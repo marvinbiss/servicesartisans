@@ -67,14 +67,14 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, subtitle, icon, tone = 'neutral' }: MetricCardProps) {
   const toneClasses = {
-    neutral: 'border-gray-200 bg-white',
+    neutral: 'border-sand-200 bg-white',
     warning: 'border-yellow-200 bg-yellow-50',
     critical: 'border-red-200 bg-red-50',
     success: 'border-green-200 bg-green-50',
   }[tone]
 
   const iconClasses = {
-    neutral: 'text-gray-400',
+    neutral: 'text-charcoal-400',
     warning: 'text-yellow-600',
     critical: 'text-red-600',
     success: 'text-green-600',
@@ -83,11 +83,11 @@ function MetricCard({ title, value, subtitle, icon, tone = 'neutral' }: MetricCa
   return (
     <div className={`rounded-xl border p-5 ${toneClasses}`}>
       <div className="flex items-start justify-between mb-3">
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{title}</p>
+        <p className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">{title}</p>
         <div className={iconClasses}>{icon}</div>
       </div>
-      <p className="text-3xl font-bold text-gray-900 tabular-nums">{value}</p>
-      {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+      <p className="text-3xl font-bold text-charcoal-900 tabular-nums">{value}</p>
+      {subtitle && <p className="text-xs text-charcoal-500 mt-1">{subtitle}</p>}
     </div>
   )
 }
@@ -128,17 +128,17 @@ export default async function RgeHealthAdminPage() {
     metrics.cee_operations_active < 15 ? 'critical' : 'success'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Header */}
         <div className="flex items-start justify-between mb-8 flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Activity className="w-6 h-6 text-blue-600" />
+            <div className="p-2 bg-sand-200 rounded-lg">
+              <Activity className="w-6 h-6 text-charcoal-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Santé pipeline RGE & CEE</h1>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <h1 className="text-2xl font-bold text-charcoal-900">Santé pipeline RGE & CEE</h1>
+              <p className="text-sm text-charcoal-500 mt-0.5">
                 Monitoring de la sync ADEME, couverture territoriale et seed CEE.
               </p>
             </div>
@@ -223,7 +223,7 @@ export default async function RgeHealthAdminPage() {
         </div>
 
         {/* Footer meta */}
-        <div className="text-xs text-gray-400 flex items-center justify-between flex-wrap gap-2">
+        <div className="text-xs text-charcoal-400 flex items-center justify-between flex-wrap gap-2">
           <span>
             Snapshot généré le{' '}
             {new Date(timestamp).toLocaleString('fr-FR', {

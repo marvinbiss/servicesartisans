@@ -88,17 +88,17 @@ function ProviderPicker({
 
   if (selected) {
     return (
-      <div className="flex items-center justify-between px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+      <div className="flex items-center justify-between px-3 py-2 bg-sand-100 border border-sand-300 rounded-lg">
         <div>
-          <span className="font-medium text-gray-900">{selected.name}</span>
+          <span className="font-medium text-charcoal-900">{selected.name}</span>
           {selected.address_city && (
-            <span className="text-xs text-gray-500 ml-2">{selected.address_city}</span>
+            <span className="text-xs text-charcoal-500 ml-2">{selected.address_city}</span>
           )}
         </div>
         <button
           type="button"
           onClick={() => onSelect(null)}
-          className="p-1 text-gray-400 hover:text-gray-600"
+          className="p-1 text-charcoal-400 hover:text-charcoal-600"
           aria-label="Changer d'artisan"
         >
           <X className="w-4 h-4" />
@@ -110,23 +110,23 @@ function ProviderPicker({
   return (
     <div>
       <div className="relative">
-        <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 text-charcoal-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un artisan (nom, ville, SIRET…)"
-          className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full pl-9 pr-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
       {debounced.length >= 2 && (
-        <div className="mt-1 border border-gray-200 rounded-lg divide-y divide-gray-100 max-h-56 overflow-y-auto bg-white">
+        <div className="mt-1 border border-sand-200 rounded-lg divide-y divide-sand-100 max-h-56 overflow-y-auto bg-white">
           {isLoading ? (
-            <div className="px-3 py-3 text-sm text-gray-400 flex items-center gap-2">
+            <div className="px-3 py-3 text-sm text-charcoal-400 flex items-center gap-2">
               <Loader2 className="w-3 h-3 animate-spin" /> Recherche…
             </div>
           ) : (data?.providers || []).length === 0 ? (
-            <div className="px-3 py-3 text-sm text-gray-400">Aucun artisan trouvé</div>
+            <div className="px-3 py-3 text-sm text-charcoal-400">Aucun artisan trouvé</div>
           ) : (
             (data?.providers || []).map((p) => (
               <button
@@ -134,10 +134,10 @@ function ProviderPicker({
                 type="button"
                 onClick={() => onSelect(p)}
                 disabled={!p.is_active}
-                className="w-full text-left px-3 py-2 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full text-left px-3 py-2 hover:bg-sand-50 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                <span className="text-sm font-medium text-gray-900">{p.name}</span>
-                <span className="text-xs text-gray-500 ml-2">
+                <span className="text-sm font-medium text-charcoal-900">{p.name}</span>
+                <span className="text-xs text-charcoal-500 ml-2">
                   {[p.specialty, p.address_city].filter(Boolean).join(' · ')}
                   {!p.is_active && ' — inactif'}
                 </span>
@@ -202,11 +202,11 @@ function ManualLeadModal({ onClose, onCreated }: { onClose: () => void; onCreate
       aria-label="Envoyer un lead manuel"
     >
       <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">Envoyer un lead à un artisan</h2>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-sand-100">
+          <h2 className="font-semibold text-charcoal-900">Envoyer un lead à un artisan</h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600"
+            className="p-1 text-charcoal-400 hover:text-charcoal-600"
             aria-label="Fermer"
           >
             <X className="w-5 h-5" />
@@ -214,28 +214,28 @@ function ManualLeadModal({ onClose, onCreated }: { onClose: () => void; onCreate
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-charcoal-700 mb-1">
               Artisan destinataire
             </label>
             <ProviderPicker selected={provider} onSelect={setProvider} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">Service</label>
               <input
                 required
                 value={form.serviceName}
                 onChange={set('serviceName')}
                 placeholder="Plomberie, PAC…"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Urgence</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">Urgence</label>
               <select
                 value={form.urgency}
                 onChange={set('urgency')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm bg-white"
               >
                 <option value="urgent">Urgent</option>
                 <option value="semaine">Cette semaine</option>
@@ -244,27 +244,29 @@ function ManualLeadModal({ onClose, onCreated }: { onClose: () => void; onCreate
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">Ville</label>
               <input
                 required
                 value={form.city}
                 onChange={set('city')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Code postal</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                Code postal
+              </label>
               <input
                 required
                 pattern="\d{5}"
                 value={form.postalCode}
                 onChange={set('postalCode')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-charcoal-700 mb-1">
               Description des travaux
             </label>
             <textarea
@@ -273,38 +275,40 @@ function ManualLeadModal({ onClose, onCreated }: { onClose: () => void; onCreate
               rows={3}
               value={form.description}
               onChange={set('description')}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+              className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nom client</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">Nom client</label>
               <input
                 required
                 value={form.clientName}
                 onChange={set('clientName')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
                 Téléphone client
               </label>
               <input
                 required
                 value={form.clientPhone}
                 onChange={set('clientPhone')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email client</label>
+              <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                Email client
+              </label>
               <input
                 required
                 type="email"
                 value={form.clientEmail}
                 onChange={set('clientEmail')}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm"
               />
             </div>
           </div>
@@ -317,14 +321,14 @@ function ManualLeadModal({ onClose, onCreated }: { onClose: () => void; onCreate
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              className="px-4 py-2 text-sm font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={submitting || !provider}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 disabled:opacity-50"
             >
               {submitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -379,24 +383,26 @@ function ReassignModal({
       aria-label="Réassigner le lead"
     >
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">Réassigner le lead</h2>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-sand-100">
+          <h2 className="font-semibold text-charcoal-900">Réassigner le lead</h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600"
+            className="p-1 text-charcoal-400 hover:text-charcoal-600"
             aria-label="Fermer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
         <div className="p-5 space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-charcoal-600">
             <span className="font-medium">{assignment.lead?.service_name || 'Lead'}</span>
             {assignment.lead?.city && ` à ${assignment.lead.city}`} — actuellement chez{' '}
             <span className="font-medium">{assignment.provider?.name || '—'}</span>
           </p>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nouvel artisan</label>
+            <label className="block text-sm font-medium text-charcoal-700 mb-1">
+              Nouvel artisan
+            </label>
             <ProviderPicker selected={provider} onSelect={setProvider} />
           </div>
           {error && (
@@ -408,7 +414,7 @@ function ReassignModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              className="px-4 py-2 text-sm font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200"
             >
               Annuler
             </button>
@@ -416,7 +422,7 @@ function ReassignModal({
               type="button"
               onClick={handleConfirm}
               disabled={submitting || !provider}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 disabled:opacity-50"
             >
               {submitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -500,24 +506,24 @@ export default function AdminDispatchPage() {
       : 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Suivi de la répartition</h1>
-            <p className="text-gray-500 mt-1">Suivi des assignations en temps réel</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Suivi de la répartition</h1>
+            <p className="text-charcoal-500 mt-1">Suivi des assignations en temps réel</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowManualModal(true)}
-              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 transition-colors"
             >
               <UserPlus className="w-4 h-4" />
               Envoyer un lead
             </button>
             <button
               onClick={() => mutate()}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-charcoal-600 hover:text-charcoal-900 border border-sand-200 rounded-lg hover:bg-white transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
               Actualiser
@@ -574,60 +580,60 @@ export default function AdminDispatchPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-charcoal-600" />
           </div>
         ) : data ? (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table
                 className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
                 aria-label="Liste des assignations de dispatch"
               >
                 <thead>
-                  <tr className="border-b border-gray-100 bg-gray-50/50">
+                  <tr className="border-b border-sand-100 bg-sand-50/50">
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Lead
                     </th>
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Artisan
                     </th>
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Statut
                     </th>
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Assigné le
                     </th>
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Vu le
                     </th>
                     <th
                       scope="col"
-                      className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                      className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                     >
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-sand-100">
                   {data.assignments.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
-                        <ArrowRight className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                      <td colSpan={6} className="px-4 py-12 text-center text-charcoal-500">
+                        <ArrowRight className="w-10 h-10 text-charcoal-300 mx-auto mb-3" />
                         Aucune assignation
                       </td>
                     </tr>
@@ -635,19 +641,21 @@ export default function AdminDispatchPage() {
                     data.assignments.map((a) => {
                       const st = STATUS_META[a.status] || STATUS_META.pending
                       return (
-                        <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
+                        <tr key={a.id} className="hover:bg-sand-50/50 transition-colors">
                           <td className="px-4 py-3">
-                            <span className="font-medium text-gray-900">
+                            <span className="font-medium text-charcoal-900">
                               {a.lead?.service_name || '—'}
                             </span>
                             {a.lead?.city && (
-                              <p className="text-xs text-gray-400 mt-0.5">{a.lead.city}</p>
+                              <p className="text-xs text-charcoal-400 mt-0.5">{a.lead.city}</p>
                             )}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-gray-700">{a.provider?.name || '—'}</span>
+                            <span className="text-charcoal-700">{a.provider?.name || '—'}</span>
                             {a.provider?.specialty && (
-                              <p className="text-xs text-gray-400 mt-0.5">{a.provider.specialty}</p>
+                              <p className="text-xs text-charcoal-400 mt-0.5">
+                                {a.provider.specialty}
+                              </p>
                             )}
                           </td>
                           <td className="px-4 py-3">
@@ -657,7 +665,7 @@ export default function AdminDispatchPage() {
                               {st.label}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                          <td className="px-4 py-3 text-charcoal-500 text-xs whitespace-nowrap">
                             {new Date(a.assigned_at).toLocaleString('fr-FR', {
                               day: 'numeric',
                               month: 'short',
@@ -665,7 +673,7 @@ export default function AdminDispatchPage() {
                               minute: '2-digit',
                             })}
                           </td>
-                          <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                          <td className="px-4 py-3 text-charcoal-500 text-xs whitespace-nowrap">
                             {a.viewed_at ? (
                               new Date(a.viewed_at).toLocaleString('fr-FR', {
                                 day: 'numeric',
@@ -674,7 +682,7 @@ export default function AdminDispatchPage() {
                                 minute: '2-digit',
                               })
                             ) : (
-                              <span className="text-gray-300">—</span>
+                              <span className="text-charcoal-300">—</span>
                             )}
                           </td>
                           <td className="px-4 py-3">
@@ -683,7 +691,7 @@ export default function AdminDispatchPage() {
                                 <button
                                   onClick={() => handleReplay(a.id)}
                                   disabled={actionLoading === a.id}
-                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200 disabled:opacity-50 transition-colors"
                                 >
                                   {actionLoading === a.id && confirmDeleteId !== a.id ? (
                                     <Loader2 className="w-3 h-3 animate-spin" />
@@ -718,7 +726,7 @@ export default function AdminDispatchPage() {
                                   </button>
                                   <button
                                     onClick={() => setConfirmDeleteId(null)}
-                                    className="px-2.5 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                    className="px-2.5 py-1.5 text-xs font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200 transition-colors"
                                   >
                                     Annuler
                                   </button>

@@ -137,16 +137,16 @@ export default function AdminLeadsPage() {
   const getLeadAssignments = (leadId: string) => assignments.filter((a) => a.lead_id === leadId)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Leads — Vue globale</h1>
-            <p className="text-gray-500 mt-1">Gestion des leads et dispatch</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Leads — Vue globale</h1>
+            <p className="text-charcoal-500 mt-1">Gestion des leads et dispatch</p>
           </div>
           <button
             onClick={revalidateAll}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-charcoal-600 hover:text-charcoal-900 border border-sand-200 rounded-lg hover:bg-white transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             Actualiser
@@ -182,62 +182,62 @@ export default function AdminLeadsPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+        <div className="bg-white rounded-xl border border-sand-200 p-5 mb-6">
           <div className="flex flex-wrap gap-4 items-end">
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+              <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                 Ville
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
                 <input
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
+                  className="pl-10 pr-4 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-40"
                   placeholder="Paris"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+              <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                 Métier
               </label>
               <div className="relative">
-                <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
                 <input
                   type="text"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
+                  className="pl-10 pr-4 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-40"
                   placeholder="Plombier"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+              <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                 Recherche
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-48"
+                  className="pl-10 pr-4 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-48"
                   placeholder="Nom, service..."
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+              <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                 Urgence
               </label>
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
                 aria-label="Filtrer par urgence"
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Toutes</option>
                 <option value="normal">Normal</option>
@@ -250,7 +250,7 @@ export default function AdminLeadsPage() {
                 revalidateAll()
                 setPage(1)
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
             >
               <Search className="w-4 h-4" />
               Filtrer
@@ -271,8 +271,8 @@ export default function AdminLeadsPage() {
             onClick={() => setTab('leads')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               tab === 'leads'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-charcoal-600 border border-sand-200 hover:bg-sand-50'
             }`}
           >
             <FileText className="w-4 h-4 inline mr-1.5" />
@@ -282,8 +282,8 @@ export default function AdminLeadsPage() {
             onClick={() => setTab('artisans')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               tab === 'artisans'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-charcoal-600 border border-sand-200 hover:bg-sand-50'
             }`}
           >
             <Users className="w-4 h-4 inline mr-1.5" />
@@ -293,69 +293,69 @@ export default function AdminLeadsPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-charcoal-600" />
           </div>
         ) : (
           <>
             {/* Leads table */}
             {tab === 'leads' && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table
                     className="w-full min-w-[400px] sm:min-w-[800px] text-sm"
                     aria-label="Liste des leads"
                   >
                     <thead>
-                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                      <tr className="border-b border-sand-100 bg-sand-50/50">
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Service
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Lieu
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Client
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Urgence
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Assignations
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Date
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-sand-100">
                       {leads.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="px-4 py-12 text-center text-gray-500">
-                            <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                          <td colSpan={7} className="px-4 py-12 text-center text-charcoal-500">
+                            <FileText className="w-10 h-10 text-charcoal-300 mx-auto mb-3" />
                             Aucun lead trouvé
                           </td>
                         </tr>
@@ -365,23 +365,23 @@ export default function AdminLeadsPage() {
                           const leadAssignments = getLeadAssignments(lead.id)
 
                           return (
-                            <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                            <tr key={lead.id} className="hover:bg-sand-50/50 transition-colors">
                               <td className="px-4 py-3">
-                                <span className="font-medium text-gray-900">
+                                <span className="font-medium text-charcoal-900">
                                   {lead.service_name}
                                 </span>
                               </td>
-                              <td className="px-4 py-3 text-gray-600">
+                              <td className="px-4 py-3 text-charcoal-600">
                                 {lead.city ? (
                                   <span className="flex items-center gap-1">
-                                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                                    <MapPin className="w-3.5 h-3.5 text-charcoal-400" />
                                     {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                                   </span>
                                 ) : (
                                   '—'
                                 )}
                               </td>
-                              <td className="px-4 py-3 text-gray-600">{lead.client_name}</td>
+                              <td className="px-4 py-3 text-charcoal-600">{lead.client_name}</td>
                               <td className="px-4 py-3">
                                 <span
                                   className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}
@@ -407,10 +407,10 @@ export default function AdminLeadsPage() {
                                     })}
                                   </div>
                                 ) : (
-                                  <span className="text-xs text-gray-400">Non assigné</span>
+                                  <span className="text-xs text-charcoal-400">Non assigné</span>
                                 )}
                               </td>
-                              <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                              <td className="px-4 py-3 text-charcoal-500 text-xs whitespace-nowrap">
                                 {new Date(lead.created_at).toLocaleDateString('fr-FR', {
                                   day: 'numeric',
                                   month: 'short',
@@ -420,7 +420,7 @@ export default function AdminLeadsPage() {
                                 <button
                                   onClick={() => handleDispatch(lead.id)}
                                   disabled={dispatchLoading && dispatchLeadId === lead.id}
-                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200 disabled:opacity-50 transition-colors"
                                 >
                                   {dispatchLoading && dispatchLeadId === lead.id ? (
                                     <Loader2 className="w-3 h-3 animate-spin" />
@@ -444,68 +444,68 @@ export default function AdminLeadsPage() {
 
             {/* Artisans table */}
             {tab === 'artisans' && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table
                     className="w-full min-w-[400px] sm:min-w-[600px] text-sm"
                     aria-label="Liste des artisans pour le dispatch"
                   >
                     <thead>
-                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                      <tr className="border-b border-sand-100 bg-sand-50/50">
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Nom
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Métier
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Ville
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Vérifié
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Dernier lead
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-sand-100">
                       {artisans.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
-                            <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                          <td colSpan={5} className="px-4 py-12 text-center text-charcoal-500">
+                            <Users className="w-10 h-10 text-charcoal-300 mx-auto mb-3" />
                             Aucun artisan trouvé
                           </td>
                         </tr>
                       ) : (
                         artisans.map((a) => (
-                          <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
-                            <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
-                            <td className="px-4 py-3 text-gray-600">{a.specialty}</td>
-                            <td className="px-4 py-3 text-gray-600">{a.address_city || '—'}</td>
+                          <tr key={a.id} className="hover:bg-sand-50/50 transition-colors">
+                            <td className="px-4 py-3 font-medium text-charcoal-900">{a.name}</td>
+                            <td className="px-4 py-3 text-charcoal-600">{a.specialty}</td>
+                            <td className="px-4 py-3 text-charcoal-600">{a.address_city || '—'}</td>
                             <td className="px-4 py-3">
                               {a.is_verified ? (
                                 <CheckCircle className="w-4 h-4 text-green-500" />
                               ) : (
-                                <span className="text-gray-400 text-xs">Non</span>
+                                <span className="text-charcoal-400 text-xs">Non</span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-gray-500 text-xs">
+                            <td className="px-4 py-3 text-charcoal-500 text-xs">
                               {a.last_lead_assigned_at
                                 ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR', {
                                     day: 'numeric',

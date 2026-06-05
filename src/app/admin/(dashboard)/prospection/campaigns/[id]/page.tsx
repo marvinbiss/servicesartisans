@@ -122,16 +122,16 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
+          <div className="h-8 bg-sand-200 rounded w-1/3" />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-24 bg-gray-100 rounded-lg" />
+              <div key={i} className="h-24 bg-sand-100 rounded-lg" />
             ))}
           </div>
-          <div className="h-64 bg-gray-100 rounded-lg" />
+          <div className="h-64 bg-sand-100 rounded-lg" />
         </div>
       </div>
     )
@@ -143,11 +143,11 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-6">
           <Link
             href="/admin/prospection/campaigns"
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+            className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux campagnes
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -168,7 +168,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       label: 'Destinataires',
       value: campaign.total_recipients,
       icon: Users,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
     },
     {
       label: 'Envoyés',
@@ -180,13 +180,13 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       label: 'Livrés',
       value: campaign.delivered_count,
       icon: CheckCircle,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
     },
     {
       label: 'Réponses',
       value: campaign.replied_count,
       icon: MessageSquare,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
     },
     {
       label: 'Échecs',
@@ -207,17 +207,17 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       <div className="mb-6">
         <Link
           href="/admin/prospection/campaigns"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux campagnes
         </Link>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">{campaign.name}</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900">{campaign.name}</h1>
           <CampaignStatusBadge status={campaign.status} />
-          <ChannelIcon channel={campaign.channel} className="w-5 h-5 text-gray-400" />
+          <ChannelIcon channel={campaign.channel} className="w-5 h-5 text-charcoal-400" />
         </div>
         {campaign.description && (
-          <p className="text-gray-500 mt-1 text-sm">{campaign.description}</p>
+          <p className="text-charcoal-500 mt-1 text-sm">{campaign.description}</p>
         )}
       </div>
 
@@ -253,7 +253,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           <>
             <Link
               href={`/admin/prospection/campaigns/${campaign.id}`}
-              className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+              className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
               onClick={(e) => {
                 e.preventDefault()
                 setError('Éditez directement les champs sur cette page')
@@ -291,7 +291,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           </button>
         )}
         {campaign.status === 'completed' && (
-          <span className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-500">
+          <span className="flex items-center gap-1 px-3 py-1.5 text-sm text-charcoal-500">
             <BarChart3 className="w-4 h-4" /> Campagne terminée
           </span>
         )}
@@ -304,12 +304,12 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           return (
             <div key={card.label} className="bg-white rounded-lg border p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-gray-500">{card.label}</span>
+                <span className="text-xs text-charcoal-500">{card.label}</span>
                 <div className={`p-1.5 rounded-lg ${card.color}`}>
                   <Icon className="w-3.5 h-3.5" />
                 </div>
               </div>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xl font-bold text-charcoal-900">
                 {typeof card.value === 'number' ? card.value.toLocaleString('fr-FR') : card.value}
               </p>
             </div>
@@ -321,15 +321,15 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       {campaign.total_recipients > 0 && (
         <div className="bg-white rounded-lg border p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Progression d'envoi</span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm font-medium text-charcoal-700">Progression d'envoi</span>
+            <span className="text-sm text-charcoal-500">
               {campaign.sent_count.toLocaleString('fr-FR')} /{' '}
               {campaign.total_recipients.toLocaleString('fr-FR')} ({sentPercent}%)
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-sand-200 rounded-full h-3">
             <div
-              className="bg-blue-600 h-3 rounded-full transition-all"
+              className="bg-primary-500 h-3 rounded-full transition-all"
               style={{ width: `${sentPercent}%` }}
             />
           </div>
@@ -339,39 +339,41 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Template info */}
         <div className="bg-white rounded-lg border p-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Modèle</h3>
+          <h3 className="text-sm font-medium text-charcoal-700 mb-3">Modèle</h3>
           {campaign.template ? (
             <div>
               <Link
                 href={`/admin/prospection/templates/${campaign.template.id}`}
-                className="text-blue-600 hover:underline font-medium text-sm"
+                className="text-primary-600 hover:underline font-medium text-sm"
               >
                 {campaign.template.name}
               </Link>
-              <p className="text-xs text-gray-400 mt-1 capitalize">{campaign.template.channel}</p>
+              <p className="text-xs text-charcoal-400 mt-1 capitalize">
+                {campaign.template.channel}
+              </p>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Aucun modèle associé</p>
+            <p className="text-sm text-charcoal-400">Aucun modèle associé</p>
           )}
         </div>
 
         {/* List info */}
         <div className="bg-white rounded-lg border p-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Liste</h3>
+          <h3 className="text-sm font-medium text-charcoal-700 mb-3">Liste</h3>
           {campaign.list ? (
             <div>
               <Link
                 href={`/admin/prospection/lists/${campaign.list.id}`}
-                className="text-blue-600 hover:underline font-medium text-sm"
+                className="text-primary-600 hover:underline font-medium text-sm"
               >
                 {campaign.list.name}
               </Link>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-charcoal-400 mt-1">
                 {campaign.list.contact_count.toLocaleString('fr-FR')} contacts
               </p>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Aucune liste associée</p>
+            <p className="text-sm text-charcoal-400">Aucune liste associée</p>
           )}
         </div>
       </div>
@@ -379,23 +381,23 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       {/* Detailed stats (if available) */}
       {stats && (
         <div className="bg-white rounded-lg border p-4 mt-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Statistiques détaillées</h3>
+          <h3 className="text-sm font-medium text-charcoal-700 mb-3">Statistiques détaillées</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <p className="text-gray-500">Taux de livraison</p>
-              <p className="font-bold text-gray-900">{stats.delivery_rate.toFixed(1)}%</p>
+              <p className="text-charcoal-500">Taux de livraison</p>
+              <p className="font-bold text-charcoal-900">{stats.delivery_rate.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-gray-500">Taux d'ouverture</p>
-              <p className="font-bold text-gray-900">{stats.open_rate.toFixed(1)}%</p>
+              <p className="text-charcoal-500">Taux d'ouverture</p>
+              <p className="font-bold text-charcoal-900">{stats.open_rate.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-gray-500">Taux de réponse</p>
-              <p className="font-bold text-gray-900">{stats.reply_rate.toFixed(1)}%</p>
+              <p className="text-charcoal-500">Taux de réponse</p>
+              <p className="font-bold text-charcoal-900">{stats.reply_rate.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-gray-500">Taux de rebond</p>
-              <p className="font-bold text-gray-900">{stats.bounce_rate.toFixed(1)}%</p>
+              <p className="text-charcoal-500">Taux de rebond</p>
+              <p className="font-bold text-charcoal-900">{stats.bounce_rate.toFixed(1)}%</p>
             </div>
           </div>
         </div>
@@ -403,56 +405,56 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
 
       {/* Campaign metadata */}
       <div className="bg-white rounded-lg border p-4 mt-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Informations</h3>
+        <h3 className="text-sm font-medium text-charcoal-700 mb-3">Informations</h3>
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
-            <p className="text-gray-500">Canal</p>
-            <p className="text-gray-900 capitalize flex items-center gap-1">
-              <ChannelIcon channel={campaign.channel} className="w-4 h-4 text-gray-400" />
+            <p className="text-charcoal-500">Canal</p>
+            <p className="text-charcoal-900 capitalize flex items-center gap-1">
+              <ChannelIcon channel={campaign.channel} className="w-4 h-4 text-charcoal-400" />
               {campaign.channel === 'whatsapp' ? 'WhatsApp' : campaign.channel.toUpperCase()}
             </p>
           </div>
           <div>
-            <p className="text-gray-500">Audience</p>
-            <p className="text-gray-900 capitalize">{campaign.audience_type}</p>
+            <p className="text-charcoal-500">Audience</p>
+            <p className="text-charcoal-900 capitalize">{campaign.audience_type}</p>
           </div>
           <div>
-            <p className="text-gray-500">Créée le</p>
-            <p className="text-gray-900">
+            <p className="text-charcoal-500">Créée le</p>
+            <p className="text-charcoal-900">
               {new Date(campaign.created_at).toLocaleDateString('fr-FR')}
             </p>
           </div>
           {campaign.started_at && (
             <div>
-              <p className="text-gray-500">Lancée le</p>
-              <p className="text-gray-900">
+              <p className="text-charcoal-500">Lancée le</p>
+              <p className="text-charcoal-900">
                 {new Date(campaign.started_at).toLocaleString('fr-FR')}
               </p>
             </div>
           )}
           {campaign.completed_at && (
             <div>
-              <p className="text-gray-500">Terminée le</p>
-              <p className="text-gray-900">
+              <p className="text-charcoal-500">Terminée le</p>
+              <p className="text-charcoal-900">
                 {new Date(campaign.completed_at).toLocaleString('fr-FR')}
               </p>
             </div>
           )}
           {campaign.scheduled_at && (
             <div>
-              <p className="text-gray-500">Planifiée le</p>
-              <p className="text-gray-900">
+              <p className="text-charcoal-500">Planifiée le</p>
+              <p className="text-charcoal-900">
                 {new Date(campaign.scheduled_at).toLocaleString('fr-FR')}
               </p>
             </div>
           )}
           <div>
-            <p className="text-gray-500">Réponse IA auto</p>
-            <p className="text-gray-900">{campaign.ai_auto_reply ? 'Oui' : 'Non'}</p>
+            <p className="text-charcoal-500">Réponse IA auto</p>
+            <p className="text-charcoal-900">{campaign.ai_auto_reply ? 'Oui' : 'Non'}</p>
           </div>
           <div>
-            <p className="text-gray-500">Coût estimé</p>
-            <p className="text-gray-900">{campaign.estimated_cost.toFixed(2)} €</p>
+            <p className="text-charcoal-500">Coût estimé</p>
+            <p className="text-charcoal-900">{campaign.estimated_cost.toFixed(2)} €</p>
           </div>
         </div>
       </div>

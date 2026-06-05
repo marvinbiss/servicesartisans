@@ -39,7 +39,7 @@ export function FilterPanel({
 
   return (
     <div
-      className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+      className="bg-white rounded-xl shadow-sm border border-sand-100 p-4"
       role="search"
       aria-label="Filtres"
     >
@@ -48,7 +48,7 @@ export function FilterPanel({
           <div key={filter.key} className="flex-shrink-0">
             {filter.multiple ? (
               <div className="flex flex-wrap gap-2">
-                <span className="text-sm font-medium text-gray-700 mr-2">{filter.label}:</span>
+                <span className="text-sm font-medium text-charcoal-700 mr-2">{filter.label}:</span>
                 {filter.options.map((option) => {
                   const currentValues = (values[filter.key] as string[]) || []
                   const isSelected = currentValues.includes(option.value)
@@ -63,8 +63,8 @@ export function FilterPanel({
                       }}
                       className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                         isSelected
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                       }`}
                     >
                       {option.label}
@@ -80,7 +80,7 @@ export function FilterPanel({
                 value={(values[filter.key] as string) || 'all'}
                 onChange={(e) => onChange(filter.key, e.target.value)}
                 aria-label={filter.label}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="px-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               >
                 {filter.options.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -98,7 +98,7 @@ export function FilterPanel({
         {showClearAll && hasActiveFilters && onClear && (
           <button
             onClick={onClear}
-            className="flex items-center gap-1 px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
+            className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-500 hover:text-charcoal-700"
           >
             <X className="w-4 h-4" />
             Effacer les filtres
@@ -125,8 +125,8 @@ export function QuickFilters({ options, value, onChange }: QuickFiltersProps) {
           onClick={() => onChange(option.value)}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             value === option.value
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-primary-500 text-white'
+              : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
           }`}
         >
           {option.label}

@@ -32,8 +32,8 @@ class ChartErrorBoundary extends Component<{ children: ReactNode }, { hasError: 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <p className="text-gray-500 text-center py-12">
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100">
+          <p className="text-charcoal-500 text-center py-12">
             Impossible de charger le graphique. Rechargez la page.
           </p>
         </div>
@@ -52,9 +52,9 @@ const ActivityChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
-        <div className="w-48 h-5 bg-gray-200 rounded mb-6" />
-        <div className="w-full h-[300px] bg-gray-50 rounded" />
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100 animate-pulse">
+        <div className="w-48 h-5 bg-sand-200 rounded mb-6" />
+        <div className="w-full h-[300px] bg-sand-50 rounded" />
       </div>
     ),
   }
@@ -119,16 +119,16 @@ export default function AdminDashboard() {
   const { data, isLoading, error, mutate } = useAdminFetch<StatsResponse>('/api/admin/stats')
 
   return (
-    <div className="min-h-screen bg-gray-50" aria-label="Tableau de bord administration">
+    <div className="min-h-screen bg-sand-50" aria-label="Tableau de bord administration">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Shield className="w-8 h-8 text-blue-600" />
+              <Shield className="w-8 h-8 text-charcoal-600" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
-                <p className="text-sm text-gray-500">Vue d'ensemble de la plateforme</p>
+                <h1 className="text-xl font-bold text-charcoal-900">Tableau de bord</h1>
+                <p className="text-sm text-charcoal-500">Vue d'ensemble de la plateforme</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -158,29 +158,29 @@ export default function AdminDashboard() {
         {/* Quick metrics row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Today */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100">
             <div className="flex items-center gap-3 mb-4">
-              <Activity className="w-5 h-5 text-blue-600" />
-              <h3 className="font-semibold text-gray-900">Aujourd'hui</h3>
+              <Activity className="w-5 h-5 text-charcoal-600" />
+              <h3 className="font-semibold text-charcoal-900">Aujourd'hui</h3>
             </div>
             {isLoading ? (
               <div className="space-y-3 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-full" />
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-4 bg-gray-200 rounded w-5/6" />
+                <div className="h-4 bg-sand-200 rounded w-full" />
+                <div className="h-4 bg-sand-200 rounded w-3/4" />
+                <div className="h-4 bg-sand-200 rounded w-5/6" />
               </div>
             ) : (
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Nouveaux utilisateurs</span>
+                  <span className="text-charcoal-600">Nouveaux utilisateurs</span>
                   <span className="font-semibold">{data?.stats?.newUsersToday ?? 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Nouvelles réservations</span>
+                  <span className="text-charcoal-600">Nouvelles réservations</span>
                   <span className="font-semibold">{data?.stats?.newBookingsToday ?? 0}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Utilisateurs actifs (7j)</span>
+                  <span className="text-charcoal-600">Utilisateurs actifs (7j)</span>
                   <span className="font-semibold">{data?.stats?.activeUsers7d ?? 0}</span>
                 </div>
               </div>
@@ -188,21 +188,21 @@ export default function AdminDashboard() {
           </div>
 
           {/* Quality */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100">
             <div className="flex items-center gap-3 mb-4">
               <Star className="w-5 h-5 text-amber-500" />
-              <h3 className="font-semibold text-gray-900">Qualité</h3>
+              <h3 className="font-semibold text-charcoal-900">Qualité</h3>
             </div>
             {isLoading ? (
               <div className="flex justify-center py-4 animate-pulse">
-                <div className="w-16 h-10 bg-gray-200 rounded" />
+                <div className="w-16 h-10 bg-sand-200 rounded" />
               </div>
             ) : (
               <div className="text-center py-2">
-                <p className="text-2xl sm:text-4xl font-bold text-gray-900">
+                <p className="text-2xl sm:text-4xl font-bold text-charcoal-900">
                   {(data?.stats?.averageRating ?? 0).toFixed(1)}
                 </p>
-                <p className="text-sm text-gray-500 mt-1">Note moyenne</p>
+                <p className="text-sm text-charcoal-500 mt-1">Note moyenne</p>
                 <div className="flex justify-center mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
                       className={`w-5 h-5 ${
                         star <= Math.round(data?.stats?.averageRating ?? 0)
                           ? 'fill-amber-400 text-amber-400'
-                          : 'text-gray-300'
+                          : 'text-charcoal-300'
                       }`}
                     />
                   ))}
@@ -220,20 +220,20 @@ export default function AdminDashboard() {
           </div>
 
           {/* Moderation */}
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100">
             <div className="flex items-center gap-3 mb-4">
               <AlertTriangle className="w-5 h-5 text-red-500" />
-              <h3 className="font-semibold text-gray-900">Modération</h3>
+              <h3 className="font-semibold text-charcoal-900">Modération</h3>
             </div>
             {isLoading ? (
               <div className="space-y-3 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-full" />
-                <div className="h-10 bg-gray-200 rounded w-full mt-2" />
+                <div className="h-4 bg-sand-200 rounded w-full" />
+                <div className="h-10 bg-sand-200 rounded w-full mt-2" />
               </div>
             ) : (
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Signalements en attente</span>
+                  <span className="text-charcoal-600">Signalements en attente</span>
                   <span
                     className={`px-2 py-1 rounded-full text-sm font-medium ${
                       (data?.stats?.pendingReports ?? 0) > 0
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
                 </div>
                 <Link
                   href="/admin/signalements"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-sand-100 text-charcoal-700 rounded-lg hover:bg-sand-200 transition-colors text-sm"
                 >
                   Voir les signalements
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -257,18 +257,18 @@ export default function AdminDashboard() {
         </div>
 
         {/* Estimation Leads Widget */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
+          <div className="flex items-center justify-between p-6 border-b border-sand-100">
             <div className="flex items-center gap-3">
               <MessageSquare className="w-5 h-5 text-accent-600" />
-              <h3 className="font-semibold text-gray-900">Leads Estimation IA</h3>
+              <h3 className="font-semibold text-charcoal-900">Leads Estimation IA</h3>
             </div>
             <div className="flex items-center gap-3">
               {!isLoading && (
                 <>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-charcoal-500">
                     Total :{' '}
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-charcoal-900">
                       {data?.estimationLeads?.total ?? 0}
                     </span>
                   </span>
@@ -276,7 +276,7 @@ export default function AdminDashboard() {
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
                       (data?.estimationLeads?.today ?? 0) > 0
                         ? 'bg-accent-100 text-accent-700'
-                        : 'bg-gray-100 text-gray-500'
+                        : 'bg-sand-100 text-charcoal-500'
                     }`}
                   >
                     {data?.estimationLeads?.today ?? 0} aujourd'hui
@@ -295,35 +295,35 @@ export default function AdminDashboard() {
           {isLoading ? (
             <div className="p-6 space-y-3 animate-pulse">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-10 bg-gray-100 rounded" />
+                <div key={i} className="h-10 bg-sand-100 rounded" />
               ))}
             </div>
           ) : (data?.estimationLeads?.recent?.length ?? 0) === 0 ? (
-            <div className="p-8 text-center text-gray-400 text-sm">
+            <div className="p-8 text-center text-charcoal-400 text-sm">
               Aucun lead estimation pour le moment
             </div>
           ) : (
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-sand-50">
               {data?.estimationLeads?.recent?.map((lead) => (
                 <div
                   key={lead.id}
-                  className="flex items-center justify-between px-6 py-3 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between px-6 py-3 hover:bg-sand-50 transition-colors"
                 >
                   <div className="flex items-center gap-4 min-w-0">
                     <span
                       className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium ${
                         lead.source === 'chat'
-                          ? 'bg-blue-100 text-blue-700'
+                          ? 'bg-sand-200 text-charcoal-700'
                           : 'bg-orange-100 text-orange-700'
                       }`}
                     >
                       {lead.source === 'chat' ? 'Chat' : 'Rappel'}
                     </span>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
+                      <p className="text-sm font-medium text-charcoal-900 truncate">
                         {lead.nom || lead.telephone} — {lead.metier}
                       </p>
-                      <p className="text-xs text-gray-500">{lead.ville}</p>
+                      <p className="text-xs text-charcoal-500">{lead.ville}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                     >
                       <Phone className="w-4 h-4" />
                     </a>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-charcoal-400">
                       {new Date(lead.created_at).toLocaleDateString('fr-FR', {
                         day: '2-digit',
                         month: '2-digit',

@@ -148,11 +148,11 @@ export default function AdminClaimsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-charcoal-900 flex items-center gap-2">
             <Shield className="w-7 h-7 text-amber-500" />
             Revendications de fiches
           </h1>
-          <p className="text-gray-500 mt-1">Gérez les demandes de revendication des artisans</p>
+          <p className="text-charcoal-500 mt-1">Gérez les demandes de revendication des artisans</p>
         </div>
       </div>
 
@@ -190,7 +190,7 @@ export default function AdminClaimsPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === value
                 ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
             }`}
           >
             {label}
@@ -202,19 +202,19 @@ export default function AdminClaimsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse">
-              <div className="h-5 w-48 bg-gray-200 rounded mb-3" />
-              <div className="h-4 w-72 bg-gray-200 rounded mb-2" />
-              <div className="h-4 w-56 bg-gray-200 rounded" />
+            <div key={i} className="bg-white rounded-xl border border-sand-200 p-6 animate-pulse">
+              <div className="h-5 w-48 bg-sand-200 rounded mb-3" />
+              <div className="h-4 w-72 bg-sand-200 rounded mb-2" />
+              <div className="h-4 w-56 bg-sand-200 rounded" />
             </div>
           ))}
         </div>
       ) : error ? (
         <ErrorBanner message="Erreur lors du chargement des demandes" />
       ) : claims.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <Shield className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">
+        <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
+          <Shield className="w-12 h-12 text-charcoal-300 mx-auto mb-3" />
+          <p className="text-charcoal-500 font-medium">
             Aucune demande{' '}
             {filter !== 'all'
               ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}`
@@ -226,47 +226,49 @@ export default function AdminClaimsPage() {
           {claims.map((claim) => (
             <div
               key={claim.id}
-              className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl border border-sand-200 p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-3 flex-1">
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-semibold text-gray-900">
+                    <Building2 className="w-4 h-4 text-charcoal-400" />
+                    <span className="font-semibold text-charcoal-900">
                       {claim.provider?.name || 'Artisan inconnu'}
                     </span>
                     {claim.provider?.address_city && (
-                      <span className="text-gray-500 text-sm">— {claim.provider.address_city}</span>
+                      <span className="text-charcoal-500 text-sm">
+                        — {claim.provider.address_city}
+                      </span>
                     )}
                   </div>
 
                   {/* Claimant contact info */}
-                  <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
+                  <div className="bg-sand-50 rounded-lg p-3 space-y-1.5">
                     <div className="flex items-center gap-2 text-sm">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">
+                      <User className="w-4 h-4 text-charcoal-400" />
+                      <span className="font-medium text-charcoal-900">
                         {claim.claimant_name || claim.user?.full_name || 'Utilisateur'}
                       </span>
                       {claim.claimant_position && (
-                        <span className="text-gray-500">— {claim.claimant_position}</span>
+                        <span className="text-charcoal-500">— {claim.claimant_position}</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Mail className="w-4 h-4 text-gray-400" />
+                      <Mail className="w-4 h-4 text-charcoal-400" />
                       <a
                         href={`mailto:${claim.claimant_email || claim.user?.email}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-primary-600 hover:underline"
                       >
                         {claim.claimant_email || claim.user?.email}
                       </a>
                     </div>
                     {claim.claimant_phone && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Phone className="w-4 h-4 text-gray-400" />
+                        <Phone className="w-4 h-4 text-charcoal-400" />
                         <a
                           href={`tel:${formatPhoneForTel(claim.claimant_phone)}`}
-                          className="text-gray-700"
+                          className="text-charcoal-700"
                         >
                           {claim.claimant_phone}
                         </a>
@@ -274,8 +276,8 @@ export default function AdminClaimsPage() {
                     )}
                     {claim.claimant_position && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Briefcase className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-700">{claim.claimant_position}</span>
+                        <Briefcase className="w-4 h-4 text-charcoal-400" />
+                        <span className="text-charcoal-700">{claim.claimant_position}</span>
                       </div>
                     )}
                   </div>
@@ -283,21 +285,21 @@ export default function AdminClaimsPage() {
                   {/* SIRET comparison */}
                   <div className="flex items-center gap-6 text-sm">
                     <div>
-                      <span className="text-gray-500">SIRET en base :</span>{' '}
-                      <span className="font-mono font-medium text-gray-900">
+                      <span className="text-charcoal-500">SIRET en base :</span>{' '}
+                      <span className="font-mono font-medium text-charcoal-900">
                         {claim.provider?.siret || 'N/A'}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-500">SIRET fourni :</span>{' '}
-                      <span className="font-mono font-medium text-gray-900">
+                      <span className="text-charcoal-500">SIRET fourni :</span>{' '}
+                      <span className="font-mono font-medium text-charcoal-900">
                         {claim.siret_provided}
                       </span>
                     </div>
                   </div>
 
                   {/* Date */}
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-charcoal-400">
                     <Calendar className="w-3 h-3" />
                     {formatDate(claim.created_at)}
                   </div>
@@ -379,17 +381,17 @@ export default function AdminClaimsPage() {
           <button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page <= 1}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border border-sand-200 hover:bg-sand-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-charcoal-600">
             Page {page} / {totalPages}
           </span>
           <button
             onClick={() => setPage(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border border-sand-200 hover:bg-sand-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -429,7 +431,7 @@ export default function AdminClaimsPage() {
       >
         {(actionModal.action === 'reject' || actionModal.action === 'unclaim') && (
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-charcoal-700 mb-1">
               {actionModal.action === 'unclaim'
                 ? 'Motif de la dérevendication (optionnel)'
                 : 'Motif du rejet (optionnel)'}
@@ -442,7 +444,7 @@ export default function AdminClaimsPage() {
                   ? 'Expliquez pourquoi la revendication est retirée...'
                   : 'Expliquez pourquoi la demande est rejetée...'
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               rows={3}
               maxLength={500}
             />

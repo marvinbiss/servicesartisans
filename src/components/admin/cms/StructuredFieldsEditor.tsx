@@ -33,7 +33,7 @@ export function StructuredFieldsEditor({ value, pageType, onChange }: Structured
       return <HomepageFields data={value as unknown as HomepageStructuredData} update={update} />
     default:
       return (
-        <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
+        <div className="text-sm text-charcoal-500 bg-sand-50 rounded-lg p-4">
           Aucun champ structuré disponible pour le type de page «{pageType}».
         </div>
       )
@@ -47,8 +47,8 @@ export function StructuredFieldsEditor({ value, pageType, onChange }: Structured
 function SectionHeader({ title, description }: { title: string; description?: string }) {
   return (
     <div className="mb-3">
-      <h4 className="text-sm font-semibold text-gray-900">{title}</h4>
-      {description && <p className="text-xs text-gray-500 mt-0.5">{description}</p>}
+      <h4 className="text-sm font-semibold text-charcoal-900">{title}</h4>
+      {description && <p className="text-xs text-charcoal-500 mt-0.5">{description}</p>}
     </div>
   )
 }
@@ -96,34 +96,34 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
         />
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Min</label>
+            <label className="block text-xs text-charcoal-500 mb-1">Min</label>
             <input
               type="number"
               value={priceRange.min}
               onChange={(e) => update('priceRange', { ...priceRange, min: Number(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Max</label>
+            <label className="block text-xs text-charcoal-500 mb-1">Max</label>
             <input
               type="number"
               value={priceRange.max}
               onChange={(e) => update('priceRange', { ...priceRange, max: Number(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Unité</label>
+            <label className="block text-xs text-charcoal-500 mb-1">Unité</label>
             <input
               type="text"
               value={priceRange.unit}
               onChange={(e) => update('priceRange', { ...priceRange, unit: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="EUR"
             />
           </div>
@@ -165,8 +165,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                           [index]: { ...prev[index], name: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm ${
-                        nameEmpty ? 'border-red-400' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm ${
+                        nameEmpty ? 'border-red-400' : 'border-sand-300'
                       }`}
                       placeholder="Nom de la tâche"
                     />
@@ -180,7 +180,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       updated[index] = { ...task, priceMin: Number(e.target.value) }
                       update('commonTasks', updated)
                     }}
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-24 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                     placeholder="Min"
                     min={0}
                   />
@@ -192,7 +192,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       updated[index] = { ...task, priceMax: Number(e.target.value) }
                       update('commonTasks', updated)
                     }}
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-24 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                     placeholder="Max"
                     min={0}
                   />
@@ -228,8 +228,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           disabled={commonTasks.length >= STRUCTURED_LIMITS.commonTasks}
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             commonTasks.length >= STRUCTURED_LIMITS.commonTasks
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-charcoal-400 cursor-not-allowed'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-sand-100'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -252,7 +252,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   updated[index] = e.target.value
                   update('tips', updated)
                 }}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="flex-1 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                 placeholder="Conseil..."
               />
               <button
@@ -275,8 +275,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           disabled={tips.length >= STRUCTURED_LIMITS.tips}
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             tips.length >= STRUCTURED_LIMITS.tips
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-charcoal-400 cursor-not-allowed'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-sand-100'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -294,7 +294,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             const answerEmpty = faqTouched[index]?.answer && !item.answer.trim()
 
             return (
-              <div key={index} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+              <div key={index} className="border border-sand-200 rounded-lg p-3 bg-sand-50">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex-1">
                     <input
@@ -311,8 +311,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                           [index]: { ...prev[index], question: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white ${
-                        questionEmpty ? 'border-red-400' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white ${
+                        questionEmpty ? 'border-red-400' : 'border-sand-300'
                       }`}
                       placeholder="Question"
                     />
@@ -352,8 +352,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                     }))
                   }
                   rows={2}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-white ${
-                    answerEmpty ? 'border-red-400' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none bg-white ${
+                    answerEmpty ? 'border-red-400' : 'border-sand-300'
                   }`}
                   placeholder="Réponse"
                 />
@@ -368,8 +368,8 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           disabled={faq.length >= STRUCTURED_LIMITS.faqItems}
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             faq.length >= STRUCTURED_LIMITS.faqItems
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-charcoal-400 cursor-not-allowed'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-sand-100'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -388,7 +388,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           {certifications.map((cert, index) => (
             <span
               key={index}
-              className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full"
+              className="inline-flex items-center gap-1 px-3 py-1 bg-sand-100 text-charcoal-700 text-sm rounded-full"
             >
               {cert}
               <button
@@ -397,7 +397,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   const updated = certifications.filter((_, i) => i !== index)
                   update('certifications', updated)
                 }}
-                className="text-blue-400 hover:text-blue-700 ml-0.5"
+                className="text-charcoal-500 hover:text-primary-700 ml-0.5"
                 aria-label={`Retirer la certification ${cert}`}
               >
                 &times;
@@ -410,7 +410,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             type="text"
             ref={certInputRef}
             placeholder="Nouvelle certification..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="flex-1 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault()
@@ -439,19 +439,19 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             aria-label="Ajouter la certification"
             className={`px-3 py-2 text-white text-sm rounded-lg transition-colors ${
               certifications.length >= STRUCTURED_LIMITS.certifications
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
+                ? 'bg-charcoal-400 cursor-not-allowed'
+                : 'bg-primary-500 hover:bg-primary-600'
             }`}
           >
             <Plus className="w-4 h-4" />
           </button>
         </div>
         {certifications.length >= STRUCTURED_LIMITS.certifications ? (
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-charcoal-500">
             Limite atteinte ({certifications.length}/{STRUCTURED_LIMITS.certifications})
           </p>
         ) : (
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="mt-1 text-xs text-charcoal-400">
             {certifications.length}/{STRUCTURED_LIMITS.certifications}
           </p>
         )}
@@ -464,7 +464,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           type="text"
           value={data.averageResponseTime || ''}
           onChange={(e) => update('averageResponseTime', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Ex: 30 minutes"
         />
       </div>
@@ -476,7 +476,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           value={data.emergencyInfo || ''}
           onChange={(e) => update('emergencyInfo', e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y"
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-y"
           placeholder="Ex: Service disponible 24h/24, 7j/7"
         />
       </div>
@@ -509,7 +509,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
           type="text"
           value={categoryName}
           onChange={(e) => update('categoryName', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Ex: Questions générales, Tarification..."
         />
       </div>
@@ -524,7 +524,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
             const answerEmpty = touched[index]?.answer && !item.answer.trim()
 
             return (
-              <div key={index} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+              <div key={index} className="border border-sand-200 rounded-lg p-3 bg-sand-50">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex-1">
                     <input
@@ -541,8 +541,8 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                           [index]: { ...prev[index], question: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white ${
-                        questionEmpty ? 'border-red-400' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white ${
+                        questionEmpty ? 'border-red-400' : 'border-sand-300'
                       }`}
                       placeholder="Question"
                     />
@@ -582,8 +582,8 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                     }))
                   }
                   rows={4}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y bg-white ${
-                    answerEmpty ? 'border-red-400' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-y bg-white ${
+                    answerEmpty ? 'border-red-400' : 'border-sand-300'
                   }`}
                   placeholder="Réponse (texte enrichi supporté)"
                 />
@@ -598,8 +598,8 @@ function FaqFields({ data, update }: FaqFieldsProps) {
           disabled={items.length >= STRUCTURED_LIMITS.faqItems}
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             items.length >= STRUCTURED_LIMITS.faqItems
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-charcoal-400 cursor-not-allowed'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-sand-100'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -630,45 +630,45 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
       />
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Titre Hero</label>
+        <label className="block text-xs text-charcoal-500 mb-1">Titre Hero</label>
         <input
           type="text"
           value={data.heroTitle || ''}
           onChange={(e) => update('heroTitle', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Titre principal de la page d'accueil"
         />
       </div>
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Sous-titre Hero</label>
+        <label className="block text-xs text-charcoal-500 mb-1">Sous-titre Hero</label>
         <textarea
           value={data.heroSubtitle || ''}
           onChange={(e) => update('heroSubtitle', e.target.value)}
           rows={2}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
+          className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none"
           placeholder="Sous-titre ou accroche"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Texte du bouton CTA</label>
+          <label className="block text-xs text-charcoal-500 mb-1">Texte du bouton CTA</label>
           <input
             type="text"
             value={data.heroCtaText || ''}
             onChange={(e) => update('heroCtaText', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             placeholder="Ex: Demander un devis"
           />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">URL du bouton CTA</label>
+          <label className="block text-xs text-charcoal-500 mb-1">URL du bouton CTA</label>
           <input
             type="text"
             value={data.heroCtaUrl || ''}
             onChange={(e) => update('heroCtaUrl', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             placeholder="/devis"
           />
         </div>
@@ -680,11 +680,11 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
         <div className="space-y-3">
           {/* key={index} is safe: items are added at end and removed by explicit index */}
           {sections.map((section, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+            <div key={index} className="border border-sand-200 rounded-lg p-3 bg-sand-50">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex-1 space-y-2">
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Identifiant</label>
+                    <label className="block text-xs text-charcoal-500 mb-1">Identifiant</label>
                     <input
                       type="text"
                       value={section.id}
@@ -693,12 +693,12 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, id: e.target.value }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Ex: services, temoignages"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">Titre</label>
+                    <label className="block text-xs text-charcoal-500 mb-1">Titre</label>
                     <input
                       type="text"
                       value={section.title}
@@ -707,12 +707,12 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, title: e.target.value }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Titre de la section"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 mb-1">
+                    <label className="block text-xs text-charcoal-500 mb-1">
                       Sous-titre (optionnel)
                     </label>
                     <input
@@ -723,7 +723,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, subtitle: e.target.value || undefined }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Sous-titre de la section"
                     />
                   </div>
@@ -751,8 +751,8 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
           disabled={sections.length >= STRUCTURED_LIMITS.homepageSections}
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             sections.length >= STRUCTURED_LIMITS.homepageSections
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              ? 'text-charcoal-400 cursor-not-allowed'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-sand-100'
           }`}
         >
           <Plus className="w-4 h-4" />

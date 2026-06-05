@@ -165,10 +165,10 @@ export default function RisquesGeoBlock({
 
   if (hasInondation) {
     risks.push({
-      icon: <Shield className="w-5 h-5 text-blue-600" />,
+      icon: <Shield className="w-5 h-5 text-charcoal-600" />,
       label: 'Zone inondable',
       level: 'Exposé',
-      levelColor: 'text-blue-700 bg-blue-100',
+      levelColor: 'text-charcoal-700 bg-sand-200',
       description: getInondationAdvice(serviceName),
     })
   }
@@ -197,7 +197,7 @@ export default function RisquesGeoBlock({
 
   if (hasCatnat) {
     risks.push({
-      icon: <Shield className="w-5 h-5 text-blue-600" />,
+      icon: <Shield className="w-5 h-5 text-charcoal-600" />,
       label: `${c.nb_catnat} arrêtés CatNat`,
       level: (c.nb_catnat ?? 0) > 20 ? 'Très fréquent' : 'Fréquent',
       levelColor:

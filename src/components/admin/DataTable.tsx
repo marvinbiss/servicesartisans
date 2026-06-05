@@ -44,7 +44,7 @@ export function DataTable<T>({
   if (loading) {
     return (
       <div className="p-8 text-center" role="status" aria-busy="true">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin mx-auto text-charcoal-600" />
         <span className="sr-only">Chargement des données...</span>
       </div>
     )
@@ -52,7 +52,7 @@ export function DataTable<T>({
 
   if (data.length === 0) {
     return (
-      <div className="p-8 text-center text-gray-500">
+      <div className="p-8 text-center text-charcoal-500">
         {emptyIcon && <div className="mb-4">{emptyIcon}</div>}
         <p>{emptyMessage}</p>
       </div>
@@ -62,14 +62,14 @@ export function DataTable<T>({
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[800px]" aria-label={ariaLabel}>
-        <thead className="bg-gray-50 border-b border-gray-100">
+        <thead className="bg-sand-50 border-b border-sand-100">
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
-                className={`text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+                className={`text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider ${
+                  column.sortable ? 'cursor-pointer hover:bg-sand-100' : ''
                 }`}
                 style={{ width: column.width }}
                 onClick={() => column.sortable && onSort?.(column.key)}
@@ -95,11 +95,11 @@ export function DataTable<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-sand-100">
           {data.map((item) => (
             <tr
               key={rowKey(item)}
-              className={`hover:bg-gray-50 ${onRowClick ? 'cursor-pointer' : ''}`}
+              className={`hover:bg-sand-50 ${onRowClick ? 'cursor-pointer' : ''}`}
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((column) => (

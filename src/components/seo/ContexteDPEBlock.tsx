@@ -209,9 +209,9 @@ export default function ContexteDPEBlock({
         const recommendation = getDPERecommendation(serviceName, pct, communeData.revenu_median)
         if (!recommendation) return null
         return (
-          <div className="flex items-start gap-3 mt-3 p-3 rounded-lg bg-blue-50 border border-blue-100">
-            <Zap className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-blue-800 leading-relaxed">{recommendation}</p>
+          <div className="flex items-start gap-3 mt-3 p-3 rounded-lg bg-sand-100 border border-sand-200">
+            <Zap className="w-4 h-4 text-charcoal-600 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-charcoal-800 leading-relaxed">{recommendation}</p>
           </div>
         )
       })()}

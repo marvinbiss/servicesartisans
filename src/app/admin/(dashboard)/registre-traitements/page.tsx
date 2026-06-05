@@ -135,19 +135,19 @@ export default function RegistreTraitementsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-              <FileText className="w-7 h-7 text-blue-600" />
+            <h1 className="text-2xl font-bold text-charcoal-900 flex items-center gap-3">
+              <FileText className="w-7 h-7 text-charcoal-600" />
               Registre des traitements
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-charcoal-500 mt-1">
               Registre des activités de traitement — Article 30 du RGPD
             </p>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-charcoal-400 mt-1">
               Dernière mise à jour :{' '}
               {new Date(LAST_UPDATED).toLocaleDateString('fr-FR', {
                 day: 'numeric',
@@ -158,7 +158,7 @@ export default function RegistreTraitementsPage() {
           </div>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors print:hidden self-start"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors print:hidden self-start"
           >
             <Printer className="w-4 h-4" />
             Exporter PDF
@@ -166,8 +166,8 @@ export default function RegistreTraitementsPage() {
         </div>
 
         {/* Info card */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 print:mb-4">
-          <p className="text-sm text-blue-800">
+        <div className="bg-sand-100 border border-sand-300 rounded-lg p-4 mb-6 print:mb-4">
+          <p className="text-sm text-charcoal-800">
             <strong>Responsable du traitement :</strong> ServicesArtisans — Ce registre recense
             l&apos;ensemble des traitements de données personnelles conformément à l&apos;article 30
             du Règlement Général sur la Protection des Données (RGPD). Il est tenu à jour et
@@ -176,42 +176,48 @@ export default function RegistreTraitementsPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
+                <tr className="bg-sand-50 border-b border-sand-200">
                   {columnHeaders.map((header) => (
                     <th
                       key={header}
-                      className="px-4 py-3 text-left font-semibold text-gray-700 whitespace-nowrap"
+                      className="px-4 py-3 text-left font-semibold text-charcoal-700 whitespace-nowrap"
                     >
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-sand-100">
                 {traitements.map((t, index) => (
-                  <tr key={index} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-900 min-w-[180px]">{t.nom}</td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[180px]">{t.finalite}</td>
+                  <tr key={index} className="hover:bg-sand-50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-charcoal-900 min-w-[180px]">
+                      {t.nom}
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600 min-w-[180px]">{t.finalite}</td>
                     <td className="px-4 py-3 min-w-[180px]">
                       <span className="inline-block px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs font-medium">
                         {t.baseLegale}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[200px]">{t.categoriesDonnees}</td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[160px]">
+                    <td className="px-4 py-3 text-charcoal-600 min-w-[200px]">
+                      {t.categoriesDonnees}
+                    </td>
+                    <td className="px-4 py-3 text-charcoal-600 min-w-[160px]">
                       {t.personnesConcernees}
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[180px]">{t.destinataires}</td>
+                    <td className="px-4 py-3 text-charcoal-600 min-w-[180px]">{t.destinataires}</td>
                     <td className="px-4 py-3 min-w-[160px]">
                       <span className="inline-block px-2 py-1 bg-amber-50 text-amber-700 rounded text-xs font-medium">
                         {t.dureeConservation}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 min-w-[160px]">{t.mesuresSecurite}</td>
+                    <td className="px-4 py-3 text-charcoal-600 min-w-[160px]">
+                      {t.mesuresSecurite}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -220,7 +226,7 @@ export default function RegistreTraitementsPage() {
         </div>
 
         {/* Footer info */}
-        <div className="mt-6 text-sm text-gray-500 space-y-2 print:mt-4">
+        <div className="mt-6 text-sm text-charcoal-500 space-y-2 print:mt-4">
           <p>
             <strong>Sous-traitants :</strong> Supabase (hébergement DB, auth), Vercel (hébergement
             web, CDN), Stripe (paiements), Resend (emails transactionnels), Google Analytics
@@ -235,7 +241,7 @@ export default function RegistreTraitementsPage() {
             <strong>DPO :</strong> Contact via la page{' '}
             <a
               href="/confidentialite"
-              className="text-blue-600 hover:underline print:text-gray-900"
+              className="text-primary-600 hover:underline print:text-charcoal-900"
             >
               Politique de confidentialité
             </a>

@@ -37,12 +37,12 @@ export default function TemplatesPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Modèles de messages</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+          <p className="text-charcoal-500 mt-1">Modèles de messages</p>
         </div>
         <Link
           href="/admin/prospection/templates/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600"
         >
           <Plus className="w-4 h-4" /> Nouveau modèle
         </Link>
@@ -67,13 +67,13 @@ export default function TemplatesPage() {
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="bg-white rounded-lg border p-4 animate-pulse">
-              <div className="h-5 bg-gray-200 rounded w-2/3 mb-3" />
-              <div className="h-3 bg-gray-200 rounded w-1/3 mb-4" />
-              <div className="h-16 bg-gray-100 rounded" />
+              <div className="h-5 bg-sand-200 rounded w-2/3 mb-3" />
+              <div className="h-3 bg-sand-200 rounded w-1/3 mb-4" />
+              <div className="h-16 bg-sand-100 rounded" />
             </div>
           ))
         ) : templates.length === 0 ? (
-          <div className="col-span-3 text-center py-12 text-gray-400">
+          <div className="col-span-3 text-center py-12 text-charcoal-400">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>Aucun modèle. Créez votre premier modèle de message.</p>
           </div>
@@ -82,25 +82,27 @@ export default function TemplatesPage() {
             <Link
               key={tmpl.id}
               href={`/admin/prospection/templates/${tmpl.id}`}
-              className="bg-white rounded-lg border p-4 hover:border-blue-300 transition-colors"
+              className="bg-white rounded-lg border p-4 hover:border-charcoal-300 transition-colors"
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium text-gray-900">{tmpl.name}</h3>
-                <ChannelIcon channel={tmpl.channel} className="w-4 h-4 text-gray-400" />
+                <h3 className="font-medium text-charcoal-900">{tmpl.name}</h3>
+                <ChannelIcon channel={tmpl.channel} className="w-4 h-4 text-charcoal-400" />
               </div>
               <div className="flex gap-2 mb-3">
-                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-sand-100 text-charcoal-600 capitalize">
                   {tmpl.channel}
                 </span>
                 {tmpl.audience_type && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 capitalize">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-sand-200 text-charcoal-600 capitalize">
                     {tmpl.audience_type}
                   </span>
                 )}
               </div>
-              {tmpl.subject && <p className="text-sm text-gray-500 mb-1">Sujet: {tmpl.subject}</p>}
-              <p className="text-sm text-gray-400 line-clamp-3">{tmpl.body}</p>
-              <div className="mt-3 text-xs text-gray-400">
+              {tmpl.subject && (
+                <p className="text-sm text-charcoal-500 mb-1">Sujet: {tmpl.subject}</p>
+              )}
+              <p className="text-sm text-charcoal-400 line-clamp-3">{tmpl.body}</p>
+              <div className="mt-3 text-xs text-charcoal-400">
                 {tmpl.variables.length > 0 && `Variables: ${tmpl.variables.join(', ')}`}
               </div>
             </Link>

@@ -234,7 +234,7 @@ export default async function BarometreRgePage() {
               <p className="mt-1 text-sm text-charcoal-600">RGE expirés (à renouveler)</p>
             </div>
             <div className="rounded-xl border border-charcoal-200 bg-white p-5">
-              <MapPin className="h-5 w-5 text-blue-600" />
+              <MapPin className="h-5 w-5 text-charcoal-600" />
               <p className="mt-3 text-3xl font-bold text-charcoal-900">
                 {nf(snap.total_providers)}
               </p>
@@ -349,16 +349,16 @@ export default async function BarometreRgePage() {
           {/* Usage & API */}
           <section className="mt-12 rounded-xl border border-charcoal-200 bg-white p-6">
             <h2 className="flex items-center gap-2 text-xl font-bold text-charcoal-900">
-              <ExternalLink className="h-5 w-5 text-blue-600" />
+              <ExternalLink className="h-5 w-5 text-charcoal-600" />
               Reprendre ces données
             </h2>
             <p className="mt-3 text-sm text-charcoal-600">
               Données libres de réutilisation sous licence <strong>CC-BY 4.0</strong>. Attribution
               obligatoire :
             </p>
-            <blockquote className="mt-3 rounded-md border-l-4 border-blue-500 bg-blue-50 p-3 text-sm text-charcoal-700">
+            <blockquote className="mt-3 rounded-md border-l-4 border-charcoal-300 bg-sand-100 p-3 text-sm text-charcoal-700">
               Source :{' '}
-              <a href={canonicalUrl} className="font-semibold text-blue-700 hover:underline">
+              <a href={canonicalUrl} className="font-semibold text-primary-700 hover:underline">
                 {SITE_NAME} — Baromètre RGE {monthLabel}
               </a>
             </blockquote>
@@ -387,7 +387,7 @@ export default async function BarometreRgePage() {
               Snapshot capturé le {new Date(snap.captured_at).toLocaleDateString('fr-FR')}. Source
               officielle :{' '}
               <a
-                className="text-blue-600 hover:underline"
+                className="text-primary-600 hover:underline"
                 href="https://annuaire-entreprises.data.gouv.fr/"
                 rel="noopener noreferrer"
               >

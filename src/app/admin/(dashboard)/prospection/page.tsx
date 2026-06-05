@@ -41,8 +41,8 @@ export default function ProspectionDashboard() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Tableau de bord de prospection multi-canal</p>
+        <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+        <p className="text-charcoal-500 mt-1">Tableau de bord de prospection multi-canal</p>
       </div>
 
       <ProspectionNav />
@@ -64,7 +64,7 @@ export default function ProspectionDashboard() {
 
       {/* Performance par canal */}
       <div className="mt-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Performance par canal</h2>
+        <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Performance par canal</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {channels.map((ch) => (
             <div key={ch.channel} className="bg-white rounded-lg border p-4">
@@ -75,30 +75,30 @@ export default function ProspectionDashboard() {
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Envoyés</span>
+                  <span className="text-charcoal-500">Envoyés</span>
                   <span className="font-medium">{ch.sent.toLocaleString('fr-FR')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Livrés</span>
+                  <span className="text-charcoal-500">Livrés</span>
                   <span className="font-medium">{ch.delivered.toLocaleString('fr-FR')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Réponses</span>
+                  <span className="text-charcoal-500">Réponses</span>
                   <span className="font-medium">{ch.replied.toLocaleString('fr-FR')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Taux livraison</span>
+                  <span className="text-charcoal-500">Taux livraison</span>
                   <span className="font-medium text-green-600">{ch.delivery_rate.toFixed(1)}%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Taux réponse</span>
-                  <span className="font-medium text-blue-600">{ch.reply_rate.toFixed(1)}%</span>
+                  <span className="text-charcoal-500">Taux réponse</span>
+                  <span className="font-medium text-charcoal-600">{ch.reply_rate.toFixed(1)}%</span>
                 </div>
               </div>
             </div>
           ))}
           {!loading && channels.length === 0 && (
-            <div className="col-span-3 text-center py-8 text-gray-400">
+            <div className="col-span-3 text-center py-8 text-charcoal-400">
               Aucune donnée disponible. Lancez votre première campagne.
             </div>
           )}

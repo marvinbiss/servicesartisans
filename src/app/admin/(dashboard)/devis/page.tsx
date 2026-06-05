@@ -77,7 +77,7 @@ const URGENCY_CONFIG: Record<string, { variant: 'error' | 'warning' | 'default';
 
 const ASSIGNMENT_STATUS: Record<string, { cls: string; label: string }> = {
   pending: { cls: 'bg-yellow-100 text-yellow-800', label: 'En attente' },
-  viewed: { cls: 'bg-blue-100 text-blue-800', label: 'Vu' },
+  viewed: { cls: 'bg-sand-200 text-charcoal-800', label: 'Vu' },
   quoted: { cls: 'bg-green-100 text-green-800', label: 'Devis envoyé' },
   declined: { cls: 'bg-red-100 text-red-800', label: 'Décliné' },
 }
@@ -138,21 +138,21 @@ export default function AdminDevisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Demandes de devis</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-900">Demandes de devis</h1>
+          <p className="text-charcoal-500 mt-1">
             {total} demande{total > 1 ? 's' : ''} au total
           </p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-400" />
               <input
                 type="text"
                 placeholder="Rechercher par nom, email, service, ville, code postal..."
@@ -162,7 +162,7 @@ export default function AdminDevisPage() {
                   setSearch(e.target.value)
                   setPage(1)
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -175,8 +175,8 @@ export default function AdminDevisPage() {
                   }}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     status === s
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                   }`}
                 >
                   {s === 'all' ? 'Tous' : STATUS_CONFIG[s]?.label || s}
@@ -192,19 +192,19 @@ export default function AdminDevisPage() {
         )}
 
         {/* Demandes List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : demandes.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <FileText className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucune demande trouvée</p>
             </div>
           ) : (
             <>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-sand-100">
                 {demandes.map((demande) => {
                   const isExpanded = expandedId === demande.id
                   const statusConf = STATUS_CONFIG[demande.status] || STATUS_CONFIG.pending
@@ -212,7 +212,7 @@ export default function AdminDevisPage() {
                   const demandeAssignments = assignments[demande.id] || []
 
                   return (
-                    <div key={demande.id} className="hover:bg-gray-50 transition-colors">
+                    <div key={demande.id} className="hover:bg-sand-50 transition-colors">
                       {/* Main row — clickable */}
                       <button
                         onClick={() => toggleExpand(demande.id)}
@@ -221,7 +221,7 @@ export default function AdminDevisPage() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2 flex-wrap">
-                              <h3 className="font-semibold text-gray-900">
+                              <h3 className="font-semibold text-charcoal-900">
                                 {demande.service_name}
                               </h3>
                               <StatusBadge variant={statusConf.variant}>
@@ -232,7 +232,7 @@ export default function AdminDevisPage() {
                               </StatusBadge>
                             </div>
 
-                            <div className="flex items-center gap-4 text-sm text-gray-500 flex-wrap">
+                            <div className="flex items-center gap-4 text-sm text-charcoal-500 flex-wrap">
                               <span className="flex items-center gap-1">
                                 <User className="w-4 h-4" />
                                 {demande.client_name}
@@ -254,7 +254,7 @@ export default function AdminDevisPage() {
                             {/* Artisan(s) assigné(s) — visible sans expand */}
                             {demandeAssignments.length > 0 ? (
                               <div className="mt-2 flex items-center gap-2 flex-wrap">
-                                <Hammer className="w-4 h-4 text-gray-400" />
+                                <Hammer className="w-4 h-4 text-charcoal-400" />
                                 {demandeAssignments.map((a) => {
                                   const st =
                                     ASSIGNMENT_STATUS[a.status] || ASSIGNMENT_STATUS.pending
@@ -269,7 +269,7 @@ export default function AdminDevisPage() {
                                 })}
                               </div>
                             ) : (
-                              <div className="mt-2 flex items-center gap-1.5 text-xs text-gray-400">
+                              <div className="mt-2 flex items-center gap-1.5 text-xs text-charcoal-400">
                                 <Send className="w-3.5 h-3.5" />
                                 Non assigné
                               </div>
@@ -277,7 +277,7 @@ export default function AdminDevisPage() {
 
                             {/* Description preview (truncated) */}
                             {demande.description && !isExpanded && (
-                              <p className="mt-2 text-sm text-gray-600 line-clamp-1">
+                              <p className="mt-2 text-sm text-charcoal-600 line-clamp-1">
                                 {demande.description}
                               </p>
                             )}
@@ -294,9 +294,9 @@ export default function AdminDevisPage() {
                               />
                             )}
                             {isExpanded ? (
-                              <ChevronUp className="w-5 h-5 text-gray-400" />
+                              <ChevronUp className="w-5 h-5 text-charcoal-400" />
                             ) : (
-                              <ChevronDown className="w-5 h-5 text-gray-400" />
+                              <ChevronDown className="w-5 h-5 text-charcoal-400" />
                             )}
                           </div>
                         </div>
@@ -304,15 +304,15 @@ export default function AdminDevisPage() {
 
                       {/* Expanded detail */}
                       {isExpanded && (
-                        <div className="px-4 pb-4 border-t border-gray-100 bg-gray-50/50">
+                        <div className="px-4 pb-4 border-t border-sand-100 bg-sand-50/50">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                             {/* Message complet */}
                             <div className="md:col-span-2">
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                              <h4 className="text-xs font-medium text-charcoal-500 uppercase tracking-wider mb-2">
                                 Message du client
                               </h4>
-                              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                                <p className="text-sm text-gray-800 whitespace-pre-wrap">
+                              <div className="bg-white rounded-lg border border-sand-200 p-4">
+                                <p className="text-sm text-charcoal-800 whitespace-pre-wrap">
                                   {demande.description || 'Aucune description fournie'}
                                 </p>
                               </div>
@@ -320,30 +320,30 @@ export default function AdminDevisPage() {
 
                             {/* Coordonnées client */}
                             <div>
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                              <h4 className="text-xs font-medium text-charcoal-500 uppercase tracking-wider mb-2">
                                 Coordonnées
                               </h4>
-                              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-2">
+                              <div className="bg-white rounded-lg border border-sand-200 p-4 space-y-2">
                                 <div className="flex items-center gap-2 text-sm">
-                                  <User className="w-4 h-4 text-gray-400" />
-                                  <span className="font-medium text-gray-900">
+                                  <User className="w-4 h-4 text-charcoal-400" />
+                                  <span className="font-medium text-charcoal-900">
                                     {demande.client_name}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
-                                  <Mail className="w-4 h-4 text-gray-400" />
+                                  <Mail className="w-4 h-4 text-charcoal-400" />
                                   <a
                                     href={`mailto:${demande.client_email}`}
-                                    className="text-blue-600 hover:underline"
+                                    className="text-primary-600 hover:underline"
                                   >
                                     {demande.client_email}
                                   </a>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
-                                  <Phone className="w-4 h-4 text-gray-400" />
+                                  <Phone className="w-4 h-4 text-charcoal-400" />
                                   <a
                                     href={`tel:${demande.client_phone.replace(/[\s.\-()]/g, '')}`}
-                                    className="text-blue-600 hover:underline"
+                                    className="text-primary-600 hover:underline"
                                   >
                                     {demande.client_phone}
                                   </a>
@@ -353,20 +353,20 @@ export default function AdminDevisPage() {
 
                             {/* Détails demande */}
                             <div>
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                              <h4 className="text-xs font-medium text-charcoal-500 uppercase tracking-wider mb-2">
                                 Détails
                               </h4>
-                              <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-2 text-sm">
+                              <div className="bg-white rounded-lg border border-sand-200 p-4 space-y-2 text-sm">
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Service</span>
-                                  <span className="font-medium text-gray-900">
+                                  <span className="text-charcoal-500">Service</span>
+                                  <span className="font-medium text-charcoal-900">
                                     {demande.service_name}
                                   </span>
                                 </div>
                                 {(demande.city || demande.postal_code) && (
                                   <div className="flex justify-between">
-                                    <span className="text-gray-500">Localisation</span>
-                                    <span className="font-medium text-gray-900">
+                                    <span className="text-charcoal-500">Localisation</span>
+                                    <span className="font-medium text-charcoal-900">
                                       {demande.city
                                         ? `${demande.city} (${demande.postal_code})`
                                         : demande.postal_code}
@@ -374,8 +374,8 @@ export default function AdminDevisPage() {
                                   </div>
                                 )}
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Budget</span>
-                                  <span className="font-medium text-gray-900 flex items-center gap-1">
+                                  <span className="text-charcoal-500">Budget</span>
+                                  <span className="font-medium text-charcoal-900 flex items-center gap-1">
                                     <Euro className="w-3.5 h-3.5" />
                                     {demande.budget
                                       ? BUDGET_LABELS[demande.budget] || demande.budget
@@ -383,13 +383,13 @@ export default function AdminDevisPage() {
                                   </span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Urgence</span>
+                                  <span className="text-charcoal-500">Urgence</span>
                                   <StatusBadge variant={urgencyConf.variant}>
                                     {urgencyConf.label}
                                   </StatusBadge>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-gray-500">Statut</span>
+                                  <span className="text-charcoal-500">Statut</span>
                                   <StatusBadge variant={statusConf.variant}>
                                     {statusConf.label}
                                   </StatusBadge>
@@ -399,12 +399,12 @@ export default function AdminDevisPage() {
 
                             {/* Artisan(s) assigné(s) — détail */}
                             <div className="md:col-span-2">
-                              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                              <h4 className="text-xs font-medium text-charcoal-500 uppercase tracking-wider mb-2">
                                 Artisan{demandeAssignments.length > 1 ? 's' : ''} assigné
                                 {demandeAssignments.length > 1 ? 's' : ''}
                               </h4>
                               {demandeAssignments.length > 0 ? (
-                                <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
+                                <div className="bg-white rounded-lg border border-sand-200 divide-y divide-sand-100">
                                   {demandeAssignments.map((a) => {
                                     const st =
                                       ASSIGNMENT_STATUS[a.status] || ASSIGNMENT_STATUS.pending
@@ -414,13 +414,13 @@ export default function AdminDevisPage() {
                                         className="px-4 py-3 flex items-center justify-between"
                                       >
                                         <div className="flex items-center gap-3">
-                                          <Hammer className="w-4 h-4 text-gray-400" />
-                                          <span className="font-medium text-gray-900 text-sm">
+                                          <Hammer className="w-4 h-4 text-charcoal-400" />
+                                          <span className="font-medium text-charcoal-900 text-sm">
                                             {a.provider_name}
                                           </span>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                          <span className="text-xs text-gray-400">
+                                          <span className="text-xs text-charcoal-400">
                                             {formatDate(a.assigned_at)}
                                           </span>
                                           <span
@@ -434,7 +434,7 @@ export default function AdminDevisPage() {
                                   })}
                                 </div>
                               ) : (
-                                <div className="bg-white rounded-lg border border-gray-200 p-4 text-sm text-gray-400 flex items-center gap-2">
+                                <div className="bg-white rounded-lg border border-sand-200 p-4 text-sm text-charcoal-400 flex items-center gap-2">
                                   <Send className="w-4 h-4" />
                                   Aucun artisan assigné à cette demande
                                 </div>
@@ -444,7 +444,7 @@ export default function AdminDevisPage() {
 
                           {/* ID + Delete */}
                           <div className="mt-4 flex items-center justify-between">
-                            <p className="text-xs text-gray-400 font-mono">ID: {demande.id}</p>
+                            <p className="text-xs text-charcoal-400 font-mono">ID: {demande.id}</p>
                             {confirmDeleteId === demande.id ? (
                               <div className="flex items-center gap-2">
                                 <span className="text-sm text-red-600 font-medium">
@@ -470,7 +470,7 @@ export default function AdminDevisPage() {
                                     e.stopPropagation()
                                     setConfirmDeleteId(null)
                                   }}
-                                  className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                  className="px-3 py-1.5 text-xs font-medium text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200 transition-colors"
                                 >
                                   Annuler
                                 </button>
@@ -496,22 +496,22 @@ export default function AdminDevisPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>

@@ -21,7 +21,7 @@ import { useState } from 'react'
 import type { DeliveryRow, WebhookSummary } from './_types'
 
 function StatusPill({ status }: { status: number | null }) {
-  if (status === null) return <span className="text-gray-400">—</span>
+  if (status === null) return <span className="text-charcoal-400">—</span>
   if (status >= 200 && status < 300) {
     return (
       <span className="rounded bg-green-100 px-1.5 py-0.5 font-mono text-xs text-green-800">
@@ -117,18 +117,18 @@ export function WebhooksTable({ rows }: Props) {
 
   if (rows.length === 0) {
     return (
-      <p className="text-sm text-gray-700">
+      <p className="text-sm text-charcoal-700">
         Aucune subscription pour le moment. Les intégrateurs en créent via{' '}
-        <code className="rounded bg-gray-100 px-1">POST /api/v1/webhooks/subscribe</code>.
+        <code className="rounded bg-sand-100 px-1">POST /api/v1/webhooks/subscribe</code>.
       </p>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-100 bg-white shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-sand-100 bg-white shadow-sm">
       <table className="w-full text-sm" data-testid="admin-webhooks-table">
         <thead>
-          <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-600">
+          <tr className="border-b border-sand-100 bg-sand-50 text-left text-xs uppercase tracking-wide text-charcoal-600">
             <th className="px-3 py-2">URL</th>
             <th className="px-3 py-2">Events</th>
             <th className="px-3 py-2">Created</th>
@@ -192,14 +192,14 @@ function RowFragment({
   } = row
   return (
     <>
-      <tr className="border-t border-gray-100 align-top">
-        <td className="px-3 py-2 font-mono text-xs text-gray-900">
+      <tr className="border-t border-sand-100 align-top">
+        <td className="px-3 py-2 font-mono text-xs text-charcoal-900">
           <span className="block max-w-[28ch] truncate" title={url}>
             {url}
           </span>
         </td>
-        <td className="px-3 py-2 text-xs text-gray-700">{events.join(', ') || '—'}</td>
-        <td className="px-3 py-2 text-xs text-gray-600">{created_at.slice(0, 10)}</td>
+        <td className="px-3 py-2 text-xs text-charcoal-700">{events.join(', ') || '—'}</td>
+        <td className="px-3 py-2 text-xs text-charcoal-600">{created_at.slice(0, 10)}</td>
         <td className="px-3 py-2 font-mono text-xs">{delivery_count}</td>
         <td className="px-3 py-2 font-mono text-xs">
           {success_count}/{delivery_count}
@@ -212,7 +212,7 @@ function RowFragment({
             </span>
           ) : null}
         </td>
-        <td className="px-3 py-2 text-xs text-gray-600">
+        <td className="px-3 py-2 text-xs text-charcoal-600">
           {last_delivery_at ? last_delivery_at.slice(0, 16).replace('T', ' ') : '—'}
         </td>
         <td className="px-3 py-2">
@@ -225,7 +225,7 @@ function RowFragment({
             disabled={busy}
             data-testid={`toggle-${id}`}
             className={`rounded px-2 py-0.5 text-xs ${
-              active ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'
+              active ? 'bg-green-100 text-green-800' : 'bg-sand-200 text-charcoal-700'
             } ${busy ? 'opacity-50' : 'hover:opacity-80'}`}
           >
             {active ? 'Active' : 'Disabled'}
@@ -238,7 +238,7 @@ function RowFragment({
               onClick={onFireTest}
               disabled={busy}
               data-testid={`fire-test-${id}`}
-              className="rounded border border-gray-200 px-2 py-0.5 text-xs hover:border-blue-400 disabled:opacity-50"
+              className="rounded border border-sand-200 px-2 py-0.5 text-xs hover:border-charcoal-300 disabled:opacity-50"
             >
               Test
             </button>
@@ -247,7 +247,7 @@ function RowFragment({
               onClick={onLoadDeliveries}
               disabled={busy}
               data-testid={`deliveries-${id}`}
-              className="rounded border border-gray-200 px-2 py-0.5 text-xs hover:border-blue-400 disabled:opacity-50"
+              className="rounded border border-sand-200 px-2 py-0.5 text-xs hover:border-charcoal-300 disabled:opacity-50"
             >
               {isOpen ? 'Hide' : 'Deliveries'}
             </button>
@@ -255,23 +255,23 @@ function RowFragment({
         </td>
       </tr>
       {isOpen ? (
-        <tr className="bg-gray-50">
+        <tr className="bg-sand-50">
           <td colSpan={9} className="px-3 py-3">
             {deliveries && deliveries.length > 0 ? (
               <ul className="space-y-1 text-xs">
                 {deliveries.map((d) => (
                   <li key={d.id} className="font-mono">
                     <StatusPill status={d.status} />{' '}
-                    <span className="ml-2 text-gray-900">{d.event}</span>{' '}
-                    <span className="ml-2 text-gray-600">
+                    <span className="ml-2 text-charcoal-900">{d.event}</span>{' '}
+                    <span className="ml-2 text-charcoal-600">
                       attempt {d.attempt} · {d.duration_ms ?? '—'}ms
                     </span>{' '}
-                    <span className="ml-2 text-gray-500">
+                    <span className="ml-2 text-charcoal-500">
                       {d.created_at.slice(0, 19).replace('T', ' ')}
                     </span>
                     {d.error ? <span className="ml-2 text-red-700">err: {d.error}</span> : null}
                     {d.body_excerpt ? (
-                      <span className="ml-2 truncate text-gray-500" title={d.body_excerpt}>
+                      <span className="ml-2 truncate text-charcoal-500" title={d.body_excerpt}>
                         body: {d.body_excerpt.slice(0, 80)}
                       </span>
                     ) : null}
@@ -279,7 +279,7 @@ function RowFragment({
                 ))}
               </ul>
             ) : (
-              <p className="text-xs text-gray-600">Aucune delivery enregistrée.</p>
+              <p className="text-xs text-charcoal-600">Aucune delivery enregistrée.</p>
             )}
           </td>
         </tr>

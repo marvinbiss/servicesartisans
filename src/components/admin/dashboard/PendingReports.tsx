@@ -44,7 +44,7 @@ const reasonColors: Record<string, string> = {
   fake: 'bg-red-100 text-red-600',
   inappropriate: 'bg-orange-100 text-orange-600',
   harassment: 'bg-red-100 text-red-600',
-  other: 'bg-gray-100 text-gray-600',
+  other: 'bg-sand-100 text-charcoal-600',
 }
 
 function formatDate(iso: string): string {
@@ -59,11 +59,11 @@ function SkeletonReport() {
   return (
     <div className="p-4 animate-pulse">
       <div className="flex items-start gap-3">
-        <div className="w-9 h-9 bg-gray-200 rounded-lg shrink-0" />
+        <div className="w-9 h-9 bg-sand-200 rounded-lg shrink-0" />
         <div className="flex-1">
-          <div className="w-28 h-4 bg-gray-200 rounded mb-2" />
-          <div className="w-56 h-3 bg-gray-200 rounded mb-2" />
-          <div className="w-20 h-3 bg-gray-200 rounded" />
+          <div className="w-28 h-4 bg-sand-200 rounded mb-2" />
+          <div className="w-56 h-3 bg-sand-200 rounded mb-2" />
+          <div className="w-20 h-3 bg-sand-200 rounded" />
         </div>
       </div>
     </div>
@@ -115,13 +115,13 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div
-        className="bg-white rounded-xl shadow-sm border border-gray-100"
+        className="bg-white rounded-xl shadow-sm border border-sand-100"
         role="region"
         aria-label="Signalements en attente"
       >
-        <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="p-6 border-b border-sand-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-gray-900">Signalements</h3>
+            <h3 className="font-semibold text-charcoal-900">Signalements</h3>
             {reports.length > 0 && (
               <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-medium">
                 {reports.length}
@@ -130,17 +130,17 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
           </div>
           <Link
             href="/admin/signalements"
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 transition-colors"
           >
             Voir tout
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-sand-100">
           {loading ? (
             Array.from({ length: 3 }, (_, i) => <SkeletonReport key={i} />)
           ) : reports.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-charcoal-500">
               <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-300" />
               <p className="font-medium">Aucun signalement en attente</p>
               <p className="text-sm mt-1">Tous les signalements ont été traités</p>
@@ -157,19 +157,21 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-gray-900">
+                        <span className="font-medium text-charcoal-900">
                           {targetLabels[report.target_type] || report.target_type}
                         </span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">
+                        <span className="px-2 py-0.5 bg-sand-100 text-charcoal-600 rounded text-xs">
                           {reasonLabels[report.reason] || report.reason}
                         </span>
                       </div>
                       {report.description && (
-                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                        <p className="text-sm text-charcoal-600 mt-1 line-clamp-2">
                           {report.description}
                         </p>
                       )}
-                      <p className="text-xs text-gray-400 mt-1">{formatDate(report.created_at)}</p>
+                      <p className="text-xs text-charcoal-400 mt-1">
+                        {formatDate(report.created_at)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -189,7 +191,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
                     <button
                       onClick={() => handleAction(report.id, 'dismiss')}
                       disabled={actionLoading === report.id}
-                      className="p-2 text-gray-400 hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 text-charcoal-400 hover:bg-sand-50 rounded-lg transition-colors disabled:opacity-50"
                       title="Rejeter"
                       aria-label="Rejeter ce signalement"
                     >
@@ -218,9 +220,9 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
         <div className="mb-4">
           <label
             htmlFor="resolution-notes"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-charcoal-700 mb-1"
           >
-            Notes de résolution <span className="text-gray-400 font-normal">(optionnel)</span>
+            Notes de résolution <span className="text-charcoal-400 font-normal">(optionnel)</span>
           </label>
           <textarea
             id="resolution-notes"
@@ -229,7 +231,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
             placeholder="Décrivez la raison de votre décision..."
             maxLength={1000}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
           />
         </div>
       </ConfirmationModal>

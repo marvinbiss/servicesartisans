@@ -9,9 +9,9 @@ import type { AdminRole, AdminUser } from '@/types/admin'
 
 const ROLE_LABELS: Record<AdminRole, { label: string; color: string }> = {
   super_admin: { label: 'Super Admin', color: 'bg-red-100 text-red-700' },
-  admin: { label: 'Admin', color: 'bg-blue-100 text-blue-700' },
+  admin: { label: 'Admin', color: 'bg-sand-200 text-charcoal-700' },
   moderator: { label: 'Modérateur', color: 'bg-green-100 text-green-700' },
-  viewer: { label: 'Lecteur', color: 'bg-gray-100 text-gray-700' },
+  viewer: { label: 'Lecteur', color: 'bg-sand-100 text-charcoal-700' },
 }
 
 export default function AdminsManagementPage() {
@@ -118,24 +118,26 @@ export default function AdminsManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
               onClick={() => router.push('/admin/parametres')}
-              className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
+              className="text-charcoal-500 hover:text-charcoal-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
               Retour aux paramètres
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Administrateurs</h1>
-            <p className="text-gray-500 mt-1">Gérer les rôles et permissions des administrateurs</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Gestion des Administrateurs</h1>
+            <p className="text-charcoal-500 mt-1">
+              Gérer les rôles et permissions des administrateurs
+            </p>
           </div>
           <button
             onClick={() => setAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
             Ajouter un admin
@@ -143,13 +145,13 @@ export default function AdminsManagementPage() {
         </div>
 
         {/* Role Legend */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Niveaux de permissions</h3>
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
+          <h3 className="text-sm font-medium text-charcoal-700 mb-3">Niveaux de permissions</h3>
           <div className="flex flex-wrap gap-3">
             {Object.entries(ROLE_LABELS).map(([role, { label, color }]) => (
               <div key={role} className="flex items-center gap-2">
                 <span className={`px-2 py-1 rounded text-xs font-medium ${color}`}>{label}</span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-charcoal-500">
                   {role === 'super_admin' && '(Accès total)'}
                   {role === 'admin' && '(CRUD limité)'}
                   {role === 'moderator' && '(Modération)'}
@@ -166,53 +168,53 @@ export default function AdminsManagementPage() {
         )}
 
         {/* Admins List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : admins.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Shield className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <Shield className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucun administrateur trouvé</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[600px]" aria-label="Liste des administrateurs">
-                  <thead className="bg-gray-50 border-b border-gray-100">
+                  <thead className="bg-sand-50 border-b border-sand-100">
                     <tr>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase"
                       >
                         Email
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase"
                       >
                         Rôle
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase"
                       >
                         Ajouté le
                       </th>
                       <th
                         scope="col"
-                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase"
+                        className="text-right px-6 py-3 text-xs font-medium text-charcoal-500 uppercase"
                       >
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-sand-100">
                     {admins.map((admin) => (
-                      <tr key={admin.id} className="hover:bg-gray-50">
+                      <tr key={admin.id} className="hover:bg-sand-50">
                         <td className="px-6 py-4">
-                          <p className="font-medium text-gray-900">{admin.email}</p>
+                          <p className="font-medium text-charcoal-900">{admin.email}</p>
                         </td>
                         <td className="px-6 py-4">
                           <select
@@ -230,7 +232,7 @@ export default function AdminsManagementPage() {
                             ))}
                           </select>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-500">
+                        <td className="px-6 py-4 text-sm text-charcoal-500">
                           {formatDate(admin.created_at)}
                         </td>
                         <td className="px-6 py-4">
@@ -243,7 +245,7 @@ export default function AdminsManagementPage() {
                                   adminEmail: admin.email,
                                 })
                               }
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                              className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                               title="Supprimer"
                               aria-label={`Supprimer l'administrateur ${admin.email}`}
                             >
@@ -258,15 +260,15 @@ export default function AdminsManagementPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
                     aria-label="Page précédente"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -274,7 +276,7 @@ export default function AdminsManagementPage() {
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
                     aria-label="Page suivante"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -295,27 +297,27 @@ export default function AdminsManagementPage() {
             aria-labelledby="add-admin-title"
             className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6"
           >
-            <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">
+            <h3 id="add-admin-title" className="text-lg font-semibold text-charcoal-900 mb-4">
               Ajouter un administrateur
             </h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">Email</label>
                 <input
                   type="email"
                   value={newAdmin.email}
                   onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
                   maxLength={254}
                   placeholder="admin@example.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">Rôle</label>
                 <select
                   value={newAdmin.role}
                   onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value as AdminRole })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   {Object.entries(ROLE_LABELS).map(([role, { label }]) => (
                     <option key={role} value={role}>
@@ -328,14 +330,14 @@ export default function AdminsManagementPage() {
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setAddModal(false)}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                className="px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200"
               >
                 Annuler
               </button>
               <button
                 onClick={handleAddAdmin}
                 disabled={adding || !newAdmin.email}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
               >
                 {adding ? 'Ajout...' : 'Ajouter'}
               </button>

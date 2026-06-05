@@ -215,18 +215,18 @@ export default async function AdminCeeDashboardPage() {
     allDossiersRes.error || recentDossiersRes.error || stagnantRes.error || recentTableRes.error
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <BarChart3 className="w-6 h-6 text-blue-600" />
+          <div className="p-2 bg-sand-200 rounded-lg">
+            <BarChart3 className="w-6 h-6 text-charcoal-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-charcoal-900">
               Dashboard CEE — Tableau de bord mandataire
             </h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-charcoal-500 mt-0.5">
               KPIs temps réel du pipeline de dossiers CEE.
             </p>
           </div>
@@ -280,10 +280,10 @@ export default async function AdminCeeDashboardPage() {
                   className={`w-5 h-5 ${stagnantCount > 0 ? 'text-amber-600' : 'text-accent-600'}`}
                 />
               </div>
-              <span className="text-sm text-gray-500">Dossiers stagnants</span>
+              <span className="text-sm text-charcoal-500">Dossiers stagnants</span>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{fmtNum(stagnantCount)}</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-2xl font-bold text-charcoal-900">{fmtNum(stagnantCount)}</p>
+            <p className="text-xs text-charcoal-500 mt-1">
               Brouillons créés il y a plus de 3 jours sans progression
             </p>
           </div>
@@ -295,17 +295,21 @@ export default async function AdminCeeDashboardPage() {
           <div className="bg-white border border-sand-200 shadow-sm rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <h3 className="text-sm font-semibold text-gray-700">Top 5 opérations</h3>
+              <h3 className="text-sm font-semibold text-charcoal-700">Top 5 opérations</h3>
             </div>
-            {topOperations.length === 0 && <p className="text-sm text-gray-400">Aucune donnée</p>}
+            {topOperations.length === 0 && (
+              <p className="text-sm text-charcoal-400">Aucune donnée</p>
+            )}
             <div className="space-y-3">
               {topOperations.map(([code, count], i) => (
                 <div key={code} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-gray-400 w-4">{i + 1}.</span>
-                    <span className="text-sm font-medium text-gray-900">{code}</span>
+                    <span className="text-xs font-bold text-charcoal-400 w-4">{i + 1}.</span>
+                    <span className="text-sm font-medium text-charcoal-900">{code}</span>
                   </div>
-                  <span className="text-sm tabular-nums font-semibold text-gray-700">{count}</span>
+                  <span className="text-sm tabular-nums font-semibold text-charcoal-700">
+                    {count}
+                  </span>
                 </div>
               ))}
             </div>

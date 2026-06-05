@@ -59,7 +59,11 @@ function formatDate(iso: string): string {
 
 function formatEuro(n: number | null): string {
   if (n === null || n === undefined) return '—'
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n)
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(n)
 }
 
 const CATEGORIE_COLORS: Record<Estimation['categorie_anah'], string> = {
@@ -124,8 +128,8 @@ export default function SimulateurList() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Simulateur — Estimations</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-900">Simulateur — Estimations</h1>
+          <p className="text-sm text-charcoal-500 mt-1">
             Traçabilité &lt; 30s — liste + export + détail avec formule_debug
           </p>
         </div>
@@ -138,7 +142,7 @@ export default function SimulateurList() {
           </a>
           <button
             onClick={() => mutate()}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-charcoal-700 bg-white border border-sand-300 rounded-lg hover:bg-sand-50"
           >
             <RefreshCw className="w-4 h-4" /> Rafraîchir
           </button>
@@ -146,7 +150,7 @@ export default function SimulateurList() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 space-y-3">
+      <div className="bg-white rounded-xl border border-sand-200 p-4 mb-6 space-y-3">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
           <select
             value={categorie}
@@ -154,7 +158,7 @@ export default function SimulateurList() {
               setCategorie(e.target.value as typeof categorie)
               setPage(1)
             }}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg"
+            className="px-3 py-2 text-sm border border-sand-200 rounded-lg"
           >
             <option value="all">Toutes catégories</option>
             <option value="bleu">Bleu</option>
@@ -168,7 +172,7 @@ export default function SimulateurList() {
               setParcours(e.target.value as typeof parcours)
               setPage(1)
             }}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg"
+            className="px-3 py-2 text-sm border border-sand-200 rounded-lg"
           >
             <option value="all">Tous parcours</option>
             <option value="geste">Geste</option>
@@ -180,7 +184,7 @@ export default function SimulateurList() {
               setZone(e.target.value as typeof zone)
               setPage(1)
             }}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg"
+            className="px-3 py-2 text-sm border border-sand-200 rounded-lg"
           >
             <option value="all">Toutes zones</option>
             <option value="H1">H1</option>
@@ -193,7 +197,7 @@ export default function SimulateurList() {
               setConsent(e.target.value as typeof consent)
               setPage(1)
             }}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-lg"
+            className="px-3 py-2 text-sm border border-sand-200 rounded-lg"
           >
             <option value="all">Consent RGPD</option>
             <option value="true">Avec consent</option>
@@ -201,20 +205,20 @@ export default function SimulateurList() {
           </select>
           <form onSubmit={handleSearch} className="flex gap-1 col-span-2 md:col-span-1">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="EST-..."
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-sand-200 rounded-lg"
               />
             </div>
           </form>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Du</label>
+            <label className="block text-xs text-charcoal-500 mb-1">Du</label>
             <input
               type="date"
               value={from}
@@ -222,11 +226,11 @@ export default function SimulateurList() {
                 setFrom(e.target.value)
                 setPage(1)
               }}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg"
+              className="w-full px-3 py-2 text-sm border border-sand-200 rounded-lg"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Au</label>
+            <label className="block text-xs text-charcoal-500 mb-1">Au</label>
             <input
               type="date"
               value={to}
@@ -234,7 +238,7 @@ export default function SimulateurList() {
                 setTo(e.target.value)
                 setPage(1)
               }}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg"
+              className="w-full px-3 py-2 text-sm border border-sand-200 rounded-lg"
             />
           </div>
         </div>
@@ -251,43 +255,53 @@ export default function SimulateurList() {
           <Loader2 className="w-8 h-8 animate-spin text-[#E07040]" />
         </div>
       ) : rows.length === 0 ? (
-        <div className="text-center py-16 text-gray-500 bg-white rounded-xl border border-gray-200">
+        <div className="text-center py-16 text-charcoal-500 bg-white rounded-xl border border-sand-200">
           <p className="font-medium">Aucune estimation</p>
           <p className="text-sm mt-1">Aucun résultat pour ces filtres.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">
-                    <button onClick={() => toggleSort('created_at')} className="hover:text-gray-900">
+                <tr className="bg-sand-50 border-b border-sand-200">
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">
+                    <button
+                      onClick={() => toggleSort('created_at')}
+                      className="hover:text-charcoal-900"
+                    >
                       Date {sortBy === 'created_at' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </button>
                   </th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Public ID</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Catégorie</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Parcours</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Zone</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">
-                    <button onClick={() => toggleSort('mpr_total')} className="hover:text-gray-900">
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Public ID</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Catégorie</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Parcours</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Zone</th>
+                  <th className="text-right px-4 py-3 font-semibold text-charcoal-600">
+                    <button
+                      onClick={() => toggleSort('mpr_total')}
+                      className="hover:text-charcoal-900"
+                    >
                       MPR {sortBy === 'mpr_total' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </button>
                   </th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">CEE haut</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">
-                    <button onClick={() => toggleSort('reste_a_charge_bas')} className="hover:text-gray-900">
-                      RAC bas {sortBy === 'reste_a_charge_bas' && (sortOrder === 'desc' ? '↓' : '↑')}
+                  <th className="text-right px-4 py-3 font-semibold text-charcoal-600">CEE haut</th>
+                  <th className="text-right px-4 py-3 font-semibold text-charcoal-600">
+                    <button
+                      onClick={() => toggleSort('reste_a_charge_bas')}
+                      className="hover:text-charcoal-900"
+                    >
+                      RAC bas{' '}
+                      {sortBy === 'reste_a_charge_bas' && (sortOrder === 'desc' ? '↓' : '↑')}
                     </button>
                   </th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Pipedrive</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Pipedrive</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                  <tr key={row.id} className="border-b border-sand-100 hover:bg-sand-50">
+                    <td className="px-4 py-3 text-charcoal-500 whitespace-nowrap">
                       {formatDate(row.created_at)}
                     </td>
                     <td className="px-4 py-3">
@@ -305,15 +319,15 @@ export default function SimulateurList() {
                         {row.categorie_anah}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-700 capitalize">{row.parcours}</td>
-                    <td className="px-4 py-3 text-gray-700">{row.zone_climatique}</td>
-                    <td className="px-4 py-3 text-right text-gray-900 font-medium">
+                    <td className="px-4 py-3 text-charcoal-700 capitalize">{row.parcours}</td>
+                    <td className="px-4 py-3 text-charcoal-700">{row.zone_climatique}</td>
+                    <td className="px-4 py-3 text-right text-charcoal-900 font-medium">
                       {formatEuro(row.mpr_total)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-700">
+                    <td className="px-4 py-3 text-right text-charcoal-700">
                       {formatEuro(row.cee_fourchette_haut)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-900 font-medium">
+                    <td className="px-4 py-3 text-right text-charcoal-900 font-medium">
                       {formatEuro(row.reste_a_charge_bas)}
                     </td>
                     <td className="px-4 py-3">
@@ -322,13 +336,13 @@ export default function SimulateurList() {
                           href={`https://servicesartisans.pipedrive.com/deal/${row.pipedrive_deal_id}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                          className="inline-flex items-center gap-1 text-xs text-primary-600 hover:underline"
                         >
                           #{row.pipedrive_deal_id}
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       ) : (
-                        <span className="text-gray-300">—</span>
+                        <span className="text-charcoal-300">—</span>
                       )}
                     </td>
                   </tr>
@@ -338,8 +352,8 @@ export default function SimulateurList() {
           </div>
 
           {pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
+            <div className="flex items-center justify-between px-4 py-3 border-t border-sand-200">
+              <p className="text-sm text-charcoal-500">
                 {(pagination.page - 1) * pagination.limit + 1}–
                 {Math.min(pagination.page * pagination.limit, pagination.total)} sur{' '}
                 {pagination.total}
@@ -348,17 +362,17 @@ export default function SimulateurList() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40"
+                  className="p-2 rounded-lg hover:bg-sand-100 disabled:opacity-40"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="px-3 py-1 text-sm font-medium text-gray-700">
+                <span className="px-3 py-1 text-sm font-medium text-charcoal-700">
                   {page} / {pagination.totalPages}
                 </span>
                 <button
                   onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                   disabled={page === pagination.totalPages}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40"
+                  className="p-2 rounded-lg hover:bg-sand-100 disabled:opacity-40"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>

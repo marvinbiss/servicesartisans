@@ -119,9 +119,9 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
-        <div className="animate-pulse h-96 bg-gray-100 rounded-lg" />
+        <div className="animate-pulse h-96 bg-sand-100 rounded-lg" />
       </div>
     )
   }
@@ -131,21 +131,21 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       <div className="mb-6">
         <Link
           href="/admin/prospection/inbox"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour à la boîte de réception
         </Link>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-charcoal-900">
             {contact?.contact_name || contact?.company_name || 'Conversation'}
           </h1>
           {contact?.contact_type && <ContactTypeBadge type={contact.contact_type} />}
           {conversation && (
-            <ChannelIcon channel={conversation.channel} className="w-5 h-5 text-gray-400" />
+            <ChannelIcon channel={conversation.channel} className="w-5 h-5 text-charcoal-400" />
           )}
         </div>
-        {contact?.email && <p className="text-sm text-gray-500">{contact.email}</p>}
-        {contact?.phone && <p className="text-sm text-gray-500">{contact.phone}</p>}
+        {contact?.email && <p className="text-sm text-charcoal-500">{contact.email}</p>}
+        {contact?.phone && <p className="text-sm text-charcoal-500">{contact.phone}</p>}
       </div>
 
       <ProspectionNav />
@@ -168,7 +168,9 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       <div className="bg-white rounded-lg border">
         <div className="p-4 space-y-4 max-h-[500px] overflow-y-auto">
           {messages.length === 0 ? (
-            <p className="text-center text-gray-400 py-8">Aucun message dans cette conversation</p>
+            <p className="text-center text-charcoal-400 py-8">
+              Aucun message dans cette conversation
+            </p>
           ) : (
             messages.map((msg) => (
               <div
@@ -179,9 +181,9 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
                   className={`max-w-[70%] rounded-lg px-4 py-2 ${
                     msg.direction === 'outbound'
                       ? msg.sender_type === 'ai'
-                        ? 'bg-blue-100 text-blue-900'
-                        : 'bg-blue-100 text-blue-900'
-                      : 'bg-gray-100 text-gray-900'
+                        ? 'bg-sand-200 text-charcoal-900'
+                        : 'bg-sand-200 text-charcoal-900'
+                      : 'bg-sand-100 text-charcoal-900'
                   }`}
                 >
                   <div className="flex items-center gap-1.5 mb-1 text-xs opacity-60">
@@ -229,7 +231,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
           />
           <div className="flex items-center justify-between mb-3">
             <span
-              className={`text-xs ${replyText.length > MAX_REPLY_LENGTH ? 'text-red-600 font-medium' : 'text-gray-400'}`}
+              className={`text-xs ${replyText.length > MAX_REPLY_LENGTH ? 'text-red-600 font-medium' : 'text-charcoal-400'}`}
             >
               {replyText.length}/{MAX_REPLY_LENGTH}
             </span>
@@ -238,14 +240,14 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
             <button
               onClick={handleAIGenerate}
               disabled={generating}
-              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-blue-50 text-blue-600 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-sand-100 text-charcoal-600 disabled:opacity-50"
             >
               <Sparkles className="w-4 h-4" /> {generating ? 'Génération...' : 'Générer avec IA'}
             </button>
             <button
               onClick={handleReply}
               disabled={sending || !replyText.trim() || replyText.length > MAX_REPLY_LENGTH}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 ml-auto"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 ml-auto"
             >
               <Send className="w-4 h-4" /> {sending ? 'Envoi...' : 'Envoyer'}
             </button>

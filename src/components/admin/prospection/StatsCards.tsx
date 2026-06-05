@@ -23,7 +23,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Contacts',
       value: stats?.total_contacts || 0,
       icon: Users,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
       detail: stats
         ? `${stats.contacts_by_type.artisan} artisans, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} mairies`
         : '',
@@ -39,7 +39,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Messages envoyés',
       value: stats?.total_messages_sent || 0,
       icon: MessageSquare,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
       detail: stats
         ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}`
         : '',
@@ -54,7 +54,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Taux de réponse',
       value: `${(stats?.overall_reply_rate || 0).toFixed(1)}%`,
       icon: Inbox,
-      color: 'text-blue-600 bg-blue-100',
+      color: 'text-charcoal-600 bg-sand-200',
       detail: `${stats?.open_conversations || 0} conversations ouvertes`,
     },
     {
@@ -70,9 +70,9 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="bg-white rounded-lg border p-4 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
-            <div className="h-8 bg-gray-200 rounded w-1/2 mb-2" />
-            <div className="h-3 bg-gray-200 rounded w-2/3" />
+            <div className="h-4 bg-sand-200 rounded w-1/3 mb-3" />
+            <div className="h-8 bg-sand-200 rounded w-1/2 mb-2" />
+            <div className="h-3 bg-sand-200 rounded w-2/3" />
           </div>
         ))}
       </div>
@@ -86,15 +86,15 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
         return (
           <div key={card.name} className="bg-white rounded-lg border p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-500">{card.name}</span>
+              <span className="text-sm text-charcoal-500">{card.name}</span>
               <div className={`p-2 rounded-lg ${card.color}`}>
                 <Icon className="w-4 h-4" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-2xl font-bold text-charcoal-900">
               {typeof card.value === 'number' ? card.value.toLocaleString('fr-FR') : card.value}
             </p>
-            {card.detail && <p className="text-xs text-gray-400 mt-1">{card.detail}</p>}
+            {card.detail && <p className="text-xs text-charcoal-400 mt-1">{card.detail}</p>}
           </div>
         )
       })}
@@ -119,11 +119,11 @@ export function ChannelIcon({ channel, className }: { channel: string; className
 // Badge de statut campagne
 export function CampaignStatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    draft: 'bg-gray-100 text-gray-700',
-    scheduled: 'bg-blue-100 text-blue-700',
+    draft: 'bg-sand-100 text-charcoal-700',
+    scheduled: 'bg-sand-200 text-charcoal-700',
     sending: 'bg-green-100 text-green-700',
     paused: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-blue-100 text-blue-700',
+    completed: 'bg-sand-200 text-charcoal-700',
     cancelled: 'bg-red-100 text-red-700',
   }
 
@@ -138,7 +138,7 @@ export function CampaignStatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || 'bg-gray-100 text-gray-700'}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status] || 'bg-sand-100 text-charcoal-700'}`}
     >
       {labels[status] || status}
     </span>
@@ -148,9 +148,9 @@ export function CampaignStatusBadge({ status }: { status: string }) {
 // Badge type contact
 export function ContactTypeBadge({ type }: { type: string }) {
   const styles: Record<string, string> = {
-    artisan: 'bg-blue-100 text-blue-700',
+    artisan: 'bg-sand-200 text-charcoal-700',
     client: 'bg-green-100 text-green-700',
-    mairie: 'bg-blue-100 text-blue-700',
+    mairie: 'bg-sand-200 text-charcoal-700',
   }
 
   const labels: Record<string, string> = {
@@ -161,7 +161,7 @@ export function ContactTypeBadge({ type }: { type: string }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-gray-100 text-gray-700'}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[type] || 'bg-sand-100 text-charcoal-700'}`}
     >
       {labels[type] || type}
     </span>

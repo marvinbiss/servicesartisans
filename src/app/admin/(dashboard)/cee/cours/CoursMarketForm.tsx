@@ -109,8 +109,8 @@ export function CoursMarketForm({ initialData }: Props) {
       </div>
 
       {/* Formulaire d'ajout */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Ajouter un nouveau cours</h2>
+      <div className="bg-white rounded-lg border border-sand-200 p-6">
+        <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Ajouter un nouveau cours</h2>
 
         {error && (
           <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -129,14 +129,17 @@ export function CoursMarketForm({ initialData }: Props) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="price_type" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="price_type"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
+              >
                 Type
               </label>
               <select
                 id="price_type"
                 value={priceType}
                 onChange={(e) => setPriceType(e.target.value as 'classique' | 'precarite')}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               >
                 <option value="classique">Classique</option>
                 <option value="precarite">Précarité</option>
@@ -146,7 +149,7 @@ export function CoursMarketForm({ initialData }: Props) {
             <div>
               <label
                 htmlFor="eur_per_mwhc"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
               >
                 Montant (€/MWhc)
               </label>
@@ -160,12 +163,12 @@ export function CoursMarketForm({ initialData }: Props) {
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="ex: 9.50"
                 required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               />
             </div>
 
             <div>
-              <label htmlFor="source" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="source" className="block text-sm font-medium text-charcoal-700 mb-1">
                 Source
               </label>
               <input
@@ -175,14 +178,14 @@ export function CoursMarketForm({ initialData }: Props) {
                 onChange={(e) => setSource(e.target.value)}
                 placeholder="ex: Emmy PNCEE mars 2026"
                 maxLength={200}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               />
             </div>
 
             <div>
               <label
                 htmlFor="effective_date"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-charcoal-700 mb-1"
               >
                 Date d&apos;effet
               </label>
@@ -192,7 +195,7 @@ export function CoursMarketForm({ initialData }: Props) {
                 value={effectiveDate}
                 onChange={(e) => setEffectiveDate(e.target.value)}
                 required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               />
             </div>
           </div>
@@ -201,7 +204,7 @@ export function CoursMarketForm({ initialData }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
@@ -215,29 +218,31 @@ export function CoursMarketForm({ initialData }: Props) {
       </div>
 
       {/* Historique */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Historique des cours</h2>
+      <div className="bg-white rounded-lg border border-sand-200">
+        <div className="px-6 py-4 border-b border-sand-200">
+          <h2 className="text-lg font-semibold text-charcoal-900">Historique des cours</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-6 py-3 text-left font-medium text-gray-500">Type</th>
-                <th className="px-6 py-3 text-left font-medium text-gray-500">Montant</th>
-                <th className="px-6 py-3 text-left font-medium text-gray-500">Source</th>
-                <th className="px-6 py-3 text-left font-medium text-gray-500">Date d&apos;effet</th>
-                <th className="px-6 py-3 text-left font-medium text-gray-500">Ajouté le</th>
+              <tr className="border-b border-sand-200 bg-sand-50">
+                <th className="px-6 py-3 text-left font-medium text-charcoal-500">Type</th>
+                <th className="px-6 py-3 text-left font-medium text-charcoal-500">Montant</th>
+                <th className="px-6 py-3 text-left font-medium text-charcoal-500">Source</th>
+                <th className="px-6 py-3 text-left font-medium text-charcoal-500">
+                  Date d&apos;effet
+                </th>
+                <th className="px-6 py-3 text-left font-medium text-charcoal-500">Ajouté le</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-sand-200">
               {prices.map((p) => (
-                <tr key={p.id} className="hover:bg-gray-50">
+                <tr key={p.id} className="hover:bg-sand-50">
                   <td className="px-6 py-3">
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
                         p.price_type === 'classique'
-                          ? 'bg-blue-100 text-blue-700'
+                          ? 'bg-sand-200 text-charcoal-700'
                           : 'bg-amber-100 text-amber-700'
                       }`}
                     >
@@ -247,16 +252,16 @@ export function CoursMarketForm({ initialData }: Props) {
                   <td className="px-6 py-3 font-mono font-medium">
                     {Number(p.eur_per_mwhc).toFixed(2)} €/MWhc
                   </td>
-                  <td className="px-6 py-3 text-gray-600">{p.source || '—'}</td>
-                  <td className="px-6 py-3 text-gray-600">{p.effective_date}</td>
-                  <td className="px-6 py-3 text-gray-400">
+                  <td className="px-6 py-3 text-charcoal-600">{p.source || '—'}</td>
+                  <td className="px-6 py-3 text-charcoal-600">{p.effective_date}</td>
+                  <td className="px-6 py-3 text-charcoal-400">
                     {new Date(p.created_at).toLocaleDateString('fr-FR')}
                   </td>
                 </tr>
               ))}
               {prices.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
+                  <td colSpan={5} className="px-6 py-8 text-center text-charcoal-400">
                     Aucun cours enregistré.
                   </td>
                 </tr>
@@ -280,28 +285,28 @@ function PriceCard({
   price: MarketPrice | undefined
   color: 'blue' | 'amber'
 }) {
-  const bgClass = color === 'blue' ? 'bg-blue-50 border-blue-200' : 'bg-amber-50 border-amber-200'
-  const iconClass = color === 'blue' ? 'text-blue-600' : 'text-amber-600'
-  const valueClass = color === 'blue' ? 'text-blue-900' : 'text-amber-900'
+  const bgClass = color === 'blue' ? 'bg-sand-100 border-sand-300' : 'bg-amber-50 border-amber-200'
+  const iconClass = color === 'blue' ? 'text-charcoal-600' : 'text-amber-600'
+  const valueClass = color === 'blue' ? 'text-charcoal-900' : 'text-amber-900'
 
   return (
     <div className={`rounded-lg border p-5 ${bgClass}`}>
       <div className="flex items-center gap-2 mb-2">
         <TrendingUp className={`w-5 h-5 ${iconClass}`} />
-        <span className="text-sm font-medium text-gray-600">{label}</span>
+        <span className="text-sm font-medium text-charcoal-600">{label}</span>
       </div>
       {price ? (
         <>
           <p className={`text-2xl font-bold ${valueClass}`}>
             {Number(price.eur_per_mwhc).toFixed(2)} €/MWhc
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-charcoal-500 mt-1">
             Depuis le {price.effective_date}
             {price.source ? ` — ${price.source}` : ''}
           </p>
         </>
       ) : (
-        <p className="text-lg text-gray-400">Aucune donnée</p>
+        <p className="text-lg text-charcoal-400">Aucune donnée</p>
       )}
     </div>
   )

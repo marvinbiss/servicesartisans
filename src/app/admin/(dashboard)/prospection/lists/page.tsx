@@ -49,12 +49,12 @@ export default function ListsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des listes</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+          <p className="text-charcoal-500 mt-1">Gestion des listes</p>
         </div>
         <Link
           href="/admin/prospection/lists/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600"
         >
           <Plus className="w-4 h-4" /> Nouvelle liste
         </Link>
@@ -68,7 +68,7 @@ export default function ListsPage() {
           <button
             key={t}
             onClick={() => setTypeFilter(t)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${typeFilter === t ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${typeFilter === t ? 'bg-sand-100 border-sand-300 text-charcoal-700' : 'hover:bg-sand-50'}`}
           >
             {t === 'all' ? 'Toutes' : t === 'static' ? 'Statiques' : 'Dynamiques'}
           </button>
@@ -87,21 +87,21 @@ export default function ListsPage() {
       <div className="bg-white rounded-lg border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[600px] text-sm" aria-label="Liste des listes de contacts">
-            <thead className="bg-gray-50">
+            <thead className="bg-sand-50">
               <tr>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Nom
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Type
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Contacts
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Description
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Créée le
                 </th>
               </tr>
@@ -112,14 +112,14 @@ export default function ListsPage() {
                   <tr key={i}>
                     {Array.from({ length: 5 }).map((__, j) => (
                       <td key={j} className="px-4 py-3">
-                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-4 bg-sand-100 rounded animate-pulse" />
                       </td>
                     ))}
                   </tr>
                 ))
               ) : filteredLists.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={5} className="px-4 py-8 text-center text-charcoal-400">
                     <List className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     {lists.length === 0
                       ? 'Aucune liste. Créez votre première liste de contacts.'
@@ -128,11 +128,11 @@ export default function ListsPage() {
                 </tr>
               ) : (
                 filteredLists.map((list) => (
-                  <tr key={list.id} className="hover:bg-gray-50">
+                  <tr key={list.id} className="hover:bg-sand-50">
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/prospection/lists/${list.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-medium text-primary-600 hover:underline"
                       >
                         {list.name}
                       </Link>
@@ -141,8 +141,8 @@ export default function ListsPage() {
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           list.list_type === 'static'
-                            ? 'bg-gray-100 text-gray-700'
-                            : 'bg-blue-100 text-blue-700'
+                            ? 'bg-sand-100 text-charcoal-700'
+                            : 'bg-sand-200 text-charcoal-700'
                         }`}
                       >
                         {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
@@ -151,10 +151,10 @@ export default function ListsPage() {
                     <td className="px-4 py-3 text-right">
                       {list.contact_count.toLocaleString('fr-FR')}
                     </td>
-                    <td className="px-4 py-3 text-gray-500 truncate max-w-[200px]">
+                    <td className="px-4 py-3 text-charcoal-500 truncate max-w-[200px]">
                       {list.description || '-'}
                     </td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">
+                    <td className="px-4 py-3 text-charcoal-400 text-xs">
                       {new Date(list.created_at).toLocaleDateString('fr-FR')}
                     </td>
                   </tr>

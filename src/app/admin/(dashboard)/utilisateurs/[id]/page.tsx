@@ -104,8 +104,8 @@ export default function AdminUserDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400"></div>
       </div>
     )
   }
@@ -115,13 +115,13 @@ export default function AdminUserDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => router.push('/admin/utilisateurs')}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
+            className="flex items-center gap-2 text-charcoal-600 hover:text-charcoal-900 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Retour à la liste
@@ -129,11 +129,15 @@ export default function AdminUserDetailPage() {
 
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{user.full_name || 'Sans nom'}</h1>
-              <p className="text-gray-500 mt-1">{user.email}</p>
+              <h1 className="text-2xl font-bold text-charcoal-900">
+                {user.full_name || 'Sans nom'}
+              </h1>
+              <p className="text-charcoal-500 mt-1">{user.email}</p>
               <div className="flex items-center gap-3 mt-2">
                 <UserStatusBadge status={getUserStatus()} />
-                {user.role && <span className="text-sm text-gray-500 capitalize">{user.role}</span>}
+                {user.role && (
+                  <span className="text-sm text-charcoal-500 capitalize">{user.role}</span>
+                )}
               </div>
             </div>
 
@@ -145,14 +149,14 @@ export default function AdminUserDetailPage() {
                       setFormData(user)
                       setEditMode(false)
                     }}
-                    className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+                    className="px-4 py-2 text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200"
                   >
                     Annuler
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
                     {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -161,7 +165,7 @@ export default function AdminUserDetailPage() {
               ) : (
                 <button
                   onClick={() => setEditMode(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
                 >
                   Modifier
                 </button>
@@ -172,39 +176,41 @@ export default function AdminUserDetailPage() {
 
         <div className="grid gap-6">
           {/* Informations générales */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations générales</h2>
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Informations générales</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                  Nom complet
+                </label>
                 {editMode ? (
                   <input
                     type="text"
                     value={formData.full_name || ''}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 ) : (
-                  <p className="flex items-center gap-2 text-gray-900">
-                    <User className="w-4 h-4 text-gray-400" />
+                  <p className="flex items-center gap-2 text-charcoal-900">
+                    <User className="w-4 h-4 text-charcoal-400" />
                     {user.full_name || '-'}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <p className="flex items-center gap-2 text-gray-900">
-                  <Mail className="w-4 h-4 text-gray-400" />
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">Email</label>
+                <p className="flex items-center gap-2 text-charcoal-900">
+                  <Mail className="w-4 h-4 text-charcoal-400" />
                   {user.email}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
-                <p className="flex items-center gap-2 text-gray-900">
-                  <Phone className="w-4 h-4 text-gray-400" />
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">Rôle</label>
+                <p className="flex items-center gap-2 text-charcoal-900">
+                  <Phone className="w-4 h-4 text-charcoal-400" />
                   {user.role || '-'}
                 </p>
               </div>
@@ -213,35 +219,35 @@ export default function AdminUserDetailPage() {
 
           {/* Statistiques */}
           {user.stats && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+              <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Statistiques</h2>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <Calendar className="w-6 h-6 mx-auto mb-2 text-blue-600" />
-                  <p className="text-2xl font-bold text-gray-900">{user.stats.bookings}</p>
-                  <p className="text-sm text-gray-500">Réservations</p>
+                <div className="bg-sand-50 rounded-lg p-4 text-center">
+                  <Calendar className="w-6 h-6 mx-auto mb-2 text-charcoal-600" />
+                  <p className="text-2xl font-bold text-charcoal-900">{user.stats.bookings}</p>
+                  <p className="text-sm text-charcoal-500">Réservations</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
+                <div className="bg-sand-50 rounded-lg p-4 text-center">
                   <Star className="w-6 h-6 mx-auto mb-2 text-amber-500" />
-                  <p className="text-2xl font-bold text-gray-900">{user.stats.reviews}</p>
-                  <p className="text-sm text-gray-500">Avis donnés</p>
+                  <p className="text-2xl font-bold text-charcoal-900">{user.stats.reviews}</p>
+                  <p className="text-sm text-charcoal-500">Avis donnés</p>
                 </div>
               </div>
             </div>
           )}
 
           {/* Dates */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Historique</h2>
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Historique</h2>
 
             <div className="space-y-2 text-sm">
-              <p className="flex items-center gap-2 text-gray-600">
+              <p className="flex items-center gap-2 text-charcoal-600">
                 <Calendar className="w-4 h-4" />
                 Inscrit le {formatDate(user.created_at)}
               </p>
               {user.updated_at && (
-                <p className="flex items-center gap-2 text-gray-600">
+                <p className="flex items-center gap-2 text-charcoal-600">
                   <FileText className="w-4 h-4" />
                   Dernière modification le {formatDate(user.updated_at)}
                 </p>

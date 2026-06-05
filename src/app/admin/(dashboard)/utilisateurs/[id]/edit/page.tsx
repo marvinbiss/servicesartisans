@@ -84,20 +84,20 @@ export default function EditUserPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400"></div>
       </div>
     )
   }
 
   if (error && !user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => router.push('/admin/utilisateurs')}
-            className="text-blue-600 hover:underline"
+            className="text-primary-600 hover:underline"
           >
             Retour à la liste
           </button>
@@ -107,25 +107,25 @@ export default function EditUserPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
               onClick={() => router.push(`/admin/utilisateurs/${userId}`)}
-              className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
+              className="text-charcoal-500 hover:text-charcoal-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
               Retour au profil
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l'utilisateur</h1>
-            <p className="text-gray-500 mt-1">{user?.email}</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Modifier l'utilisateur</h1>
+            <p className="text-charcoal-500 mt-1">{user?.email}</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
           >
             <Save className="w-5 h-5" />
             {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -141,24 +141,26 @@ export default function EditUserPage() {
         {/* Form */}
         <div className="space-y-6">
           {/* Personal Info */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-charcoal-400" />
               Informations personnelles
             </h2>
             <div className="grid gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                  Nom complet
+                </label>
                 <input
                   type="text"
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     <Mail className="w-4 h-4 inline mr-1" />
                     Email
                   </label>
@@ -166,12 +168,14 @@ export default function EditUserPage() {
                     type="email"
                     value={user?.email || ''}
                     disabled
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
+                    className="w-full px-3 py-2 border border-sand-200 rounded-lg bg-sand-50 text-charcoal-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">L'email ne peut pas être modifié ici</p>
+                  <p className="text-xs text-charcoal-500 mt-1">
+                    L'email ne peut pas être modifié ici
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     <Phone className="w-4 h-4 inline mr-1" />
                     Téléphone
                   </label>
@@ -179,7 +183,7 @@ export default function EditUserPage() {
                     type="tel"
                     value={formData.phone_e164}
                     onChange={(e) => setFormData({ ...formData, phone_e164: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
               </div>
@@ -187,33 +191,33 @@ export default function EditUserPage() {
           </div>
 
           {/* Account Settings */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-charcoal-400" />
               Paramètres du compte
             </h2>
             <div className="grid gap-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">Rôle</label>
                   <input
                     type="text"
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="ex: client, artisan, admin"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Administrateur
                   </label>
                   <div className="mt-2 flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, is_admin: !formData.is_admin })}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                        formData.is_admin ? 'bg-blue-600' : 'bg-gray-200'
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                        formData.is_admin ? 'bg-primary-500' : 'bg-sand-200'
                       }`}
                       aria-pressed={formData.is_admin}
                     >
@@ -223,7 +227,7 @@ export default function EditUserPage() {
                         }`}
                       />
                     </button>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-charcoal-600">
                       {formData.is_admin ? 'Administrateur' : 'Utilisateur standard'}
                     </span>
                   </div>

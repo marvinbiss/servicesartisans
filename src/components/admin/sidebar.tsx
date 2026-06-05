@@ -82,7 +82,7 @@ export function AdminSidebar() {
       {/* Mobile hamburger button */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-charcoal-900 text-white rounded-lg shadow-lg"
         aria-label="Ouvrir le menu"
       >
         <Menu className="w-6 h-6" />
@@ -98,20 +98,20 @@ export function AdminSidebar() {
 
       <aside
         className={clsx(
-          'bg-gray-900 min-h-screen flex flex-col z-50 transition-transform duration-300',
+          'bg-charcoal-900 min-h-screen flex flex-col z-50 transition-transform duration-300',
           'fixed lg:static lg:translate-x-0 w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         aria-label="Navigation administration"
       >
-        <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+        <div className="p-4 border-b border-charcoal-800 flex items-center justify-between">
           <Link href="/admin" className="text-xl font-bold text-white flex items-center gap-2">
             <Shield className="w-6 h-6" />
             Administration
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden p-1 text-gray-400 hover:text-white"
+            className="lg:hidden p-1 text-charcoal-400 hover:text-white"
             aria-label="Fermer le menu"
           >
             <X className="w-5 h-5" />
@@ -132,8 +132,8 @@ export function AdminSidebar() {
                 className={clsx(
                   'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
                   isActive(item.href)
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    ? 'bg-primary-500 text-white'
+                    : 'text-charcoal-400 hover:bg-charcoal-800 hover:text-white'
                 )}
               >
                 <Icon className="w-5 h-5" />
@@ -142,10 +142,10 @@ export function AdminSidebar() {
             )
           })}
         </nav>
-        <div className="p-4 border-t border-gray-800">
+        <div className="p-4 border-t border-charcoal-800">
           <Link
             href="/"
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-charcoal-400 hover:text-white rounded-lg hover:bg-charcoal-800 transition-colors"
           >
             ← Retour au site
           </Link>

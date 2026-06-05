@@ -206,11 +206,11 @@ export default function CreateListPage() {
       <div className="mb-6">
         <Link
           href="/admin/prospection/lists"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux listes
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouvelle liste</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900">Nouvelle liste</h1>
       </div>
 
       <ProspectionNav />
@@ -264,10 +264,10 @@ export default function CreateListPage() {
                 value="static"
                 checked={listType === 'static'}
                 onChange={() => setListType('static')}
-                className="text-blue-600"
+                className="text-charcoal-600"
               />
               <span className="text-sm">Statique</span>
-              <span className="text-xs text-gray-400">- ajout manuel des contacts</span>
+              <span className="text-xs text-charcoal-400">- ajout manuel des contacts</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -276,10 +276,10 @@ export default function CreateListPage() {
                 value="dynamic"
                 checked={listType === 'dynamic'}
                 onChange={() => setListType('dynamic')}
-                className="text-blue-600"
+                className="text-charcoal-600"
               />
               <span className="text-sm">Dynamique</span>
-              <span className="text-xs text-gray-400">- basée sur des filtres</span>
+              <span className="text-xs text-charcoal-400">- basée sur des filtres</span>
             </label>
           </div>
         </div>
@@ -287,7 +287,7 @@ export default function CreateListPage() {
         {/* Dynamic filters */}
         {listType === 'dynamic' && (
           <div className="border-t pt-4 space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">Critères de filtrage</h3>
+            <h3 className="text-sm font-medium text-charcoal-700">Critères de filtrage</h3>
 
             <div>
               <label className="block text-sm font-medium mb-1">Type de contact</label>
@@ -341,14 +341,14 @@ export default function CreateListPage() {
         <div className="flex gap-2 pt-4">
           <Link
             href="/admin/prospection/lists"
-            className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+            className="px-4 py-2 text-sm border rounded-lg hover:bg-sand-50"
           >
             Annuler
           </Link>
           <button
             onClick={handleSave}
             disabled={saving || !name.trim()}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
           >
             <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
           </button>

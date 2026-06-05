@@ -188,7 +188,7 @@ export default function PerformanceTrendBlock() {
             total={totals.profileViews}
             series={series.profileViews}
             icon={<Eye className="w-4 h-4" aria-hidden />}
-            colorClass="text-blue-600"
+            colorClass="text-charcoal-600"
             deltaLabel="sur la seconde moitié de la période"
           />
           <TrendRow

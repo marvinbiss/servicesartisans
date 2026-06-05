@@ -166,11 +166,11 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-100 rounded-lg" />
+          <div className="h-8 bg-sand-200 rounded w-1/3" />
+          <div className="h-64 bg-sand-100 rounded-lg" />
         </div>
       </div>
     )
@@ -182,11 +182,11 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-6">
           <Link
             href="/admin/prospection/templates"
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+            className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux modèles
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -202,11 +202,11 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       <div className="mb-6">
         <Link
           href="/admin/prospection/templates"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Modifier le modèle</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900">Modifier le modèle</h1>
       </div>
 
       <ProspectionNav />
@@ -302,7 +302,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
               }
             />
             {channel === 'sms' && (
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-charcoal-400 mt-1">
                 {body.length}/160 caractères ({Math.ceil(body.length / 160) || 1} SMS)
               </p>
             )}
@@ -324,14 +324,14 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
           <div className="flex gap-2 pt-4">
             <button
               onClick={handlePreview}
-              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-sand-50"
             >
               <Eye className="w-4 h-4" /> Aperçu
             </button>
             <button
               onClick={handleSave}
               disabled={saving || !name.trim() || !body.trim()}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
             >
               <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </button>
@@ -359,7 +359,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+                  className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
                 >
                   Annuler
                 </button>
@@ -379,10 +379,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                 <button
                   key={v.key}
                   onClick={() => insertVariable(v.key)}
-                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-blue-50 text-blue-600"
+                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-sand-100 text-charcoal-600"
                 >
                   <code className="text-xs">{`{{${v.key}}}`}</code>
-                  <span className="text-gray-500 ml-2">{v.label}</span>
+                  <span className="text-charcoal-500 ml-2">{v.label}</span>
                 </button>
               ))}
             </div>
@@ -391,7 +391,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
           {preview && (
             <div className="bg-white rounded-lg border p-4">
               <h3 className="text-sm font-medium mb-3">Aperçu</h3>
-              <div className="text-sm bg-gray-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
+              <div className="text-sm bg-sand-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
             </div>
           )}
 
@@ -400,29 +400,29 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
             <h3 className="text-sm font-medium mb-3">Informations</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Créé le</span>
-                <span className="text-gray-700">
+                <span className="text-charcoal-500">Créé le</span>
+                <span className="text-charcoal-700">
                   {new Date(template.created_at).toLocaleDateString('fr-FR')}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Modifié le</span>
-                <span className="text-gray-700">
+                <span className="text-charcoal-500">Modifié le</span>
+                <span className="text-charcoal-700">
                   {new Date(template.updated_at).toLocaleDateString('fr-FR')}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Actif</span>
+                <span className="text-charcoal-500">Actif</span>
                 <span className={template.is_active ? 'text-green-600' : 'text-red-600'}>
                   {template.is_active ? 'Oui' : 'Non'}
                 </span>
               </div>
               {template.variables.length > 0 && (
                 <div>
-                  <span className="text-gray-500">Variables utilisées</span>
+                  <span className="text-charcoal-500">Variables utilisées</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {template.variables.map((v) => (
-                      <span key={v} className="text-xs px-1.5 py-0.5 bg-gray-100 rounded">
+                      <span key={v} className="text-xs px-1.5 py-0.5 bg-sand-100 rounded">
                         {v}
                       </span>
                     ))}

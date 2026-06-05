@@ -100,11 +100,11 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
       case 'published':
         return { text: 'Publié', className: 'bg-green-100 text-green-700' }
       case 'draft':
-        return { text: 'Brouillon', className: 'bg-gray-100 text-gray-700' }
+        return { text: 'Brouillon', className: 'bg-sand-100 text-charcoal-700' }
       case 'archived':
         return { text: 'Archivé', className: 'bg-amber-100 text-amber-700' }
       default:
-        return { text: status, className: 'bg-gray-100 text-gray-700' }
+        return { text: status, className: 'bg-sand-100 text-charcoal-700' }
     }
   }
 
@@ -122,12 +122,12 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
         {/* Modal */}
         <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full my-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-sand-200 px-6 py-4">
             <div className="flex items-center gap-2">
-              <History className="w-5 h-5 text-gray-500" />
-              <h2 className="text-lg font-semibold text-gray-900">Historique des versions</h2>
+              <History className="w-5 h-5 text-charcoal-500" />
+              <h2 className="text-lg font-semibold text-charcoal-900">Historique des versions</h2>
               {!loading && (
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-charcoal-400">
                   {versions.length} version{versions.length > 1 ? 's' : ''}
                 </span>
               )}
@@ -135,7 +135,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
             <button
               onClick={onClose}
               aria-label="Fermer"
-              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -145,26 +145,26 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
           <div className="p-6">
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-charcoal-600" />
               </div>
             ) : error ? (
               <div>
                 <p className="text-sm text-red-600">{error}</p>
                 <button
                   onClick={fetchVersions}
-                  className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                  className="mt-2 text-sm text-primary-600 hover:text-primary-800"
                 >
                   Réessayer
                 </button>
               </div>
             ) : versions.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-4">
+              <p className="text-sm text-charcoal-500 text-center py-4">
                 Aucune version précédente enregistrée.
               </p>
             ) : (
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-3 top-2 bottom-2 w-px bg-gray-200" />
+                <div className="absolute left-3 top-2 bottom-2 w-px bg-sand-200" />
 
                 <div className="space-y-4">
                   {versions.map((version, index) => {
@@ -176,14 +176,16 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                         {/* Timeline dot */}
                         <div
                           className={`absolute left-1.5 top-2 w-3 h-3 rounded-full border-2 ${
-                            isLatest ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'
+                            isLatest
+                              ? 'bg-primary-500 border-charcoal-400'
+                              : 'bg-white border-sand-300'
                           }`}
                         />
 
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-sm font-medium text-gray-900">
+                              <span className="text-sm font-medium text-charcoal-900">
                                 v{version.version_number}
                               </span>
                               <span
@@ -192,14 +194,18 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                                 {badge.text}
                               </span>
                               {isLatest && (
-                                <span className="text-xs text-blue-600 font-medium">Actuelle</span>
+                                <span className="text-xs text-charcoal-600 font-medium">
+                                  Actuelle
+                                </span>
                               )}
                             </div>
-                            <p className="text-xs text-gray-500 mt-0.5">
+                            <p className="text-xs text-charcoal-500 mt-0.5">
                               {formatDate(version.created_at)}
                             </p>
                             {version.change_summary && (
-                              <p className="text-sm text-gray-600 mt-1">{version.change_summary}</p>
+                              <p className="text-sm text-charcoal-600 mt-1">
+                                {version.change_summary}
+                              </p>
                             )}
                           </div>
 
@@ -208,7 +214,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                               type="button"
                               onClick={() => setConfirmRestore(version.id)}
                               disabled={restoringId === version.id}
-                              className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+                              className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs text-primary-600 hover:text-primary-800 hover:bg-sand-100 rounded-lg transition-colors disabled:opacity-50"
                               title="Restaurer cette version"
                             >
                               {restoringId === version.id ? (
@@ -241,16 +247,16 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setConfirmRestore(null)} />
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-2">
                 Restaurer cette version ?
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-charcoal-600 mb-6">
                 Le contenu actuel sera remplacé par cette version. Cette action est irréversible.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setConfirmRestore(null)}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex-1 px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200 transition-colors"
                 >
                   Annuler
                 </button>

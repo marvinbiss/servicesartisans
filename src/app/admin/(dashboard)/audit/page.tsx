@@ -193,11 +193,11 @@ export default function AdminAuditPage() {
   const totalEventsAll = Object.values(eventTypeCounts).reduce((s, c) => s + c, 0)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Audit & Événements</h1>
-          <p className="text-gray-500 mt-1">Traçabilité complète — append-only</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Audit & Événements</h1>
+          <p className="text-charcoal-500 mt-1">Traçabilité complète — append-only</p>
         </div>
 
         {/* Stats row */}
@@ -235,8 +235,8 @@ export default function AdminAuditPage() {
             onClick={() => setActiveTab('lead_events')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === 'lead_events'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-charcoal-600 border border-sand-200 hover:bg-sand-50'
             }`}
           >
             <Activity className="w-4 h-4 inline mr-1.5" />
@@ -246,8 +246,8 @@ export default function AdminAuditPage() {
             onClick={() => setActiveTab('audit_logs')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === 'audit_logs'
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-charcoal-600 border border-sand-200 hover:bg-sand-50'
             }`}
           >
             <Shield className="w-4 h-4 inline mr-1.5" />
@@ -259,7 +259,7 @@ export default function AdminAuditPage() {
         {activeTab === 'lead_events' && (
           <>
             {/* Event type filter */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+            <div className="bg-white rounded-xl border border-sand-200 p-4 mb-6">
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => {
@@ -268,8 +268,8 @@ export default function AdminAuditPage() {
                   }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     !eventTypeFilter
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                   }`}
                 >
                   Tous ({totalEventsAll})
@@ -285,8 +285,8 @@ export default function AdminAuditPage() {
                       }}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                         eventTypeFilter === type
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                       }`}
                     >
                       {eventTypeLabels[type] || type} ({count})
@@ -297,99 +297,99 @@ export default function AdminAuditPage() {
 
             {eventsLoading ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-charcoal-600" />
               </div>
             ) : (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table
                     className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
                     aria-label="Événements des leads"
                   >
                     <thead>
-                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                      <tr className="border-b border-sand-100 bg-sand-50/50">
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Date
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Type
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           ID du lead
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           ID de l'artisan
                         </th>
                         <th
                           scope="col"
-                          className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                          className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                         >
                           Métadonnées
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-sand-100">
                       {leadEvents.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
-                            <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                          <td colSpan={5} className="px-4 py-12 text-center text-charcoal-500">
+                            <Activity className="w-10 h-10 text-charcoal-300 mx-auto mb-3" />
                             Aucun événement
                           </td>
                         </tr>
                       ) : (
                         leadEvents.map((e) => (
-                          <tr key={e.id} className="hover:bg-gray-50/50 transition-colors">
-                            <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">
+                          <tr key={e.id} className="hover:bg-sand-50/50 transition-colors">
+                            <td className="px-4 py-3 text-xs text-charcoal-500 whitespace-nowrap">
                               {formatDate(e.created_at)}
                             </td>
                             <td className="px-4 py-3">
                               <span
                                 className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                                   e.event_type === 'created'
-                                    ? 'bg-blue-100 text-blue-700'
+                                    ? 'bg-sand-200 text-charcoal-700'
                                     : e.event_type === 'dispatched'
-                                      ? 'bg-blue-100 text-blue-700'
+                                      ? 'bg-sand-200 text-charcoal-700'
                                       : e.event_type === 'viewed'
                                         ? 'bg-yellow-100 text-yellow-700'
                                         : e.event_type === 'quoted'
                                           ? 'bg-green-100 text-green-700'
                                           : e.event_type === 'declined'
-                                            ? 'bg-gray-100 text-gray-600'
+                                            ? 'bg-sand-100 text-charcoal-600'
                                             : e.event_type === 'accepted'
-                                              ? 'bg-blue-100 text-blue-700'
+                                              ? 'bg-sand-200 text-charcoal-700'
                                               : e.event_type === 'completed'
                                                 ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-600'
+                                                : 'bg-sand-100 text-charcoal-600'
                                 }`}
                               >
                                 {eventTypeLabels[e.event_type] || e.event_type}
                               </span>
                             </td>
-                            <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                            <td className="px-4 py-3 font-mono text-xs text-charcoal-600">
                               {e.lead_id.slice(0, 8)}
                             </td>
-                            <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                            <td className="px-4 py-3 font-mono text-xs text-charcoal-600">
                               {e.provider_id ? e.provider_id.slice(0, 8) : '—'}
                             </td>
                             <td className="px-4 py-3">
                               {Object.keys(e.metadata).length > 0 && (
                                 <details className="text-xs">
-                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
+                                  <summary className="cursor-pointer text-primary-600 hover:text-primary-700">
                                     {Object.keys(e.metadata).length} champ(s)
                                   </summary>
-                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
+                                  <pre className="mt-2 p-2 bg-sand-50 rounded text-charcoal-600 overflow-x-auto max-w-xs text-xs">
                                     {JSON.stringify(e.metadata, null, 2)}
                                   </pre>
                                 </details>
@@ -403,22 +403,22 @@ export default function AdminAuditPage() {
                 </div>
 
                 {eventsTotalPages > 1 && (
-                  <div className="px-4 py-4 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
+                  <div className="px-4 py-4 border-t border-sand-100 flex items-center justify-between">
+                    <span className="text-sm text-charcoal-500">
                       Page {eventsPage} / {eventsTotalPages} ({eventsTotal} événements)
                     </span>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setEventsPage(Math.max(1, eventsPage - 1))}
                         disabled={eventsPage === 1}
-                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                        className="p-2 rounded-lg border border-sand-200 disabled:opacity-40 hover:bg-sand-50"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setEventsPage(Math.min(eventsTotalPages, eventsPage + 1))}
                         disabled={eventsPage === eventsTotalPages}
-                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                        className="p-2 rounded-lg border border-sand-200 disabled:opacity-40 hover:bg-sand-50"
                       >
                         <ChevronRight className="w-4 h-4" />
                       </button>
@@ -434,10 +434,10 @@ export default function AdminAuditPage() {
         {activeTab === 'audit_logs' && (
           <>
             {/* Filters */}
-            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+            <div className="bg-white rounded-xl border border-sand-200 p-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                     Type d'entité
                   </label>
                   <select
@@ -447,7 +447,7 @@ export default function AdminAuditPage() {
                       setLogsPage(1)
                     }}
                     aria-label="Filtrer par type d'entité"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
                   >
                     {ENTITY_TYPES.map((type) => (
                       <option key={type.value} value={type.value}>
@@ -457,7 +457,7 @@ export default function AdminAuditPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                     Action
                   </label>
                   <input
@@ -468,11 +468,11 @@ export default function AdminAuditPage() {
                       setLogsPage(1)
                     }}
                     placeholder="ban, refund..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                     Début
                   </label>
                   <input
@@ -482,11 +482,11 @@ export default function AdminAuditPage() {
                       setDateFrom(e.target.value)
                       setLogsPage(1)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 uppercase mb-1">
                     Fin
                   </label>
                   <input
@@ -496,21 +496,21 @@ export default function AdminAuditPage() {
                       setDateTo(e.target.value)
                       setLogsPage(1)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
               </div>
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
               {logsLoading ? (
                 <div className="p-16 text-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+                  <Loader2 className="w-8 h-8 animate-spin text-charcoal-600 mx-auto" />
                 </div>
               ) : logs.length === 0 ? (
-                <div className="p-16 text-center text-gray-500">
-                  <Shield className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+                <div className="p-16 text-center text-charcoal-500">
+                  <Shield className="w-10 h-10 mx-auto mb-3 text-charcoal-300" />
                   <p>Aucun log d'audit trouvé</p>
                 </div>
               ) : (
@@ -521,66 +521,68 @@ export default function AdminAuditPage() {
                       aria-label="Logs d'audit administrateur"
                     >
                       <thead>
-                        <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <tr className="border-b border-sand-100 bg-sand-50/50">
                           <th
                             scope="col"
-                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                            className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                           >
                             Date
                           </th>
                           <th
                             scope="col"
-                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                            className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                           >
                             Admin
                           </th>
                           <th
                             scope="col"
-                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                            className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                           >
                             Action
                           </th>
                           <th
                             scope="col"
-                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                            className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                           >
                             Entité
                           </th>
                           <th
                             scope="col"
-                            className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3"
+                            className="text-left text-xs font-medium text-charcoal-500 uppercase tracking-wider px-4 py-3"
                           >
                             Détails
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-sand-100">
                         {logs.map((log) => (
-                          <tr key={log.id} className="hover:bg-gray-50/50 transition-colors">
-                            <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">
+                          <tr key={log.id} className="hover:bg-sand-50/50 transition-colors">
+                            <td className="px-4 py-3 text-xs text-charcoal-500 whitespace-nowrap">
                               {formatDate(log.created_at)}
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex items-center gap-2">
-                                <User className="w-3.5 h-3.5 text-gray-400" />
+                                <User className="w-3.5 h-3.5 text-charcoal-400" />
                                 <div>
-                                  <p className="text-sm text-gray-900">
+                                  <p className="text-sm text-charcoal-900">
                                     {log.admin?.full_name || 'Admin'}
                                   </p>
-                                  <p className="text-xs text-gray-400">{log.admin?.email}</p>
+                                  <p className="text-xs text-charcoal-400">{log.admin?.email}</p>
                                 </div>
                               </div>
                             </td>
                             <td className="px-4 py-3">
                               {getActionBadge(log.action)}
-                              <p className="text-xs text-gray-400 font-mono mt-0.5">{log.action}</p>
+                              <p className="text-xs text-charcoal-400 font-mono mt-0.5">
+                                {log.action}
+                              </p>
                             </td>
                             <td className="px-4 py-3">
-                              <p className="text-sm text-gray-700 capitalize">
+                              <p className="text-sm text-charcoal-700 capitalize">
                                 {log.resource_type}
                               </p>
                               {log.resource_id && (
-                                <p className="text-xs text-gray-400 font-mono">
+                                <p className="text-xs text-charcoal-400 font-mono">
                                   {log.resource_id.slice(0, 8)}
                                 </p>
                               )}
@@ -588,10 +590,10 @@ export default function AdminAuditPage() {
                             <td className="px-4 py-3">
                               {log.new_value && Object.keys(log.new_value).length > 0 && (
                                 <details className="text-xs">
-                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
+                                  <summary className="cursor-pointer text-primary-600 hover:text-primary-700">
                                     Données
                                   </summary>
-                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
+                                  <pre className="mt-2 p-2 bg-sand-50 rounded text-charcoal-600 overflow-x-auto max-w-xs text-xs">
                                     {JSON.stringify(log.new_value, null, 2)}
                                   </pre>
                                 </details>
@@ -603,22 +605,22 @@ export default function AdminAuditPage() {
                     </table>
                   </div>
 
-                  <div className="px-4 py-4 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
+                  <div className="px-4 py-4 border-t border-sand-100 flex items-center justify-between">
+                    <span className="text-sm text-charcoal-500">
                       Page {logsPage} / {logsTotalPages} ({logsTotal} logs)
                     </span>
                     <div className="flex gap-2">
                       <button
                         onClick={() => setLogsPage(Math.max(1, logsPage - 1))}
                         disabled={logsPage === 1}
-                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                        className="p-2 rounded-lg border border-sand-200 disabled:opacity-40 hover:bg-sand-50"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setLogsPage(Math.min(logsTotalPages, logsPage + 1))}
                         disabled={logsPage === logsTotalPages}
-                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                        className="p-2 rounded-lg border border-sand-200 disabled:opacity-40 hover:bg-sand-50"
                       >
                         <ChevronRight className="w-4 h-4" />
                       </button>

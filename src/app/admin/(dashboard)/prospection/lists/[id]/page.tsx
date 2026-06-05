@@ -201,11 +201,11 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-100 rounded-lg" />
+          <div className="h-8 bg-sand-200 rounded w-1/3" />
+          <div className="h-64 bg-sand-100 rounded-lg" />
         </div>
       </div>
     )
@@ -217,11 +217,11 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         <div className="mb-6">
           <Link
             href="/admin/prospection/lists"
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+            className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux listes
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -237,7 +237,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       <div className="mb-6">
         <Link
           href="/admin/prospection/lists"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux listes
         </Link>
@@ -249,7 +249,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
               aria-label="Nom de la liste"
-              className="text-2xl font-bold text-gray-900 border rounded-lg px-2 py-1 w-full max-w-md"
+              className="text-2xl font-bold text-charcoal-900 border rounded-lg px-2 py-1 w-full max-w-md"
             />
             <textarea
               value={editDesc}
@@ -263,7 +263,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               <button
                 onClick={handleSaveEdit}
                 disabled={savingEdit || !editName.trim()}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
               >
                 <Save className="w-3 h-3" /> {savingEdit ? 'Sauvegarde...' : 'Sauvegarder'}
               </button>
@@ -273,7 +273,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                   setEditName(list.name)
                   setEditDesc(list.description || '')
                 }}
-                className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+                className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
               >
                 Annuler
               </button>
@@ -282,7 +282,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         ) : (
           <div className="flex items-center gap-3">
             <h1
-              className="text-2xl font-bold text-gray-900 cursor-pointer hover:text-blue-600"
+              className="text-2xl font-bold text-charcoal-900 cursor-pointer hover:text-primary-600"
               onClick={() => setEditingName(true)}
               title="Cliquer pour modifier"
             >
@@ -291,20 +291,20 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                 list.list_type === 'static'
-                  ? 'bg-gray-100 text-gray-700'
-                  : 'bg-blue-100 text-blue-700'
+                  ? 'bg-sand-100 text-charcoal-700'
+                  : 'bg-sand-200 text-charcoal-700'
               }`}
             >
               {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-charcoal-500">
               {list.contact_count.toLocaleString('fr-FR')} contacts
             </span>
           </div>
         )}
 
         {!editingName && list.description && (
-          <p className="text-gray-500 mt-1 text-sm">{list.description}</p>
+          <p className="text-charcoal-500 mt-1 text-sm">{list.description}</p>
         )}
       </div>
 
@@ -329,14 +329,14 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         {!editingName && (
           <button
             onClick={() => setEditingName(true)}
-            className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+            className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
           >
             Modifier
           </button>
         )}
         {list.list_type === 'static' && (
           <button
-            className="flex items-center gap-1 px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50 text-gray-600"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50 text-charcoal-600"
             title="Fonctionnalité à venir"
             disabled
           >
@@ -367,7 +367,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             </button>
             <button
               onClick={() => setShowDeleteConfirm(false)}
-              className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+              className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
             >
               Annuler
             </button>
@@ -377,8 +377,10 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Dynamic filter info */}
       {list.list_type === 'dynamic' && list.filter_criteria && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-medium text-blue-700 mb-2">Critères de filtrage dynamique</h3>
+        <div className="bg-sand-100 border border-sand-300 rounded-lg p-4 mb-4">
+          <h3 className="text-sm font-medium text-charcoal-700 mb-2">
+            Critères de filtrage dynamique
+          </h3>
           <div className="flex flex-wrap gap-2">
             {list.filter_criteria.contact_type && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
@@ -412,31 +414,31 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {/* Members table (static lists only) */}
       {list.list_type === 'static' && (
         <>
-          <p className="text-sm text-gray-500 mb-3">
+          <p className="text-sm text-charcoal-500 mb-3">
             {totalMembers.toLocaleString('fr-FR')} membres
           </p>
 
           <div className="bg-white rounded-lg border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[700px] text-sm" aria-label="Membres de la liste">
-                <thead className="bg-gray-50">
+                <thead className="bg-sand-50">
                   <tr>
-                    <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                       Nom
                     </th>
-                    <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                       Type
                     </th>
-                    <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                       Email
                     </th>
-                    <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                       Téléphone
                     </th>
-                    <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                       Ajouté le
                     </th>
-                    <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                    <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                       Actions
                     </th>
                   </tr>
@@ -447,24 +449,24 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                       <tr key={i}>
                         {Array.from({ length: 6 }).map((__, j) => (
                           <td key={j} className="px-4 py-3">
-                            <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                            <div className="h-4 bg-sand-100 rounded animate-pulse" />
                           </td>
                         ))}
                       </tr>
                     ))
                   ) : members.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                      <td colSpan={6} className="px-4 py-8 text-center text-charcoal-400">
                         Aucun membre dans cette liste.
                       </td>
                     </tr>
                   ) : (
                     members.map((member) => (
-                      <tr key={member.contact_id} className="hover:bg-gray-50">
+                      <tr key={member.contact_id} className="hover:bg-sand-50">
                         <td className="px-4 py-3">
                           <Link
                             href={`/admin/prospection/contacts/${member.contact_id}`}
-                            className="font-medium text-blue-600 hover:underline"
+                            className="font-medium text-primary-600 hover:underline"
                           >
                             {member.contact?.contact_name || member.contact?.company_name || '-'}
                           </Link>
@@ -474,9 +476,13 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                             <ContactTypeBadge type={member.contact.contact_type} />
                           )}
                         </td>
-                        <td className="px-4 py-3 text-gray-600">{member.contact?.email || '-'}</td>
-                        <td className="px-4 py-3 text-gray-600">{member.contact?.phone || '-'}</td>
-                        <td className="px-4 py-3 text-gray-400 text-xs">
+                        <td className="px-4 py-3 text-charcoal-600">
+                          {member.contact?.email || '-'}
+                        </td>
+                        <td className="px-4 py-3 text-charcoal-600">
+                          {member.contact?.phone || '-'}
+                        </td>
+                        <td className="px-4 py-3 text-charcoal-400 text-xs">
                           {new Date(member.added_at).toLocaleDateString('fr-FR')}
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -516,7 +522,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               >
                 Précédent
               </button>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-charcoal-500">
                 Page {page} / {totalPages}
               </span>
               <button

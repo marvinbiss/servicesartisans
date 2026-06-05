@@ -123,16 +123,16 @@ export default function AdminSignalementsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Signalements</h1>
-          <p className="text-gray-500 mt-1">{total} signalements</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Gestion des Signalements</h1>
+          <p className="text-charcoal-500 mt-1">{total} signalements</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex gap-2 flex-wrap">
               {(['all', 'pending', 'reviewed', 'dismissed'] as const).map((s) => (
@@ -144,8 +144,8 @@ export default function AdminSignalementsPage() {
                   }}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     status === s
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                   }`}
                 >
                   {s === 'all'
@@ -165,7 +165,7 @@ export default function AdminSignalementsPage() {
                 setPage(1)
               }}
               aria-label="Filtrer par type de cible"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">Tous les types</option>
               <option value="provider">Artisans</option>
@@ -186,21 +186,21 @@ export default function AdminSignalementsPage() {
         )}
 
         {/* Reports List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : reports.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Flag className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <Flag className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucun signalement trouvé</p>
             </div>
           ) : (
             <>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-sand-100">
                 {reports.map((report) => (
-                  <div key={report.id} className="p-4 hover:bg-gray-50">
+                  <div key={report.id} className="p-4 hover:bg-sand-50">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
@@ -218,7 +218,7 @@ export default function AdminSignalementsPage() {
                           </StatusBadge>
                         </div>
 
-                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                        <div className="flex items-center gap-4 text-sm text-charcoal-500 mb-2">
                           {report.reporter_email && (
                             <span className="flex items-center gap-1">
                               <User className="w-4 h-4" />
@@ -232,11 +232,11 @@ export default function AdminSignalementsPage() {
                         </div>
 
                         {report.description && (
-                          <p className="text-sm text-gray-600 mt-2">{report.description}</p>
+                          <p className="text-sm text-charcoal-600 mt-2">{report.description}</p>
                         )}
 
                         {report.resolution && (
-                          <div className="mt-2 p-2 bg-gray-100 rounded text-sm text-gray-600">
+                          <div className="mt-2 p-2 bg-sand-100 rounded text-sm text-charcoal-600">
                             <strong>Résolution:</strong> {report.resolution}
                           </div>
                         )}
@@ -265,7 +265,7 @@ export default function AdminSignalementsPage() {
                                 action: 'dismiss',
                               })
                             }
-                            className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg"
+                            className="p-2 text-charcoal-400 hover:bg-sand-100 rounded-lg"
                             title="Rejeter"
                           >
                             <XCircle className="w-5 h-5" />
@@ -278,22 +278,22 @@ export default function AdminSignalementsPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -318,14 +318,14 @@ export default function AdminSignalementsPage() {
               aria-labelledby="action-modal-title"
               className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
             >
-              <h3 id="action-modal-title" className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 id="action-modal-title" className="text-lg font-semibold text-charcoal-900 mb-4">
                 {actionModal.action === 'resolve'
                   ? 'Résoudre le signalement'
                   : 'Rejeter le signalement'}
               </h3>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   Notes (optionnel)
                 </label>
                 <textarea
@@ -333,7 +333,7 @@ export default function AdminSignalementsPage() {
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   rows={3}
                   maxLength={2000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
                   placeholder="Décrivez les actions prises..."
                 />
               </div>
@@ -344,7 +344,7 @@ export default function AdminSignalementsPage() {
                     setActionModal({ open: false, reportId: '', action: 'resolve' })
                     setResolutionNotes('')
                   }}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                  className="flex-1 px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200"
                 >
                   Annuler
                 </button>
@@ -353,7 +353,7 @@ export default function AdminSignalementsPage() {
                   className={`flex-1 px-4 py-2 text-white rounded-lg ${
                     actionModal.action === 'resolve'
                       ? 'bg-green-600 hover:bg-green-700'
-                      : 'bg-gray-600 hover:bg-gray-700'
+                      : 'bg-charcoal-600 hover:bg-charcoal-700'
                   }`}
                 >
                   {actionModal.action === 'resolve' ? 'Résoudre' : 'Rejeter'}

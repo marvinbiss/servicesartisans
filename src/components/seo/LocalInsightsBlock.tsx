@@ -384,7 +384,7 @@ export default function LocalInsightsBlock({
             {/* 8. RGE artisan coverage */}
             {rgeInsight && (
               <div className="flex items-start gap-3">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 bg-blue-100 flex-shrink-0 mt-0.5">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold text-charcoal-700 bg-sand-200 flex-shrink-0 mt-0.5">
                   RGE
                 </span>
                 <p className="text-sm text-charcoal-700 leading-relaxed">{rgeInsight}</p>

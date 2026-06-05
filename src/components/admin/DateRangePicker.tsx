@@ -153,17 +153,19 @@ export function DateRangePicker({
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Sélectionner une période"
         aria-expanded={isOpen}
-        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+        className="flex items-center gap-2 px-4 py-2 border border-sand-300 rounded-lg hover:bg-sand-50 text-sm"
       >
-        <Calendar className="w-4 h-4 text-gray-400" />
-        <span className={startDate ? 'text-gray-900' : 'text-gray-500'}>{getDisplayText()}</span>
+        <Calendar className="w-4 h-4 text-charcoal-400" />
+        <span className={startDate ? 'text-charcoal-900' : 'text-charcoal-500'}>
+          {getDisplayText()}
+        </span>
         {(startDate || endDate) && (
           <button
             onClick={(e) => {
               e.stopPropagation()
               handleClear()
             }}
-            className="ml-1 text-gray-400 hover:text-gray-600"
+            className="ml-1 text-charcoal-400 hover:text-charcoal-600"
             aria-label="Effacer la période sélectionnée"
           >
             <X className="w-4 h-4" />
@@ -172,17 +174,17 @@ export function DateRangePicker({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 p-4 right-0">
+        <div className="absolute z-50 mt-2 bg-white rounded-xl shadow-lg border border-sand-200 p-4 right-0">
           <div className="flex gap-4">
             {/* Presets */}
-            <div className="border-r border-gray-100 pr-4">
-              <p className="text-xs font-medium text-gray-500 mb-2">Raccourcis</p>
+            <div className="border-r border-sand-100 pr-4">
+              <p className="text-xs font-medium text-charcoal-500 mb-2">Raccourcis</p>
               <div className="space-y-1">
                 {presets.map((preset) => (
                   <button
                     key={preset.days}
                     onClick={() => handlePreset(preset.days)}
-                    className="block w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 rounded"
+                    className="block w-full text-left px-3 py-1.5 text-sm text-charcoal-700 hover:bg-sand-100 rounded"
                   >
                     {preset.label}
                   </button>
@@ -198,29 +200,29 @@ export function DateRangePicker({
                   onClick={() =>
                     setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))
                   }
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-sand-100 rounded"
                   aria-label="Mois précédent"
                 >
-                  <ChevronLeft className="w-5 h-5 text-gray-600" />
+                  <ChevronLeft className="w-5 h-5 text-charcoal-600" />
                 </button>
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-charcoal-900">
                   {currentMonth.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                 </span>
                 <button
                   onClick={() =>
                     setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))
                   }
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-sand-100 rounded"
                   aria-label="Mois suivant"
                 >
-                  <ChevronRight className="w-5 h-5 text-gray-600" />
+                  <ChevronRight className="w-5 h-5 text-charcoal-600" />
                 </button>
               </div>
 
               {/* Day headers */}
               <div className="grid grid-cols-7 mb-2">
                 {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'].map((day) => (
-                  <div key={day} className="text-center text-xs font-medium text-gray-500 py-1">
+                  <div key={day} className="text-center text-xs font-medium text-charcoal-500 py-1">
                     {day}
                   </div>
                 ))}
@@ -243,12 +245,12 @@ export function DateRangePicker({
                       onClick={() => handleDateClick(date)}
                       className={`w-8 h-8 rounded text-sm transition-colors ${
                         selected
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary-500 text-white'
                           : inRange
-                            ? 'bg-blue-100 text-blue-700'
+                            ? 'bg-sand-200 text-charcoal-700'
                             : today
-                              ? 'bg-gray-100 text-gray-900 font-medium'
-                              : 'text-gray-700 hover:bg-gray-100'
+                              ? 'bg-sand-100 text-charcoal-900 font-medium'
+                              : 'text-charcoal-700 hover:bg-sand-100'
                       }`}
                     >
                       {date.getDate()}
@@ -259,7 +261,7 @@ export function DateRangePicker({
 
               {/* Selection hint */}
               {startDate && !endDate && (
-                <p className="text-xs text-gray-500 mt-3 text-center">
+                <p className="text-xs text-charcoal-500 mt-3 text-center">
                   Sélectionnez la date de fin
                 </p>
               )}

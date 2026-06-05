@@ -54,8 +54,8 @@ const STATUT_LABEL: Record<DelegataireStatut, string> = {
 }
 
 const STATUT_CLASS: Record<DelegataireStatut, string> = {
-  partenaire: 'bg-blue-50 text-blue-700 border-blue-200',
-  prospect: 'bg-gray-50 text-gray-600 border-gray-200',
+  partenaire: 'bg-sand-100 text-charcoal-700 border-sand-300',
+  prospect: 'bg-sand-50 text-charcoal-600 border-sand-200',
   actif: 'bg-green-50 text-green-700 border-green-200',
   inactif: 'bg-red-50 text-red-700 border-red-200',
 }
@@ -151,65 +151,71 @@ export function DelegatairesTable({ initialData }: Props) {
       )}
 
       {rows.length === 0 ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
-          <p className="text-sm text-gray-500">Aucun délégataire enregistré.</p>
+        <div className="rounded-xl border border-sand-200 bg-white p-12 text-center">
+          <p className="text-sm text-charcoal-500">Aucun délégataire enregistré.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-sand-200 bg-white">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-sand-200">
+              <thead className="bg-sand-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Slug
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Dénomination
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     SIRET
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Type
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Vague
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Statut
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Actif
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Opérations
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Site
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-charcoal-500">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
+              <tbody className="divide-y divide-sand-100 bg-white">
                 {rows.map((row) => {
                   const isEditing = editingId === row.id
                   const busy = busyId === row.id
                   const active = isActiveStatut(row.statut)
                   return (
                     <Fragment key={row.id}>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-sm font-mono text-gray-700">{row.slug}</td>
+                      <tr className="hover:bg-sand-50">
+                        <td className="px-4 py-3 text-sm font-mono text-charcoal-700">
+                          {row.slug}
+                        </td>
                         <td className="px-4 py-3 text-sm">
-                          <div className="font-medium text-gray-900">{row.nom_commercial}</div>
-                          <div className="text-xs text-gray-500">{row.raison_sociale}</div>
+                          <div className="font-medium text-charcoal-900">{row.nom_commercial}</div>
+                          <div className="text-xs text-charcoal-500">{row.raison_sociale}</div>
                         </td>
-                        <td className="px-4 py-3 text-sm font-mono text-gray-700">
-                          {row.siret ?? <span className="text-gray-400">—</span>}
+                        <td className="px-4 py-3 text-sm font-mono text-charcoal-700">
+                          {row.siret ?? <span className="text-charcoal-400">—</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{TYPE_LABEL[row.type]}</td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{row.vague_priorite}</td>
+                        <td className="px-4 py-3 text-sm text-charcoal-700">
+                          {TYPE_LABEL[row.type]}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-charcoal-700">
+                          {row.vague_priorite}
+                        </td>
                         <td className="px-4 py-3 text-sm">
                           <span
                             className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUT_CLASS[row.statut]}`}
@@ -226,7 +232,7 @@ export function DelegatairesTable({ initialData }: Props) {
                             aria-checked={active}
                             aria-label={`Basculer le statut actif de ${row.nom_commercial}`}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                              active ? 'bg-green-600' : 'bg-gray-300'
+                              active ? 'bg-green-600' : 'bg-sand-300'
                             } ${busy ? 'opacity-50' : ''}`}
                           >
                             <span
@@ -236,7 +242,7 @@ export function DelegatairesTable({ initialData }: Props) {
                             />
                           </button>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
+                        <td className="px-4 py-3 text-sm text-charcoal-700">
                           {row.operations_supportees.length}
                         </td>
                         <td className="px-4 py-3 text-sm">
@@ -245,13 +251,13 @@ export function DelegatairesTable({ initialData }: Props) {
                               href={row.url_site}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-blue-600 hover:underline"
+                              className="inline-flex items-center gap-1 text-primary-600 hover:underline"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                               Site
                             </a>
                           ) : (
-                            <span className="text-gray-400">—</span>
+                            <span className="text-charcoal-400">—</span>
                           )}
                         </td>
                         <td className="px-4 py-3 text-right text-sm">
@@ -260,7 +266,7 @@ export function DelegatairesTable({ initialData }: Props) {
                               type="button"
                               onClick={() => startEdit(row)}
                               disabled={busy}
-                              className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                              className="inline-flex items-center gap-1 rounded-lg border border-sand-200 px-2.5 py-1.5 text-xs font-medium text-charcoal-700 hover:bg-sand-50 disabled:opacity-50"
                             >
                               <Pencil className="w-3.5 h-3.5" />
                               Éditer
@@ -269,11 +275,11 @@ export function DelegatairesTable({ initialData }: Props) {
                         </td>
                       </tr>
                       {isEditing && (
-                        <tr className="bg-blue-50/40">
+                        <tr className="bg-sand-100/40">
                           <td colSpan={10} className="px-4 py-4">
                             <div className="flex flex-col gap-3 md:flex-row md:items-start">
                               <div className="flex-1">
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
+                                <label className="block text-xs font-medium text-charcoal-700 mb-1">
                                   SIRET (14 chiffres, vide pour retirer)
                                 </label>
                                 <input
@@ -283,11 +289,11 @@ export function DelegatairesTable({ initialData }: Props) {
                                   onChange={(e) => setEditSiret(e.target.value)}
                                   maxLength={14}
                                   placeholder="14 chiffres"
-                                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-mono focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                  className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm font-mono focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
                                 />
                               </div>
                               <div className="flex-[2]">
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
+                                <label className="block text-xs font-medium text-charcoal-700 mb-1">
                                   Notes
                                 </label>
                                 <textarea
@@ -295,7 +301,7 @@ export function DelegatairesTable({ initialData }: Props) {
                                   onChange={(e) => setEditNotes(e.target.value)}
                                   rows={2}
                                   maxLength={2000}
-                                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                  className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
                                 />
                               </div>
                               <div className="flex gap-2 md:mt-5">
@@ -303,7 +309,7 @@ export function DelegatairesTable({ initialData }: Props) {
                                   type="button"
                                   onClick={() => saveEdit(row)}
                                   disabled={busy}
-                                  className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                                  className="inline-flex items-center gap-1 rounded-lg bg-primary-500 px-3 py-2 text-xs font-medium text-white hover:bg-primary-600 disabled:opacity-50"
                                 >
                                   {busy ? (
                                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -316,7 +322,7 @@ export function DelegatairesTable({ initialData }: Props) {
                                   type="button"
                                   onClick={cancelEdit}
                                   disabled={busy}
-                                  className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                                  className="inline-flex items-center gap-1 rounded-lg border border-sand-200 px-3 py-2 text-xs font-medium text-charcoal-700 hover:bg-sand-50 disabled:opacity-50"
                                 >
                                   <X className="w-3.5 h-3.5" />
                                   Annuler
@@ -335,7 +341,7 @@ export function DelegatairesTable({ initialData }: Props) {
         </div>
       )}
 
-      <div className="flex items-center gap-4 text-xs text-gray-500">
+      <div className="flex items-center gap-4 text-xs text-charcoal-500">
         <span className="inline-flex items-center gap-1">
           <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />
           Actif = statut 'actif' ou 'partenaire'

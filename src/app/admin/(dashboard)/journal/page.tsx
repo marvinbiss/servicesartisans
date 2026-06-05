@@ -66,28 +66,29 @@ export default function AdminJournalPage() {
 
   const actionColor = (action: string) => {
     if (action.includes('create') || action.includes('insert')) return 'text-green-700 bg-green-100'
-    if (action.includes('update') || action.includes('edit')) return 'text-blue-700 bg-blue-100'
+    if (action.includes('update') || action.includes('edit')) return 'text-charcoal-700 bg-sand-200'
     if (action.includes('delete') || action.includes('remove')) return 'text-red-700 bg-red-100'
-    if (action.includes('dispatch') || action.includes('assign')) return 'text-blue-700 bg-blue-100'
+    if (action.includes('dispatch') || action.includes('assign'))
+      return 'text-charcoal-700 bg-sand-200'
     if (action.includes('verify') || action.includes('approve'))
       return 'text-green-700 bg-green-100'
-    return 'text-gray-700 bg-gray-100'
+    return 'text-charcoal-700 bg-sand-100'
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Shield className="w-6 h-6 text-gray-400" />
+            <h1 className="text-2xl font-bold text-charcoal-900 flex items-center gap-2">
+              <Shield className="w-6 h-6 text-charcoal-400" />
               Journal Admin
             </h1>
-            <p className="text-gray-500 mt-1">Journal immuable — {total} entrées au total</p>
+            <p className="text-charcoal-500 mt-1">Journal immuable — {total} entrées au total</p>
           </div>
           <button
             onClick={() => mutate()}
-            className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+            className="text-sm text-primary-600 hover:underline flex items-center gap-1"
           >
             <RefreshCw className="w-3 h-3" /> Rafraîchir
           </button>
@@ -102,23 +103,23 @@ export default function AdminJournalPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-charcoal-600" />
           </div>
         ) : logs.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-            <Shield className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Aucune entrée dans le journal</p>
+            <Shield className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
+            <p className="text-charcoal-500">Aucune entrée dans le journal</p>
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100">
               <div className="overflow-x-auto">
                 <table
                   className="w-full min-w-[400px] sm:min-w-[700px] text-sm"
                   aria-label="Journal des actions administrateur"
                 >
                   <thead>
-                    <tr className="border-b border-gray-100 text-left text-gray-500">
+                    <tr className="border-b border-sand-100 text-left text-charcoal-500">
                       <th scope="col" className="px-4 py-3 font-medium">
                         Date
                       </th>
@@ -136,10 +137,10 @@ export default function AdminJournalPage() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-sand-50">
                     {logs.map((log) => (
-                      <tr key={log.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                      <tr key={log.id} className="hover:bg-sand-50">
+                        <td className="px-4 py-3 text-charcoal-500 text-xs whitespace-nowrap">
                           <Clock className="w-3 h-3 inline mr-1" />
                           {new Date(log.created_at).toLocaleString('fr-FR', {
                             day: '2-digit',
@@ -156,22 +157,22 @@ export default function AdminJournalPage() {
                             {actionLabels[log.action] || log.action}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-600 text-xs">
+                        <td className="px-4 py-3 text-charcoal-600 text-xs">
                           {log.resource_type && (
                             <span>
                               {log.resource_type}
                               {log.resource_id && (
-                                <span className="text-gray-400 ml-1">
+                                <span className="text-charcoal-400 ml-1">
                                   ({log.resource_id.slice(0, 8)}...)
                                 </span>
                               )}
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-xs">
+                        <td className="px-4 py-3 text-charcoal-500 text-xs">
                           {log.user_id ? log.user_id.slice(0, 8) + '...' : '—'}
                         </td>
-                        <td className="px-4 py-3 text-gray-400 text-xs max-w-xs truncate">
+                        <td className="px-4 py-3 text-charcoal-400 text-xs max-w-xs truncate">
                           {log.new_value ? JSON.stringify(log.new_value).slice(0, 80) : '—'}
                         </td>
                       </tr>
@@ -181,7 +182,7 @@ export default function AdminJournalPage() {
               </div>
 
               {/* Pagination */}
-              <div className="flex items-center justify-center gap-4 p-4 border-t border-gray-100">
+              <div className="flex items-center justify-center gap-4 p-4 border-t border-sand-100">
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
@@ -189,7 +190,7 @@ export default function AdminJournalPage() {
                 >
                   <ChevronLeft className="w-4 h-4" /> Préc.
                 </button>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-charcoal-600">
                   Page {page} / {totalPages}
                 </span>
                 <button

@@ -128,17 +128,17 @@ export default function AdminServicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Services</h1>
-            <p className="text-gray-500 mt-1">{services.length} services</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Gestion des Services</h1>
+            <p className="text-charcoal-500 mt-1">{services.length} services</p>
           </div>
           <button
             onClick={() => openEditModal(null)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
           >
             <Plus className="w-5 h-5" />
             Nouveau service
@@ -146,17 +146,17 @@ export default function AdminServicesPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-400" />
               <input
                 type="text"
                 placeholder="Rechercher un service..."
                 aria-label="Rechercher un service"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
@@ -164,9 +164,9 @@ export default function AdminServicesPage() {
                 type="checkbox"
                 checked={showInactive}
                 onChange={(e) => setShowInactive(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="w-4 h-4 rounded border-sand-300 text-charcoal-600 focus:ring-primary-500"
               />
-              <span className="text-sm text-gray-600">Afficher les inactifs</span>
+              <span className="text-sm text-charcoal-600">Afficher les inactifs</span>
             </label>
           </div>
         </div>
@@ -177,14 +177,14 @@ export default function AdminServicesPage() {
         )}
 
         {/* Services Grid */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : services.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Grid className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <Grid className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucun service trouvé</p>
             </div>
           ) : (
@@ -193,15 +193,15 @@ export default function AdminServicesPage() {
                 <div
                   key={service.id}
                   className={`p-4 border rounded-lg ${
-                    service.is_active ? 'border-gray-200' : 'border-red-200 bg-red-50'
+                    service.is_active ? 'border-sand-200' : 'border-red-200 bg-red-50'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       {service.icon && <span className="text-2xl">{service.icon}</span>}
                       <div>
-                        <h3 className="font-medium text-gray-900">{service.name}</h3>
-                        <p className="text-sm text-gray-500">{service.slug}</p>
+                        <h3 className="font-medium text-charcoal-900">{service.name}</h3>
+                        <p className="text-sm text-charcoal-500">{service.slug}</p>
                       </div>
                     </div>
                     <StatusBadge variant={service.is_active ? 'success' : 'error'}>
@@ -209,12 +209,14 @@ export default function AdminServicesPage() {
                     </StatusBadge>
                   </div>
                   {service.description && (
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-2">{service.description}</p>
+                    <p className="mt-2 text-sm text-charcoal-600 line-clamp-2">
+                      {service.description}
+                    </p>
                   )}
                   <div className="flex items-center gap-2 mt-4">
                     <button
                       onClick={() => openEditModal(service)}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg"
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm text-charcoal-600 hover:bg-sand-100 rounded-lg"
                     >
                       <Edit2 className="w-4 h-4" />
                       Modifier
@@ -254,24 +256,24 @@ export default function AdminServicesPage() {
               aria-labelledby="edit-service-title"
               className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
             >
-              <h3 id="edit-service-title" className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 id="edit-service-title" className="text-lg font-semibold text-charcoal-900 mb-4">
                 {editModal.service ? 'Modifier le service' : 'Nouveau service'}
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">Nom</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="Ex: Plomberie"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Description
                   </label>
                   <textarea
@@ -279,12 +281,12 @@ export default function AdminServicesPage() {
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
                     maxLength={2000}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
                     placeholder="Description du service..."
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Icône (emoji)
                   </label>
                   <input
@@ -292,7 +294,7 @@ export default function AdminServicesPage() {
                     value={formData.icon}
                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                     maxLength={100}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="Ex: 🔧"
                   />
                 </div>
@@ -301,14 +303,14 @@ export default function AdminServicesPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setEditModal({ open: false, service: null })}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+                  className="flex-1 px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={!formData.name}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
                 >
                   {editModal.service ? 'Enregistrer' : 'Créer'}
                 </button>

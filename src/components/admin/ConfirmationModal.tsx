@@ -40,8 +40,8 @@ const variantConfig: Record<
   },
   info: {
     icon: Info,
-    colors: 'bg-blue-100 text-blue-600',
-    buttonColors: 'bg-blue-600 hover:bg-blue-700 text-white',
+    colors: 'bg-sand-200 text-charcoal-600',
+    buttonColors: 'bg-primary-500 hover:bg-primary-600 text-white',
   },
 }
 
@@ -153,7 +153,7 @@ export function ConfirmationModal({
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            className="absolute top-4 right-4 text-charcoal-400 hover:text-charcoal-600"
             aria-label="Fermer la boîte de dialogue"
           >
             <X className="w-5 h-5" />
@@ -170,10 +170,13 @@ export function ConfirmationModal({
           </div>
 
           {/* Content */}
-          <h3 id="confirmation-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
+          <h3
+            id="confirmation-modal-title"
+            className="text-lg font-semibold text-charcoal-900 mb-2"
+          >
             {title}
           </h3>
-          <p className="text-gray-600 mb-4">{message}</p>
+          <p className="text-charcoal-600 mb-4">{message}</p>
 
           {/* Custom content */}
           {children}
@@ -181,16 +184,18 @@ export function ConfirmationModal({
           {/* Confirmation input */}
           {requireConfirmation && (
             <div className="mb-4">
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-charcoal-500 mb-2">
                 Tapez{' '}
-                <span className="font-mono font-semibold text-gray-900">{requireConfirmation}</span>{' '}
+                <span className="font-mono font-semibold text-charcoal-900">
+                  {requireConfirmation}
+                </span>{' '}
                 pour confirmer
               </p>
               <input
                 type="text"
                 value={confirmInput}
                 onChange={(e) => setConfirmInput(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Tapez pour confirmer"
                 aria-label="Saisir le texte de confirmation"
               />
@@ -202,7 +207,7 @@ export function ConfirmationModal({
             <button
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200 transition-colors disabled:opacity-50"
             >
               {cancelText}
             </button>

@@ -177,7 +177,7 @@ export const URGENCY_META: Record<string, { label: string; cls: string }> = {
 }
 
 export const STATUS_META: Record<string, { label: string; cls: string }> = {
-  pending: { label: 'Nouveau', cls: 'bg-blue-100 text-blue-700' },
+  pending: { label: 'Nouveau', cls: 'bg-sand-200 text-charcoal-700' },
   viewed: { label: 'Consulté', cls: 'bg-yellow-100 text-yellow-700' },
   quoted: { label: 'Devis envoyé', cls: 'bg-green-100 text-green-700' },
   declined: { label: 'Décliné', cls: 'bg-charcoal-100 text-charcoal-600' },

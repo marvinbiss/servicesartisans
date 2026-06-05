@@ -47,12 +47,12 @@ export default function CampaignsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des campagnes</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+          <p className="text-charcoal-500 mt-1">Gestion des campagnes</p>
         </div>
         <Link
           href="/admin/prospection/campaigns/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600"
         >
           <Plus className="w-4 h-4" /> Nouvelle campagne
         </Link>
@@ -78,7 +78,7 @@ export default function CampaignsPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-sand-100 border-sand-300 text-charcoal-700' : 'hover:bg-sand-50'}`}
           >
             {s === 'all'
               ? 'Toutes'
@@ -99,27 +99,27 @@ export default function CampaignsPage() {
             className="w-full min-w-[800px] text-sm"
             aria-label="Liste des campagnes de prospection"
           >
-            <thead className="bg-gray-50">
+            <thead className="bg-sand-50">
               <tr>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Campagne
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Canal
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Statut
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Envoyés
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Livrés
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Réponses
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Coût
                 </th>
               </tr>
@@ -130,32 +130,34 @@ export default function CampaignsPage() {
                   <tr key={i}>
                     {Array.from({ length: 7 }).map((__, j) => (
                       <td key={j} className="px-4 py-3">
-                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-4 bg-sand-100 rounded animate-pulse" />
                       </td>
                     ))}
                   </tr>
                 ))
               ) : campaigns.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={7} className="px-4 py-8 text-center text-charcoal-400">
                     Aucune campagne. Créez votre première campagne de prospection.
                   </td>
                 </tr>
               ) : (
                 campaigns.map((camp) => (
-                  <tr key={camp.id} className="hover:bg-gray-50">
+                  <tr key={camp.id} className="hover:bg-sand-50">
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/prospection/campaigns/${camp.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-medium text-primary-600 hover:underline"
                       >
                         {camp.name}
                       </Link>
-                      <div className="text-xs text-gray-400 capitalize">{camp.audience_type}</div>
+                      <div className="text-xs text-charcoal-400 capitalize">
+                        {camp.audience_type}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
-                        <ChannelIcon channel={camp.channel} className="w-4 h-4 text-gray-400" />
+                        <ChannelIcon channel={camp.channel} className="w-4 h-4 text-charcoal-400" />
                         <span className="capitalize">
                           {camp.channel === 'whatsapp' ? 'WhatsApp' : camp.channel.toUpperCase()}
                         </span>
@@ -173,7 +175,7 @@ export default function CampaignsPage() {
                     <td className="px-4 py-3 text-right">
                       {camp.replied_count.toLocaleString('fr-FR')}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-500">
+                    <td className="px-4 py-3 text-right text-charcoal-500">
                       {camp.actual_cost.toFixed(2)} €
                     </td>
                   </tr>

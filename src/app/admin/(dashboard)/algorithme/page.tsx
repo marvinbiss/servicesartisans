@@ -96,8 +96,8 @@ export default function AdminAlgorithmePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-charcoal-600" />
       </div>
     )
   }
@@ -105,13 +105,13 @@ export default function AdminAlgorithmePage() {
   if (!config) return null
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Configuration Algorithmique</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-2xl font-bold text-charcoal-900">Configuration Algorithmique</h1>
+            <p className="text-charcoal-500 mt-1">
               Paramètres de distribution des leads et scoring des artisans
             </p>
           </div>
@@ -125,7 +125,7 @@ export default function AdminAlgorithmePage() {
             {hasChanges && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+                className="flex items-center gap-2 px-4 py-2 text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200"
               >
                 <RefreshCw className="w-4 h-4" />
                 Annuler
@@ -134,7 +134,7 @@ export default function AdminAlgorithmePage() {
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
               {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -154,7 +154,7 @@ export default function AdminAlgorithmePage() {
           <Section icon={Target} title="Stratégie de distribution">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-charcoal-700 mb-2">
                   Mode de matching
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -167,16 +167,16 @@ export default function AdminAlgorithmePage() {
                         onClick={() => update('matching_strategy', key)}
                         className={`p-4 rounded-xl border-2 text-left transition-all ${
                           selected
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-charcoal-300 bg-sand-100'
+                            : 'border-sand-200 hover:border-sand-300'
                         }`}
                       >
                         <p
-                          className={`font-medium ${selected ? 'text-blue-700' : 'text-gray-900'}`}
+                          className={`font-medium ${selected ? 'text-charcoal-700' : 'text-charcoal-900'}`}
                         >
                           {meta.label}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">{meta.description}</p>
+                        <p className="text-xs text-charcoal-500 mt-1">{meta.description}</p>
                       </button>
                     )
                   })}
@@ -216,7 +216,7 @@ export default function AdminAlgorithmePage() {
               />
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-charcoal-700 mb-2">
                   Mode de correspondance spécialité
                 </label>
                 <div className="flex gap-2">
@@ -229,8 +229,8 @@ export default function AdminAlgorithmePage() {
                         onClick={() => update('specialty_match_mode', key)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                           selected
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-primary-500 text-white'
+                            : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                         }`}
                         title={meta.description}
                       >
@@ -252,7 +252,7 @@ export default function AdminAlgorithmePage() {
 
           {/* === SCORING === */}
           <Section icon={Sliders} title="Poids du scoring">
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-charcoal-500 mb-4">
               Ajustez les poids relatifs du score composite. Total actuel :{' '}
               <span
                 className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}
@@ -386,7 +386,7 @@ export default function AdminAlgorithmePage() {
 
           {/* === MULTIPLICATEURS URGENCE === */}
           <Section icon={Zap} title="Multiplicateurs d'urgence">
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-charcoal-500 mb-4">
               Multiplie le score des artisans pour les leads urgents
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -419,7 +419,7 @@ export default function AdminAlgorithmePage() {
 
           {/* Metadata */}
           {config.updated_at && (
-            <div className="text-xs text-gray-400 text-center pt-4">
+            <div className="text-xs text-charcoal-400 text-center pt-4">
               Dernière modification : {new Date(config.updated_at).toLocaleString('fr-FR')}
             </div>
           )}
@@ -441,10 +441,10 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-        <Icon className="w-5 h-5 text-gray-400" />
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+    <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
+      <div className="px-6 py-4 border-b border-sand-100 flex items-center gap-3">
+        <Icon className="w-5 h-5 text-charcoal-400" />
+        <h2 className="text-lg font-semibold text-charcoal-900">{title}</h2>
       </div>
       <div className="p-6">{children}</div>
     </div>
@@ -471,8 +471,8 @@ function NumberField({
   return (
     <div className="flex items-start justify-between">
       <div className="flex-1">
-        <label className="block font-medium text-gray-900">{label}</label>
-        {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+        <label className="block font-medium text-charcoal-900">{label}</label>
+        {description && <p className="text-sm text-charcoal-500 mt-1">{description}</p>}
       </div>
       <div className="ml-4">
         <input
@@ -483,7 +483,7 @@ function NumberField({
           max={max}
           step={step || 1}
           aria-label={label}
-          className="w-full sm:w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+          className="w-full sm:w-24 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-right"
         />
       </div>
     </div>
@@ -504,8 +504,8 @@ function ToggleField({
   return (
     <div className="flex items-start justify-between">
       <div className="flex-1">
-        <label className="block font-medium text-gray-900">{label}</label>
-        {description && <p className="text-sm text-gray-500 mt-1">{description}</p>}
+        <label className="block font-medium text-charcoal-900">{label}</label>
+        {description && <p className="text-sm text-charcoal-500 mt-1">{description}</p>}
       </div>
       <div className="ml-4">
         <button
@@ -514,7 +514,7 @@ function ToggleField({
           aria-checked={value}
           aria-label={label}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            value ? 'bg-blue-600' : 'bg-gray-300'
+            value ? 'bg-primary-500' : 'bg-sand-300'
           }`}
         >
           <span
@@ -530,7 +530,7 @@ function ToggleField({
 
 const SLIDER_COLORS: Record<string, string> = {
   yellow: 'bg-yellow-500',
-  blue: 'bg-blue-500',
+  blue: 'bg-charcoal-400',
   green: 'bg-green-500',
 }
 
@@ -548,14 +548,14 @@ function WeightSlider({
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <label className="text-sm font-medium text-gray-700">{label}</label>
-        <span className="text-sm font-bold text-gray-900">{value}</span>
+        <label className="text-sm font-medium text-charcoal-700">{label}</label>
+        <span className="text-sm font-bold text-charcoal-900">{value}</span>
       </div>
       <div className="flex items-center gap-3">
         <div className="flex-1 relative">
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-sand-200 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all ${SLIDER_COLORS[color] || 'bg-blue-500'}`}
+              className={`h-full rounded-full transition-all ${SLIDER_COLORS[color] || 'bg-charcoal-400'}`}
               style={{ width: `${value}%` }}
             />
           </div>
@@ -576,7 +576,7 @@ function WeightSlider({
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value) || 0)}
           aria-label={`${label} (valeur)`}
-          className="w-full sm:w-16 px-2 py-1 text-sm border border-gray-300 rounded-lg text-center"
+          className="w-full sm:w-16 px-2 py-1 text-sm border border-sand-300 rounded-lg text-center"
         />
       </div>
     </div>
@@ -584,8 +584,8 @@ function WeightSlider({
 }
 
 const MULTIPLIER_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  gray: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
-  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  gray: { bg: 'bg-sand-50', text: 'text-charcoal-700', border: 'border-sand-200' },
+  blue: { bg: 'bg-sand-100', text: 'text-charcoal-700', border: 'border-sand-300' },
   orange: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
   red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 }
@@ -613,9 +613,9 @@ function MultiplierCard({
         max={5}
         step={0.25}
         aria-label={`Multiplicateur ${label}`}
-        className="w-full sm:w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-gray-300 rounded-lg"
+        className="w-full sm:w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-sand-300 rounded-lg"
       />
-      <p className="text-xs text-gray-400 mt-1">x multiplicateur</p>
+      <p className="text-xs text-charcoal-400 mt-1">x multiplicateur</p>
     </div>
   )
 }

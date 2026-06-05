@@ -9,10 +9,10 @@ import type { ProspectionConversation } from '@/types/prospection'
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   open: { label: 'Ouvert', color: 'bg-green-100 text-green-700' },
-  ai_handling: { label: 'IA en cours', color: 'bg-blue-100 text-blue-700' },
+  ai_handling: { label: 'IA en cours', color: 'bg-sand-200 text-charcoal-700' },
   human_required: { label: 'Humain requis', color: 'bg-red-100 text-red-700' },
-  resolved: { label: 'Résolu', color: 'bg-gray-100 text-gray-700' },
-  archived: { label: 'Archivé', color: 'bg-gray-100 text-gray-500' },
+  resolved: { label: 'Résolu', color: 'bg-sand-100 text-charcoal-700' },
+  archived: { label: 'Archivé', color: 'bg-sand-100 text-charcoal-500' },
 }
 
 export default function InboxPage() {
@@ -50,8 +50,10 @@ export default function InboxPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Boîte de réception - Conversations avec les contacts</p>
+        <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+        <p className="text-charcoal-500 mt-1">
+          Boîte de réception - Conversations avec les contacts
+        </p>
       </div>
 
       <ProspectionNav />
@@ -74,7 +76,7 @@ export default function InboxPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-sand-100 border-sand-300 text-charcoal-700' : 'hover:bg-sand-50'}`}
           >
             {s === 'all' ? 'Toutes' : statusLabels[s]?.label || s}
           </button>
@@ -85,12 +87,12 @@ export default function InboxPage() {
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="p-4 animate-pulse">
-              <div className="h-5 bg-gray-200 rounded w-1/3 mb-2" />
-              <div className="h-4 bg-gray-100 rounded w-2/3" />
+              <div className="h-5 bg-sand-200 rounded w-1/3 mb-2" />
+              <div className="h-4 bg-sand-100 rounded w-2/3" />
             </div>
           ))
         ) : conversations.length === 0 ? (
-          <div className="p-8 text-center text-gray-400">
+          <div className="p-8 text-center text-charcoal-400">
             <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>Aucune conversation. Les réponses à vos campagnes apparaîtront ici.</p>
           </div>
@@ -104,26 +106,26 @@ export default function InboxPage() {
                   contact_type?: string
                 }
               | undefined
-            const status = statusLabels[conv.status] || { label: conv.status, color: 'bg-gray-100' }
+            const status = statusLabels[conv.status] || { label: conv.status, color: 'bg-sand-100' }
             return (
               <Link
                 key={conv.id}
                 href={`/admin/prospection/inbox/${conv.id}`}
-                className="block p-4 hover:bg-gray-50 transition-colors"
+                className="block p-4 hover:bg-sand-50 transition-colors"
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-blue-100' : 'bg-gray-100'}`}
+                      className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-sand-200' : 'bg-sand-100'}`}
                     >
                       {conv.status === 'ai_handling' ? (
-                        <Bot className="w-4 h-4 text-blue-600" />
+                        <Bot className="w-4 h-4 text-charcoal-600" />
                       ) : (
-                        <User className="w-4 h-4 text-gray-500" />
+                        <User className="w-4 h-4 text-charcoal-500" />
                       )}
                     </div>
                     <div>
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-charcoal-900">
                         {contact?.contact_name ||
                           contact?.company_name ||
                           contact?.email ||
@@ -133,13 +135,13 @@ export default function InboxPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <ChannelIcon channel={conv.channel} className="w-4 h-4 text-gray-400" />
+                    <ChannelIcon channel={conv.channel} className="w-4 h-4 text-charcoal-400" />
                     <span className={`text-xs px-2 py-0.5 rounded-full ${status.color}`}>
                       {status.label}
                     </span>
                   </div>
                 </div>
-                <div className="ml-10 text-sm text-gray-500">
+                <div className="ml-10 text-sm text-charcoal-500">
                   {conv.ai_replies_count > 0 && (
                     <span className="mr-3">{conv.ai_replies_count} réponses IA</span>
                   )}

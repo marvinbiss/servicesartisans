@@ -41,8 +41,8 @@ export default function AnalyticsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Statistiques et analyses</p>
+        <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+        <p className="text-charcoal-500 mt-1">Statistiques et analyses</p>
       </div>
 
       <ProspectionNav />
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
 
       {/* Table détaillée par canal */}
       <div className="mt-8 bg-white rounded-lg border overflow-hidden">
-        <div className="px-4 py-3 border-b bg-gray-50">
+        <div className="px-4 py-3 border-b bg-sand-50">
           <h2 className="font-semibold">Détail par canal</h2>
         </div>
         <div className="overflow-x-auto">
@@ -74,25 +74,25 @@ export default function AnalyticsPage() {
           >
             <thead>
               <tr className="border-b">
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Canal
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Envoyés
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Livrés
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Réponses
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Échecs
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Taux livraison
                 </th>
-                <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-right px-4 py-3 font-medium text-charcoal-500">
                   Taux réponse
                 </th>
               </tr>
@@ -112,14 +112,14 @@ export default function AnalyticsPage() {
                   <td className="px-4 py-3 text-right text-green-600">
                     {ch.delivery_rate.toFixed(1)}%
                   </td>
-                  <td className="px-4 py-3 text-right text-blue-600">
+                  <td className="px-4 py-3 text-right text-charcoal-600">
                     {ch.reply_rate.toFixed(1)}%
                   </td>
                 </tr>
               ))}
               {channels.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={7} className="px-4 py-8 text-center text-charcoal-400">
                     Aucune donnée disponible
                   </td>
                 </tr>

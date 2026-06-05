@@ -99,16 +99,16 @@ export default function AdminMessagesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Modération des Messages</h1>
-          <p className="text-gray-500 mt-1">{total} conversations</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Modération des Messages</h1>
+          <p className="text-charcoal-500 mt-1">{total} conversations</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex gap-2">
             {(['all', 'active', 'archived', 'blocked'] as const).map((s) => (
               <button
@@ -119,8 +119,8 @@ export default function AdminMessagesPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   status === s
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                 }`}
               >
                 {s === 'all'
@@ -139,27 +139,27 @@ export default function AdminMessagesPage() {
         {error && <ErrorBanner message={error.message} onRetry={() => mutate()} />}
 
         {/* Conversations List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : conversations.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <MessageSquare className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucune conversation trouvée</p>
             </div>
           ) : (
             <>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-sand-100">
                 {conversations.map((conversation) => (
-                  <div key={conversation.id} className="p-4 hover:bg-gray-50">
+                  <div key={conversation.id} className="p-4 hover:bg-sand-50">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
                           {getStatusBadge(conversation.status)}
                           {conversation.unread_count > 0 && (
-                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-sand-200 text-charcoal-700 rounded-full text-xs font-medium">
                               {conversation.unread_count} non lu(s)
                             </span>
                           )}
@@ -168,38 +168,40 @@ export default function AdminMessagesPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Client */}
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-gray-100 rounded-lg">
-                              <User className="w-5 h-5 text-gray-600" />
+                            <div className="p-2 bg-sand-100 rounded-lg">
+                              <User className="w-5 h-5 text-charcoal-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 uppercase">Client</p>
-                              <p className="font-medium text-gray-900">
+                              <p className="text-xs text-charcoal-500 uppercase">Client</p>
+                              <p className="font-medium text-charcoal-900">
                                 {conversation.client?.full_name || 'Sans nom'}
                               </p>
-                              <p className="text-sm text-gray-500">{conversation.client?.email}</p>
+                              <p className="text-sm text-charcoal-500">
+                                {conversation.client?.email}
+                              </p>
                             </div>
                           </div>
 
                           {/* Provider */}
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-blue-100 rounded-lg">
-                              <Briefcase className="w-5 h-5 text-blue-600" />
+                            <div className="p-2 bg-sand-200 rounded-lg">
+                              <Briefcase className="w-5 h-5 text-charcoal-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-gray-500 uppercase">Artisan</p>
-                              <p className="font-medium text-gray-900">
+                              <p className="text-xs text-charcoal-500 uppercase">Artisan</p>
+                              <p className="font-medium text-charcoal-900">
                                 {conversation.provider?.name ||
                                   conversation.provider?.full_name ||
                                   'Sans nom'}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-charcoal-500">
                                 {conversation.provider?.email}
                               </p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
+                        <div className="flex items-center gap-4 mt-3 text-sm text-charcoal-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-4 h-4" />
                             Dernier message: {formatDate(conversation.last_message_at)}
@@ -214,7 +216,7 @@ export default function AdminMessagesPage() {
                             <button
                               onClick={() => handleStatusChange(conversation.id, 'archived')}
                               disabled={actionLoading === conversation.id}
-                              className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg disabled:opacity-50"
+                              className="p-2 text-charcoal-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg disabled:opacity-50"
                               title="Archiver"
                               aria-label="Archiver la conversation"
                             >
@@ -223,7 +225,7 @@ export default function AdminMessagesPage() {
                             <button
                               onClick={() => handleStatusChange(conversation.id, 'blocked')}
                               disabled={actionLoading === conversation.id}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                              className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
                               title="Bloquer"
                               aria-label="Bloquer la conversation"
                             >
@@ -238,15 +240,15 @@ export default function AdminMessagesPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                     aria-label="Page précédente"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -254,7 +256,7 @@ export default function AdminMessagesPage() {
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                     aria-label="Page suivante"
                   >
                     <ChevronRight className="w-5 h-5" />

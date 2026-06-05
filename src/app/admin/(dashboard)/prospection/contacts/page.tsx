@@ -68,8 +68,8 @@ export default function ContactsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Gestion des contacts</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+          <p className="text-charcoal-500 mt-1">Gestion des contacts</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -81,7 +81,7 @@ export default function ContactsPage() {
           </button>
           <Link
             href="/admin/prospection/contacts/import"
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600"
           >
             <Upload className="w-4 h-4" /> Importer CSV
           </Link>
@@ -106,7 +106,7 @@ export default function ContactsPage() {
       {/* Filtres */}
       <div className="flex gap-4 mb-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
           <input
             type="text"
             placeholder="Rechercher par nom, email, ville..."
@@ -133,7 +133,7 @@ export default function ContactsPage() {
       </div>
 
       {/* Total */}
-      <p className="text-sm text-gray-500 mb-3">{total.toLocaleString('fr-FR')} contacts</p>
+      <p className="text-sm text-charcoal-500 mb-3">{total.toLocaleString('fr-FR')} contacts</p>
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
@@ -142,24 +142,24 @@ export default function ContactsPage() {
             className="w-full min-w-[700px] text-sm"
             aria-label="Liste des contacts de prospection"
           >
-            <thead className="bg-gray-50">
+            <thead className="bg-sand-50">
               <tr>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Nom
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Type
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Email
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Téléphone
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Ville
                 </th>
-                <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">
+                <th scope="col" className="text-left px-4 py-3 font-medium text-charcoal-500">
                   Source
                 </th>
               </tr>
@@ -170,39 +170,39 @@ export default function ContactsPage() {
                   <tr key={i}>
                     {Array.from({ length: 6 }).map((__, j) => (
                       <td key={j} className="px-4 py-3">
-                        <div className="h-4 bg-gray-100 rounded animate-pulse" />
+                        <div className="h-4 bg-sand-100 rounded animate-pulse" />
                       </td>
                     ))}
                   </tr>
                 ))
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={6} className="px-4 py-8 text-center text-charcoal-400">
                     <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     Aucun contact. Importez un CSV pour commencer.
                   </td>
                 </tr>
               ) : (
                 contacts.map((contact) => (
-                  <tr key={contact.id} className="hover:bg-gray-50">
+                  <tr key={contact.id} className="hover:bg-sand-50">
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/prospection/contacts/${contact.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-medium text-primary-600 hover:underline"
                       >
                         {contact.contact_name || contact.company_name || '-'}
                       </Link>
                       {contact.company_name && contact.contact_name && (
-                        <div className="text-xs text-gray-400">{contact.company_name}</div>
+                        <div className="text-xs text-charcoal-400">{contact.company_name}</div>
                       )}
                     </td>
                     <td className="px-4 py-3">
                       <ContactTypeBadge type={contact.contact_type} />
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{contact.email || '-'}</td>
-                    <td className="px-4 py-3 text-gray-600">{contact.phone || '-'}</td>
-                    <td className="px-4 py-3 text-gray-600">{contact.city || '-'}</td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{contact.source}</td>
+                    <td className="px-4 py-3 text-charcoal-600">{contact.email || '-'}</td>
+                    <td className="px-4 py-3 text-charcoal-600">{contact.phone || '-'}</td>
+                    <td className="px-4 py-3 text-charcoal-600">{contact.city || '-'}</td>
+                    <td className="px-4 py-3 text-charcoal-400 text-xs">{contact.source}</td>
                   </tr>
                 ))
               )}
@@ -221,7 +221,7 @@ export default function ContactsPage() {
           >
             Précédent
           </button>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-charcoal-500">
             Page {page} / {totalPages}
           </span>
           <button

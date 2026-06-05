@@ -220,8 +220,8 @@ export default function CalendrierSaisonnierBlock({
   return (
     <section className="py-6 bg-white rounded-xl border border-sand-200 p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Calendar className="w-5 h-5 text-blue-600" />
+        <div className="w-9 h-9 bg-sand-200 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Calendar className="w-5 h-5 text-charcoal-600" />
         </div>
         <div>
           <h3 className="font-heading text-lg font-bold text-charcoal-900">
@@ -280,8 +280,8 @@ export default function CalendrierSaisonnierBlock({
 
       {/* Climate-aware tip */}
       {climatTip && (
-        <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
-          <p className="text-sm text-blue-800 leading-relaxed">
+        <div className="p-3 rounded-lg bg-sand-100 border border-sand-200">
+          <p className="text-sm text-charcoal-800 leading-relaxed">
             <strong>Conseil climat{'\u00A0'}:</strong> {climatTip}
           </p>
         </div>

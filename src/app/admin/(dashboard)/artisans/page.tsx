@@ -175,15 +175,15 @@ export default function AdminProvidersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" aria-label="Gestion des artisans">
+    <div className="min-h-screen bg-sand-50" aria-label="Gestion des artisans">
       {/* Toast notification */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Gestion des Artisans</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-2xl font-bold text-charcoal-900">Gestion des Artisans</h1>
+            <p className="text-charcoal-500 mt-1">
               {total > 0
                 ? `${total} artisan${total > 1 ? 's' : ''} au total`
                 : 'Gérez les profils et vérifications des artisans'}
@@ -192,7 +192,7 @@ export default function AdminProvidersPage() {
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-sand-300 rounded-lg hover:bg-sand-50 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Actualiser
@@ -200,17 +200,17 @@ export default function AdminProvidersPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-400" />
               <input
                 type="text"
                 placeholder="Rechercher par nom, email, ville, SIRET..."
                 aria-label="Rechercher un artisan"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -226,8 +226,8 @@ export default function AdminProvidersPage() {
                   disabled={loading}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === f
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                   } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {f === 'all'
@@ -244,17 +244,17 @@ export default function AdminProvidersPage() {
         </div>
 
         {/* Providers Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
           {loading && providers.length === 0 ? (
             <div className="p-12 text-center">
-              <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-              <p className="text-gray-500 mt-4">Chargement des artisans...</p>
+              <Loader2 className="w-8 h-8 text-charcoal-600 mx-auto animate-spin" />
+              <p className="text-charcoal-500 mt-4">Chargement des artisans...</p>
             </div>
           ) : providers.length === 0 ? (
             <div className="p-12 text-center">
-              <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun artisan trouvé</h3>
-              <p className="text-gray-500 mb-4">
+              <Briefcase className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-charcoal-900 mb-2">Aucun artisan trouvé</h3>
+              <p className="text-charcoal-500 mb-4">
                 {filter !== 'all' || search
                   ? 'Aucun résultat pour cette recherche. Essayez de modifier vos filtres.'
                   : 'Les artisans sont importés via les scripts SIRENE/ADEME.'}
@@ -265,7 +265,7 @@ export default function AdminProvidersPage() {
               {/* Loading overlay */}
               {loading && (
                 <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-                  <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-charcoal-600 animate-spin" />
                 </div>
               )}
 
@@ -274,69 +274,69 @@ export default function AdminProvidersPage() {
                   className="w-full min-w-[500px] sm:min-w-[900px]"
                   aria-label="Liste des artisans"
                 >
-                  <thead className="bg-gray-50 border-b border-gray-100">
+                  <thead className="bg-sand-50 border-b border-sand-100">
                     <tr>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Artisan
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Service
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Localisation
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Statut
                       </th>
                       <th
                         scope="col"
-                        className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-left px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Avis
                       </th>
                       <th
                         scope="col"
-                        className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="text-right px-6 py-3 text-xs font-medium text-charcoal-500 uppercase tracking-wider"
                       >
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-sand-100">
                     {providers.map((provider) => (
                       <tr
                         key={provider.id}
-                        className={`hover:bg-gray-50 transition-colors ${actionLoading === provider.id ? 'opacity-50' : ''}`}
+                        className={`hover:bg-sand-50 transition-colors ${actionLoading === provider.id ? 'opacity-50' : ''}`}
                       >
                         <td className="px-6 py-4">
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-900">{provider.name}</p>
+                              <p className="font-medium text-charcoal-900">{provider.name}</p>
                               {provider.source === 'sirene-open' && (
-                                <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">
+                                <span className="px-1.5 py-0.5 bg-sand-200 text-charcoal-700 rounded text-xs">
                                   SIRENE
                                 </span>
                               )}
                             </div>
                             {provider.email ? (
-                              <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                              <div className="flex items-center gap-2 mt-1 text-sm text-charcoal-500">
                                 <Mail className="w-3 h-3" />
                                 {provider.email}
                               </div>
                             ) : provider.siret ? (
-                              <div className="mt-1 text-sm text-gray-400 font-mono">
+                              <div className="mt-1 text-sm text-charcoal-400 font-mono">
                                 SIRET: {provider.siret}
                               </div>
                             ) : null}
@@ -344,19 +344,19 @@ export default function AdminProvidersPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.specialty}</span>
+                            <Briefcase className="w-4 h-4 text-charcoal-400" />
+                            <span className="text-charcoal-900">{provider.specialty}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">
+                            <MapPin className="w-4 h-4 text-charcoal-400" />
+                            <span className="text-charcoal-900">
                               {provider.address_city || 'Non renseigné'}
                             </span>
                           </div>
                           {provider.address_region && (
-                            <p className="text-sm text-gray-500">{provider.address_region}</p>
+                            <p className="text-sm text-charcoal-500">{provider.address_region}</p>
                           )}
                         </td>
                         <td className="px-6 py-4">{getStatusBadge(provider)}</td>
@@ -365,12 +365,12 @@ export default function AdminProvidersPage() {
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                               <span className="font-medium">{provider.rating_average}</span>
-                              <span className="text-gray-500 text-sm">
+                              <span className="text-charcoal-500 text-sm">
                                 ({provider.review_count})
                               </span>
                             </div>
                           ) : (
-                            <span className="text-gray-400 text-sm">Aucun avis</span>
+                            <span className="text-charcoal-400 text-sm">Aucun avis</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -378,7 +378,7 @@ export default function AdminProvidersPage() {
                             {/* View button */}
                             <button
                               onClick={() => router.push(`/admin/artisans/${provider.id}`)}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-charcoal-400 hover:text-primary-600 hover:bg-sand-100 rounded-lg transition-colors"
                               title="Voir le profil"
                               aria-label="Voir le profil"
                             >
@@ -388,7 +388,7 @@ export default function AdminProvidersPage() {
                             {/* Edit button */}
                             <button
                               onClick={() => router.push(`/admin/artisans/${provider.id}/edit`)}
-                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                              className="p-2 text-charcoal-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                               title="Modifier"
                               aria-label="Modifier"
                             >
@@ -400,7 +400,7 @@ export default function AdminProvidersPage() {
                               <button
                                 onClick={() => handleAction(provider.id, 'verify')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="p-2 text-charcoal-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Vérifier cet artisan"
                                 aria-label="Vérifier cet artisan"
                               >
@@ -422,7 +422,7 @@ export default function AdminProvidersPage() {
                                 })
                               }
                               disabled={actionLoading === provider.id}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                              className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                               title="Supprimer définitivement"
                               aria-label="Supprimer définitivement"
                             >
@@ -434,7 +434,7 @@ export default function AdminProvidersPage() {
                               <button
                                 onClick={() => handleAction(provider.id, 'suspend')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Suspendre"
                                 aria-label="Suspendre"
                               >
@@ -448,7 +448,7 @@ export default function AdminProvidersPage() {
                               <button
                                 onClick={() => handleAction(provider.id, 'activate')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="p-2 text-charcoal-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Réactiver"
                                 aria-label="Réactiver"
                               >
@@ -468,8 +468,8 @@ export default function AdminProvidersPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages} ({total} résultat{total > 1 ? 's' : ''})
                 </p>
                 <div className="flex gap-2">
@@ -477,7 +477,7 @@ export default function AdminProvidersPage() {
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1 || loading}
                     aria-label="Page précédente"
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -485,7 +485,7 @@ export default function AdminProvidersPage() {
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages || loading}
                     aria-label="Page suivante"
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>

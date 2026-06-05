@@ -214,20 +214,22 @@ export default function EmailTemplatesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
               onClick={() => router.push('/admin/parametres')}
-              className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
+              className="text-charcoal-500 hover:text-charcoal-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
               Retour aux paramètres
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modèles d'email</h1>
-            <p className="text-gray-500 mt-1">Personnalisez les emails envoyés par la plateforme</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Modèles d'email</h1>
+            <p className="text-charcoal-500 mt-1">
+              Personnalisez les emails envoyés par la plateforme
+            </p>
           </div>
           {saved && (
             <span className="flex items-center gap-1 text-green-600 text-sm">
@@ -242,17 +244,17 @@ export default function EmailTemplatesPage() {
           {templates.map((template) => (
             <div
               key={template.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+              className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden"
             >
               {/* Header */}
-              <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
+              <div className="px-6 py-4 flex items-center justify-between border-b border-sand-100">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-sand-200 rounded-lg">
+                    <Mail className="w-5 h-5 text-charcoal-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{template.name}</h3>
-                    <p className="text-sm text-gray-500">{template.description}</p>
+                    <h3 className="font-semibold text-charcoal-900">{template.name}</h3>
+                    <p className="text-sm text-charcoal-500">{template.description}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -260,8 +262,8 @@ export default function EmailTemplatesPage() {
                     onClick={() => handlePreview(template)}
                     className={`p-2 rounded-lg transition-colors ${
                       previewId === template.id
-                        ? 'bg-blue-100 text-blue-600'
-                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                        ? 'bg-sand-200 text-charcoal-600'
+                        : 'text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100'
                     }`}
                     title="Prévisualiser"
                     aria-label={`Prévisualiser le modèle ${template.name}`}
@@ -272,8 +274,8 @@ export default function EmailTemplatesPage() {
                     onClick={() => handleEdit(template)}
                     className={`p-2 rounded-lg transition-colors ${
                       editingId === template.id
-                        ? 'bg-blue-100 text-blue-600'
-                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                        ? 'bg-sand-200 text-charcoal-600'
+                        : 'text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100'
                     }`}
                     title="Modifier"
                     aria-label={`Modifier le modèle ${template.name}`}
@@ -285,32 +287,36 @@ export default function EmailTemplatesPage() {
 
               {/* Edit Mode */}
               {editingId === template.id && (
-                <div className="p-6 space-y-4 bg-gray-50">
+                <div className="p-6 space-y-4 bg-sand-50">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Sujet</label>
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                      Sujet
+                    </label>
                     <input
                       type="text"
                       value={editSubject}
                       onChange={(e) => setEditSubject(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                      Contenu
+                    </label>
                     <textarea
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
                       rows={10}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 font-mono text-sm"
                     />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Variables disponibles :</p>
+                    <p className="text-sm text-charcoal-500 mb-2">Variables disponibles :</p>
                     <div className="flex flex-wrap gap-2">
                       {template.variables.map((v) => (
                         <code
                           key={v}
-                          className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs"
+                          className="px-2 py-1 bg-sand-200 text-charcoal-700 rounded text-xs"
                         >
                           {v}
                         </code>
@@ -320,14 +326,14 @@ export default function EmailTemplatesPage() {
                   <div className="flex justify-end gap-3 pt-4">
                     <button
                       onClick={handleCancel}
-                      className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300"
+                      className="px-4 py-2 text-charcoal-600 bg-sand-200 rounded-lg hover:bg-sand-300"
                     >
                       Annuler
                     </button>
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
                       {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -338,21 +344,21 @@ export default function EmailTemplatesPage() {
 
               {/* Preview Mode */}
               {previewId === template.id && (
-                <div className="p-6 bg-gray-50">
-                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                    <div className="px-4 py-3 bg-gray-100 border-b border-gray-200">
+                <div className="p-6 bg-sand-50">
+                  <div className="bg-white border border-sand-200 rounded-lg overflow-hidden">
+                    <div className="px-4 py-3 bg-sand-100 border-b border-sand-200">
                       <p className="text-sm">
-                        <span className="text-gray-500">Sujet : </span>
-                        <span className="font-medium text-gray-900">{template.subject}</span>
+                        <span className="text-charcoal-500">Sujet : </span>
+                        <span className="font-medium text-charcoal-900">{template.subject}</span>
                       </p>
                     </div>
                     <div className="p-4">
-                      <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">
+                      <pre className="whitespace-pre-wrap text-sm text-charcoal-700 font-sans">
                         {getPreviewContent(template)}
                       </pre>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-3 text-center">
+                  <p className="text-xs text-charcoal-500 mt-3 text-center">
                     Aperçu avec des valeurs de test
                   </p>
                 </div>
@@ -362,9 +368,9 @@ export default function EmailTemplatesPage() {
         </div>
 
         {/* Info */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h3 className="font-medium text-blue-900 mb-2">À propos des templates</h3>
-          <p className="text-sm text-blue-700">
+        <div className="mt-8 bg-sand-100 border border-sand-300 rounded-xl p-4">
+          <h3 className="font-medium text-charcoal-900 mb-2">À propos des templates</h3>
+          <p className="text-sm text-charcoal-700">
             Les modifications apportées aux templates seront appliquées à tous les futurs emails.
             Les variables entre doubles accolades (ex: {'{{user_name}}'}) seront automatiquement
             remplacées par les valeurs réelles lors de l'envoi.

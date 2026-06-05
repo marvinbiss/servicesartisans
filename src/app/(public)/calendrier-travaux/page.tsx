@@ -45,8 +45,8 @@ const seasonInfo: Record<
 > = {
   hiver: {
     icon: Snowflake,
-    bgClass: 'bg-blue-100',
-    textClass: 'text-blue-600',
+    bgClass: 'bg-sand-200',
+    textClass: 'text-charcoal-600',
     label: 'Hiver',
     months: ['Janvier', 'Février', 'Décembre'],
   },

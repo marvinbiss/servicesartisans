@@ -132,7 +132,7 @@ export default function ScreenTeaser({
             </div>
           )}
           {mprAccompagne && (
-            <div className="mx-auto mt-4 max-w-xs rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5 text-left text-sm text-blue-800">
+            <div className="mx-auto mt-4 max-w-xs rounded-lg border border-sand-300 bg-sand-100 px-4 py-2.5 text-left text-sm text-charcoal-800">
               <span className="font-semibold">Mon Accompagnateur Rénov&apos;</span> — Un
               accompagnateur agréé est obligatoire pour ce parcours. Nous pouvons vous orienter vers
               un MAR dans votre secteur.

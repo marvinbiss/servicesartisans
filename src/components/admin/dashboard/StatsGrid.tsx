@@ -31,7 +31,7 @@ interface StatsGridProps {
 function TrendBadge({ value }: { value: number }) {
   if (value === 0) {
     return (
-      <span className="flex items-center gap-1 text-xs text-gray-400">
+      <span className="flex items-center gap-1 text-xs text-charcoal-400">
         <Minus className="w-3 h-3" />
         0%
       </span>
@@ -54,13 +54,13 @@ function TrendBadge({ value }: { value: number }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100 animate-pulse">
       <div className="flex items-center justify-between mb-4">
-        <div className="w-12 h-12 bg-gray-200 rounded-lg" />
-        <div className="w-14 h-4 bg-gray-200 rounded" />
+        <div className="w-12 h-12 bg-sand-200 rounded-lg" />
+        <div className="w-14 h-4 bg-sand-200 rounded" />
       </div>
-      <div className="w-20 h-8 bg-gray-200 rounded mb-2" />
-      <div className="w-28 h-4 bg-gray-200 rounded" />
+      <div className="w-20 h-8 bg-sand-200 rounded mb-2" />
+      <div className="w-28 h-4 bg-sand-200 rounded" />
     </div>
   )
 }
@@ -81,7 +81,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       label: 'Utilisateurs',
       value: stats.totalUsers.toLocaleString('fr-FR'),
       icon: Users,
-      color: 'bg-blue-100 text-blue-600',
+      color: 'bg-sand-200 text-charcoal-600',
       trend: stats.trends.users,
       trendLabel: 'vs mois dernier',
       href: '/admin/utilisateurs',
@@ -121,7 +121,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
         <Link
           key={card.label}
           href={card.href}
-          className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all group block"
+          className="bg-white rounded-xl p-6 shadow-sm border border-sand-100 hover:shadow-md hover:border-sand-200 transition-all group block"
           aria-label={`${card.label}: ${card.value}${card.trend !== null ? `, tendance ${card.trend > 0 ? '+' : ''}${card.trend}%` : ''}`}
         >
           <div className="flex items-center justify-between mb-4">
@@ -132,15 +132,15 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
               <div className="text-right">
                 <TrendBadge value={card.trend} />
                 {card.trendLabel && (
-                  <p className="text-[10px] text-gray-400 mt-0.5">{card.trendLabel}</p>
+                  <p className="text-2xs text-charcoal-400 mt-0.5">{card.trendLabel}</p>
                 )}
               </div>
             )}
           </div>
-          <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+          <p className="text-2xl font-bold text-charcoal-900 group-hover:text-primary-600 transition-colors">
             {card.value}
           </p>
-          <p className="text-sm text-gray-500 mt-1">{card.label}</p>
+          <p className="text-sm text-charcoal-500 mt-1">{card.label}</p>
         </Link>
       ))}
     </div>

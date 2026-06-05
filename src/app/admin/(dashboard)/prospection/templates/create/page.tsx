@@ -96,11 +96,11 @@ export default function CreateTemplatePage() {
       <div className="mb-6">
         <Link
           href="/admin/prospection/templates"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau modèle</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900">Nouveau modèle</h1>
       </div>
 
       <ProspectionNav />
@@ -186,7 +186,7 @@ export default function CreateTemplatePage() {
             />
             {channel === 'sms' && (
               <p
-                className={`text-xs mt-1 ${smsOverLimit ? 'text-red-600 font-medium' : 'text-gray-400'}`}
+                className={`text-xs mt-1 ${smsOverLimit ? 'text-red-600 font-medium' : 'text-charcoal-400'}`}
               >
                 {body.length}/160 caractères ({Math.ceil(body.length / 160 || 1)} SMS)
                 {smsOverLimit && ' — Limite de 160 caractères dépassée'}
@@ -210,14 +210,14 @@ export default function CreateTemplatePage() {
           <div className="flex gap-2 pt-4">
             <button
               onClick={handlePreview}
-              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-sand-50"
             >
               <Eye className="w-4 h-4" /> Aperçu
             </button>
             <button
               onClick={handleSave}
               disabled={saving || !name || !body || smsOverLimit}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
             >
               <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </button>
@@ -235,10 +235,10 @@ export default function CreateTemplatePage() {
                 <button
                   key={v.key}
                   onClick={() => insertVariable(v.key)}
-                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-blue-50 text-blue-600"
+                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-sand-100 text-charcoal-600"
                 >
                   <code className="text-xs">{`{{${v.key}}}`}</code>
-                  <span className="text-gray-500 ml-2">{v.label}</span>
+                  <span className="text-charcoal-500 ml-2">{v.label}</span>
                 </button>
               ))}
             </div>
@@ -247,7 +247,7 @@ export default function CreateTemplatePage() {
           {preview && (
             <div className="bg-white rounded-lg border p-4">
               <h3 className="text-sm font-medium mb-3">Aperçu</h3>
-              <div className="text-sm bg-gray-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
+              <div className="text-sm bg-sand-50 rounded p-3 whitespace-pre-wrap">{preview}</div>
             </div>
           )}
         </div>

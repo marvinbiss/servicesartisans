@@ -181,23 +181,23 @@ export default function AdminRgpdPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Conformité RGPD</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-900">Conformité RGPD</h1>
+          <p className="text-charcoal-500 mt-1">
             Gestion des demandes d'export et de suppression de données
           </p>
         </div>
 
         {/* Manual Action Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Action manuelle</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-charcoal-900 mb-4">Action manuelle</h2>
 
           <div className="flex gap-4 mb-4">
             <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-400" />
               <input
                 type="email"
                 placeholder="Rechercher un utilisateur par email..."
@@ -205,35 +205,37 @@ export default function AdminRgpdPage() {
                 value={searchEmail}
                 onChange={(e) => setSearchEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchUser()}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <button
               onClick={searchUser}
               disabled={searching || !searchEmail}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
             >
               {searching ? 'Recherche...' : 'Rechercher'}
             </button>
           </div>
 
           {foundUser && (
-            <div className="p-4 bg-gray-50 rounded-lg">
+            <div className="p-4 bg-sand-50 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-white rounded-full">
-                    <User className="w-5 h-5 text-gray-600" />
+                    <User className="w-5 h-5 text-charcoal-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{foundUser.full_name || 'Sans nom'}</p>
-                    <p className="text-sm text-gray-500">{foundUser.email}</p>
+                    <p className="font-medium text-charcoal-900">
+                      {foundUser.full_name || 'Sans nom'}
+                    </p>
+                    <p className="text-sm text-charcoal-500">{foundUser.email}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleExport(foundUser.id)}
                     disabled={exportingUser === foundUser.id}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
                   >
                     <Download className="w-4 h-4" />
                     {exportingUser === foundUser.id ? 'Export...' : 'Exporter'}
@@ -270,10 +272,10 @@ export default function AdminRgpdPage() {
         </div>
 
         {/* Requests List */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-4 border-b border-gray-100">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden">
+          <div className="p-4 border-b border-sand-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Demandes RGPD</h2>
+              <h2 className="text-lg font-semibold text-charcoal-900">Demandes RGPD</h2>
               <div className="flex gap-2">
                 {(['all', 'pending', 'processing', 'completed'] as const).map((s) => (
                   <button
@@ -284,8 +286,8 @@ export default function AdminRgpdPage() {
                     }}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                       status === s
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-primary-500 text-white'
+                        : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                     }`}
                   >
                     {s === 'all'
@@ -303,34 +305,34 @@ export default function AdminRgpdPage() {
 
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : requests.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Lock className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <div className="p-8 text-center text-charcoal-500">
+              <Lock className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
               <p>Aucune demande RGPD</p>
             </div>
           ) : (
             <>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-sand-100">
                 {requests.map((request) => (
-                  <div key={request.id} className="p-4 hover:bg-gray-50">
+                  <div key={request.id} className="p-4 hover:bg-sand-50">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div
                           className={`p-2 rounded-lg ${
-                            request.request_type === 'export' ? 'bg-blue-100' : 'bg-red-100'
+                            request.request_type === 'export' ? 'bg-sand-200' : 'bg-red-100'
                           }`}
                         >
                           {request.request_type === 'export' ? (
-                            <Download className={`w-5 h-5 text-blue-600`} />
+                            <Download className={`w-5 h-5 text-charcoal-600`} />
                           ) : (
                             <Trash2 className={`w-5 h-5 text-red-600`} />
                           )}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{request.user_email}</p>
-                          <div className="flex items-center gap-3 text-sm text-gray-500">
+                          <p className="font-medium text-charcoal-900">{request.user_email}</p>
+                          <div className="flex items-center gap-3 text-sm text-charcoal-500">
                             <span className="flex items-center gap-1">
                               <FileText className="w-4 h-4" />
                               {request.request_type === 'export' ? 'Export' : 'Suppression'}
@@ -349,22 +351,22 @@ export default function AdminRgpdPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+              <div className="px-6 py-4 border-t border-sand-100 flex items-center justify-between">
+                <p className="text-sm text-charcoal-500">
                   Page {page} sur {totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 hover:bg-sand-50"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>

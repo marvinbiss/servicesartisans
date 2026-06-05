@@ -228,20 +228,20 @@ export default function AdminParametresPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-            <p className="text-gray-500 mt-1">Configuration de la plateforme</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Paramètres</h1>
+            <p className="text-charcoal-500 mt-1">Configuration de la plateforme</p>
           </div>
           <div className="flex items-center gap-3">
             {saveSuccess && (
@@ -253,7 +253,7 @@ export default function AdminParametresPage() {
             {hasChanges && (
               <button
                 onClick={() => setResetModal(true)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+                className="flex items-center gap-2 px-4 py-2 text-charcoal-600 bg-sand-100 rounded-lg hover:bg-sand-200"
               >
                 <RefreshCw className="w-4 h-4" />
                 Réinitialiser
@@ -262,7 +262,7 @@ export default function AdminParametresPage() {
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
               {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -288,40 +288,40 @@ export default function AdminParametresPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => router.push('/admin/parametres/admins')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-sand-100 hover:border-sand-300 hover:shadow-md transition-all text-left"
           >
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Shield className="w-5 h-5 text-blue-600" />
+            <div className="p-2 bg-sand-200 rounded-lg">
+              <Shield className="w-5 h-5 text-charcoal-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Administrateurs</p>
-              <p className="text-sm text-gray-500">Gérer les rôles admin</p>
+              <p className="font-medium text-charcoal-900">Administrateurs</p>
+              <p className="text-sm text-charcoal-500">Gérer les rôles admin</p>
             </div>
           </button>
 
           <button
             onClick={() => router.push('/admin/parametres/emails')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-sand-100 hover:border-sand-300 hover:shadow-md transition-all text-left"
           >
             <div className="p-2 bg-green-100 rounded-lg">
               <Mail className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Modèles d'email</p>
-              <p className="text-sm text-gray-500">Personnaliser les emails</p>
+              <p className="font-medium text-charcoal-900">Modèles d'email</p>
+              <p className="text-sm text-charcoal-500">Personnaliser les emails</p>
             </div>
           </button>
 
           <button
             onClick={() => router.push('/admin/audit')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-sand-100 hover:border-sand-300 hover:shadow-md transition-all text-left"
           >
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Settings className="w-5 h-5 text-blue-600" />
+            <div className="p-2 bg-sand-200 rounded-lg">
+              <Settings className="w-5 h-5 text-charcoal-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Logs d'audit</p>
-              <p className="text-sm text-gray-500">Historique des actions</p>
+              <p className="font-medium text-charcoal-900">Logs d'audit</p>
+              <p className="text-sm text-charcoal-500">Historique des actions</p>
             </div>
           </button>
         </div>
@@ -333,18 +333,18 @@ export default function AdminParametresPage() {
             return (
               <div
                 key={section.title}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+                className="bg-white rounded-xl shadow-sm border border-sand-100 overflow-hidden"
               >
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-gray-400" />
-                  <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
+                <div className="px-6 py-4 border-b border-sand-100 flex items-center gap-3">
+                  <Icon className="w-5 h-5 text-charcoal-400" />
+                  <h2 className="text-lg font-semibold text-charcoal-900">{section.title}</h2>
                 </div>
                 <div className="p-6 space-y-6">
                   {section.fields.map((field) => (
                     <div key={field.key} className="flex items-start justify-between">
                       <div className="flex-1">
-                        <label className="block font-medium text-gray-900">{field.label}</label>
-                        <p className="text-sm text-gray-500 mt-1">{field.description}</p>
+                        <label className="block font-medium text-charcoal-900">{field.label}</label>
+                        <p className="text-sm text-charcoal-500 mt-1">{field.description}</p>
                       </div>
                       <div className="ml-4">
                         {field.type === 'toggle' ? (
@@ -362,8 +362,8 @@ export default function AdminParametresPage() {
                               settings[field.key as keyof PlatformSettings]
                                 ? 'warning' in field && field.warning
                                   ? 'bg-red-600'
-                                  : 'bg-blue-600'
-                                : 'bg-gray-300'
+                                  : 'bg-primary-500'
+                                : 'bg-sand-300'
                             }`}
                           >
                             <span
@@ -386,7 +386,7 @@ export default function AdminParametresPage() {
                             {...('min' in field ? { min: field.min } : {})}
                             {...('max' in field ? { max: field.max } : {})}
                             {...('step' in field ? { step: field.step } : {})}
-                            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+                            className="w-24 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-right"
                           />
                         ) : (
                           <input
@@ -400,7 +400,7 @@ export default function AdminParametresPage() {
                             }
                             aria-label={field.label}
                             {...('maxLength' in field ? { maxLength: field.maxLength } : {})}
-                            className="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-64 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                           />
                         )}
                       </div>
@@ -420,8 +420,8 @@ export default function AdminParametresPage() {
           <div className="p-6 space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-medium text-gray-900">Réinitialiser les statistiques</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="font-medium text-charcoal-900">Réinitialiser les statistiques</p>
+                <p className="text-sm text-charcoal-500 mt-1">
                   Remettre à zéro toutes les statistiques de la plateforme. Cette action est
                   irréversible.
                 </p>
@@ -433,10 +433,10 @@ export default function AdminParametresPage() {
                 Réinitialiser
               </button>
             </div>
-            <div className="flex items-start justify-between pt-4 border-t border-gray-100">
+            <div className="flex items-start justify-between pt-4 border-t border-sand-100">
               <div>
-                <p className="font-medium text-gray-900">Vider le cache</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="font-medium text-charcoal-900">Vider le cache</p>
+                <p className="text-sm text-charcoal-500 mt-1">
                   Supprimer tous les fichiers en cache. Peut ralentir temporairement le site.
                 </p>
               </div>

@@ -383,19 +383,19 @@ export default function AdminEditContenuPage() {
       case 'published':
         return { label: 'Publié', classes: 'bg-green-100 text-green-800' }
       case 'archived':
-        return { label: 'Archivé', classes: 'bg-gray-100 text-gray-800' }
+        return { label: 'Archivé', classes: 'bg-sand-100 text-charcoal-800' }
       default:
-        return { label: status, classes: 'bg-gray-100 text-gray-600' }
+        return { label: status, classes: 'bg-sand-100 text-charcoal-600' }
     }
   }
 
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-500">Chargement de la page...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-charcoal-600 mx-auto" />
+          <p className="mt-4 text-charcoal-500">Chargement de la page...</p>
         </div>
       </div>
     )
@@ -404,16 +404,19 @@ export default function AdminEditContenuPage() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-lg font-medium">{error}</p>
           <div className="mt-4 flex items-center justify-center gap-4">
-            <button onClick={fetchPage} className="text-blue-600 hover:text-blue-800 font-medium">
+            <button
+              onClick={fetchPage}
+              className="text-primary-600 hover:text-primary-800 font-medium"
+            >
               Réessayer
             </button>
             <Link
               href="/admin/contenu"
-              className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
+              className="inline-flex items-center gap-2 text-charcoal-500 hover:text-charcoal-700"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour à la liste
@@ -427,7 +430,7 @@ export default function AdminEditContenuPage() {
   const sb = statusBadge()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Toast */}
       {toast && (
         <div
@@ -447,27 +450,27 @@ export default function AdminEditContenuPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/admin/contenu"
-              className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors"
+              className="flex items-center gap-1 text-charcoal-500 hover:text-charcoal-700 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               Retour
             </Link>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-              <Pencil className="w-4 h-4 text-gray-400" />
+              <h1 className="text-2xl font-bold text-charcoal-900">{title}</h1>
+              <Pencil className="w-4 h-4 text-charcoal-400" />
             </div>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 border border-sand-300 text-charcoal-700 rounded-lg hover:bg-sand-50 transition-colors"
             >
               <Eye className="w-4 h-4" />
               Prévisualiser
             </button>
             <button
               onClick={() => setShowVersions(true)}
-              className="flex items-center gap-2 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 border border-sand-300 text-charcoal-700 rounded-lg hover:bg-sand-50 transition-colors"
             >
               <History className="w-4 h-4" />
               Versions
@@ -475,7 +478,7 @@ export default function AdminEditContenuPage() {
             <button
               onClick={handleSave}
               disabled={saving || !!slugError}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Enregistrer
@@ -515,8 +518,8 @@ export default function AdminEditContenuPage() {
           {/* Left: Editor area (2/3) */}
           <div className="lg:col-span-2 space-y-6">
             {/* Title input */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Titre</label>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+              <label className="block text-sm font-medium text-charcoal-700 mb-2">Titre</label>
               <input
                 type="text"
                 value={title}
@@ -526,15 +529,15 @@ export default function AdminEditContenuPage() {
                 }}
                 placeholder="Titre de la page"
                 maxLength={FIELD_LIMITS.title}
-                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 text-lg border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
             {/* Slug input */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Slug (URL)</label>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+              <label className="block text-sm font-medium text-charcoal-700 mb-2">Slug (URL)</label>
               <div className="flex items-center gap-2">
-                <span className="text-gray-400 text-sm">/</span>
+                <span className="text-charcoal-400 text-sm">/</span>
                 <input
                   type="text"
                   value={slug}
@@ -551,7 +554,7 @@ export default function AdminEditContenuPage() {
                   }}
                   placeholder="slug-de-la-page"
                   maxLength={FIELD_LIMITS.slug}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="flex-1 px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
                 />
               </div>
               {slugError && <p className="mt-1 text-xs text-red-600">{slugError}</p>}
@@ -559,12 +562,12 @@ export default function AdminEditContenuPage() {
 
             {/* Service/Location slug fields */}
             {(pageType === 'service' || pageType === 'location') && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">
+              <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6 space-y-4">
+                <h3 className="font-medium text-charcoal-900">
                   Champs {pageType === 'location' ? 'localisation' : 'service'}
                 </h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Slug du service
                   </label>
                   <input
@@ -576,15 +579,15 @@ export default function AdminEditContenuPage() {
                     }}
                     placeholder="plombier"
                     maxLength={FIELD_LIMITS.slug}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-charcoal-500">
                     Lettres minuscules, chiffres et tirets uniquement
                   </p>
                 </div>
                 {pageType === 'location' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Slug de la localisation
                     </label>
                     <input
@@ -596,9 +599,9 @@ export default function AdminEditContenuPage() {
                       }}
                       placeholder="paris"
                       maxLength={FIELD_LIMITS.slug}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-charcoal-500">
                       Lettres minuscules, chiffres et tirets uniquement
                     </p>
                   </div>
@@ -608,12 +611,14 @@ export default function AdminEditContenuPage() {
 
             {/* Blog-specific fields */}
             {pageType === 'blog' && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <h3 className="font-medium text-gray-900">Champs blog</h3>
+              <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6 space-y-4">
+                <h3 className="font-medium text-charcoal-900">Champs blog</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Auteur</label>
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                      Auteur
+                    </label>
                     <input
                       type="text"
                       value={author}
@@ -623,11 +628,11 @@ export default function AdminEditContenuPage() {
                       }}
                       placeholder="Nom de l'auteur"
                       maxLength={FIELD_LIMITS.author}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Catégorie
                     </label>
                     <select
@@ -636,7 +641,7 @@ export default function AdminEditContenuPage() {
                         setCategory(e.target.value)
                         setIsDirty(true)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
                     >
                       <option value="">Sélectionner...</option>
                       {BLOG_CATEGORIES.map((cat) => (
@@ -649,7 +654,7 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Biographie de l'auteur
                   </label>
                   <textarea
@@ -661,13 +666,13 @@ export default function AdminEditContenuPage() {
                     rows={2}
                     maxLength={FIELD_LIMITS.authorBio}
                     placeholder="Courte biographie de l'auteur..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Tags (séparés par des virgules)
                     </label>
                     <input
@@ -678,11 +683,11 @@ export default function AdminEditContenuPage() {
                         setIsDirty(true)
                       }}
                       placeholder="rénovation, plomberie, conseils"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-charcoal-700 mb-1">
                       Temps de lecture
                     </label>
                     <input
@@ -694,13 +699,15 @@ export default function AdminEditContenuPage() {
                       }}
                       placeholder="5 min"
                       maxLength={FIELD_LIMITS.readTime}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Extrait</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                    Extrait
+                  </label>
                   <textarea
                     value={excerpt}
                     onChange={(e) => {
@@ -710,12 +717,12 @@ export default function AdminEditContenuPage() {
                     rows={3}
                     maxLength={FIELD_LIMITS.excerpt}
                     placeholder="Court résumé de l'article..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Image mise en avant (URL)
                   </label>
                   <input
@@ -727,15 +734,15 @@ export default function AdminEditContenuPage() {
                     }}
                     placeholder="https://example.com/image.jpg"
                     maxLength={FIELD_LIMITS.featuredImage}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
             )}
 
             {/* Editor */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <label className="block text-sm font-medium text-gray-700 mb-4">Contenu</label>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+              <label className="block text-sm font-medium text-charcoal-700 mb-4">Contenu</label>
               {usesRichTextEditor && (
                 <RichTextEditor
                   value={content}
@@ -762,12 +769,12 @@ export default function AdminEditContenuPage() {
           {/* Right: Sidebar (1/3) */}
           <div className="space-y-6">
             {/* Page settings */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-medium text-gray-900 mb-4">Paramètres</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+              <h3 className="font-medium text-charcoal-900 mb-4">Paramètres</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Type de page
                   </label>
                   <select
@@ -776,7 +783,7 @@ export default function AdminEditContenuPage() {
                       setPageType(e.target.value)
                       setIsDirty(true)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
                   >
                     {PAGE_TYPE_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -787,7 +794,7 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
                     Ordre de tri
                   </label>
                   <input
@@ -797,12 +804,12 @@ export default function AdminEditContenuPage() {
                       setSortOrder(parseInt(e.target.value, 10) || 0)
                       setIsDirty(true)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-1">Statut</label>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sb.classes}`}
                   >
@@ -827,10 +834,10 @@ export default function AdminEditContenuPage() {
             />
 
             {/* Additional SEO fields */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-              <h3 className="font-medium text-gray-900">SEO avancé</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6 space-y-4">
+              <h3 className="font-medium text-charcoal-900">SEO avancé</h3>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   Image Open Graph (URL)
                 </label>
                 <input
@@ -842,11 +849,11 @@ export default function AdminEditContenuPage() {
                   }}
                   placeholder="https://example.com/og-image.jpg"
                   maxLength={FIELD_LIMITS.ogImageUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
                   URL canonique
                 </label>
                 <input
@@ -858,7 +865,7 @@ export default function AdminEditContenuPage() {
                   }}
                   placeholder="https://servicesartisans.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
                 />
               </div>
             </div>
@@ -892,15 +899,15 @@ export default function AdminEditContenuPage() {
               onClick={() => setShowDeleteConfirm(false)}
             />
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Supprimer la page</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-lg font-semibold text-charcoal-900 mb-2">Supprimer la page</h3>
+              <p className="text-charcoal-600 mb-6">
                 Êtes-vous sûr de vouloir supprimer la page &quot;{title}&quot; ? Cette action est
                 irréversible.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="flex-1 px-4 py-2 text-charcoal-700 bg-sand-100 rounded-lg hover:bg-sand-200 transition-colors"
                 >
                   Annuler
                 </button>

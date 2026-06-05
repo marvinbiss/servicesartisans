@@ -106,11 +106,11 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
-          <div className="h-48 bg-gray-100 rounded-lg" />
-          <div className="h-48 bg-gray-100 rounded-lg" />
+          <div className="h-48 bg-sand-100 rounded-lg" />
+          <div className="h-48 bg-sand-100 rounded-lg" />
         </div>
       </div>
     )
@@ -120,8 +120,8 @@ export default function SettingsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Configuration de l'IA et des canaux</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
+          <p className="text-charcoal-500 mt-1">Configuration de l'IA et des canaux</p>
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
@@ -132,7 +132,7 @@ export default function SettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />{' '}
             {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Sauvegarder'}
@@ -221,7 +221,7 @@ export default function SettingsPage() {
                 className="w-full px-3 py-2 border rounded-lg text-sm"
                 placeholder="urgent, plainte, avocat, rgpd..."
               />
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-charcoal-400 mt-1">
                 Séparés par des virgules. Si un message contient un de ces mots, la conversation
                 sera assignée à un humain.
               </p>

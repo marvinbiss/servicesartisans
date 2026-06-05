@@ -114,10 +114,10 @@ export default function AdminToolsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Outils Admin</h1>
-        <p className="text-gray-500 mb-8">Gestion des artisans et dispatch</p>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-2">Outils Admin</h1>
+        <p className="text-charcoal-500 mb-8">Gestion des artisans et dispatch</p>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
@@ -134,9 +134,9 @@ export default function AdminToolsPage() {
         )}
 
         {/* Provider lookup & toggle */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gray-400" />
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6 mb-6">
+          <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-charcoal-400" />
             Activer / Désactiver un artisan
           </h2>
 
@@ -147,12 +147,12 @@ export default function AdminToolsPage() {
               onChange={(e) => setProviderId(e.target.value)}
               placeholder="UUID de l'artisan"
               aria-label="UUID de l'artisan"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             />
             <button
               onClick={lookupProvider}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-sand-100 text-charcoal-700 rounded-lg text-sm font-medium hover:bg-sand-200 disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -164,11 +164,11 @@ export default function AdminToolsPage() {
           </div>
 
           {providerInfo && (
-            <div className="border border-gray-200 rounded-lg p-4">
+            <div className="border border-sand-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <p className="font-medium text-gray-900">{providerInfo.name}</p>
-                  <p className="text-xs text-gray-400">{providerInfo.id}</p>
+                  <p className="font-medium text-charcoal-900">{providerInfo.name}</p>
+                  <p className="text-xs text-charcoal-400">{providerInfo.id}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span
@@ -183,8 +183,8 @@ export default function AdminToolsPage() {
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       providerInfo.is_verified
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-sand-200 text-charcoal-700'
+                        : 'bg-sand-100 text-charcoal-600'
                     }`}
                   >
                     {providerInfo.is_verified ? 'Référencé' : 'Non référencé'}
@@ -217,12 +217,12 @@ export default function AdminToolsPage() {
         </div>
 
         {/* Replay dispatch */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <RefreshCw className="w-5 h-5 text-gray-400" />
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+          <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+            <RefreshCw className="w-5 h-5 text-charcoal-400" />
             Rejouer un dispatch
           </h2>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-charcoal-500 mb-4">
             Relance le round-robin pour une assignation existante. Un nouvel artisan sera
             sélectionné automatiquement.
           </p>
@@ -234,12 +234,12 @@ export default function AdminToolsPage() {
               placeholder="ID de l'assignation à rejouer"
               aria-label="ID de l'assignation à rejouer"
               onKeyDown={(e) => e.key === 'Enter' && replayDispatch()}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             />
             <button
               onClick={replayDispatch}
               disabled={loading || !assignmentId.trim()}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

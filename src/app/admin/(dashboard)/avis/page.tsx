@@ -128,7 +128,7 @@ export default function AdminReviewsPage() {
         <Star
           key={star}
           className={`w-4 h-4 ${
-            star <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
+            star <= rating ? 'fill-amber-400 text-amber-400' : 'text-charcoal-300'
           }`}
         />
       ))}
@@ -136,15 +136,15 @@ export default function AdminReviewsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Modération des Avis</h1>
-          <p className="text-gray-500 mt-1">Vérifiez et modérez les avis clients</p>
+          <h1 className="text-2xl font-bold text-charcoal-900">Modération des Avis</h1>
+          <p className="text-charcoal-500 mt-1">Vérifiez et modérez les avis clients</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             {(['all', 'pending_review', 'flagged', 'published', 'hidden'] as const).map((f) => (
               <button
@@ -155,8 +155,8 @@ export default function AdminReviewsPage() {
                 }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === f
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
                 }`}
               >
                 {f === 'all'
@@ -186,33 +186,33 @@ export default function AdminReviewsPage() {
         <div className="space-y-4">
           {isLoading ? (
             <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-400 mx-auto"></div>
             </div>
           ) : displayReviews.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-              <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Aucun avis à afficher</p>
+              <MessageSquare className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
+              <p className="text-charcoal-500">Aucun avis à afficher</p>
             </div>
           ) : (
             displayReviews.map((review) => (
               <div
                 key={review.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                className="bg-white rounded-xl shadow-sm border border-sand-100 p-6"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex flex-col sm:flex-row items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-                      <User className="w-6 h-6 text-gray-400" />
+                    <div className="w-12 h-12 rounded-full bg-sand-100 flex items-center justify-center">
+                      <User className="w-6 h-6 text-charcoal-400" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{review.author_name}</h3>
+                        <h3 className="font-medium text-charcoal-900">{review.author_name}</h3>
                         {getStatusBadge(review)}
                       </div>
-                      <p className="text-sm text-gray-500">{review.author_email}</p>
+                      <p className="text-sm text-charcoal-500">{review.author_email}</p>
                       <div className="flex items-center gap-3 mt-1">
                         {renderStars(review.rating)}
-                        <span className="text-sm text-gray-400 flex items-center gap-1">
+                        <span className="text-sm text-charcoal-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {new Date(review.created_at).toLocaleDateString('fr-FR')}
                         </span>
@@ -220,24 +220,26 @@ export default function AdminReviewsPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">Pour</p>
-                    <p className="font-medium text-blue-600">{review.provider_name}</p>
+                    <p className="text-sm text-charcoal-500">Pour</p>
+                    <p className="font-medium text-charcoal-600">{review.provider_name}</p>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                  <p className="text-gray-700">{review.content}</p>
+                <div className="bg-sand-50 rounded-lg p-4 mb-4">
+                  <p className="text-charcoal-700">{review.content}</p>
                 </div>
 
                 {review.response && (
-                  <div className="bg-blue-50 rounded-lg p-4 mb-4 ml-8">
-                    <p className="text-sm text-blue-600 font-medium mb-1">Réponse de l'artisan :</p>
-                    <p className="text-gray-700">{review.response}</p>
+                  <div className="bg-sand-100 rounded-lg p-4 mb-4 ml-8">
+                    <p className="text-sm text-charcoal-600 font-medium mb-1">
+                      Réponse de l'artisan :
+                    </p>
+                    <p className="text-charcoal-700">{review.response}</p>
                   </div>
                 )}
 
                 {review.status === 'pending_review' && (
-                  <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-end gap-2 pt-4 border-t border-sand-100">
                     <button
                       onClick={() => handleModeration(review.id, 'published')}
                       className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -265,17 +267,17 @@ export default function AdminReviewsPage() {
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="px-4 py-2 text-gray-600">
+            <span className="px-4 py-2 text-charcoal-600">
               Page {page} sur {totalPages}
             </span>
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

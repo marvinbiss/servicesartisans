@@ -113,7 +113,7 @@ export default async function ArtisanSearchPage({ searchParams }: SearchPageProp
                               </span>
                             )}
                             {r.claimed_at && (
-                              <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+                              <span className="inline-flex items-center gap-1 text-xs font-medium text-charcoal-700 bg-sand-100 px-2 py-0.5 rounded-full">
                                 Fiche revendiquée
                               </span>
                             )}

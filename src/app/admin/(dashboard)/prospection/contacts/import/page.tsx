@@ -132,12 +132,12 @@ export default function ImportPage() {
       <div className="mb-6">
         <Link
           href="/admin/prospection/contacts"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux contacts
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Import de contacts</h1>
-        <p className="text-gray-500 mt-1">Importez des contacts depuis un fichier CSV</p>
+        <h1 className="text-2xl font-bold text-charcoal-900">Import de contacts</h1>
+        <p className="text-charcoal-500 mt-1">Importez des contacts depuis un fichier CSV</p>
       </div>
 
       <ProspectionNav />
@@ -174,14 +174,14 @@ export default function ImportPage() {
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">Fichier CSV</label>
             <div className="border-2 border-dashed rounded-lg p-8 text-center">
-              <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+              <Upload className="w-8 h-8 mx-auto mb-2 text-charcoal-400" />
               <input
                 type="file"
                 accept=".csv,.txt"
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700"
+                className="block w-full text-sm text-charcoal-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-sand-100 file:text-charcoal-700"
               />
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-charcoal-400 mt-2">
                 CSV avec séparateur ; ou , (encodage UTF-8) — max 50 Mo
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function ImportPage() {
           <button
             onClick={handleUpload}
             disabled={!file || loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600 disabled:opacity-50"
           >
             {loading ? 'Analyse...' : 'Analyser le fichier'} <ArrowRight className="w-4 h-4" />
           </button>
@@ -200,7 +200,7 @@ export default function ImportPage() {
       {/* Step: Mapping */}
       {step === 'mapping' && (
         <div className="bg-white rounded-lg border p-6">
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-charcoal-500 mb-4">
             {totalRows} lignes détectées. Mappez les colonnes :
           </p>
 
@@ -208,7 +208,7 @@ export default function ImportPage() {
             {headers.map((h) => (
               <div key={h} className="flex items-center gap-2">
                 <span className="text-sm font-medium w-1/2 truncate">{h}</span>
-                <ArrowRight className="w-4 h-4 text-gray-300 shrink-0" />
+                <ArrowRight className="w-4 h-4 text-charcoal-300 shrink-0" />
                 <select
                   value={mapping[h] || ''}
                   onChange={(e) =>
@@ -239,7 +239,7 @@ export default function ImportPage() {
                 aria-label="Aperçu des données importées"
               >
                 <thead>
-                  <tr className="bg-gray-50">
+                  <tr className="bg-sand-50">
                     {headers.map((h) => (
                       <th scope="col" key={h} className="px-2 py-1 border text-left">
                         {h}
@@ -321,7 +321,7 @@ export default function ImportPage() {
 
           <button
             onClick={() => router.push('/admin/prospection/contacts')}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+            className="w-full px-4 py-2 bg-primary-500 text-white rounded-lg text-sm hover:bg-primary-600"
           >
             Voir les contacts
           </button>

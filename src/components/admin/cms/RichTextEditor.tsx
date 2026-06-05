@@ -29,7 +29,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
       }),
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: { class: 'text-blue-600 underline' },
+        HTMLAttributes: { class: 'text-primary-600 underline' },
         validate: (href) => /^https?:\/\/|^mailto:/.test(href),
       }),
       Image.configure({
@@ -73,7 +73,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
   }, [value, editor])
 
   return (
-    <div className="border border-gray-300 rounded-xl overflow-hidden bg-white">
+    <div className="border border-sand-300 rounded-xl overflow-hidden bg-white">
       <EditorToolbar editor={editor} />
       <EditorContent editor={editor} />
     </div>

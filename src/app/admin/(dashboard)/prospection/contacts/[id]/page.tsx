@@ -172,11 +172,11 @@ export default function ContactDetailPage() {
   if (loading) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Prospection</h1>
+        <h1 className="text-2xl font-bold text-charcoal-900 mb-6">Prospection</h1>
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-100 rounded-lg" />
+          <div className="h-8 bg-sand-200 rounded w-1/3" />
+          <div className="h-64 bg-sand-100 rounded-lg" />
         </div>
       </div>
     )
@@ -188,11 +188,11 @@ export default function ContactDetailPage() {
         <div className="mb-6">
           <Link
             href="/admin/prospection/contacts"
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+            className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour aux contacts
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -208,12 +208,12 @@ export default function ContactDetailPage() {
       <div className="mb-6">
         <Link
           href="/admin/prospection/contacts"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+          className="flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
         >
           <ArrowLeft className="w-4 h-4" /> Retour aux contacts
         </Link>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-charcoal-900">
             {contact.contact_name || contact.company_name || 'Contact'}
           </h1>
           <ContactTypeBadge type={contact.contact_type} />
@@ -224,7 +224,7 @@ export default function ContactDetailPage() {
           )}
         </div>
         {contact.company_name && contact.contact_name && (
-          <p className="text-gray-500 mt-1">{contact.company_name}</p>
+          <p className="text-charcoal-500 mt-1">{contact.company_name}</p>
         )}
       </div>
 
@@ -259,11 +259,11 @@ export default function ContactDetailPage() {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-lg border p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Informations</h2>
+              <h2 className="text-lg font-semibold text-charcoal-900">Informations</h2>
               {!editing && (
                 <button
                   onClick={() => setEditing(true)}
-                  className="px-3 py-1.5 text-sm border rounded-lg hover:bg-gray-50"
+                  className="px-3 py-1.5 text-sm border rounded-lg hover:bg-sand-50"
                 >
                   Modifier
                 </button>
@@ -274,7 +274,7 @@ export default function ContactDetailPage() {
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Nom</label>
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">Nom</label>
                     <input
                       type="text"
                       value={editFields.contact_name}
@@ -285,7 +285,7 @@ export default function ContactDetailPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
                       Entreprise
                     </label>
                     <input
@@ -300,7 +300,9 @@ export default function ContactDetailPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
+                      Email
+                    </label>
                     <input
                       type="email"
                       value={editFields.email}
@@ -309,7 +311,7 @@ export default function ContactDetailPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
                       Téléphone
                     </label>
                     <input
@@ -321,7 +323,9 @@ export default function ContactDetailPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Adresse</label>
+                  <label className="block text-xs font-medium text-charcoal-500 mb-1">
+                    Adresse
+                  </label>
                   <input
                     type="text"
                     value={editFields.address}
@@ -331,7 +335,7 @@ export default function ContactDetailPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
                       Code postal
                     </label>
                     <input
@@ -344,7 +348,9 @@ export default function ContactDetailPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">Ville</label>
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
+                      Ville
+                    </label>
                     <input
                       type="text"
                       value={editFields.city}
@@ -353,7 +359,7 @@ export default function ContactDetailPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">
+                    <label className="block text-xs font-medium text-charcoal-500 mb-1">
                       Département
                     </label>
                     <input
@@ -365,7 +371,7 @@ export default function ContactDetailPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Région</label>
+                  <label className="block text-xs font-medium text-charcoal-500 mb-1">Région</label>
                   <input
                     type="text"
                     value={editFields.region}
@@ -374,7 +380,7 @@ export default function ContactDetailPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 mb-1">
                     Tags (séparés par des virgules)
                   </label>
                   <input
@@ -386,7 +392,7 @@ export default function ContactDetailPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                  <label className="block text-xs font-medium text-charcoal-500 mb-1">
                     Consentement
                   </label>
                   <select
@@ -408,13 +414,13 @@ export default function ContactDetailPage() {
                   <button
                     onClick={handleSaveEdit}
                     disabled={savingEdit}
-                    className="flex items-center gap-1 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-1 px-4 py-2 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" /> {savingEdit ? 'Sauvegarde...' : 'Sauvegarder'}
                   </button>
                   <button
                     onClick={() => setEditing(false)}
-                    className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+                    className="px-4 py-2 text-sm border rounded-lg hover:bg-sand-50"
                   >
                     Annuler
                   </button>
@@ -423,29 +429,29 @@ export default function ContactDetailPage() {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm">
-                  <User className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">Nom</span>
-                  <span className="text-gray-900">{contact.contact_name || '-'}</span>
+                  <User className="w-4 h-4 text-charcoal-400" />
+                  <span className="text-charcoal-500 w-24">Nom</span>
+                  <span className="text-charcoal-900">{contact.contact_name || '-'}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Building className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">Entreprise</span>
-                  <span className="text-gray-900">{contact.company_name || '-'}</span>
+                  <Building className="w-4 h-4 text-charcoal-400" />
+                  <span className="text-charcoal-500 w-24">Entreprise</span>
+                  <span className="text-charcoal-900">{contact.company_name || '-'}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Mail className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">Email</span>
-                  <span className="text-gray-900">{contact.email || '-'}</span>
+                  <Mail className="w-4 h-4 text-charcoal-400" />
+                  <span className="text-charcoal-500 w-24">Email</span>
+                  <span className="text-charcoal-900">{contact.email || '-'}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Phone className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">Téléphone</span>
-                  <span className="text-gray-900">{contact.phone || '-'}</span>
+                  <Phone className="w-4 h-4 text-charcoal-400" />
+                  <span className="text-charcoal-500 w-24">Téléphone</span>
+                  <span className="text-charcoal-900">{contact.phone || '-'}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <MapPin className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">Adresse</span>
-                  <span className="text-gray-900">
+                  <MapPin className="w-4 h-4 text-charcoal-400" />
+                  <span className="text-charcoal-500 w-24">Adresse</span>
+                  <span className="text-charcoal-900">
                     {[contact.address, contact.postal_code, contact.city]
                       .filter(Boolean)
                       .join(', ') || '-'}
@@ -453,22 +459,22 @@ export default function ContactDetailPage() {
                 </div>
                 {(contact.department || contact.region) && (
                   <div className="flex items-center gap-3 text-sm">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-500 w-24">Zone</span>
-                    <span className="text-gray-900">
+                    <MapPin className="w-4 h-4 text-charcoal-400" />
+                    <span className="text-charcoal-500 w-24">Zone</span>
+                    <span className="text-charcoal-900">
                       {[contact.department, contact.region].filter(Boolean).join(' - ')}
                     </span>
                   </div>
                 )}
                 {contact.tags.length > 0 && (
                   <div className="flex items-center gap-3 text-sm">
-                    <Tag className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-500 w-24">Tags</span>
+                    <Tag className="w-4 h-4 text-charcoal-400" />
+                    <span className="text-charcoal-500 w-24">Tags</span>
                     <div className="flex flex-wrap gap-1">
                       {contact.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600"
+                          className="text-xs px-2 py-0.5 bg-sand-100 rounded-full text-charcoal-600"
                         >
                           {tag}
                         </span>
@@ -477,14 +483,16 @@ export default function ContactDetailPage() {
                   </div>
                 )}
                 <div className="flex items-center gap-3 text-sm">
-                  <span className="w-4 h-4 text-gray-400 text-xs font-bold text-center">ID</span>
-                  <span className="text-gray-500 w-24">Source</span>
-                  <span className="text-gray-400 text-xs">{contact.source}</span>
+                  <span className="w-4 h-4 text-charcoal-400 text-xs font-bold text-center">
+                    ID
+                  </span>
+                  <span className="text-charcoal-500 w-24">Source</span>
+                  <span className="text-charcoal-400 text-xs">{contact.source}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="w-4 h-4" />
-                  <span className="text-gray-500 w-24">Créé le</span>
-                  <span className="text-gray-400 text-xs">
+                  <span className="text-charcoal-500 w-24">Créé le</span>
+                  <span className="text-charcoal-400 text-xs">
                     {new Date(contact.created_at).toLocaleDateString('fr-FR')}
                   </span>
                 </div>
@@ -494,9 +502,11 @@ export default function ContactDetailPage() {
 
           {/* Message history */}
           <div className="bg-white rounded-lg border p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Historique des messages</h2>
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4">
+              Historique des messages
+            </h2>
             {messages.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">
+              <p className="text-sm text-charcoal-400 text-center py-6">
                 Aucun message envoyé à ce contact.
               </p>
             ) : (
@@ -504,7 +514,9 @@ export default function ContactDetailPage() {
                 {messages.map((msg) => (
                   <div key={msg.id} className="border rounded-lg p-3 text-sm">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-gray-700 capitalize">{msg.channel}</span>
+                      <span className="font-medium text-charcoal-700 capitalize">
+                        {msg.channel}
+                      </span>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full ${
                           msg.status === 'delivered' ||
@@ -514,12 +526,12 @@ export default function ContactDetailPage() {
                             : msg.status === 'failed' || msg.status === 'bounced'
                               ? 'bg-red-100 text-red-700'
                               : msg.status === 'sent'
-                                ? 'bg-blue-100 text-blue-700'
+                                ? 'bg-sand-200 text-charcoal-700'
                                 : msg.status === 'queued' || msg.status === 'sending'
                                   ? 'bg-yellow-100 text-yellow-700'
                                   : msg.status === 'opted_out' || msg.status === 'cancelled'
-                                    ? 'bg-gray-100 text-gray-600'
-                                    : 'bg-gray-100 text-gray-700'
+                                    ? 'bg-sand-100 text-charcoal-600'
+                                    : 'bg-sand-100 text-charcoal-700'
                         }`}
                       >
                         {msg.status === 'delivered'
@@ -545,8 +557,8 @@ export default function ContactDetailPage() {
                                             : msg.status}
                       </span>
                     </div>
-                    <p className="text-gray-600 line-clamp-2">{msg.rendered_body || '-'}</p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-charcoal-600 line-clamp-2">{msg.rendered_body || '-'}</p>
+                    <p className="text-xs text-charcoal-400 mt-1">
                       {msg.sent_at ? new Date(msg.sent_at).toLocaleString('fr-FR') : 'Non envoyé'}
                     </p>
                   </div>
@@ -561,18 +573,18 @@ export default function ContactDetailPage() {
           {/* RGPD */}
           <div className="bg-white rounded-lg border p-4">
             <h3 className="text-sm font-medium flex items-center gap-2 mb-3">
-              <Shield className="w-4 h-4 text-gray-400" /> RGPD / Consentement
+              <Shield className="w-4 h-4 text-charcoal-400" /> RGPD / Consentement
             </h3>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Statut</span>
+                <span className="text-sm text-charcoal-500">Statut</span>
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                     contact.consent_status === 'opted_in'
                       ? 'bg-green-100 text-green-700'
                       : contact.consent_status === 'opted_out'
                         ? 'bg-red-100 text-red-700'
-                        : 'bg-gray-100 text-gray-600'
+                        : 'bg-sand-100 text-charcoal-600'
                   }`}
                 >
                   {contact.consent_status === 'opted_in'
@@ -584,8 +596,8 @@ export default function ContactDetailPage() {
               </div>
               {contact.opted_out_at && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">Désinscrit le</span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-sm text-charcoal-500">Désinscrit le</span>
+                  <span className="text-xs text-charcoal-400">
                     {new Date(contact.opted_out_at).toLocaleDateString('fr-FR')}
                   </span>
                 </div>
@@ -597,17 +609,17 @@ export default function ContactDetailPage() {
           <div className="bg-white rounded-lg border p-4">
             <h3 className="text-sm font-medium mb-3">Listes</h3>
             {lists.length === 0 ? (
-              <p className="text-sm text-gray-400">Aucune liste chargée</p>
+              <p className="text-sm text-charcoal-400">Aucune liste chargée</p>
             ) : (
               <div className="space-y-1">
                 {lists.map((list) => (
                   <Link
                     key={list.id}
                     href={`/admin/prospection/lists/${list.id}`}
-                    className="block text-sm text-blue-600 hover:underline py-1"
+                    className="block text-sm text-primary-600 hover:underline py-1"
                   >
                     {list.name}
-                    <span className="text-xs text-gray-400 ml-2">({list.contact_count})</span>
+                    <span className="text-xs text-charcoal-400 ml-2">({list.contact_count})</span>
                   </Link>
                 ))}
               </div>

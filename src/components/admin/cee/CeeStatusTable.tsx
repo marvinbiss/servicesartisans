@@ -14,21 +14,21 @@ export interface CeeDossierRow {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
-  brouillon: { label: 'Brouillon', bg: 'bg-gray-100', text: 'text-gray-600' },
+  brouillon: { label: 'Brouillon', bg: 'bg-sand-100', text: 'text-charcoal-600' },
   pre_visite_planifiee: {
     label: 'Pre-visite planifiee',
-    bg: 'bg-gray-100',
-    text: 'text-gray-600',
+    bg: 'bg-sand-100',
+    text: 'text-charcoal-600',
   },
   pre_visite_effectuee: {
     label: 'Pre-visite effectuee',
-    bg: 'bg-gray-100',
-    text: 'text-gray-600',
+    bg: 'bg-sand-100',
+    text: 'text-charcoal-600',
   },
   engagement_signe: {
     label: 'Engagement signe',
-    bg: 'bg-blue-100',
-    text: 'text-blue-700',
+    bg: 'bg-sand-200',
+    text: 'text-charcoal-700',
   },
   travaux_en_cours: {
     label: 'Travaux en cours',
@@ -61,14 +61,14 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string }>
     text: 'text-accent-700',
   },
   rejete: { label: 'Rejete', bg: 'bg-red-100', text: 'text-red-700' },
-  annule: { label: 'Annule', bg: 'bg-gray-100', text: 'text-gray-500' },
+  annule: { label: 'Annule', bg: 'bg-sand-100', text: 'text-charcoal-500' },
 }
 
 function StatusBadge({ status }: { status: string }) {
   const cfg = STATUS_CONFIG[status] ?? {
     label: status,
-    bg: 'bg-gray-100',
-    text: 'text-gray-600',
+    bg: 'bg-sand-100',
+    text: 'text-charcoal-600',
   }
   return (
     <span
@@ -86,13 +86,13 @@ interface CeeStatusTableProps {
 export function CeeStatusTable({ rows }: CeeStatusTableProps) {
   return (
     <div className="bg-white border border-sand-200 shadow-sm rounded-xl overflow-hidden">
-      <div className="px-5 py-4 border-b border-gray-100">
-        <h3 className="text-sm font-semibold text-gray-700">Dossiers récents</h3>
+      <div className="px-5 py-4 border-b border-sand-100">
+        <h3 className="text-sm font-semibold text-charcoal-700">Dossiers récents</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-100 text-left text-xs text-gray-500 uppercase tracking-wider">
+            <tr className="border-b border-sand-100 text-left text-xs text-charcoal-500 uppercase tracking-wider">
               <th className="px-5 py-3">ID</th>
               <th className="px-5 py-3">Opération</th>
               <th className="px-5 py-3">Artisan</th>
@@ -101,26 +101,28 @@ export function CeeStatusTable({ rows }: CeeStatusTableProps) {
               <th className="px-5 py-3">Créé le</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-sand-50">
             {rows.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-5 py-8 text-center text-gray-400">
+                <td colSpan={6} className="px-5 py-8 text-center text-charcoal-400">
                   Aucun dossier
                 </td>
               </tr>
             )}
             {rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50">
-                <td className="px-5 py-3 font-mono text-xs text-gray-500">{row.id.slice(0, 8)}</td>
-                <td className="px-5 py-3 font-medium text-gray-900">{row.operation_code}</td>
-                <td className="px-5 py-3 text-gray-600">{row.provider_name ?? '-'}</td>
+              <tr key={row.id} className="hover:bg-sand-50">
+                <td className="px-5 py-3 font-mono text-xs text-charcoal-500">
+                  {row.id.slice(0, 8)}
+                </td>
+                <td className="px-5 py-3 font-medium text-charcoal-900">{row.operation_code}</td>
+                <td className="px-5 py-3 text-charcoal-600">{row.provider_name ?? '-'}</td>
                 <td className="px-5 py-3">
                   <StatusBadge status={row.status} />
                 </td>
-                <td className="px-5 py-3 text-right tabular-nums text-gray-700">
+                <td className="px-5 py-3 text-right tabular-nums text-charcoal-700">
                   {row.kwhc_estime != null ? row.kwhc_estime.toLocaleString('fr-FR') : '-'}
                 </td>
-                <td className="px-5 py-3 text-gray-500">
+                <td className="px-5 py-3 text-charcoal-500">
                   {new Date(row.created_at).toLocaleDateString('fr-FR')}
                 </td>
               </tr>

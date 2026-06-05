@@ -69,12 +69,12 @@ export function Pagination({
 
   return (
     <nav
-      className="px-6 py-4 border-t border-gray-100 flex items-center justify-between"
+      className="px-6 py-4 border-t border-sand-100 flex items-center justify-between"
       aria-label="Pagination"
     >
       <div className="flex items-center gap-4">
         {showTotal && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-charcoal-500">
             {total > 0 ? (
               <>
                 Affichage {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, total)} sur{' '}
@@ -90,7 +90,7 @@ export function Pagination({
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
             aria-label="Nombre d'éléments par page"
-            className="text-sm border border-gray-300 rounded px-2 py-1"
+            className="text-sm border border-sand-300 rounded px-2 py-1"
           >
             {pageSizeOptions.map((size) => (
               <option key={size} value={size}>
@@ -106,7 +106,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(1)}
           disabled={!canGoPrev}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
           title="Première page"
           aria-label="Première page"
         >
@@ -117,7 +117,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={!canGoPrev}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
           title="Page précédente"
           aria-label="Page précédente"
         >
@@ -128,7 +128,7 @@ export function Pagination({
         <div className="flex items-center gap-1 mx-2">
           {getPageNumbers().map((pageNum, index) =>
             pageNum === 'ellipsis' ? (
-              <span key={`ellipsis-${index}`} className="px-2 text-gray-400">
+              <span key={`ellipsis-${index}`} className="px-2 text-charcoal-400">
                 ...
               </span>
             ) : (
@@ -138,7 +138,9 @@ export function Pagination({
                 aria-label={`Page ${pageNum}`}
                 aria-current={page === pageNum ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                  page === pageNum ? 'bg-blue-600 text-white' : 'hover:bg-gray-100 text-gray-600'
+                  page === pageNum
+                    ? 'bg-primary-500 text-white'
+                    : 'hover:bg-sand-100 text-charcoal-600'
                 }`}
               >
                 {pageNum}
@@ -151,7 +153,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={!canGoNext}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
           title="Page suivante"
           aria-label="Page suivante"
         >
@@ -162,7 +164,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={!canGoNext}
-          className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+          className="p-2 rounded-lg border border-sand-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-sand-50"
           title="Dernière page"
           aria-label="Dernière page"
         >

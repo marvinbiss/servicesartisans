@@ -71,10 +71,10 @@ export default function SystemDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
-          <p className="text-sm text-gray-500 mt-2">Chargement du dashboard système...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-charcoal-600 mx-auto" />
+          <p className="text-sm text-charcoal-500 mt-2">Chargement du dashboard système...</p>
         </div>
       </div>
     )
@@ -82,11 +82,11 @@ export default function SystemDashboardPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700">{error || 'Erreur'}</p>
-          <button onClick={fetchData} className="text-blue-600 hover:underline text-sm mt-3">
+          <button onClick={fetchData} className="text-primary-600 hover:underline text-sm mt-3">
             Réessayer
           </button>
         </div>
@@ -99,28 +99,30 @@ export default function SystemDashboardPage() {
   const maxCity = Math.max(...data.topCities.map((c) => c.count), 1)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Gauge className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-sand-200 rounded-lg">
+                <Gauge className="w-6 h-6 text-charcoal-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Tableau de bord système</h1>
-                <p className="text-gray-500 text-sm mt-0.5">KPIs internes, qualité, monitoring</p>
+                <h1 className="text-2xl font-bold text-charcoal-900">Tableau de bord système</h1>
+                <p className="text-charcoal-500 text-sm mt-0.5">
+                  KPIs internes, qualité, monitoring
+                </p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-charcoal-400">
               Mis à jour :{' '}
               {lastRefresh.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
             </span>
             <button
               onClick={fetchData}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-charcoal-600 hover:text-charcoal-900 border border-sand-200 rounded-lg hover:bg-white transition-colors"
               aria-label="Actualiser les données"
             >
               <RefreshCw className="w-4 h-4" />
@@ -132,7 +134,7 @@ export default function SystemDashboardPage() {
         {/* Section 1: Volumes */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
             Volumes
           </h2>
         </div>
@@ -167,7 +169,7 @@ export default function SystemDashboardPage() {
         {/* Section 2: Assignations */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
             Assignations
           </h2>
         </div>
@@ -208,7 +210,7 @@ export default function SystemDashboardPage() {
         {/* Section 3: Qualité */}
         {/* ============================================================ */}
         <div className="mb-2">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
             Qualité
           </h2>
         </div>
@@ -271,22 +273,22 @@ export default function SystemDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <FunnelChart steps={data.funnel} title="Entonnoir de conversion" />
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-900 mb-4">
               Leads / jour (14 derniers jours)
             </h3>
             <div className="flex items-end gap-1.5 h-40">
               {data.dailyLeads.map((d) => (
                 <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
-                  <span className="text-xs font-semibold text-gray-700 tabular-nums">
+                  <span className="text-xs font-semibold text-charcoal-700 tabular-nums">
                     {d.count > 0 ? d.count : ''}
                   </span>
                   <div
-                    className="w-full bg-gray-100 rounded-t overflow-hidden"
+                    className="w-full bg-sand-100 rounded-t overflow-hidden"
                     style={{ height: '100%' }}
                   >
                     <div
-                      className="w-full bg-blue-500 rounded-t transition-all duration-500"
+                      className="w-full bg-charcoal-400 rounded-t transition-all duration-500"
                       style={{
                         height: `${(d.count / maxDaily) * 100}%`,
                         minHeight: d.count > 0 ? '4px' : '0px',
@@ -294,7 +296,7 @@ export default function SystemDashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-xs text-gray-400 truncate w-full text-center">
+                  <span className="text-xs text-charcoal-400 truncate w-full text-center">
                     {d.label}
                   </span>
                 </div>
@@ -307,25 +309,25 @@ export default function SystemDashboardPage() {
         {/* Section 6: Top services + Top cities */}
         {/* ============================================================ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-gray-400" />
+          <div className="bg-white rounded-xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <Wrench className="w-4 h-4 text-charcoal-400" />
               Top 10 services
             </h3>
             {data.topServices.length === 0 ? (
-              <p className="text-sm text-gray-400">Aucune donnée</p>
+              <p className="text-sm text-charcoal-400">Aucune donnée</p>
             ) : (
               <div className="space-y-2.5">
                 {data.topServices.map((s, i) => (
                   <div key={s.service} className="flex items-center gap-3">
-                    <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
-                    <span className="text-sm text-gray-700 flex-1 truncate">{s.service}</span>
-                    <span className="text-sm font-semibold text-gray-900 tabular-nums">
+                    <span className="text-xs text-charcoal-400 w-5 tabular-nums">{i + 1}.</span>
+                    <span className="text-sm text-charcoal-700 flex-1 truncate">{s.service}</span>
+                    <span className="text-sm font-semibold text-charcoal-900 tabular-nums">
                       {s.count}
                     </span>
-                    <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-20 h-1.5 bg-sand-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 rounded-full"
+                        className="h-full bg-charcoal-400 rounded-full"
                         style={{ width: `${(s.count / maxService) * 100}%` }}
                       />
                     </div>
@@ -335,25 +337,25 @@ export default function SystemDashboardPage() {
             )}
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-gray-400" />
+          <div className="bg-white rounded-xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-charcoal-400" />
               Top 10 villes
             </h3>
             {data.topCities.length === 0 ? (
-              <p className="text-sm text-gray-400">Aucune donnée</p>
+              <p className="text-sm text-charcoal-400">Aucune donnée</p>
             ) : (
               <div className="space-y-2.5">
                 {data.topCities.map((c, i) => (
                   <div key={c.city} className="flex items-center gap-3">
-                    <span className="text-xs text-gray-400 w-5 tabular-nums">{i + 1}.</span>
-                    <span className="text-sm text-gray-700 flex-1 truncate">{c.city}</span>
-                    <span className="text-sm font-semibold text-gray-900 tabular-nums">
+                    <span className="text-xs text-charcoal-400 w-5 tabular-nums">{i + 1}.</span>
+                    <span className="text-sm text-charcoal-700 flex-1 truncate">{c.city}</span>
+                    <span className="text-sm font-semibold text-charcoal-900 tabular-nums">
                       {c.count}
                     </span>
-                    <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-20 h-1.5 bg-sand-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 rounded-full"
+                        className="h-full bg-charcoal-400 rounded-full"
                         style={{ width: `${(c.count / maxCity) * 100}%` }}
                       />
                     </div>
@@ -368,15 +370,17 @@ export default function SystemDashboardPage() {
         {/* Section 7: Event counts + Architecture note */}
         {/* ============================================================ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-gray-400" />
+          <div className="bg-white rounded-xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-charcoal-400" />
               Événements
             </h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 bg-blue-50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-blue-700 tabular-nums">{data.events.total}</p>
-                <p className="text-xs text-blue-500 mt-1">Total événements</p>
+              <div className="p-3 bg-sand-100 rounded-lg text-center">
+                <p className="text-2xl font-bold text-charcoal-700 tabular-nums">
+                  {data.events.total}
+                </p>
+                <p className="text-xs text-charcoal-500 mt-1">Total événements</p>
               </div>
               <div className="p-3 bg-yellow-50 rounded-lg text-center">
                 <p className="text-2xl font-bold text-yellow-700 tabular-nums">
@@ -387,26 +391,26 @@ export default function SystemDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-gray-400" />
+          <div className="bg-white rounded-xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-900 mb-3 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-charcoal-400" />
               Architecture
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Event store</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-sand-100">
+                <span className="text-charcoal-500">Event store</span>
                 <span className="text-green-700 font-medium">Append-only</span>
               </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">Mutations</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-sand-100">
+                <span className="text-charcoal-500">Mutations</span>
                 <span className="text-green-700 font-medium">Aucune (INSERT only)</span>
               </div>
-              <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
-                <span className="text-gray-500">X-Robots-Tag</span>
-                <span className="font-mono text-xs text-gray-600">noindex, nofollow</span>
+              <div className="flex items-center justify-between py-1.5 border-b border-sand-100">
+                <span className="text-charcoal-500">X-Robots-Tag</span>
+                <span className="font-mono text-xs text-charcoal-600">noindex, nofollow</span>
               </div>
               <div className="flex items-center justify-between py-1.5">
-                <span className="text-gray-500">Liens publics</span>
+                <span className="text-charcoal-500">Liens publics</span>
                 <span className="text-green-700 font-medium">0 (isolé)</span>
               </div>
             </div>

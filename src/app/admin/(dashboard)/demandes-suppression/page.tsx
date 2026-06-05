@@ -148,11 +148,11 @@ export default function AdminRemovalRequestsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-charcoal-900 flex items-center gap-2">
             <Trash2 className="w-7 h-7 text-red-500" />
             Demandes de suppression
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-charcoal-500 mt-1">
             Gérez les demandes de suppression de fiches artisan (RGPD)
           </p>
         </div>
@@ -192,7 +192,7 @@ export default function AdminRemovalRequestsPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === value
                 ? 'bg-red-100 text-red-800 border border-red-200'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-sand-100 text-charcoal-600 hover:bg-sand-200'
             }`}
           >
             {label}
@@ -204,19 +204,19 @@ export default function AdminRemovalRequestsPage() {
       {isLoading ? (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse">
-              <div className="h-5 w-48 bg-gray-200 rounded mb-3" />
-              <div className="h-4 w-72 bg-gray-200 rounded mb-2" />
-              <div className="h-4 w-56 bg-gray-200 rounded" />
+            <div key={i} className="bg-white rounded-xl border border-sand-200 p-6 animate-pulse">
+              <div className="h-5 w-48 bg-sand-200 rounded mb-3" />
+              <div className="h-4 w-72 bg-sand-200 rounded mb-2" />
+              <div className="h-4 w-56 bg-sand-200 rounded" />
             </div>
           ))}
         </div>
       ) : error ? (
         <ErrorBanner message="Erreur lors du chargement des demandes" />
       ) : requests.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <Trash2 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">
+        <div className="bg-white rounded-xl border border-sand-200 p-12 text-center">
+          <Trash2 className="w-12 h-12 text-charcoal-300 mx-auto mb-3" />
+          <p className="text-charcoal-500 font-medium">
             Aucune demande{' '}
             {filter !== 'all'
               ? `${filter === 'pending' ? 'en attente' : filter === 'approved' ? 'approuvée' : 'rejetée'}`
@@ -228,43 +228,45 @@ export default function AdminRemovalRequestsPage() {
           {requests.map((req) => (
             <div
               key={req.id}
-              className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl border border-sand-200 p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-3 flex-1">
                   {/* Provider info */}
                   <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="font-semibold text-gray-900">
+                    <Building2 className="w-4 h-4 text-charcoal-400" />
+                    <span className="font-semibold text-charcoal-900">
                       {req.provider?.name || 'Artisan inconnu'}
                     </span>
                     {req.provider?.address_city && (
-                      <span className="text-gray-500 text-sm">— {req.provider.address_city}</span>
+                      <span className="text-charcoal-500 text-sm">
+                        — {req.provider.address_city}
+                      </span>
                     )}
                     {req.provider?.specialty && (
-                      <span className="text-gray-400 text-xs">({req.provider.specialty})</span>
+                      <span className="text-charcoal-400 text-xs">({req.provider.specialty})</span>
                     )}
                   </div>
 
                   {/* Requester info */}
-                  <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
+                  <div className="bg-sand-50 rounded-lg p-3 space-y-1.5">
                     <div className="flex items-center gap-2 text-sm">
-                      <User className="w-4 h-4 text-gray-400" />
-                      <span className="font-medium text-gray-900">{req.requester_name}</span>
+                      <User className="w-4 h-4 text-charcoal-400" />
+                      <span className="font-medium text-charcoal-900">{req.requester_name}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Mail className="w-4 h-4 text-gray-400" />
+                      <Mail className="w-4 h-4 text-charcoal-400" />
                       <a
                         href={`mailto:${req.requester_email}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-primary-600 hover:underline"
                       >
                         {req.requester_email}
                       </a>
                     </div>
                     {req.requester_siret && (
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="text-gray-500">SIRET :</span>
-                        <span className="font-mono font-medium text-gray-900">
+                        <span className="text-charcoal-500">SIRET :</span>
+                        <span className="font-mono font-medium text-charcoal-900">
                           {req.requester_siret}
                         </span>
                       </div>
@@ -273,15 +275,15 @@ export default function AdminRemovalRequestsPage() {
 
                   {/* Reason */}
                   <div className="flex items-start gap-2 text-sm">
-                    <FileText className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                    <FileText className="w-4 h-4 text-charcoal-400 mt-0.5 shrink-0" />
                     <div>
-                      <span className="text-gray-500 font-medium">Motif :</span>{' '}
-                      <span className="text-gray-700">{req.reason}</span>
+                      <span className="text-charcoal-500 font-medium">Motif :</span>{' '}
+                      <span className="text-charcoal-700">{req.reason}</span>
                     </div>
                   </div>
 
                   {/* Date */}
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-charcoal-400">
                     <Calendar className="w-3 h-3" />
                     {formatDate(req.created_at)}
                   </div>
@@ -295,7 +297,7 @@ export default function AdminRemovalRequestsPage() {
 
                   {/* Processed date */}
                   {req.processed_at && (
-                    <div className="text-xs text-gray-400">
+                    <div className="text-xs text-charcoal-400">
                       Traitée le {formatDate(req.processed_at)}
                     </div>
                   )}
@@ -352,17 +354,17 @@ export default function AdminRemovalRequestsPage() {
           <button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page <= 1}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border border-sand-200 hover:bg-sand-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-charcoal-600">
             Page {page} / {totalPages}
           </span>
           <button
             onClick={() => setPage(Math.min(totalPages, page + 1))}
             disabled={page >= totalPages}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border border-sand-200 hover:bg-sand-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -387,7 +389,7 @@ export default function AdminRemovalRequestsPage() {
         variant={actionModal.action === 'approve' ? 'danger' : 'warning'}
       >
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-charcoal-700 mb-1">
             {actionModal.action === 'reject'
               ? 'Motif du rejet (obligatoire)'
               : 'Notes admin (optionnel)'}
@@ -400,12 +402,12 @@ export default function AdminRemovalRequestsPage() {
                 ? 'Expliquez pourquoi la demande est rejetée...'
                 : 'Notes internes sur cette décision...'
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-sand-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             rows={3}
             maxLength={1000}
           />
           {actionModal.action === 'reject' && (
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-charcoal-400 mt-1">
               Le motif sera conservé dans le dossier de la demande.
             </p>
           )}

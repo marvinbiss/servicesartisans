@@ -219,10 +219,10 @@ export default function EditArtisanPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-          <p className="text-gray-500 mt-4">Chargement de l'artisan...</p>
+          <Loader2 className="w-8 h-8 text-charcoal-600 mx-auto animate-spin" />
+          <p className="text-charcoal-500 mt-4">Chargement de l'artisan...</p>
         </div>
       </div>
     )
@@ -230,14 +230,16 @@ export default function EditArtisanPage() {
 
   if (!artisan) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Artisan non trouvé</h2>
-          <p className="text-gray-500 mb-4">L'artisan demandé n'existe pas ou a été supprimé.</p>
+          <h2 className="text-xl font-semibold text-charcoal-900 mb-2">Artisan non trouvé</h2>
+          <p className="text-charcoal-500 mb-4">
+            L'artisan demandé n'existe pas ou a été supprimé.
+          </p>
           <button
             onClick={() => router.push('/admin/artisans')}
-            className="text-blue-600 hover:underline"
+            className="text-primary-600 hover:underline"
           >
             Retour à la liste
           </button>
@@ -247,7 +249,7 @@ export default function EditArtisanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* Toast notification */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
@@ -257,18 +259,18 @@ export default function EditArtisanPage() {
           <div>
             <button
               onClick={() => router.push('/admin/artisans')}
-              className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
+              className="text-charcoal-500 hover:text-charcoal-700 mb-2 flex items-center gap-1 text-sm"
             >
               <ChevronLeft className="w-4 h-4" />
               Retour à la liste
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l'artisan</h1>
-            <p className="text-gray-500 mt-1">{artisan.full_name}</p>
+            <h1 className="text-2xl font-bold text-charcoal-900">Modifier l'artisan</h1>
+            <p className="text-charcoal-500 mt-1">{artisan.full_name}</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving || !hasChanges}
-            className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-6 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {saving ? (
               <>
@@ -287,9 +289,9 @@ export default function EditArtisanPage() {
         {/* Form */}
         <div className="space-y-6">
           {/* Personal Info */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-charcoal-400" />
               Informations générales
             </h2>
             <div className="grid gap-4">
@@ -297,7 +299,7 @@ export default function EditArtisanPage() {
                 <div>
                   <label
                     htmlFor="full_name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
                   >
                     Nom complet
                   </label>
@@ -312,7 +314,7 @@ export default function EditArtisanPage() {
                     onBlur={(e) => handleBlur('full_name', e.target.value)}
                     placeholder="Jean Dupont"
                     maxLength={200}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-sand-300 focus:ring-primary-500 focus:border-primary-500'}`}
                   />
                   {fieldErrors.full_name && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.full_name}</p>
@@ -321,7 +323,7 @@ export default function EditArtisanPage() {
                 <div>
                   <label
                     htmlFor="specialty"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
                   >
                     Spécialité
                   </label>
@@ -332,13 +334,16 @@ export default function EditArtisanPage() {
                     onChange={(e) => updateFormData({ specialty: e.target.value })}
                     placeholder="Plombier, Électricien..."
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
+                  >
                     <Mail className="w-4 h-4 inline mr-1" />
                     Email
                   </label>
@@ -348,11 +353,14 @@ export default function EditArtisanPage() {
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
                     placeholder="contact@entreprise.fr"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
+                  >
                     <Phone className="w-4 h-4 inline mr-1" />
                     Téléphone
                   </label>
@@ -367,7 +375,7 @@ export default function EditArtisanPage() {
                     onBlur={(e) => handleBlur('phone', e.target.value)}
                     placeholder="01 23 45 67 89"
                     maxLength={20}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-sand-300 focus:ring-primary-500 focus:border-primary-500'}`}
                   />
                   {fieldErrors.phone && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
@@ -375,7 +383,7 @@ export default function EditArtisanPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="siret" className="block text-sm font-medium text-charcoal-700 mb-1">
                   SIRET
                 </label>
                 <input
@@ -385,13 +393,13 @@ export default function EditArtisanPage() {
                   onChange={(e) => updateFormData({ siret: e.target.value })}
                   placeholder="123 456 789 00012"
                   maxLength={20}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono"
                 />
               </div>
               <div>
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-charcoal-700 mb-1"
                 >
                   Description
                 </label>
@@ -402,11 +410,11 @@ export default function EditArtisanPage() {
                   rows={4}
                   placeholder="Décrivez l'entreprise, ses services, son expertise..."
                   maxLength={5000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div>
-                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="bio" className="block text-sm font-medium text-charcoal-700 mb-1">
                   Bio
                 </label>
                 <textarea
@@ -416,23 +424,23 @@ export default function EditArtisanPage() {
                   rows={3}
                   placeholder="Bio courte de l'artisan..."
                   maxLength={2000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Address */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-charcoal-400" />
               Adresse
             </h2>
             <div className="grid gap-4">
               <div>
                 <label
                   htmlFor="address_street"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-sm font-medium text-charcoal-700 mb-1"
                 >
                   Adresse complète
                 </label>
@@ -443,14 +451,14 @@ export default function EditArtisanPage() {
                   onChange={(e) => updateFormData({ address_street: e.target.value })}
                   placeholder="123 rue de la République"
                   maxLength={500}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label
                     htmlFor="address_postal_code"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
                   >
                     Code postal
                   </label>
@@ -465,7 +473,7 @@ export default function EditArtisanPage() {
                     onBlur={(e) => handleBlur('address_postal_code', e.target.value)}
                     placeholder="75001"
                     maxLength={10}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_postal_code ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_postal_code ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-sand-300 focus:ring-primary-500 focus:border-primary-500'}`}
                   />
                   {fieldErrors.address_postal_code && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.address_postal_code}</p>
@@ -474,7 +482,7 @@ export default function EditArtisanPage() {
                 <div>
                   <label
                     htmlFor="address_city"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
                   >
                     Ville
                   </label>
@@ -485,13 +493,13 @@ export default function EditArtisanPage() {
                     onChange={(e) => updateFormData({ address_city: e.target.value })}
                     placeholder="Paris"
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="address_region"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-charcoal-700 mb-1"
                   >
                     Région
                   </label>
@@ -502,7 +510,7 @@ export default function EditArtisanPage() {
                     onChange={(e) => updateFormData({ address_region: e.target.value })}
                     placeholder="Île-de-France"
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
@@ -510,15 +518,17 @@ export default function EditArtisanPage() {
           </div>
 
           {/* Status */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-xl shadow-sm border border-sand-100 p-6">
+            <h2 className="text-lg font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <Briefcase className="w-5 h-5 text-charcoal-400" />
               Statut
             </h2>
             <div className="grid gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Vérifié</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">
+                    Vérifié
+                  </label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_verified: !formData.is_verified })}
@@ -526,7 +536,7 @@ export default function EditArtisanPage() {
                     aria-checked={formData.is_verified}
                     aria-label="Vérifié"
                     className={`relative w-14 h-7 rounded-full transition-colors ${
-                      formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
+                      formData.is_verified ? 'bg-green-600' : 'bg-sand-300'
                     }`}
                   >
                     <span
@@ -537,7 +547,7 @@ export default function EditArtisanPage() {
                   </button>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Actif</label>
+                  <label className="block text-sm font-medium text-charcoal-700 mb-2">Actif</label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_active: !formData.is_active })}
@@ -545,7 +555,7 @@ export default function EditArtisanPage() {
                     aria-checked={formData.is_active}
                     aria-label="Actif"
                     className={`relative w-14 h-7 rounded-full transition-colors ${
-                      formData.is_active ? 'bg-blue-600' : 'bg-gray-300'
+                      formData.is_active ? 'bg-primary-500' : 'bg-sand-300'
                     }`}
                   >
                     <span
@@ -557,16 +567,16 @@ export default function EditArtisanPage() {
                 </div>
               </div>
               {artisan && (
-                <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-6 pt-4 border-t border-sand-100">
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-amber-500" />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-charcoal-600">
                       Note: {artisan.rating_average?.toFixed(1) || 'N/A'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500">{artisan.review_count} avis</div>
+                  <div className="text-sm text-charcoal-500">{artisan.review_count} avis</div>
                   {artisan.updated_at && (
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-charcoal-400">
                       Dernière modification:{' '}
                       {new Date(artisan.updated_at).toLocaleDateString('fr-FR')}
                     </div>
@@ -578,11 +588,11 @@ export default function EditArtisanPage() {
         </div>
 
         {/* Sticky save button for mobile */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-sand-200 md:hidden">
           <button
             onClick={handleSave}
             disabled={saving || !hasChanges}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
               <>

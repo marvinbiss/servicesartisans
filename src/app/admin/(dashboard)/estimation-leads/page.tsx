@@ -185,8 +185,8 @@ export default function AdminEstimationLeadsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Leads Estimation IA</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-900">Leads Estimation IA</h1>
+          <p className="text-sm text-charcoal-500 mt-1">
             Leads capturés par le widget d'estimation sur les pages services et artisans
           </p>
         </div>
@@ -194,14 +194,14 @@ export default function AdminEstimationLeadsPage() {
           <button
             onClick={handleExportCSV}
             disabled={!leads.length}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-charcoal-700 bg-white border border-sand-300 rounded-lg hover:bg-sand-50 disabled:opacity-50"
           >
             <Download className="w-4 h-4" />
             Export CSV
           </button>
           <button
             onClick={() => mutate()}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-charcoal-700 bg-white border border-sand-300 rounded-lg hover:bg-sand-50"
           >
             <RefreshCw className="w-4 h-4" />
             Rafraîchir
@@ -211,33 +211,33 @@ export default function AdminEstimationLeadsPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Total leads</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
+        <div className="bg-white rounded-xl border border-sand-200 p-4">
+          <p className="text-sm text-charcoal-500">Total leads</p>
+          <p className="text-2xl font-bold text-charcoal-900 mt-1">{stats.total}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Aujourd'hui</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.today}</p>
+        <div className="bg-white rounded-xl border border-sand-200 p-4">
+          <p className="text-sm text-charcoal-500">Aujourd'hui</p>
+          <p className="text-2xl font-bold text-charcoal-600 mt-1">{stats.today}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-1.5 text-sm text-gray-500">
+        <div className="bg-white rounded-xl border border-sand-200 p-4">
+          <div className="flex items-center gap-1.5 text-sm text-charcoal-500">
             <MessageSquare className="w-3.5 h-3.5" /> Via chat
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.chat}</p>
+          <p className="text-2xl font-bold text-charcoal-900 mt-1">{stats.chat}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex items-center gap-1.5 text-sm text-gray-500">
+        <div className="bg-white rounded-xl border border-sand-200 p-4">
+          <div className="flex items-center gap-1.5 text-sm text-charcoal-500">
             <Phone className="w-3.5 h-3.5" /> Rappel
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.callback}</p>
+          <p className="text-2xl font-bold text-charcoal-900 mt-1">{stats.callback}</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+      <div className="bg-white rounded-xl border border-sand-200 p-4 mb-6">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Source filter */}
-          <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+          <div className="flex rounded-lg border border-sand-200 overflow-hidden">
             {(['all', 'chat', 'callback'] as const).map((s) => (
               <button
                 key={s}
@@ -248,7 +248,7 @@ export default function AdminEstimationLeadsPage() {
                 className={`px-3 py-2 text-sm font-medium transition-colors ${
                   sourceFilter === s
                     ? 'bg-[#E07040] text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                    : 'bg-white text-charcoal-600 hover:bg-sand-50'
                 }`}
               >
                 {s === 'all' ? 'Tous' : s === 'chat' ? 'Chat' : 'Rappel'}
@@ -259,13 +259,13 @@ export default function AdminEstimationLeadsPage() {
           {/* Search */}
           <form onSubmit={handleSearch} className="flex flex-1 gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Rechercher par nom, tél, email, ville..."
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E07040]/20 focus:border-[#E07040]"
+                className="w-full pl-9 pr-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E07040]/20 focus:border-[#E07040]"
               />
             </div>
             <button
@@ -282,7 +282,7 @@ export default function AdminEstimationLeadsPage() {
                   setSearchInput('')
                   setPage(1)
                 }}
-                className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
+                className="px-3 py-2 text-sm text-charcoal-500 hover:text-charcoal-700"
               >
                 Effacer
               </button>
@@ -304,42 +304,42 @@ export default function AdminEstimationLeadsPage() {
           <Loader2 className="w-8 h-8 animate-spin text-[#E07040]" />
         </div>
       ) : leads.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+        <div className="text-center py-16 text-charcoal-500">
+          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-charcoal-300" />
           <p className="font-medium">Aucun lead pour le moment</p>
           <p className="text-sm mt-1">
             Les leads apparaîtront ici quand les visiteurs utiliseront le widget d'estimation.
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-sand-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Source</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Contact</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Métier</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Ville</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Artisan</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+                <tr className="bg-sand-50 border-b border-sand-200">
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Date</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Source</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Contact</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Métier</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Ville</th>
+                  <th className="text-left px-4 py-3 font-semibold text-charcoal-600">Artisan</th>
+                  <th className="text-right px-4 py-3 font-semibold text-charcoal-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {leads.map((lead) => (
                   <tr
                     key={lead.id}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                    className="border-b border-sand-100 hover:bg-sand-50 transition-colors"
                   >
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                    <td className="px-4 py-3 text-charcoal-500 whitespace-nowrap">
                       {formatDate(lead.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                           lead.source === 'chat'
-                            ? 'bg-blue-50 text-blue-700'
+                            ? 'bg-sand-100 text-charcoal-700'
                             : 'bg-green-50 text-green-700'
                         }`}
                       >
@@ -355,17 +355,17 @@ export default function AdminEstimationLeadsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-900">
-                        {lead.nom || <span className="text-gray-400 italic">Anonyme</span>}
+                      <div className="font-medium text-charcoal-900">
+                        {lead.nom || <span className="text-charcoal-400 italic">Anonyme</span>}
                       </div>
-                      <div className="text-gray-500">{formatPhone(lead.telephone)}</div>
-                      {lead.email && <div className="text-gray-400 text-xs">{lead.email}</div>}
+                      <div className="text-charcoal-500">{formatPhone(lead.telephone)}</div>
+                      {lead.email && <div className="text-charcoal-400 text-xs">{lead.email}</div>}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{lead.metier}</td>
+                    <td className="px-4 py-3 text-charcoal-700">{lead.metier}</td>
                     <td className="px-4 py-3">
-                      <span className="text-gray-700">{lead.ville}</span>
+                      <span className="text-charcoal-700">{lead.ville}</span>
                       {lead.departement && (
-                        <span className="text-gray-400 ml-1">({lead.departement})</span>
+                        <span className="text-charcoal-400 ml-1">({lead.departement})</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -374,7 +374,7 @@ export default function AdminEstimationLeadsPage() {
                           {lead.artisan_public_id}
                         </span>
                       ) : (
-                        <span className="text-gray-300">—</span>
+                        <span className="text-charcoal-300">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -382,7 +382,7 @@ export default function AdminEstimationLeadsPage() {
                         {lead.conversation_history && lead.conversation_history.length > 0 && (
                           <button
                             onClick={() => setSelectedLead(lead)}
-                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-1.5 text-charcoal-400 hover:text-primary-600 hover:bg-sand-100 rounded-lg transition-colors"
                             title="Voir la conversation"
                           >
                             <Eye className="w-4 h-4" />
@@ -390,14 +390,14 @@ export default function AdminEstimationLeadsPage() {
                         )}
                         <a
                           href={`tel:${lead.telephone.replace(/[\s.\-()]/g, '')}`}
-                          className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          className="p-1.5 text-charcoal-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                           title="Appeler"
                         >
                           <Phone className="w-4 h-4" />
                         </a>
                         <button
                           onClick={() => handleDelete(lead.id)}
-                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="p-1.5 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -412,8 +412,8 @@ export default function AdminEstimationLeadsPage() {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
+            <div className="flex items-center justify-between px-4 py-3 border-t border-sand-200">
+              <p className="text-sm text-charcoal-500">
                 {(pagination.page - 1) * pagination.limit + 1}–
                 {Math.min(pagination.page * pagination.limit, pagination.total)} sur{' '}
                 {pagination.total}
@@ -422,17 +422,17 @@ export default function AdminEstimationLeadsPage() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="p-2 rounded-lg hover:bg-sand-100 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="px-3 py-1 text-sm font-medium text-gray-700">
+                <span className="px-3 py-1 text-sm font-medium text-charcoal-700">
                   {page} / {pagination.totalPages}
                 </span>
                 <button
                   onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                   disabled={page === pagination.totalPages}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="p-2 rounded-lg hover:bg-sand-100 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -453,18 +453,18 @@ export default function AdminEstimationLeadsPage() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-sand-200">
               <div>
-                <h3 className="font-semibold text-gray-900">Conversation</h3>
-                <p className="text-xs text-gray-500">
+                <h3 className="font-semibold text-charcoal-900">Conversation</h3>
+                <p className="text-xs text-charcoal-500">
                   {selectedLead.nom || 'Anonyme'} · {selectedLead.metier} · {selectedLead.ville}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedLead(null)}
-                className="p-1.5 hover:bg-gray-100 rounded-lg"
+                className="p-1.5 hover:bg-sand-100 rounded-lg"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-charcoal-500" />
               </button>
             </div>
 
@@ -479,7 +479,7 @@ export default function AdminEstimationLeadsPage() {
                     className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${
                       msg.role === 'user'
                         ? 'rounded-tr-sm bg-[#E07040] text-white'
-                        : 'rounded-tl-sm bg-gray-100 text-gray-800'
+                        : 'rounded-tl-sm bg-sand-100 text-charcoal-800'
                     }`}
                   >
                     {msg.content}
@@ -489,8 +489,8 @@ export default function AdminEstimationLeadsPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-between">
-              <p className="text-xs text-gray-400">
+            <div className="px-5 py-3 border-t border-sand-200 flex items-center justify-between">
+              <p className="text-xs text-charcoal-400">
                 {formatDate(selectedLead.created_at)}
                 {selectedLead.page_url && (
                   <>
@@ -500,7 +500,7 @@ export default function AdminEstimationLeadsPage() {
                       href={selectedLead.page_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
+                      className="text-charcoal-500 hover:underline"
                     >
                       {selectedLead.page_url}
                     </a>

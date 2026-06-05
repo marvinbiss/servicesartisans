@@ -30,27 +30,27 @@ const typeConfig: Record<string, { icon: typeof Calendar; bg: string }> = {
   booking: { icon: Calendar, bg: 'bg-green-100 text-green-600' },
   review: { icon: Star, bg: 'bg-amber-100 text-amber-600' },
   report: { icon: AlertTriangle, bg: 'bg-red-100 text-red-600' },
-  user: { icon: Users, bg: 'bg-blue-100 text-blue-600' },
+  user: { icon: Users, bg: 'bg-sand-200 text-charcoal-600' },
 }
 
 const statusLabels: Record<string, { label: string; classes: string }> = {
   confirmed: { label: 'Confirmé', classes: 'bg-green-100 text-green-700' },
   pending: { label: 'En attente', classes: 'bg-amber-100 text-amber-700' },
-  completed: { label: 'Terminé', classes: 'bg-blue-100 text-blue-700' },
+  completed: { label: 'Terminé', classes: 'bg-sand-200 text-charcoal-700' },
   published: { label: 'Publié', classes: 'bg-green-100 text-green-700' },
   cancelled: { label: 'Annulé', classes: 'bg-red-100 text-red-700' },
-  in_progress: { label: 'En cours', classes: 'bg-blue-100 text-blue-700' },
+  in_progress: { label: 'En cours', classes: 'bg-sand-200 text-charcoal-700' },
 }
 
 function SkeletonRow() {
   return (
     <div className="p-4 flex items-center gap-4 animate-pulse">
-      <div className="w-10 h-10 bg-gray-200 rounded-lg shrink-0" />
+      <div className="w-10 h-10 bg-sand-200 rounded-lg shrink-0" />
       <div className="flex-1 min-w-0">
-        <div className="w-32 h-4 bg-gray-200 rounded mb-2" />
-        <div className="w-48 h-3 bg-gray-200 rounded" />
+        <div className="w-32 h-4 bg-sand-200 rounded mb-2" />
+        <div className="w-48 h-3 bg-sand-200 rounded" />
       </div>
-      <div className="w-16 h-3 bg-gray-200 rounded shrink-0" />
+      <div className="w-16 h-3 bg-sand-200 rounded shrink-0" />
     </div>
   )
 }
@@ -58,26 +58,26 @@ function SkeletonRow() {
 export function RecentActivity({ activity, loading }: RecentActivityProps) {
   return (
     <div
-      className="bg-white rounded-xl shadow-sm border border-gray-100"
+      className="bg-white rounded-xl shadow-sm border border-sand-100"
       role="region"
       aria-label="Activité récente"
     >
-      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900">Activité récente</h3>
+      <div className="p-6 border-b border-sand-100 flex items-center justify-between">
+        <h3 className="font-semibold text-charcoal-900">Activité récente</h3>
         <Link
           href="/admin/journal"
-          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+          className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 transition-colors"
         >
           Voir tout
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-sand-100">
         {loading ? (
           Array.from({ length: 5 }, (_, i) => <SkeletonRow key={i} />)
         ) : activity.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <div className="p-8 text-center text-charcoal-500">
+            <Activity className="w-12 h-12 mx-auto mb-4 text-charcoal-300" />
             <p>Aucune activité récente</p>
           </div>
         ) : (
@@ -87,23 +87,23 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
             const statusInfo = item.status
               ? (statusLabels[item.status] ?? {
                   label: item.status,
-                  classes: 'bg-gray-100 text-gray-700',
+                  classes: 'bg-sand-100 text-charcoal-700',
                 })
               : null
             return (
               <div
                 key={item.id}
-                className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
+                className="p-4 flex items-center gap-4 hover:bg-sand-50 transition-colors"
               >
                 <div className={`p-2 rounded-lg shrink-0 ${config.bg}`}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">{item.action}</p>
-                  <p className="text-sm text-gray-500 truncate">{item.details}</p>
+                  <p className="font-medium text-charcoal-900 truncate">{item.action}</p>
+                  <p className="text-sm text-charcoal-500 truncate">{item.details}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-xs text-gray-400">{formatRelativeTime(item.timestamp)}</p>
+                  <p className="text-xs text-charcoal-400">{formatRelativeTime(item.timestamp)}</p>
                   {statusInfo && (
                     <span
                       className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full ${statusInfo.classes}`}

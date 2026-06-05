@@ -29,7 +29,7 @@ const STATUS_LABELS: Record<CeeCommissionRow['status'], string> = {
 const STATUS_CLASSES: Record<CeeCommissionRow['status'], string> = {
   due: 'bg-amber-50 text-amber-700 border-amber-200',
   batched: 'bg-amber-50 text-amber-700 border-amber-200',
-  sent: 'bg-blue-50 text-blue-800 border-blue-200',
+  sent: 'bg-sand-100 text-charcoal-800 border-sand-300',
   confirmed: 'bg-green-100 text-green-800 border-green-200',
   failed: 'bg-red-50 text-red-700 border-red-200',
   cancelled: 'bg-sand-100 text-charcoal-600 border-sand-300',
