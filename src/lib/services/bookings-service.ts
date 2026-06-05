@@ -311,12 +311,16 @@ export async function rescheduleBooking(
   return { error }
 }
 
-/** Fetch artisan bookings for a given month (artisan dashboard) */
+/**
+ * Fetch artisan bookings for a given month (artisan dashboard).
+ * Bornes appliquées dans la query (`!inner` + filtre slot.date) — sans elles,
+ * tout l'historique bookings + PII client est chargé à chaque appel.
+ */
 export async function getArtisanBookingsForMonth(
   supabase: SupabaseClientType,
   artisanId: string,
-  _startDate: string,
-  _endDate: string
+  startDate: string,
+  endDate: string
 ): Promise<{
   data: Array<{
     id: string
@@ -341,7 +345,7 @@ export async function getArtisanBookingsForMonth(
       service_description,
       status,
       created_at,
-      slot:availability_slots!slot_id (
+      slot:availability_slots!slot_id!inner (
         id,
         date,
         start_time,
@@ -351,6 +355,8 @@ export async function getArtisanBookingsForMonth(
     )
     .eq('artisan_id', artisanId)
     .in('status', ['confirmed', 'pending', 'completed'])
+    .gte('slot.date', startDate)
+    .lte('slot.date', endDate)
 
   return { data, error }
 }

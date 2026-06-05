@@ -819,7 +819,11 @@ export async function getQuoteByIdForProvider(
   return { data, error }
 }
 
-/** Update a quote */
+/**
+ * Update a quote.
+ * `status = 'pending'` est appliqué dans la mutation elle-même (anti-TOCTOU) :
+ * le pre-check des routes ne suffit pas si le statut change entre lecture et écriture.
+ */
 export async function updateQuote(
   supabase: SupabaseClientType,
   quoteId: string,
@@ -831,13 +835,17 @@ export async function updateQuote(
     .update(updates)
     .eq('id', quoteId)
     .eq('provider_id', providerId)
+    .eq('status', 'pending')
     .select()
     .single()
 
   return { data, error }
 }
 
-/** Delete a quote */
+/**
+ * Delete a quote.
+ * `status = 'pending'` appliqué dans la mutation (anti-TOCTOU, cf. updateQuote).
+ */
 export async function deleteQuote(
   supabase: SupabaseClientType,
   quoteId: string,
@@ -848,6 +856,7 @@ export async function deleteQuote(
     .delete()
     .eq('id', quoteId)
     .eq('provider_id', providerId)
+    .eq('status', 'pending')
 
   return { error }
 }

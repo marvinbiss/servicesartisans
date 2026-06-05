@@ -459,10 +459,10 @@ describe('rescheduleBooking', () => {
 // ===========================================================================
 
 describe('getArtisanBookingsForMonth', () => {
-  it('returns bookings for the artisan', async () => {
+  it('returns bookings for the artisan, scoped to the month via slot.date', async () => {
     const bookings = [{ id: 'b-1', status: 'confirmed' }]
     const builder = createMockQueryBuilder()
-    builder.in = vi.fn().mockResolvedValue({ data: bookings, error: null })
+    builder.lte = vi.fn().mockResolvedValue({ data: bookings, error: null })
     mockSupabaseFrom.mockReturnValue(builder)
 
     const result = await getArtisanBookingsForMonth(
@@ -475,6 +475,9 @@ describe('getArtisanBookingsForMonth', () => {
     expect(result.data).toEqual(bookings)
     expect(builder.eq).toHaveBeenCalledWith('artisan_id', 'art-1')
     expect(builder.in).toHaveBeenCalledWith('status', ['confirmed', 'pending', 'completed'])
+    // Bornes poussées dans la query (anti chargement historique complet + PII)
+    expect(builder.gte).toHaveBeenCalledWith('slot.date', '2026-04-01')
+    expect(builder.lte).toHaveBeenCalledWith('slot.date', '2026-04-30')
   })
 })
 

@@ -301,6 +301,26 @@ const DOSSIER_SELECT = [
 ].join(',')
 
 /**
+ * Instant UTC de 00:00 Europe/Paris pour le jour contenant `at`.
+ * L'index uniq_cee_dossiers_draft_idempotent (mig 507) tronque au jour
+ * *Paris* — la borne du SELECT idempotence doit utiliser le même fuseau,
+ * sinon entre 00:00 et 01:00/02:00 Paris le SELECT rate le draft existant,
+ * l'INSERT prend 23505 et le retry rate aussi → DB_ERROR au lieu d'existing.
+ * Paris n'a que deux offsets possibles (+01:00 CET, +02:00 CEST).
+ */
+function startOfParisDay(at: Date): Date {
+  // en-CA → YYYY-MM-DD
+  const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(at)
+  const cetGuess = new Date(`${day}T00:00:00+01:00`)
+  const hourInParis = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Paris',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(cetGuess)
+  return hourInParis === '00' ? cetGuess : new Date(`${day}T00:00:00+02:00`)
+}
+
+/**
  * Crée un dossier CEE après validation des business gates.
  *
  * Idempotence : si un dossier draft existe déjà pour
@@ -344,9 +364,9 @@ export async function createDossier(
   // artisan d'attribuer un dossier — donc sa commission — à un autre provider.
   const providerId = gateResult.partner.provider_id
 
-  // Idempotence check: same (partner_id, email_hash, operation_code) today
-  const todayStart = new Date(depositDate)
-  todayStart.setHours(0, 0, 0, 0)
+  // Idempotence check: same (partner_id, email_hash, operation_code) on the
+  // same *Paris* day — must mirror uniq_cee_dossiers_draft_idempotent (mig 507)
+  const todayStart = startOfParisDay(depositDate)
 
   const { data: existing } = await supabase
     .from('cee_dossiers')

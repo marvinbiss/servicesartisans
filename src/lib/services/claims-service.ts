@@ -1073,6 +1073,9 @@ export async function listRemovalRequests(
   const { status, page, limit } = params
   const offset = (page - 1) * limit
 
+  // `requester_siret:siret` : l'insert écrit la colonne `siret` (mig 374,
+  // NOT NULL) ; `requester_siret` (mig 487, drift-restore) n'est jamais
+  // peuplée. Alias pour que l'admin voie le SIRET sur toutes les lignes.
   let query = supabase
     .from('provider_removal_requests')
     .select(
@@ -1081,7 +1084,7 @@ export async function listRemovalRequests(
       provider_id,
       requester_name,
       requester_email,
-      requester_siret,
+      requester_siret:siret,
       reason,
       status,
       admin_notes,
