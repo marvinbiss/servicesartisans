@@ -15,10 +15,12 @@ import {
   getDispatchAssignments,
   getDispatchStats,
   getAssignmentById,
+  getLeadSummary,
   reassignAssignment,
   deleteAssignment,
   logLeadEvent,
 } from '@/lib/services/leads-service'
+import { sendLeadAlert } from '@/lib/services/notifications-service'
 
 const actionBodySchema = z.object({
   action: z.enum(['reassign', 'replay']),
@@ -118,6 +120,19 @@ export async function POST(request: NextRequest) {
         from: current.provider_id,
         to: newProviderId,
       })
+
+      // Alerte le nouvel artisan (email + SMS + in-app). Fire-and-forget.
+      if (current.source_table === 'devis_requests' || current.source_table === null) {
+        const lead = await getLeadSummary(supabase, current.lead_id)
+        void sendLeadAlert({
+          provider_ids: [newProviderId],
+          service: lead?.service_name ?? undefined,
+          city: lead?.city ?? undefined,
+          urgency: lead?.urgency ?? undefined,
+          client_name: lead?.client_name ?? undefined,
+          description: lead?.description ?? undefined,
+        }).catch((err) => logger.error('Reassign lead alert failed (non-blocking)', err))
+      }
     } else if (action === 'replay') {
       // Re-dispatch using configurable algorithm
       const currentReplay = await getAssignmentById(supabase, assignmentId)

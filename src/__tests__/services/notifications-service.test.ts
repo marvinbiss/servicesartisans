@@ -335,6 +335,45 @@ describe('sendLeadAlert', () => {
     }
   })
 
+  it('claimedOnly filters providers on user_id IS NOT NULL', async () => {
+    const notFn = vi.fn().mockResolvedValue({
+      data: [
+        {
+          id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          name: 'Claimed Pro',
+          email: 'claimed@test.com',
+          phone: null,
+          user_id: 'u1',
+        },
+      ],
+      error: null,
+    })
+
+    mockAdminFrom.mockImplementation((table: string) => {
+      if (table === 'providers') {
+        const b = createMockQueryBuilder()
+        b.in = vi.fn().mockReturnValue({ not: notFn })
+        return b
+      }
+      if (table === 'notifications') {
+        const b = createMockQueryBuilder()
+        b.insert = vi.fn().mockResolvedValue({ error: null })
+        return b
+      }
+      return createMockQueryBuilder()
+    })
+
+    const result = await sendLeadAlert({
+      provider_ids: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+      service: 'plombier',
+      city: 'Paris',
+      claimedOnly: true,
+    })
+
+    expect(result.success).toBe(true)
+    expect(notFn).toHaveBeenCalledWith('user_id', 'is', null)
+  })
+
   it('rejects empty provider_ids', async () => {
     const result = await sendLeadAlert({
       provider_ids: [],

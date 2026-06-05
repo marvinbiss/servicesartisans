@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { geocoder } from '@/lib/api/adresse'
 import { isRgeRequiredService } from '@/lib/dispatch/rge-required-services'
+import { sendLeadAlert } from '@/lib/services/notifications-service'
 
 export interface DispatchOptions {
   serviceName?: string
@@ -111,6 +112,22 @@ export async function dispatchLead(leadId: string, opts?: DispatchOptions): Prom
     }
 
     const assigned = (data as string[]) || []
+
+    // Alerte immédiate (email + SMS + notification in-app) aux artisans
+    // assignés. Fire-and-forget : l'assignation est déjà en DB, un échec
+    // d'alerte ne doit pas faire échouer le dispatch.
+    // claimedOnly : le dispatch auto ne doit JAMAIS contacter une fiche non
+    // revendiquée (prospection L.34-5 sans opt-out). Les non-revendiqués
+    // restent joignables via les actions admin délibérées.
+    if (assigned.length > 0) {
+      void sendLeadAlert({
+        provider_ids: assigned,
+        service: opts?.serviceName,
+        city: opts?.city,
+        urgency: opts?.urgency,
+        claimedOnly: true,
+      }).catch((err) => logger.error('Lead alert failed (non-blocking)', err))
+    }
 
     // Mig 498: 0 candidat sur un lead potentiellement RGE-required → trace.
     // Le SQL n'écrit `dispatch.rge_strict_no_match` dans audit_logs QUE quand

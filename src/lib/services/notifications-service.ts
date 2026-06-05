@@ -32,6 +32,14 @@ export interface SendLeadAlertInput {
   description?: string
   urgency?: string
   client_name?: string
+  /**
+   * Si true, n'alerte que les fiches revendiquées (user_id non NULL).
+   * Obligatoire sur le chemin de dispatch automatique : un email/SMS
+   * automatisé vers un artisan non inscrit = prospection L.34-5 sans
+   * opt-out. Les actions admin délibérées (lead manuel, reassign)
+   * peuvent alerter tout le monde.
+   */
+  claimedOnly?: boolean
 }
 
 export interface AlertResult {
@@ -138,7 +146,7 @@ export async function markAllAsRead(
 export async function sendLeadAlert(
   input: SendLeadAlertInput
 ): Promise<ServiceResult<{ results: AlertResult[] }>> {
-  const { provider_ids, service, city, description, urgency, client_name } = input
+  const { provider_ids, service, city, description, urgency, client_name, claimedOnly } = input
 
   // Input validation
   if (!Array.isArray(provider_ids) || provider_ids.length === 0) {
@@ -165,10 +173,14 @@ export async function sendLeadAlert(
   const dashboardUrl = `${SITE_URL}/espace-artisan/demandes-recues`
 
   // Fetch provider details
-  const { data: providers, error } = await supabase
+  let query = supabase
     .from('providers')
     .select('id, name, email, phone, user_id')
     .in('id', provider_ids)
+  if (claimedOnly) {
+    query = query.not('user_id', 'is', null)
+  }
+  const { data: providers, error } = await query
 
   if (error || !providers) {
     logger.error('[lead-alert] Provider fetch error', error)

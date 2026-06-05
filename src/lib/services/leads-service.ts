@@ -1107,6 +1107,93 @@ export async function deleteAssignment(
 }
 
 // ---------------------------------------------------------------------------
+// Admin: lead summary (for notification after reassign/manual dispatch)
+// ---------------------------------------------------------------------------
+
+export async function getLeadSummary(
+  supabase: SupabaseClient,
+  leadId: string
+): Promise<{
+  service_name: string | null
+  city: string | null
+  urgency: string | null
+  client_name: string | null
+  description: string | null
+} | null> {
+  const { data } = await supabase
+    .from('devis_requests')
+    .select('service_name, city, urgency, client_name, description')
+    .eq('id', leadId)
+    .single()
+
+  return data
+}
+
+// ---------------------------------------------------------------------------
+// Admin: manual lead creation + direct assignment to a chosen provider
+// ---------------------------------------------------------------------------
+
+export type ManualLeadInput = {
+  providerId: string
+  serviceName: string
+  city: string
+  postalCode: string
+  description: string
+  urgency: 'urgent' | 'semaine' | 'mois' | 'flexible'
+  clientName: string
+  clientEmail: string
+  clientPhone: string
+}
+
+export async function createManualLead(
+  supabase: SupabaseClient,
+  input: ManualLeadInput
+): Promise<{ leadId: string; assignmentId: string }> {
+  const { data: lead, error: leadError } = await supabase
+    .from('devis_requests')
+    .insert({
+      service_name: input.serviceName,
+      city: input.city,
+      postal_code: input.postalCode,
+      description: input.description,
+      urgency: input.urgency,
+      status: 'pending',
+      client_name: input.clientName,
+      client_email: input.clientEmail,
+      client_phone: input.clientPhone,
+      source: 'admin-manual',
+      cee_eligible: false,
+      cee_operation_codes: [],
+      cee_manual_review: false,
+    })
+    .select('id')
+    .single()
+
+  if (leadError || !lead) {
+    logger.error('Manual lead insert error', leadError)
+    throw new Error('Erreur lors de la création du lead')
+  }
+
+  const { data: assignment, error: assignError } = await supabase
+    .from('lead_assignments')
+    .insert({
+      lead_id: lead.id,
+      provider_id: input.providerId,
+      source_table: 'devis_requests',
+      status: 'pending',
+    })
+    .select('id')
+    .single()
+
+  if (assignError || !assignment) {
+    logger.error('Manual lead assignment error', assignError)
+    throw new Error('Lead créé mais assignation impossible')
+  }
+
+  return { leadId: lead.id, assignmentId: assignment.id }
+}
+
+// ---------------------------------------------------------------------------
 // Re-export logLeadEvent for convenience
 // ---------------------------------------------------------------------------
 
