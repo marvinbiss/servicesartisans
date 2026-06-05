@@ -416,7 +416,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 </h3>
                 <p className="text-xs text-charcoal-400 mt-1.5">à {quartierName}</p>
                 {topServiceSlugs.has(service.slug) && (
-                  <span className="inline-block mt-2 text-[10px] font-semibold text-accent-700 bg-accent-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-block mt-2 text-2xs font-semibold text-accent-700 bg-accent-100 px-2 py-0.5 rounded-full">
                     Prioritaire
                   </span>
                 )}

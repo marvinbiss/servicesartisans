@@ -96,13 +96,13 @@ export default function RgeBadge({
       .join('\n')
 
     const compactClasses =
-      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 text-accent-700 text-[11px] font-semibold border border-accent-200'
+      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 text-accent-700 text-2xs font-semibold border border-accent-200'
     const compactAria = `Certifié RGE — ${count} qualification${count > 1 ? 's' : ''} active${count > 1 ? 's' : ''}, valide jusqu'au ${formatDate(validUntil)}`
     const compactInner = (
       <>
         <Leaf className="w-3 h-3 text-accent-600" aria-hidden="true" />
         RGE
-        {count > 1 && <span className="text-[10px] font-normal text-accent-600">×{count}</span>}
+        {count > 1 && <span className="text-2xs font-normal text-accent-600">×{count}</span>}
       </>
     )
 

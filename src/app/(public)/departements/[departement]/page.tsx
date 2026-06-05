@@ -416,7 +416,7 @@ export default async function DepartementPage({ params }: PageProps) {
                 className={`bg-white rounded-2xl shadow-soft p-5 text-center hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-accent-200' : 'border border-sand-200'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full mb-2">
+                  <span className="inline-block text-2xs font-bold text-accent-600 bg-accent-50 px-2 py-0.5 rounded-full mb-2">
                     Prioritaire
                   </span>
                 )}

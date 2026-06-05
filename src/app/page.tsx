@@ -421,7 +421,7 @@ export default async function HomePage() {
                 href="/devenir-partenaire-cee"
                 className="group p-7 rounded-3xl bg-gradient-to-br from-secondary-500/20 to-primary-500/15 hover:from-secondary-500/30 hover:to-primary-500/25 border border-secondary-400/40 backdrop-blur-sm transition-all hover:-translate-y-0.5 relative"
               >
-                <span className="absolute top-4 right-4 px-2.5 py-0.5 bg-secondary-400 text-charcoal-900 text-[10px] font-bold rounded-full uppercase tracking-wide">
+                <span className="absolute top-4 right-4 px-2.5 py-0.5 bg-secondary-400 text-charcoal-900 text-2xs font-bold rounded-full uppercase tracking-wide">
                   Pro
                 </span>
                 <div className="text-xs font-semibold text-secondary-200 mb-2 uppercase tracking-wider">

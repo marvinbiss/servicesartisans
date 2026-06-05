@@ -413,9 +413,7 @@ export default function MetricsPage() {
                   <td className="px-4 py-2 font-mono text-xs text-charcoal-600">
                     {s.captured_at}
                     {s.captured_at === data?.baselineDate && (
-                      <span className="ml-2 text-[10px] font-bold text-primary-700 uppercase">
-                        J0
-                      </span>
+                      <span className="ml-2 text-2xs font-bold text-primary-700 uppercase">J0</span>
                     )}
                   </td>
                   <td className="text-right px-4 py-2 tabular-nums">{fmt(s.clicks_7d)}</td>

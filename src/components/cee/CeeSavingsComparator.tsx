@@ -233,7 +233,7 @@ export default function CeeSavingsComparator({
         <h4 className="font-heading text-sm font-semibold text-charcoal-900">
           Estimation du coût avec et sans prime CEE
         </h4>
-        <span className="ml-auto inline-flex items-center rounded-full bg-accent-100 px-2 py-0.5 text-[11px] font-semibold text-accent-700">
+        <span className="ml-auto inline-flex items-center rounded-full bg-accent-100 px-2 py-0.5 text-2xs font-semibold text-accent-700">
           Prime CEE
         </span>
       </div>

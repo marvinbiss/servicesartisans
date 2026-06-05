@@ -122,7 +122,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           onChange={(e) => setConsentRgpd(e.target.checked)}
           className="mt-0.5 accent-amber-600"
         />
-        <span className="text-[11px] text-amber-900/70">
+        <span className="text-2xs text-amber-900/70">
           J&apos;accepte que mes données soient utilisées pour traiter ma demande et me mettre en
           relation avec des artisans partenaires. Voir notre{' '}
           <Link href="/confidentialite" className="underline text-primary-500">

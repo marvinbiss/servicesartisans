@@ -73,7 +73,7 @@ export default function UrgencyBlock({
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-red-200">
             <Clock className="w-4 h-4 text-red-600 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="text-[11px] uppercase tracking-wide text-red-700 font-semibold">
+              <div className="text-2xs uppercase tracking-wide text-red-700 font-semibold">
                 Délai moyen
               </div>
               <div className="text-sm font-medium text-charcoal-900">{interventionLabel}</div>
@@ -83,7 +83,7 @@ export default function UrgencyBlock({
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-red-200">
             <ShieldCheck className="w-4 h-4 text-red-600 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="text-[11px] uppercase tracking-wide text-red-700 font-semibold">
+              <div className="text-2xs uppercase tracking-wide text-red-700 font-semibold">
                 Disponibilité
               </div>
               <div className="text-sm font-medium text-charcoal-900">{activeLabel}</div>
@@ -93,7 +93,7 @@ export default function UrgencyBlock({
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-red-200">
             <PhoneCall className="w-4 h-4 text-red-600 flex-shrink-0" aria-hidden="true" />
             <div>
-              <div className="text-[11px] uppercase tracking-wide text-red-700 font-semibold">
+              <div className="text-2xs uppercase tracking-wide text-red-700 font-semibold">
                 Service
               </div>
               <div className="text-sm font-medium text-charcoal-900">24h/24 · 7j/7</div>

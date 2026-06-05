@@ -254,7 +254,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 {renderStars(review.rating)}
                 {(review.booking_id || review.user_id || review.is_verified) && (
                   <span
-                    className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
+                    className="inline-flex items-center gap-1 text-2xs font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
                     title="Cet avis provient d'un client ayant utilisé la plateforme"
                   >
                     <CheckCircle className="w-3 h-3" />

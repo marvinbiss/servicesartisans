@@ -183,7 +183,7 @@ export default function MiniSimulateurInline({
         inputId={inputId}
         errorId={errorId}
       />
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] sm:text-xs text-charcoal-500 mt-4">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-2xs sm:text-xs text-charcoal-500 mt-4">
         <span className="inline-flex items-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-accent-500" />
           100% gratuit

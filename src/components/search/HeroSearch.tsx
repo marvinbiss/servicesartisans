@@ -792,19 +792,19 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-sand-50 border-t border-charcoal-100 text-xs text-charcoal-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-2xs">
                           Flèches
                         </kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-2xs">
                           Entrée
                         </kbd>
                         valider
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-2xs">
                           Échap
                         </kbd>
                         fermer
@@ -1088,7 +1088,7 @@ export function HeroSearch() {
                                   >
                                     {city.name}
                                   </span>
-                                  <div className="text-[11px] text-charcoal-400">
+                                  <div className="text-2xs text-charcoal-400">
                                     {city.departement}
                                   </div>
                                 </div>
@@ -1103,13 +1103,13 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-sand-50 border-t border-charcoal-100 text-xs text-charcoal-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-2xs">
                           Flèches
                         </kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-[10px]">
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-charcoal-200 font-mono text-2xs">
                           Entrée
                         </kbd>
                         valider

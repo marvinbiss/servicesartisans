@@ -72,7 +72,7 @@ function ReviewCard({
             </span>
             {review.verified && (
               <span
-                className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-700 bg-accent-50 border border-accent-200 px-2 py-0.5 rounded-full"
+                className="inline-flex items-center gap-1 text-2xs font-semibold text-accent-700 bg-accent-50 border border-accent-200 px-2 py-0.5 rounded-full"
                 title="Cet avis provient d'un client ayant utilisé la plateforme"
               >
                 <ShieldCheck className="w-3 h-3" aria-hidden="true" />

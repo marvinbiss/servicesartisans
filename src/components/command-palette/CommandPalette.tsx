@@ -336,7 +336,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
             ) : (
               grouped.map(([group, items]) => (
                 <div key={group} className="py-2">
-                  <p className="px-4 pt-1 pb-1.5 text-[11px] font-semibold tracking-wide uppercase text-charcoal-400">
+                  <p className="px-4 pt-1 pb-1.5 text-2xs font-semibold tracking-wide uppercase text-charcoal-400">
                     {group}
                   </p>
                   {items.map((item) => {
@@ -387,7 +387,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
           </div>
 
           {/* Footer hints */}
-          <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-t border-sand-200 bg-sand-50 text-[11px] text-charcoal-500">
+          <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-t border-sand-200 bg-sand-50 text-2xs text-charcoal-500">
             <span className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1">
                 <kbd className="px-1.5 py-0.5 rounded border border-sand-300 bg-white font-mono">

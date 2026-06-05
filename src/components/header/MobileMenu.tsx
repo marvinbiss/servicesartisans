@@ -327,7 +327,7 @@ export default function MobileMenu({
                         <div className="text-sm font-medium text-charcoal-700 truncate">
                           {region.name}
                         </div>
-                        <div className="text-[11px] text-charcoal-400">
+                        <div className="text-2xs text-charcoal-400">
                           {region.departments?.length ?? 0} dép.
                         </div>
                       </div>

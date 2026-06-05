@@ -447,7 +447,7 @@ export default function HeaderClient({
                 aria-label="Recherche rapide (Ctrl+K)"
                 title="Recherche rapide"
               >
-                <kbd className="font-mono text-[10px] px-1 rounded bg-white border border-sand-300">
+                <kbd className="font-mono text-2xs px-1 rounded bg-white border border-sand-300">
                   ⌘K
                 </kbd>
               </button>

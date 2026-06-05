@@ -223,7 +223,7 @@ export default function StickyMobileCTA({
                     />
                   ))}
                 </div>
-                <p className="text-[11px] text-charcoal-500">
+                <p className="text-2xs text-charcoal-500">
                   <span className="inline-block w-1.5 h-1.5 bg-accent-500 rounded-full mr-1 animate-pulse" />
                   {providerCount} artisan{providerCount > 1 ? 's' : ''} disponible
                   {providerCount > 1 ? 's' : ''} près de chez vous
@@ -265,7 +265,7 @@ export default function StickyMobileCTA({
             </div>
 
             {/* Trust line */}
-            <p className="text-[10px] text-charcoal-400 text-center mt-1.5 flex items-center justify-center gap-1">
+            <p className="text-2xs text-charcoal-400 text-center mt-1.5 flex items-center justify-center gap-1">
               <span className="text-accent-500">&#10003;</span> Gratuit
               <span className="text-sand-400">&#183;</span> Sans engagement
             </p>

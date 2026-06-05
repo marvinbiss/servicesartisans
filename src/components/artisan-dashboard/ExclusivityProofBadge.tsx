@@ -121,7 +121,7 @@ export default function ExclusivityProofBadge({ assignmentId }: Props) {
               )}
             </button>
           </div>
-          <p className="text-[11px] text-charcoal-500 mt-2">
+          <p className="text-2xs text-charcoal-500 mt-2">
             Preuve SHA256 verifiable : lead_id + provider_id + assigned_at. En cas de litige
             (DGCCRF, Trustpilot, client), citez ce hash.
           </p>

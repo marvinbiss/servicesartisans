@@ -172,7 +172,7 @@ export default function NextActionsBlock() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-medium text-charcoal-900 text-sm">{action.title}</p>
                     <span
-                      className={`text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded ${styles.badge}`}
+                      className={`text-2xs uppercase font-semibold px-1.5 py-0.5 rounded ${styles.badge}`}
                     >
                       {action.severity === 'p0'
                         ? 'Urgent'

@@ -724,7 +724,7 @@ export default function QuickSearch() {
 
                   {/* Type badge */}
                   <span
-                    className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${
+                    className={`text-2xs font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${
                       suggestion.type === 'service'
                         ? 'bg-primary-50 text-primary-500'
                         : suggestion.type === 'city'
@@ -748,7 +748,7 @@ export default function QuickSearch() {
           </div>
 
           {/* Keyboard hints */}
-          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-sand-50 border-t border-sand-200 text-[10px] text-charcoal-400">
+          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-sand-50 border-t border-sand-200 text-2xs text-charcoal-400">
             <span className="flex items-center gap-1">
               <kbd className="px-1 py-0.5 bg-white rounded border border-sand-300 font-mono">
                 &#8593;&#8595;

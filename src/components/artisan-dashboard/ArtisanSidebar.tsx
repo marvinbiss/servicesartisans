@@ -309,7 +309,7 @@ export default function ArtisanSidebar({
     <>
       {navSections.map((section, sectionIndex) => (
         <div key={section.title} className={sectionIndex > 0 ? 'mt-4' : undefined}>
-          <p className="px-3 sm:px-4 mb-1 text-[10px] sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider select-none">
+          <p className="px-3 sm:px-4 mb-1 text-2xs sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider select-none">
             {section.title}
           </p>
           <div className="space-y-0.5">{section.items.map(renderNavLink)}</div>
@@ -388,7 +388,7 @@ export default function ArtisanSidebar({
       >
         {/* Notifications */}
         <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-sand-200">
-          <span className="text-[10px] sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
+          <span className="text-2xs sm:text-xs font-semibold text-charcoal-400 uppercase tracking-wider">
             Menu
           </span>
           <NotificationBell userId={userId} />

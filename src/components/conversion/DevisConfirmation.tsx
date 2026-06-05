@@ -331,7 +331,7 @@ export default function DevisConfirmation({
               <p className={`font-semibold text-charcoal-900 ${compact ? 'text-xs' : 'text-sm'}`}>
                 Vos travaux sont potentiellement éligibles à une prime CEE
               </p>
-              <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              <p className={`text-charcoal-600 mt-0.5 ${compact ? 'text-2xs' : 'text-xs'}`}>
                 Certificats d&apos;Économies d&apos;Énergie — estimation et éligibilité confirmées
                 par votre artisan.
               </p>
@@ -340,7 +340,7 @@ export default function DevisConfirmation({
 
           {/* Liste des opérations CEE applicables */}
           {ceeDetails.length > 0 && (
-            <ul className={`mt-3 space-y-1.5 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+            <ul className={`mt-3 space-y-1.5 ${compact ? 'text-2xs' : 'text-xs'}`}>
               {ceeDetails.slice(0, 4).map((op) => (
                 <li key={op.code} className="flex items-start gap-2">
                   <CheckCircle
@@ -365,7 +365,7 @@ export default function DevisConfirmation({
           {/* Exigences RGE (agrégées de toutes les opérations) */}
           {requiredRgeQualifs.length > 0 && (
             <div
-              className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-[11px]' : 'text-xs'}`}
+              className={`mt-3 pt-3 border-t border-accent-100 flex items-start gap-2 ${compact ? 'text-2xs' : 'text-xs'}`}
             >
               <Leaf
                 className="w-3.5 h-3.5 text-accent-600 flex-shrink-0 mt-0.5"
@@ -416,7 +416,7 @@ export default function DevisConfirmation({
               >
                 Bonne nouvelle&nbsp;: vos travaux sont éligibles à une prime CEE&nbsp;!
               </p>
-              <p className={`text-accent-800 mt-1 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+              <p className={`text-accent-800 mt-1 ${compact ? 'text-2xs' : 'text-xs'}`}>
                 Notre équipe prend en charge les démarches pour récupérer votre prime Certificats
                 d&apos;Économies d&apos;Énergie. Aucune paperasse supplémentaire pour vous.
               </p>
@@ -426,7 +426,7 @@ export default function DevisConfirmation({
           {/* Opérations éligibles */}
           {ceeOperationCodes.length > 0 && (
             <div
-              className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+              className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-2xs' : 'text-xs'}`}
             >
               <p className="font-medium text-accent-800">
                 Opérations éligibles&nbsp;:{' '}
@@ -439,7 +439,7 @@ export default function DevisConfirmation({
 
           {/* Checklist pièces à préparer */}
           <div
-            className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            className={`mt-3 pt-3 border-t border-accent-100 ${compact ? 'text-2xs' : 'text-xs'}`}
           >
             <p className="font-semibold text-accent-900 mb-2">Pièces à préparer&nbsp;:</p>
             <ul className="space-y-1.5">
@@ -471,7 +471,7 @@ export default function DevisConfirmation({
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               {ceeOperationCodes.length > 1 && (
-                <p className={`mt-2 text-accent-700 ${compact ? 'text-[11px]' : 'text-xs'}`}>
+                <p className={`mt-2 text-accent-700 ${compact ? 'text-2xs' : 'text-xs'}`}>
                   + {ceeOperationCodes.length - 1} autre
                   {ceeOperationCodes.length - 1 > 1 ? 's' : ''} opération
                   {ceeOperationCodes.length - 1 > 1 ? 's' : ''} éligible
@@ -486,7 +486,7 @@ export default function DevisConfirmation({
 
           {/* Texte rassurant */}
           <p
-            className={`mt-3 pt-3 border-t border-accent-100 text-accent-700 ${compact ? 'text-[11px]' : 'text-xs'}`}
+            className={`mt-3 pt-3 border-t border-accent-100 text-accent-700 ${compact ? 'text-2xs' : 'text-xs'}`}
           >
             Votre artisan RGE vous guidera pour chaque étape. La prime sera déduite de votre facture
             ou versée après validation.
@@ -598,7 +598,7 @@ export default function DevisConfirmation({
           className={`flex items-center justify-between gap-3 px-4 py-3 bg-charcoal-900 text-white rounded-xl print:bg-white print:text-black print:border print:border-charcoal-300 print:break-inside-avoid ${compact ? 'mb-3 text-xs' : 'mb-5 text-sm'}`}
         >
           <div className="min-w-0">
-            <p className="text-charcoal-400 uppercase tracking-wider text-[10px] font-semibold print:text-charcoal-700">
+            <p className="text-charcoal-400 uppercase tracking-wider text-2xs font-semibold print:text-charcoal-700">
               Numéro de votre demande
             </p>
             <p className="font-mono font-bold text-lg tracking-wider">
@@ -638,7 +638,7 @@ export default function DevisConfirmation({
             Un email de confirmation a été envoyé à votre adresse
           </p>
         </div>
-        <p className={`text-charcoal-400 text-center ${compact ? 'text-[10px]' : 'text-xs'}`}>
+        <p className={`text-charcoal-400 text-center ${compact ? 'text-2xs' : 'text-xs'}`}>
           Un conseiller vous rappellera au {maskedPhone}
         </p>
         <div
@@ -667,7 +667,7 @@ export default function DevisConfirmation({
         ].map(({ icon: Icon, label, color }) => (
           <div key={label} className="flex flex-col items-center gap-1.5 p-2 bg-sand-50 rounded-xl">
             <Icon className={`w-4 h-4 ${color}`} />
-            <span className="text-[10px] sm:text-xs font-medium text-charcoal-600 text-center leading-tight">
+            <span className="text-2xs sm:text-xs font-medium text-charcoal-600 text-center leading-tight">
               {label}
             </span>
           </div>

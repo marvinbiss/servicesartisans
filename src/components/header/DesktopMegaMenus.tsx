@@ -103,7 +103,7 @@ export default function DesktopMegaMenus({
                             {cat.category}
                           </span>
                           {isUrgent && (
-                            <span className="ml-1.5 inline-flex items-center text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                            <span className="ml-1.5 inline-flex items-center text-2xs font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
                               24h/24
                             </span>
                           )}
@@ -231,7 +231,7 @@ export default function DesktopMegaMenus({
                                 {city.name}
                               </span>
                             </div>
-                            <span className="text-[11px] text-charcoal-400 bg-sand-50 group-hover/city:bg-primary-100 group-hover/city:text-primary-500 px-2 py-0.5 rounded-full transition-colors">
+                            <span className="text-2xs text-charcoal-400 bg-sand-50 group-hover/city:bg-primary-100 group-hover/city:text-primary-500 px-2 py-0.5 rounded-full transition-colors">
                               {city.population}
                             </span>
                           </Link>

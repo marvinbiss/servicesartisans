@@ -95,7 +95,7 @@ function CompareRow({ label, icon, children, isDiff, highlight }: CompareRowProp
         <span>{label}</span>
         {showDiff && (
           <span
-            className="ml-auto text-[10px] uppercase tracking-wide font-bold text-amber-700"
+            className="ml-auto text-2xs uppercase tracking-wide font-bold text-amber-700"
             aria-label="critère différent"
           >
             Diff

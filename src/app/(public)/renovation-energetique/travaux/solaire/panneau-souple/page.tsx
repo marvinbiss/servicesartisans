@@ -418,7 +418,7 @@ export default function Page() {
             </ol>
             <p className="not-prose">
               <span className="text-sm bg-red-50 text-red-800 border border-red-200 rounded px-2 py-1">
-                ⚠️ NE JAMAIS percer le toit du véhicule.
+                NE JAMAIS percer le toit du véhicule.
               </span>{' '}
               Risque : perte d’étanchéité, infiltration, garantie constructeur véhicule annulée.
             </p>

@@ -171,7 +171,7 @@ export default function ExitIntentPopup({
           </Link>
         )}
 
-        <p className="text-[10px] text-charcoal-400 text-center mt-2">
+        <p className="text-2xs text-charcoal-400 text-center mt-2">
           Gratuit · Sans engagement · Réponse rapide
         </p>
       </div>
