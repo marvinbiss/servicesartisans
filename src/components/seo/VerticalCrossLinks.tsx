@@ -35,7 +35,13 @@ export default function VerticalCrossLinks({
           {otherServices.map((s) => (
             <Link
               key={s.slug}
-              href={`/${intent}/${s.slug}/${villeSlug}`}
+              // /tarifs|/devis/[s]/[v] purgés 2026-04-30 (gone-paths 301) —
+              // seule /avis/[s]/[v] subsiste ; sinon cible directe /services.
+              href={
+                intent === 'avis'
+                  ? `/avis/${s.slug}/${villeSlug}`
+                  : `/services/${s.slug}/${villeSlug}`
+              }
               className="px-3 py-1.5 text-sm text-sand-600 bg-sand-200 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
             >
               {getAnchorText({

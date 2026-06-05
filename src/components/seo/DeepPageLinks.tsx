@@ -330,9 +330,13 @@ export default async function DeepPageLinks({
     { intent: 'avis', prefix: 'avis', label: 'Avis' },
     { intent: 'urgence', prefix: 'urgence', label: 'Urgence' },
   ]
+  // City mode : /tarifs|/devis/[s]/[v] purgés 2026-04-30 (gone-paths 301) —
+  // on les exclut pour ne pas émettre de liens vers des redirects.
   const filteredIntents = isHubMode
     ? allIntents.filter((i) => i.intent !== 'services' && i.intent !== currentIntent)
-    : allIntents.filter((i) => i.intent !== currentIntent)
+    : allIntents.filter(
+        (i) => i.intent !== currentIntent && i.intent !== 'tarifs' && i.intent !== 'devis'
+      )
   const module4Links = skipCrossIntent
     ? []
     : dedup(

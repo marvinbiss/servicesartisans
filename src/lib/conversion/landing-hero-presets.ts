@@ -68,7 +68,10 @@ export function buildSimulateurCta(opts?: { ville?: string }): LandingHeroCta {
 /** CTA devis générique service+ville. */
 export function buildDevisCta(opts: { serviceSlug: string; villeSlug?: string }): LandingHeroCta {
   const { serviceSlug, villeSlug } = opts
-  const href = villeSlug ? `/devis/${serviceSlug}/${villeSlug}` : `/devis/${serviceSlug}`
+  // /devis/[s]/[v] purgé 2026-04-30 (gone-paths 301) — forme query à la place.
+  const href = villeSlug
+    ? `/devis?service=${encodeURIComponent(serviceSlug)}&ville=${encodeURIComponent(villeSlug)}`
+    : `/devis/${serviceSlug}`
   return {
     label: 'Demander un devis gratuit',
     href,

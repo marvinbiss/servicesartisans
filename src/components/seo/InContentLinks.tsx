@@ -248,8 +248,8 @@ const snippetUrgence: SnippetFn = (ctx) => {
 /** Nearby city comparison link */
 const snippetNearbyCity: SnippetFn = (ctx) => {
   if (!ctx.nearbyCity) return null
-  const intentPrefix =
-    ctx.currentIntent === 'tarifs' ? 'tarifs' : ctx.currentIntent === 'avis' ? 'avis' : 'services'
+  // /tarifs/[s]/[v] purgé 2026-04-30 (gone-paths 301) — fallback /services.
+  const intentPrefix = ctx.currentIntent === 'avis' ? 'avis' : 'services'
   const variants = [
     <>
       Comparez également avec les{' '}
