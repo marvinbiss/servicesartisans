@@ -240,16 +240,19 @@ function buildNotificationSpec(
         type: 'lead_created',
         title: 'Demande bien reçue',
         message: `Votre demande pour «\u00a0${lead.service_name}\u00a0» à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
-        link: '/espace-client/mes-demandes',
+        // Décision produit 2026-06-05 : plus d'espace particulier — les CTAs
+        // client ne pointent plus vers /espace-client (connexion bloquée).
+        // Les artisans recontactent directement ; question → /contact.
+        link: '/contact',
         emailSubject: `Demande reçue – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Demande enregistrée',
           color: '#2563eb',
           greeting: `Bonjour ${target.name}`,
-          body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone.`,
-          ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
-          ctaLabel: 'Suivre ma demande',
-          footer: 'Vous recevrez une notification dès qu’un artisan vous enverra un devis.',
+          body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone — ils vous recontacteront directement.`,
+          ctaUrl: `${SITE_URL}/contact`,
+          ctaLabel: 'Une question ? Contactez-nous',
+          footer: 'Un artisan vous contactera directement par téléphone ou email.',
         }),
       }
 
@@ -276,7 +279,7 @@ function buildNotificationSpec(
         type: 'lead_viewed',
         title: 'Un artisan a consulté votre demande',
         message: `Un artisan a pris connaissance de votre demande pour «\u00a0${lead.service_name}\u00a0».`,
-        link: `/espace-client/mes-demandes/${lead.id}`,
+        link: '/contact',
         emailSubject: '',
         emailHtml: '',
       }
@@ -287,16 +290,16 @@ function buildNotificationSpec(
         type: 'quote_received',
         title: 'Nouveau devis reçu',
         message: `Un artisan vous a envoyé un devis pour «\u00a0${lead.service_name}\u00a0»${amount}.`,
-        link: `/espace-client/mes-demandes/${lead.id}`,
+        link: '/contact',
         emailSubject: `Devis reçu – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Vous avez reçu un devis',
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Un artisan vous a envoyé un devis pour <strong>${lead.service_name}</strong> à ${location}${amount ? `.<br><br>Montant proposé : <strong>${event.metadata.amount} €</strong>` : ''}.`,
-          ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
-          ctaLabel: 'Voir le devis',
-          footer: 'Consultez le détail et comparez les offres reçues.',
+          ctaUrl: `${SITE_URL}/contact`,
+          ctaLabel: 'Une question ? Contactez-nous',
+          footer: "L'artisan vous contactera directement par téléphone ou email.",
         }),
       }
     }
@@ -335,15 +338,15 @@ function buildNotificationSpec(
           type: 'lead_closed',
           title: 'Mission terminée',
           message: `La mission pour «\u00a0${lead.service_name}\u00a0» est terminée. Merci de votre confiance !`,
-          link: `/espace-client/mes-demandes/${lead.id}`,
+          link: '/contact',
           emailSubject: `Mission terminée – ${lead.service_name}`,
           emailHtml: emailTemplate({
             heading: 'Mission terminée',
             color: '#059669',
             greeting: `Bonjour ${target.name}`,
             body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
-            ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
-            ctaLabel: 'Voir le détail',
+            ctaUrl: `${SITE_URL}/contact`,
+            ctaLabel: 'Une question ? Contactez-nous',
             footer: 'N’hésitez pas à laisser un avis pour aider d’autres clients.',
           }),
         }
@@ -371,15 +374,15 @@ function buildNotificationSpec(
           type: 'lead_closed',
           title: 'Demande expirée',
           message: `Votre demande pour «\u00a0${lead.service_name}\u00a0» a expiré sans réponse.`,
-          link: `/espace-client/mes-demandes/${lead.id}`,
+          link: '/contact',
           emailSubject: `Demande expirée – ${lead.service_name}`,
           emailHtml: emailTemplate({
             heading: 'Demande expirée',
             color: '#d97706',
             greeting: `Bonjour ${target.name}`,
             body: `Votre demande pour <strong>${lead.service_name}</strong> à ${location} a expiré. Vous pouvez en créer une nouvelle à tout moment.`,
-            ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
-            ctaLabel: 'Mes demandes',
+            ctaUrl: `${SITE_URL}/devis`,
+            ctaLabel: 'Nouvelle demande de devis',
             footer: '',
           }),
         }

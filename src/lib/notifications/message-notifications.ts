@@ -38,10 +38,10 @@ export async function notifyNewMessage(params: MessageNotificationParams): Promi
   }
 
   try {
+    // Espace particulier fermé 2026-06-05 : les clients ne peuvent plus se
+    // connecter, on les oriente vers /contact au lieu de /espace-client.
     const conversationUrl =
-      recipientRole === 'artisan'
-        ? `${SITE_URL}/espace-artisan/messages`
-        : `${SITE_URL}/espace-client/messages`
+      recipientRole === 'artisan' ? `${SITE_URL}/espace-artisan/messages` : `${SITE_URL}/contact`
 
     const { subject, html } = getNewMessageAlertEmail({
       recipientName: recipientName || (recipientRole === 'artisan' ? 'Artisan' : 'Client'),

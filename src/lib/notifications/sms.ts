@@ -54,19 +54,21 @@ function formatPhoneNumber(phone: string): string {
 
 // SMS Templates - Keep under 160 chars for single message
 const smsTemplates = {
-  // Immediate confirmation
+  // Immediate confirmation.
+  // Espace particulier fermé 2026-06-05 : plus de lien espace-client,
+  // la gestion passe par le contact direct avec l'artisan.
   bookingConfirmation: (data: SMSData) =>
     `RDV confirmé ✓
 ${data.date} à ${data.time}
 ${data.artisanName}
-Gérer: servicesartisans.fr/espace-client/mes-demandes`,
+Question ? servicesartisans.fr/contact`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
     `Rappel: RDV demain
 ${data.date} à ${data.time}
 ${data.artisanName}
-Confirmer/Annuler: servicesartisans.fr/espace-client/mes-demandes`,
+Annuler ? servicesartisans.fr/contact`,
 
   // 1h reminder
   reminder1h: (data: SMSData) =>
@@ -86,7 +88,7 @@ Reprogrammer: servicesartisans.fr`,
     `RDV reporté ✓
 Nouveau: ${data.date} à ${data.time}
 ${data.artisanName}
-Gérer: servicesartisans.fr/espace-client/mes-demandes`,
+Question ? servicesartisans.fr/contact`,
 
   // Waitlist notification
   waitlistAvailable: (data: SMSData) =>

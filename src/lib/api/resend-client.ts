@@ -273,8 +273,8 @@ export async function sendWelcomeEmail(params: {
   }
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}${isArtisan ? '/espace-artisan' : '/espace-client'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
-      Accéder à mon compte
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}${isArtisan ? '/espace-artisan' : '/devis'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+      ${isArtisan ? 'Accéder à mon compte' : 'Demander un devis'}
     </a>
   </div>
 
