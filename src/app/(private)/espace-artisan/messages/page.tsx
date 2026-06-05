@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import { MessageSquare, ArrowLeft, Send, Search, Loader2 } from 'lucide-react'
+import { MessageSquare, ArrowLeft, Search, Loader2, Info } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
@@ -32,16 +32,13 @@ interface Conversation {
 
 export default function MessagesArtisanPage() {
   const [loading, setLoading] = useState(true)
-  const [sendingMessage, setSendingMessage] = useState(false)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [messages, setMessages] = useState<Message[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
-  const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [sendError, setSendError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Real-time: append new messages from Supabase Realtime without re-fetching
@@ -163,59 +160,6 @@ export default function MessagesArtisanPage() {
     }
   }
 
-  const fetchMessages = async (conversationId: string, partnerId: string) => {
-    try {
-      const response = await fetch(`/api/artisan/messages?conversation_id=${conversationId}`)
-      const data = await response.json()
-
-      if (response.ok) {
-        setMessages(data.messages || [])
-        // Extract current user ID from API response (preferred) or infer from messages
-        if (data.currentUserId) {
-          setCurrentUserId(data.currentUserId)
-        } else if (data.messages?.length > 0) {
-          // Infer: the sender that is NOT the partner is the current user
-          const msg = data.messages.find((m: Message) => m.sender_id !== partnerId)
-          if (msg) setCurrentUserId(msg.sender_id)
-        }
-      }
-    } catch (err) {
-      logger.error('Error fetching messages', err)
-      setError('Impossible de charger les messages.')
-    }
-  }
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newMessage.trim() || !selectedConversation) return
-
-    setSendingMessage(true)
-    try {
-      const response = await fetch('/api/artisan/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          conversation_id: selectedConversation.id,
-          content: newMessage.trim(),
-        }),
-      })
-
-      if (response.ok) {
-        setNewMessage('')
-        setSendError(null)
-        // Refresh messages
-        fetchMessages(selectedConversation.id, selectedConversation.partner.id)
-      } else {
-        setSendError("Impossible d'envoyer le message. Veuillez réessayer.")
-      }
-    } catch (err) {
-      logger.error('Error sending message', err)
-      setSendError('Erreur de connexion. Veuillez réessayer.')
-    } finally {
-      setSendingMessage(false)
-    }
-  }
-
   const getAvatar = (partner: Partner) => {
     const name = partner.full_name || 'U'
     return name
@@ -274,7 +218,7 @@ export default function MessagesArtisanPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Messages</h1>
-              <p className="text-primary-100">Communiquez avec vos clients</p>
+              <p className="text-primary-100">Historique de vos conversations</p>
             </div>
           </div>
         </div>
@@ -286,6 +230,21 @@ export default function MessagesArtisanPage() {
 
           {/* Messages */}
           <main id="main-content" className="lg:col-span-3">
+            {/* Décision produit 2026-06-05 : espace particulier fermé. Les
+                clients ne peuvent plus se connecter — la messagerie interne
+                ne leur parvient plus. On conserve l'historique en lecture mais
+                on oriente l'artisan vers le contact direct (tel/email du lead). */}
+            <div
+              role="note"
+              className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm flex items-start gap-2"
+            >
+              <Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <p>
+                La messagerie interne est en lecture seule : vos clients ne reçoivent plus de
+                nouveaux messages ici. Pour les recontacter, utilisez le téléphone ou l'email
+                indiqués dans la demande de devis.
+              </p>
+            </div>
             {error && (
               <div
                 role="alert"
@@ -426,37 +385,13 @@ export default function MessagesArtisanPage() {
                       </div>
 
                       {/* Input */}
-                      <form onSubmit={handleSendMessage} className="p-4 border-t">
-                        {sendError && (
-                          <div
-                            role="alert"
-                            className="p-2 mb-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm"
-                          >
-                            {sendError}
-                          </div>
-                        )}
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Écrivez votre message..."
-                            className="flex-1 px-4 py-2 border border-sand-300 rounded-lg focus:ring-2 focus:ring-primary-400"
-                            disabled={sendingMessage}
-                          />
-                          <button
-                            type="submit"
-                            disabled={sendingMessage || !newMessage.trim()}
-                            className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
-                          >
-                            {sendingMessage ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              <Send className="w-5 h-5" />
-                            )}
-                          </button>
-                        </div>
-                      </form>
+                      {/* Lecture seule depuis la fermeture de l'espace
+                          particulier (2026-06-05) : l'envoi est désactivé car
+                          le client ne reçoit plus les messages internes. */}
+                      <div className="p-4 border-t bg-sand-50 text-center text-sm text-charcoal-500">
+                        Messagerie en lecture seule. Recontactez ce client via le téléphone ou
+                        l'email de sa demande de devis.
+                      </div>
                     </>
                   ) : (
                     <div className="flex-1 flex items-center justify-center text-charcoal-500">
