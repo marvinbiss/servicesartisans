@@ -439,7 +439,7 @@ ${SITE_NAME}
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/espace-artisan/parametres/facturation" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                <a href="${SITE_URL}/espace-artisan/parametres" style="display: inline-block; background: #3366FF; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
                   Mettre à jour le paiement
                 </a>
               </div>
@@ -465,7 +465,7 @@ ${data.amount ? `Montant: ${data.amount}` : ''}
 
 Veuillez mettre à jour vos informations de paiement pour continuer à bénéficier de votre abonnement.
 
-Mettre à jour: ${SITE_URL}/espace-artisan/parametres/facturation
+Mettre à jour: ${SITE_URL}/espace-artisan/parametres
 
 ${SITE_NAME}
     `,

@@ -59,14 +59,14 @@ const smsTemplates = {
     `RDV confirmé ✓
 ${data.date} à ${data.time}
 ${data.artisanName}
-Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+Gérer: servicesartisans.fr/espace-client/mes-demandes`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
     `Rappel: RDV demain
 ${data.date} à ${data.time}
 ${data.artisanName}
-Confirmer/Annuler: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+Confirmer/Annuler: servicesartisans.fr/espace-client/mes-demandes`,
 
   // 1h reminder
   reminder1h: (data: SMSData) =>
@@ -86,7 +86,7 @@ Reprogrammer: servicesartisans.fr`,
     `RDV reporté ✓
 Nouveau: ${data.date} à ${data.time}
 ${data.artisanName}
-Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+Gérer: servicesartisans.fr/espace-client/mes-demandes`,
 
   // Waitlist notification
   waitlistAvailable: (data: SMSData) =>
