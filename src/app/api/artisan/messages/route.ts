@@ -1,42 +1,26 @@
 /**
  * Artisan Messages API
  * GET: Fetch conversations and messages
- * POST: Send a new message
+ * POST: gelé (messagerie en lecture seule, voir stub en bas de fichier)
  */
 
 import { NextResponse } from 'next/server'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
-import { notifyNewMessage } from '@/lib/notifications/message-notifications'
-import { sanitizeUserInput } from '@/lib/sanitize'
 import {
   getConversationById,
   getMessagesByConversation,
   markMessagesAsRead,
   getProviderConversations,
   getRecentMessagesForConversations,
-  findConversation,
-  createConversation,
-  insertMessage,
   getProviderByUserId,
-  getConversationClientId,
-  getProfileById,
-  getProviderName,
   type MessagePreviewRow,
 } from '@/lib/services/messages-service'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
   conversation_id: z.string().uuid().optional(),
-})
-
-// POST request schema
-const sendMessageSchema = z.object({
-  conversation_id: z.string().uuid().optional().nullable(),
-  client_id: z.string().uuid().optional().nullable(),
-  content: z.string().min(1).max(5000),
 })
 
 export const dynamic = 'force-dynamic'
@@ -183,141 +167,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const { error, user, supabase } = await requireArtisan()
-    if (error) return error
-
-    const body = await request.json()
-    const result = sendMessageSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { message: 'Erreur de validation', details: result.error.flatten() },
-        },
-        { status: 400 }
-      )
-    }
-    const { conversation_id, client_id, content } = result.data
-
-    // Get provider linked to this user
-    const { data: provider } = await getProviderByUserId(supabase, user.id)
-
-    if (!provider) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Profil artisan non trouvé' } },
-        { status: 404 }
-      )
-    }
-
-    let resolvedConversationId = conversation_id
-
-    if (!resolvedConversationId) {
-      // Try to find existing conversation or create one
-      if (!client_id) {
-        return NextResponse.json(
-          { success: false, error: { message: 'conversation_id ou client_id requis' } },
-          { status: 400 }
-        )
-      }
-
-      const { data: existingConv } = await findConversation(supabase, {
-        providerId: provider.id,
-        clientId: client_id,
-      })
-
-      if (existingConv) {
-        resolvedConversationId = existingConv.id
-      } else {
-        const { data: newConv, error: convError } = await createConversation(supabase, {
-          providerId: provider.id,
-          clientId: client_id,
-        })
-
-        if (convError || !newConv) {
-          logger.error('Error creating conversation:', convError)
-          return NextResponse.json(
-            { success: false, error: { message: 'Erreur lors de la création de la conversation' } },
-            { status: 500 }
-          )
-        }
-        resolvedConversationId = newConv.id
-      }
-    } else {
-      // Verify conversation belongs to this artisan
-      const { data: conversation } = await getConversationById(supabase, resolvedConversationId, {
-        providerId: provider.id,
-      })
-
-      if (!conversation) {
-        return NextResponse.json(
-          { success: false, error: { message: 'Conversation non trouvée ou non autorisée' } },
-          { status: 403 }
-        )
-      }
-    }
-
-    // Insert new message
-    const { data: message, error: insertError } = await insertMessage(supabase, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      conversationId: resolvedConversationId!,
-      senderId: user.id,
-      senderType: 'artisan',
-      content: sanitizeUserInput(content),
-    })
-
-    if (insertError) {
-      logger.error('Error sending message:', insertError)
-      return NextResponse.json(
-        { success: false, error: { message: "Erreur lors de l'envoi du message" } },
-        { status: 500 }
-      )
-    }
-
-    // Fire-and-forget: notify the client by email
-    const effectiveConvId = resolvedConversationId
-    const effectiveClientId = client_id
-    ;(async () => {
-      try {
-        const adminSupabase = createAdminClient()
-
-        // Resolve client_id from conversation if not provided directly
-        let cid = effectiveClientId
-        if (!cid && effectiveConvId) {
-          const { data: conv } = await getConversationClientId(adminSupabase, effectiveConvId)
-          cid = conv?.client_id ?? null
-        }
-        if (!cid) return
-
-        const { data: clientProfile } = await getProfileById(adminSupabase, cid)
-
-        if (!clientProfile?.email) return
-
-        // Get artisan name from provider
-        const { data: providerData } = await getProviderName(adminSupabase, provider.id)
-
-        await notifyNewMessage({
-          recipientEmail: clientProfile.email,
-          recipientName: clientProfile.full_name || 'Client',
-          senderName: providerData?.name || 'Un artisan',
-          messageContent: content,
-          recipientRole: 'client',
-        })
-      } catch (err) {
-        logger.error('Failed to send message notification to client:', err)
-      }
-    })()
-
-    return NextResponse.json({
-      success: true,
-      message,
-    })
-  } catch (error) {
-    logger.error('Messages POST error:', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 }
-    )
-  }
+/**
+ * POST gelé — messagerie artisan en lecture seule depuis la fermeture de
+ * l'espace particulier (2026-06-05). L'UI n'envoie plus ; on ferme aussi
+ * l'API (zombie write surface). Contact client = tel/email du devis.
+ */
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: { message: 'Messagerie en lecture seule' } },
+    { status: 501 }
+  )
 }

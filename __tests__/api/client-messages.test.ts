@@ -1,7 +1,7 @@
 /**
  * Tests -- Client Messages API (/api/client/messages)
  * GET: auth check, conversation messages, conversation list, 404 for unknown conv, DB errors
- * POST: auth check, validation, send to existing conv, create new conv, missing provider_id, 403 forbidden conv
+ * POST: gelé — messagerie en lecture seule (501)
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
@@ -92,14 +92,6 @@ type MockResult = { body: Record<string, unknown>; status: number }
 function makeGetRequest(params: Record<string, string> = {}) {
   const sp = new URLSearchParams(params)
   return new Request(`http://localhost/api/client/messages?${sp.toString()}`)
-}
-
-function makePostRequest(body: unknown) {
-  return new Request('http://localhost/api/client/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
 }
 
 function setAuthUser(user: { id: string } | null) {
@@ -293,212 +285,26 @@ describe('GET /api/client/messages', () => {
 // ============================================
 
 describe('POST /api/client/messages', () => {
-  it('returns 401 when not authenticated', async () => {
+  // Messagerie en lecture seule depuis la fermeture de l'espace particulier
+  // (2026-06-05) : le POST est gelé et répond 501 sans toucher auth ni DB.
+  it('returns 501 (messagerie en lecture seule) regardless of auth', async () => {
     setAuthUser(null)
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({ content: 'Hello' }))) as unknown as MockResult
+    const result = (await POST()) as unknown as MockResult
 
-    expect(result.status).toBe(401)
-    expect(result.body.error).toBe('Non authentifi\u00e9')
+    expect(result.status).toBe(501)
+    expect((result.body as { error: { message: string } }).error.message).toBe(
+      'Messagerie en lecture seule'
+    )
   })
 
-  it('returns 400 for invalid data (empty content)', async () => {
+  it('returns 501 even for an authenticated user with valid payload', async () => {
     setAuthUser({ id: USER_UUID })
 
     const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(makePostRequest({ content: '' }))) as unknown as MockResult
+    const result = (await POST()) as unknown as MockResult
 
-    expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Erreur de validation')
-  })
-
-  it('returns 400 for missing content', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({ conversation_id: CONV_UUID })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(400)
-    expect(result.body.error).toBe('Erreur de validation')
-  })
-
-  it('creates a new message in existing conversation (200)', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    const mockMessage = {
-      id: 'm-new',
-      conversation_id: CONV_UUID,
-      sender_id: USER_UUID,
-      sender_type: 'client',
-      content: 'Bonjour, je voudrais un devis.',
-      created_at: '2026-02-20T12:00:00Z',
-    }
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq('id').eq('client_id').single() -> found
-      { data: { id: CONV_UUID }, error: null },
-      // Call 1: messages.insert(...).select().single() -> created message
-      { data: mockMessage, error: null },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        conversation_id: CONV_UUID,
-        content: 'Bonjour, je voudrais un devis.',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(200)
-    expect(result.body.success).toBe(true)
-    expect(result.body.message).toEqual(mockMessage)
-  })
-
-  it('returns 403 when conversation does not belong to user', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq('id').eq('client_id').single() -> not found
-      { data: null, error: null },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        conversation_id: CONV_UUID,
-        content: 'Hello',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(403)
-    expect(result.body.error).toContain('non trouv')
-  })
-
-  it('returns 400 when no conversation_id and no provider_id', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        content: 'Hello',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(400)
-    expect(result.body.error).toBe('conversation_id ou provider_id requis')
-  })
-
-  it('finds existing conversation by provider_id and sends message', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    const mockMessage = {
-      id: 'm-new',
-      conversation_id: CONV_UUID,
-      sender_id: USER_UUID,
-      sender_type: 'client',
-      content: 'Hello',
-      created_at: '2026-02-20T12:00:00Z',
-    }
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq('client_id').eq('provider_id').single() -> existing conv
-      { data: { id: CONV_UUID }, error: null },
-      // Call 1: messages.insert(...).select().single() -> created message
-      { data: mockMessage, error: null },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        provider_id: PROVIDER_UUID,
-        content: 'Hello',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(200)
-    expect(result.body.success).toBe(true)
-    expect(result.body.message).toEqual(mockMessage)
-  })
-
-  it('creates a new conversation when none exists for provider_id', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    const newConvId = '550e8400-e29b-41d4-a716-446655440030'
-    const mockMessage = {
-      id: 'm-new',
-      conversation_id: newConvId,
-      sender_id: USER_UUID,
-      sender_type: 'client',
-      content: 'Bonjour',
-      created_at: '2026-02-20T12:00:00Z',
-    }
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq().eq().single() -> no existing conv
-      { data: null, error: null },
-      // Call 1: conversations.insert({client_id, provider_id}).select('id').single() -> new conv
-      { data: { id: newConvId }, error: null },
-      // Call 2: messages.insert(...).select().single() -> created message
-      { data: mockMessage, error: null },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        provider_id: PROVIDER_UUID,
-        content: 'Bonjour',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(200)
-    expect(result.body.success).toBe(true)
-    expect(result.body.message).toEqual(mockMessage)
-  })
-
-  it('returns 500 when conversation creation fails', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq().eq().single() -> no existing conv
-      { data: null, error: null },
-      // Call 1: conversations.insert(...).select('id').single() -> error
-      { data: null, error: { message: 'insert failed', code: '23505' } },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        provider_id: PROVIDER_UUID,
-        content: 'Hello',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(500)
-    expect(result.body.error).toContain('cr\u00e9ation')
-  })
-
-  it('returns 500 when message insert fails', async () => {
-    setAuthUser({ id: USER_UUID })
-
-    builderResults = [
-      // Call 0: conversations.select('id').eq('id').eq('client_id').single() -> found
-      { data: { id: CONV_UUID }, error: null },
-      // Call 1: messages.insert(...).select().single() -> error
-      { data: null, error: { message: 'insert failed', code: '08000' } },
-    ]
-
-    const { POST } = await import('@/app/api/client/messages/route')
-    const result = (await POST(
-      makePostRequest({
-        conversation_id: CONV_UUID,
-        content: 'Hello',
-      })
-    )) as unknown as MockResult
-
-    expect(result.status).toBe(500)
-    expect(result.body.error).toContain('envoi')
+    expect(result.status).toBe(501)
   })
 })

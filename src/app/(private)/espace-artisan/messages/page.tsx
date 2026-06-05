@@ -26,7 +26,8 @@ interface Message {
 interface Conversation {
   id: string
   partner: Partner
-  lastMessage: Message
+  // null si conversation sans message (l'API ne le garantit pas)
+  lastMessage: Message | null
   unreadCount: number
 }
 
@@ -312,11 +313,11 @@ export default function MessagesArtisanPage() {
                                 {getDisplayName(conv.partner)}
                               </span>
                               <span className="text-xs text-charcoal-500">
-                                {formatTime(conv.lastMessage.created_at)}
+                                {conv.lastMessage ? formatTime(conv.lastMessage.created_at) : ''}
                               </span>
                             </div>
                             <p className="text-sm text-charcoal-500 truncate">
-                              {conv.lastMessage.content}
+                              {conv.lastMessage?.content ?? 'Aucun message'}
                             </p>
                           </div>
                           {conv.unreadCount > 0 && (

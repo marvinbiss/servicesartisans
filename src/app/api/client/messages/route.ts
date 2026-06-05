@@ -1,16 +1,13 @@
 /**
  * Client Messages API
  * GET: Fetch conversations and messages for client
- * POST: Send a new message
+ * POST: gelé (messagerie en lecture seule, voir stub en bas de fichier)
  */
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
-import { notifyNewMessage } from '@/lib/notifications/message-notifications'
-import { sanitizeUserInput } from '@/lib/sanitize'
 import {
   getConversationById,
   getMessagesByConversation,
@@ -18,24 +15,11 @@ import {
   getClientConversations,
   getLastMessage,
   countUnreadMessages,
-  findConversation,
-  createConversation,
-  insertMessageFull,
-  getConversationProviderId,
-  getProviderDetails,
-  getProfileName,
 } from '@/lib/services/messages-service'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
   conversation_id: z.string().uuid().optional(),
-})
-
-// POST request schema
-const sendMessageSchema = z.object({
-  conversation_id: z.string().uuid().optional().nullable(),
-  provider_id: z.string().uuid().optional().nullable(),
-  content: z.string().min(1).max(5000),
 })
 
 export const dynamic = 'force-dynamic'
@@ -135,131 +119,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const supabase = await createClient()
-
-    // Get current user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
-
-    const body = await request.json()
-    const result = sendMessageSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Erreur de validation', details: result.error.flatten() },
-        { status: 400 }
-      )
-    }
-    const { conversation_id, provider_id, content } = result.data
-
-    let resolvedConversationId = conversation_id
-
-    if (!resolvedConversationId) {
-      // Try to find existing conversation or create one
-      if (!provider_id) {
-        return NextResponse.json(
-          { error: 'conversation_id ou provider_id requis' },
-          { status: 400 }
-        )
-      }
-
-      const { data: existingConv } = await findConversation(supabase, {
-        providerId: provider_id,
-        clientId: user.id,
-      })
-
-      if (existingConv) {
-        resolvedConversationId = existingConv.id
-      } else {
-        const { data: newConv, error: convError } = await createConversation(supabase, {
-          providerId: provider_id,
-          clientId: user.id,
-        })
-
-        if (convError || !newConv) {
-          logger.error('Error creating conversation:', convError)
-          return NextResponse.json(
-            { error: 'Erreur lors de la création de la conversation' },
-            { status: 500 }
-          )
-        }
-        resolvedConversationId = newConv.id
-      }
-    } else {
-      // Verify conversation belongs to this client
-      const { data: conversation } = await getConversationById(supabase, resolvedConversationId, {
-        clientId: user.id,
-      })
-
-      if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation non trouvée ou non autorisée' },
-          { status: 403 }
-        )
-      }
-    }
-
-    // Insert new message
-    const { data: message, error: insertError } = await insertMessageFull(supabase, {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      conversationId: resolvedConversationId!,
-      senderId: user.id,
-      senderType: 'client',
-      content: sanitizeUserInput(content),
-    })
-
-    if (insertError) {
-      logger.error('Error sending message:', insertError)
-      return NextResponse.json({ error: "Erreur lors de l'envoi du message" }, { status: 500 })
-    }
-
-    // Fire-and-forget: notify the artisan by email
-    const effectiveConvId = resolvedConversationId
-    const effectiveProviderId = provider_id
-    ;(async () => {
-      try {
-        const adminSupabase = createAdminClient()
-
-        // Resolve provider_id from conversation if not provided directly
-        let pid = effectiveProviderId
-        if (!pid && effectiveConvId) {
-          const { data: conv } = await getConversationProviderId(adminSupabase, effectiveConvId)
-          pid = conv?.provider_id ?? null
-        }
-        if (!pid) return
-
-        const { data: provider } = await getProviderDetails(adminSupabase, pid)
-
-        if (!provider?.email) return
-
-        // Get sender name
-        const { data: senderProfile } = await getProfileName(adminSupabase, user.id)
-
-        await notifyNewMessage({
-          recipientEmail: provider.email,
-          recipientName: provider.name || 'Artisan',
-          senderName: senderProfile?.full_name || 'Un client',
-          messageContent: content,
-          recipientRole: 'artisan',
-        })
-      } catch (err) {
-        logger.error('Failed to send message notification to artisan:', err)
-      }
-    })()
-
-    return NextResponse.json({
-      success: true,
-      message,
-    })
-  } catch (error) {
-    logger.error('Client Messages POST error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
-  }
+/**
+ * POST gelé — messagerie en lecture seule depuis la fermeture de l'espace
+ * particulier (2026-06-05). Les clients ne peuvent plus se connecter ; on
+ * ferme aussi la surface d'écriture API (defense-in-depth, audit 2026-06-05).
+ */
+export async function POST() {
+  return NextResponse.json(
+    { success: false, error: { message: 'Messagerie en lecture seule' } },
+    { status: 501 }
+  )
 }

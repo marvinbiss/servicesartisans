@@ -1,113 +1,25 @@
 /**
- * Message API - Edit and Delete
- * PATCH: Edit a message
- * DELETE: Soft delete a message
+ * Message API - Edit and Delete — gelé.
+ *
+ * Messagerie en lecture seule depuis la fermeture de l'espace particulier
+ * (2026-06-05). Aucune UI n'appelle ces mutations ; on ferme la surface
+ * d'écriture (audit 2026-06-05).
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { logger } from '@/lib/logger'
-import { z } from 'zod'
-import { updateMessageContent, deleteMessage } from '@/lib/services/messages-service'
+import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-const editMessageSchema = z.object({
-  content: z.string().min(1).max(5000),
-})
-
-export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    const { id } = await params
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
-    const parsed = editMessageSchema.safeParse(body)
-
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: { message: 'Données invalides', details: parsed.error.flatten() },
-        },
-        { status: 400 }
-      )
-    }
-
-    // Update message (RLS will verify ownership)
-    const { data, error } = await updateMessageContent(supabase, id, user.id, parsed.data.content)
-
-    if (error) {
-      logger.error('Error editing message', error)
-      return NextResponse.json(
-        { success: false, error: { message: 'Impossible de modifier le message' } },
-        { status: 500 }
-      )
-    }
-
-    if (!data) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Message non trouvé ou non autorisé' } },
-        { status: 404 }
-      )
-    }
-
-    return NextResponse.json(data)
-  } catch (error) {
-    logger.error('Edit message error', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 }
-    )
-  }
+export async function PATCH() {
+  return NextResponse.json(
+    { success: false, error: { message: 'Messagerie en lecture seule' } },
+    { status: 501 }
+  )
 }
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
-    }
-
-    // Hard delete message (RLS will verify ownership)
-    // Note: deleted_at column was removed in migration 102, using hard delete
-    const { error } = await deleteMessage(supabase, id, user.id)
-
-    if (error) {
-      logger.error('Error deleting message', error)
-      return NextResponse.json(
-        { success: false, error: { message: 'Impossible de supprimer le message' } },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    logger.error('Delete message error', error)
-    return NextResponse.json(
-      { success: false, error: { message: 'Erreur serveur' } },
-      { status: 500 }
-    )
-  }
+export async function DELETE() {
+  return NextResponse.json(
+    { success: false, error: { message: 'Messagerie en lecture seule' } },
+    { status: 501 }
+  )
 }

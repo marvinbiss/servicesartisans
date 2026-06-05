@@ -59,13 +59,6 @@ export const LazyBookingCalendarPro = dynamic(
   }
 )
 
-export const LazyChatWindow = dynamic(
-  () => import('@/components/chat/ChatWindow').then((mod) => mod.default),
-  {
-    loading: () => <LoadingFallback height="500px" />,
-  }
-)
-
 export const LazyReviewsSection = dynamic(
   () => import('@/components/ReviewsSection').then((mod) => mod.default),
   {
