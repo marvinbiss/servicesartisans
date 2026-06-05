@@ -39,20 +39,20 @@ export default async function AdminWebhooksPage() {
   const activeCount = rows.filter((r) => r.active).length
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white">
+    <div className="min-h-screen bg-sand-50">
+      <header className="border-b border-sand-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-gray-900">Webhooks</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-charcoal-900">Webhooks</h1>
+          <p className="mt-2 text-sm text-charcoal-600">
             {rows.length} subscription{rows.length > 1 ? 's' : ''} · {activeCount} active
             {activeCount > 1 ? 's' : ''} · {totalDeliveries} delivery
             {totalDeliveries > 1 ? 'ies' : ''} total
             {successRate !== null ? ` · ${successRate}% success rate` : ''}.
           </p>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-charcoal-500">
             Monitoring uniquement — les intégrateurs gèrent eux-mêmes leur cycle de vie via{' '}
-            <code className="rounded bg-gray-100 px-1">/api/v1/webhooks/subscribe</code> et{' '}
-            <code className="rounded bg-gray-100 px-1">/api/v1/webhooks/unsubscribe</code>.
+            <code className="rounded bg-sand-100 px-1">/api/v1/webhooks/subscribe</code> et{' '}
+            <code className="rounded bg-sand-100 px-1">/api/v1/webhooks/unsubscribe</code>.
           </p>
         </div>
       </header>

@@ -31,13 +31,13 @@ function formatDateTick(dateStr: string): string {
 
 function ChartSkeleton() {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
-      <div className="w-48 h-5 bg-gray-200 rounded mb-6" />
-      <div className="w-full h-[300px] bg-gray-50 rounded flex items-end gap-1 px-8 pb-6">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-sand-100 animate-pulse">
+      <div className="w-48 h-5 bg-sand-200 rounded mb-6" />
+      <div className="w-full h-[300px] bg-sand-50 rounded flex items-end gap-1 px-8 pb-6">
         {Array.from({ length: 30 }, (_, i) => (
           <div
             key={i}
-            className="flex-1 bg-gray-200 rounded-t"
+            className="flex-1 bg-sand-200 rounded-t"
             style={{ height: `${20 + Math.random() * 60}%` }}
           />
         ))}
@@ -58,13 +58,13 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
 
   return (
     <div
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
+      className="bg-white rounded-xl p-6 shadow-sm border border-sand-100"
       role="region"
       aria-label="Graphique d'activité des 30 derniers jours"
     >
-      <h3 className="font-semibold text-gray-900 mb-6">Activité des 30 derniers jours</h3>
+      <h3 className="font-semibold text-charcoal-900 mb-6">Activité des 30 derniers jours</h3>
       {!hasData ? (
-        <div className="h-[300px] flex items-center justify-center text-gray-400">
+        <div className="h-[300px] flex items-center justify-center text-charcoal-400">
           <p>Aucune donnée sur cette période</p>
         </div>
       ) : (

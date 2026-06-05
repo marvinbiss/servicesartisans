@@ -9,9 +9,26 @@ export interface BreadcrumbItem {
 interface BreadcrumbProps {
   items: BreadcrumbItem[]
   className?: string
+  /** `dark` : variante lisible sur fond charcoal-950 (hero immersif). */
+  variant?: 'light' | 'dark'
 }
 
-export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
+const VARIANT_LINK: Record<'light' | 'dark', string> = {
+  light: 'text-charcoal-400 hover:text-primary-400',
+  dark: 'text-sand-400 hover:text-white',
+}
+
+const VARIANT_CURRENT: Record<'light' | 'dark', string> = {
+  light: 'text-charcoal-900',
+  dark: 'text-white',
+}
+
+const VARIANT_CHEVRON: Record<'light' | 'dark', string> = {
+  light: 'text-sand-400',
+  dark: 'text-charcoal-300',
+}
+
+export default function Breadcrumb({ items, className = '', variant = 'light' }: BreadcrumbProps) {
   return (
     <nav aria-label="Fil d'Ariane" className={`flex items-center gap-2 text-sm ${className}`}>
       <ol
@@ -27,7 +44,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
         >
           <Link
             href="/"
-            className="flex items-center gap-1 text-charcoal-400 hover:text-primary-400 transition-colors"
+            className={`flex items-center gap-1 transition-colors ${VARIANT_LINK[variant]}`}
             itemProp="item"
           >
             <Home className="w-4 h-4" />
@@ -46,11 +63,11 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             itemScope
             itemType="https://schema.org/ListItem"
           >
-            <ChevronRight className="w-4 h-4 text-sand-400" aria-hidden="true" />
+            <ChevronRight className={`w-4 h-4 ${VARIANT_CHEVRON[variant]}`} aria-hidden="true" />
             {item.href && index < items.length - 1 ? (
               <Link
                 href={item.href}
-                className="text-charcoal-400 hover:text-primary-400 transition-colors"
+                className={`transition-colors ${VARIANT_LINK[variant]}`}
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>
@@ -58,7 +75,11 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             ) : (
               // Plan D — D-5 (a11y) : aria-current="page" pour annoncer la
               // page courante aux lecteurs d'écran (WCAG 2.4.8 Location).
-              <span className="text-charcoal-900 font-medium" itemProp="name" aria-current="page">
+              <span
+                className={`font-medium ${VARIANT_CURRENT[variant]}`}
+                itemProp="name"
+                aria-current="page"
+              >
                 {item.label}
               </span>
             )}

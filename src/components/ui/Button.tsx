@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react'
 import { clsx } from 'clsx'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'premium'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   isLoading?: boolean
   leftIcon?: ReactNode
@@ -40,12 +40,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ]
 
     const variants = {
+      // Canonique DESIGN.md : fill primary-500, hover 600 (un seul
+      // traitement CTA sur tout le site — wave A design premium 2026-06-05)
       primary: [
-        'bg-primary-400 text-white',
-        'hover:bg-primary-500',
-        'focus-visible:ring-primary-400',
-        'shadow-[0_4px_14px_0_rgba(232,107,75,0.3)]',
-        'hover:shadow-[0_8px_25px_0_rgba(212,85,58,0.4)]',
+        'bg-primary-500 text-white',
+        'hover:bg-primary-600',
+        'focus-visible:ring-primary-500',
+        'shadow-cta',
+        'hover:shadow-cta-hover',
         'hover:-translate-y-[2px]',
       ],
       secondary: [
@@ -73,16 +75,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'shadow-[0_4px_14px_0_rgba(239,68,68,0.25)]',
         'hover:shadow-[0_8px_25px_0_rgba(239,68,68,0.35)]',
         'hover:-translate-y-[2px]',
-      ],
-      premium: [
-        'bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold',
-        'hover:from-secondary-600 hover:via-secondary-500 hover:to-secondary-600',
-        'focus-visible:ring-secondary-500',
-        'shadow-[0_4px_20px_0_rgba(232,150,10,0.35)]',
-        'hover:shadow-[0_10px_35px_0_rgba(232,150,10,0.45)]',
-        'hover:-translate-y-[3px]',
-        'relative overflow-hidden',
-        'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700',
       ],
     }
 

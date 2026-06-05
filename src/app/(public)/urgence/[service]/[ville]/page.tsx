@@ -246,9 +246,9 @@ const emergencyMeta: Record<
     ],
   },
   facadier: {
-    gradient: 'from-zinc-600 to-zinc-800',
-    lightBg: 'bg-zinc-50',
-    lightText: 'text-zinc-700',
+    gradient: 'from-charcoal-600 to-charcoal-800',
+    lightBg: 'bg-sand-50',
+    lightText: 'text-charcoal-700',
     problems: [
       'Enduit décollé menaçant de tomber (danger piétons)',
       'Fissure façade traversante',
@@ -285,9 +285,9 @@ const emergencyMeta: Record<
   // Pivot pure-play BTP énergétique 2026-05-02 :
   // paysagiste + alarme-securite retirés (services hors thèse SA).
   platrier: {
-    gradient: 'from-neutral-600 to-neutral-800',
-    lightBg: 'bg-neutral-50',
-    lightText: 'text-neutral-700',
+    gradient: 'from-charcoal-600 to-charcoal-800',
+    lightBg: 'bg-sand-50',
+    lightText: 'text-charcoal-700',
     problems: [
       "Plafond en plâtre qui s'effrite ou se fissure",
       'Fissures plâtre après tassement ou sinistre',

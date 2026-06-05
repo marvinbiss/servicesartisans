@@ -27,7 +27,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { FileText } from 'lucide-react'
 
-import Breadcrumb from '@/components/Breadcrumb'
+import RgeHero from '@/components/rge/RgeHero'
 import ProviderList from '@/components/ProviderList'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import MiniSimulateurInline from '@/components/conversion/MiniSimulateurInline'
@@ -316,6 +316,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
     limit: 50,
   })
   let isFallback = false
+
+  // Accord grammatical : "2 pompe à chaleur RGE actifs" → "2 pompes à chaleur
+  // RGE actives". serviceName est un libellé singulier ; le pluriel + genre
+  // viennent de NATURAL_TERMS (les noms composés ne se pluralisent pas par +s).
+  const svcTerms = getNaturalTerm(serviceSlug)
+  const svcCounted = () => (count > 1 ? svcTerms.plural : svcTerms.singular)
+  const svcAccord = (masc: string, fem: string) =>
+    (svcTerms.feminin ? fem : masc) + (count > 1 ? 's' : '')
 
   // Vague 1.1 — 410 strategy : quand on confirme 0 providers via la variante
   // stricte (discrimine count=0 légitime d'une erreur transitoire), on déclenche
@@ -668,22 +676,85 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
         />
       )}
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <Breadcrumb
-          items={[
-            { label: 'Artisans RGE', href: '/rge' },
-            { label: serviceName, href: `/rge/${serviceSlug}` },
-            { label: villeName },
-          ]}
-          className="mb-6"
-        />
+      <RgeHero
+        breadcrumbItems={[
+          { label: 'Artisans RGE', href: '/rge' },
+          { label: serviceName, href: `/rge/${serviceSlug}` },
+          { label: villeName },
+        ]}
+        rgeCount={count}
+        devisHref={buildDevisHref(serviceSlug, villeName)}
+        title={
+          upgradeV2 ? (
+            isFallback && location.department_name ? (
+              <>
+                {serviceName} RGE à {villeName} — département {location.department_name} (
+                {monthYear})
+              </>
+            ) : (
+              <>
+                {count} {svcCounted()} RGE {villeName} ({monthYear})
+              </>
+            )
+          ) : (
+            <>
+              {serviceName} certifié RGE à {villeName}
+            </>
+          )
+        }
+        subtitle={
+          isFallback && location.department_name ? (
+            <>
+              {count} {svcCounted()} RGE {svcAccord('actif', 'active')} dans le département{' '}
+              {location.department_name}, intervenant à {villeName}
+            </>
+          ) : (
+            <>
+              {count} {svcCounted()} RGE {svcAccord('actif', 'active')} à {villeName}
+            </>
+          )
+        }
+        socialProof={
+          deptStats && deptStats.review_count >= 3 ? (
+            <SocialProofBadge
+              average={deptStats.avg_rating}
+              count={deptStats.review_count}
+              label={
+                location.department_name
+                  ? `avis vérifiés en ${location.department_name}`
+                  : 'avis vérifiés'
+              }
+              size="md"
+            />
+          ) : undefined
+        }
+        authorLine={
+          upgradeV2 ? (
+            <>
+              Auteur :{' '}
+              <span className="font-medium text-sand-300">la rédaction ServicesArtisans</span>
+              {' · '}
+              Mis à jour le{' '}
+              <time dateTime={monthlyAnchor.slice(0, 10)}>
+                {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  timeZone: 'Europe/Paris',
+                })}
+              </time>
+            </>
+          ) : undefined
+        }
+      />
 
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {upgradeV2 && (
           <EnBrefBox
             summary={
               isFallback && location.department_name
-                ? `${count} ${serviceName.toLowerCase()} certifiés RGE dans le département ${location.department_name}, intervenant à ${villeName}. Éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Qualifications vérifiées ADEME / France Rénov’.`
-                : `Trouvez ${count} ${serviceName.toLowerCase()} certifiés RGE à ${villeName}, éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Devis gratuits sous 24h. Qualifications vérifiées ADEME / France Rénov’.`
+                ? `${count} ${svcCounted()} ${svcAccord('certifié', 'certifiée')} RGE dans le département ${location.department_name}, intervenant à ${villeName}. Éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Qualifications vérifiées ADEME / France Rénov’.`
+                : `Trouvez ${count} ${svcCounted()} ${svcAccord('certifié', 'certifiée')} RGE à ${villeName}, éligibles MaPrimeRénov’ 2026, CEE et TVA réduite 5,5 %. Devis gratuits sous 24h. Qualifications vérifiées ADEME / France Rénov’.`
             }
             keyPoints={[
               isFallback && location.department_name
@@ -695,80 +766,6 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
             ]}
           />
         )}
-
-        <header className="mb-8">
-          <h1
-            data-speakable="true"
-            className="text-3xl md:text-4xl font-bold text-charcoal-900 font-heading"
-          >
-            {upgradeV2 ? (
-              isFallback && location.department_name ? (
-                <>
-                  {serviceName} RGE à {villeName} — département {location.department_name} (
-                  {monthYear})
-                </>
-              ) : (
-                <>
-                  {count} {serviceName.toLowerCase()} RGE {villeName} ({monthYear})
-                </>
-              )
-            ) : (
-              <>
-                {serviceName} certifié RGE à {villeName}
-              </>
-            )}
-          </h1>
-          {deptStats && deptStats.review_count >= 3 && (
-            <div className="mt-2">
-              <SocialProofBadge
-                average={deptStats.avg_rating}
-                count={deptStats.review_count}
-                label={
-                  location.department_name
-                    ? `avis vérifiés en ${location.department_name}`
-                    : 'avis vérifiés'
-                }
-                size="md"
-              />
-            </div>
-          )}
-          <p className="mt-3 text-charcoal-600">
-            {isFallback && location.department_name ? (
-              <>
-                {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} dans le
-                département {location.department_name}, intervenant à {villeName}
-              </>
-            ) : (
-              <>
-                {count} {serviceName.toLowerCase()} RGE {count > 1 ? 'actifs' : 'actif'} à{' '}
-                {villeName}
-              </>
-            )}
-          </p>
-          {upgradeV2 && (
-            <p className="mt-2 text-sm text-charcoal-500">
-              Auteur :{' '}
-              <span className="font-medium text-charcoal-700">la rédaction ServicesArtisans</span>
-              {' · '}
-              Mis à jour le{' '}
-              <time dateTime={monthlyAnchor.slice(0, 10)}>
-                {new Date(monthlyAnchor).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  timeZone: 'Europe/Paris',
-                })}
-              </time>
-            </p>
-          )}
-          <Link
-            href={buildDevisHref(serviceSlug, villeName)}
-            className="inline-flex items-center gap-2 mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
-          >
-            <FileText className="w-5 h-5" aria-hidden="true" />
-            Demander un devis RGE
-          </Link>
-        </header>
 
         <section className="mb-8 text-charcoal-700 leading-relaxed space-y-4">
           <p>{intro}</p>
@@ -843,7 +840,9 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           {count === 0 ? (
             <div className="rounded-lg border border-sand-300 bg-sand-50 p-8 text-center">
               <p className="text-charcoal-700">
-                Aucun {serviceName.toLowerCase()} RGE actif actuellement référencé à {villeName}.
+                {svcTerms.feminin ? 'Aucune' : 'Aucun'} {svcTerms.singular} RGE{' '}
+                {svcTerms.feminin ? 'active' : 'actif'} actuellement{' '}
+                {svcTerms.feminin ? 'référencée' : 'référencé'} à {villeName}.
               </p>
               <p className="mt-2 text-sm text-charcoal-500">
                 Consultez{' '}
@@ -851,7 +850,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                   href={`/services/${serviceSlug}/${villeSlug}`}
                   className="text-clay-500 underline"
                 >
-                  tous les {serviceName.toLowerCase()} à {villeName}
+                  {svcTerms.feminin ? 'toutes les' : 'tous les'} {svcTerms.plural} à {villeName}
                 </Link>{' '}
                 ou{' '}
                 <Link href={`/artisans-rge/${villeSlug}`} className="text-clay-500 underline">
@@ -867,14 +866,14 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
 
         <section className="mb-12 bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 rounded-2xl p-6 md:p-8 text-center">
           <p className="font-heading font-bold text-lg md:text-xl text-charcoal-900 mb-2">
-            Besoin d&apos;un {serviceName.toLowerCase()} RGE à {villeName} ?
+            Besoin d&apos;{svcTerms.article} RGE à {villeName} ?
           </p>
           <p className="text-charcoal-600 text-sm mb-4">
             Recevez un devis gratuit et sans engagement en 2 minutes
           </p>
           <Link
             href={buildDevisHref(serviceSlug, villeName)}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Obtenir mon devis gratuit
@@ -903,7 +902,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
                 className="block rounded-lg border border-sand-300 p-4 hover:border-clay-400 hover:bg-clay-50 transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               >
                 <div className="font-semibold text-charcoal-900">
-                  Tous les {serviceName.toLowerCase()} à {villeName}
+                  {svcTerms.feminin ? 'Toutes les' : 'Tous les'} {svcTerms.plural} à {villeName}
                 </div>
                 <div className="text-sm text-charcoal-500">
                   RGE ou non, l’annuaire complet du métier
@@ -943,7 +942,8 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
               {serviceName} RGE dans d’autres villes
             </h2>
             <p className="text-sm text-charcoal-500 mb-4">
-              Les villes où les {serviceName.toLowerCase()} RGE sont les plus nombreux.
+              Les villes où les {svcTerms.plural} RGE sont les plus{' '}
+              {svcTerms.feminin ? 'nombreuses' : 'nombreux'}.
             </p>
             <div className="flex flex-wrap gap-2">
               {otherCities.map((c) => (
@@ -1104,7 +1104,7 @@ export default async function RgeServiceCityPage({ params }: PageProps) {
           </p>
           <Link
             href={buildDevisHref(serviceSlug, villeName)}
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
+            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:-translate-y-0.5 transition-all text-lg focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:outline-none"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
             Devis gratuit en 2 min

@@ -56,15 +56,15 @@ export function PagePreview({
         {/* Modal */}
         <div className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full my-8">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-sand-200 px-6 py-4">
             <div className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-gray-500" />
-              <h2 className="text-lg font-semibold text-gray-900">Aperçu</h2>
+              <Eye className="w-5 h-5 text-charcoal-500" />
+              <h2 className="text-lg font-semibold text-charcoal-900">Aperçu</h2>
             </div>
             <button
               onClick={onClose}
               aria-label="Fermer"
-              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -73,11 +73,11 @@ export function PagePreview({
           {/* Content */}
           <div className="p-6">
             {/* Page title */}
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{title}</h1>
+            <h1 className="text-3xl font-bold text-charcoal-900 mb-4">{title}</h1>
 
             {/* Blog metadata */}
             {(author || readTime) && (
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-charcoal-500 mb-4">
                 {author && <>Par {author}</>}
                 {author && readTime && <> · </>}
                 {readTime && <>{readTime}</>}
@@ -100,7 +100,7 @@ export function PagePreview({
 
             {/* Excerpt */}
             {excerpt && (
-              <p className="text-gray-500 italic mb-6 text-base leading-relaxed border-l-4 border-gray-200 pl-4">
+              <p className="text-charcoal-500 italic mb-6 text-base leading-relaxed border-l-4 border-sand-200 pl-4">
                 {excerpt}
               </p>
             )}
@@ -113,17 +113,17 @@ export function PagePreview({
               />
             ) : hasStructuredData ? (
               <div className="space-y-4">
-                <p className="text-sm text-gray-500 italic mb-4">
+                <p className="text-sm text-charcoal-500 italic mb-4">
                   Aucun contenu HTML. Résumé des données structurées :
                 </p>
-                <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 overflow-auto max-h-96 whitespace-pre-wrap">
+                <pre className="bg-sand-50 border border-sand-200 rounded-lg p-4 text-sm text-charcoal-700 overflow-auto max-h-96 whitespace-pre-wrap">
                   {JSON.stringify(structuredData, null, 2)}
                 </pre>
               </div>
             ) : (
               <div className="text-center py-12">
-                <Eye className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">
+                <Eye className="w-12 h-12 text-charcoal-300 mx-auto mb-3" />
+                <p className="text-charcoal-500">
                   Aucun contenu à afficher. Commencez à rédiger dans l'éditeur.
                 </p>
               </div>

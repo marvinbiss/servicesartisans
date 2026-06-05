@@ -1190,7 +1190,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 aria-label="Partager sur X"
-                className="w-10 h-10 bg-neutral-900 text-white rounded-full flex items-center justify-center hover:bg-neutral-800 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-charcoal-900 text-white rounded-full flex items-center justify-center hover:bg-charcoal-800 hover:scale-110 transition-all duration-200"
               >
                 <Twitter className="w-5 h-5" />
               </a>
@@ -1199,7 +1199,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 aria-label="Partager sur LinkedIn"
-                className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center hover:bg-primary-700 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-200"
               >
                 <Linkedin className="w-5 h-5" />
               </a>

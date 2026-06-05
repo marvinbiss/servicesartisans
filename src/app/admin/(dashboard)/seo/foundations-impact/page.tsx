@@ -69,7 +69,7 @@ function DeltaCell({
 }) {
   if (value === 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-gray-500">
+      <span className="inline-flex items-center gap-1 text-charcoal-500">
         <ArrowRight className="w-3.5 h-3.5" aria-hidden />
         {fmtSigned(value)}
       </span>
@@ -120,8 +120,8 @@ export default async function FoundationsImpactPage({ searchParams }: PageProps)
   return (
     <div className="px-4 sm:px-6 py-6 max-w-7xl mx-auto">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">SEO — Foundations Impact</h1>
-        <p className="text-sm text-gray-600 mt-1">
+        <h1 className="text-2xl font-bold text-charcoal-900">SEO — Foundations Impact</h1>
+        <p className="text-sm text-charcoal-600 mt-1">
           Compare deux snapshots de <code>seo_page_scores</code> pour mesurer l&apos;impact des
           sprints P0 du plan ULTRA DOMINATION SEO v2. Gate P0 : <strong>+50%</strong> clics attendus
           à J+30.
@@ -155,7 +155,7 @@ export default async function FoundationsImpactPage({ searchParams }: PageProps)
           {before && after ? (
             <ComparisonView before={before} after={after} />
           ) : (
-            <p className="mt-6 text-sm text-gray-600">
+            <p className="mt-6 text-sm text-charcoal-600">
               Sélectionnez deux snapshots distincts pour voir le delta.
             </p>
           )}
@@ -177,13 +177,13 @@ function SnapshotPicker({
   return (
     <form className="grid sm:grid-cols-2 gap-4 mb-8" method="get">
       <label className="block">
-        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1 block">
+        <span className="text-xs font-semibold text-charcoal-600 uppercase tracking-wider mb-1 block">
           Avant
         </span>
         <select
           name="before"
           defaultValue={beforeLabel}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white"
+          className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm bg-white"
         >
           {snapshots.map((s) => (
             <option key={s.id} value={s.label}>
@@ -193,13 +193,13 @@ function SnapshotPicker({
         </select>
       </label>
       <label className="block">
-        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1 block">
+        <span className="text-xs font-semibold text-charcoal-600 uppercase tracking-wider mb-1 block">
           Après
         </span>
         <select
           name="after"
           defaultValue={afterLabel}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white"
+          className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm bg-white"
         >
           {snapshots.map((s) => (
             <option key={s.id} value={s.label}>
@@ -211,7 +211,7 @@ function SnapshotPicker({
       <div className="sm:col-span-2">
         <button
           type="submit"
-          className="rounded-lg bg-gray-900 text-white px-4 py-2 text-sm font-semibold hover:bg-gray-800"
+          className="rounded-lg bg-charcoal-900 text-white px-4 py-2 text-sm font-semibold hover:bg-charcoal-800"
         >
           Comparer
         </button>
@@ -233,11 +233,11 @@ function ComparisonView({ before, after }: { before: SnapshotRow; after: Snapsho
         <SnapshotCard row={after} kind="Après" />
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <header className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-          <h2 className="font-semibold text-gray-900 text-sm">Delta global</h2>
+      <div className="rounded-xl border border-sand-200 bg-white overflow-hidden">
+        <header className="px-4 py-3 border-b border-sand-200 bg-sand-50">
+          <h2 className="font-semibold text-charcoal-900 text-sm">Delta global</h2>
         </header>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-200">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-sand-200">
           <DeltaTile label="Total pages" value={delta.total_pages} />
           <DeltaTile label="Pages indexées" value={delta.indexed_count} />
           <DeltaTile label="Orphans critiques" value={delta.orphan_critical} invert />
@@ -247,13 +247,13 @@ function ComparisonView({ before, after }: { before: SnapshotRow; after: Snapsho
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <header className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-          <h2 className="font-semibold text-gray-900 text-sm">Delta par template</h2>
+      <div className="rounded-xl border border-sand-200 bg-white overflow-hidden">
+        <header className="px-4 py-3 border-b border-sand-200 bg-sand-50">
+          <h2 className="font-semibold text-charcoal-900 text-sm">Delta par template</h2>
         </header>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs uppercase tracking-wider text-gray-600">
+            <thead className="bg-sand-50 text-xs uppercase tracking-wider text-charcoal-600">
               <tr>
                 <th className="text-left px-4 py-2 font-semibold">Template</th>
                 <th className="text-right px-4 py-2 font-semibold">Δ count</th>
@@ -262,7 +262,7 @@ function ComparisonView({ before, after }: { before: SnapshotRow; after: Snapsho
                 <th className="text-right px-4 py-2 font-semibold">Δ score moyen</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-sand-100">
               {types.map((t) => {
                 const d = delta.by_page_type[t] ?? {
                   count: 0,
@@ -271,8 +271,8 @@ function ComparisonView({ before, after }: { before: SnapshotRow; after: Snapsho
                   avg_link_score: 0,
                 }
                 return (
-                  <tr key={t} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 font-medium text-gray-900">{t}</td>
+                  <tr key={t} className="hover:bg-sand-50">
+                    <td className="px-4 py-2 font-medium text-charcoal-900">{t}</td>
                     <td className="px-4 py-2 text-right tabular-nums">
                       <DeltaCell value={d.count} />
                     </td>
@@ -298,10 +298,12 @@ function ComparisonView({ before, after }: { before: SnapshotRow; after: Snapsho
 
 function SnapshotCard({ row, kind }: { row: SnapshotRow; kind: 'Avant' | 'Après' }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <div className="rounded-xl border border-sand-200 bg-white p-4">
       <header className="flex items-center justify-between mb-3">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{kind}</span>
-        <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+        <span className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider">
+          {kind}
+        </span>
+        <span className="inline-flex items-center gap-1 text-xs text-charcoal-500">
           <Calendar className="w-3.5 h-3.5" aria-hidden />
           {new Date(row.snapshot_date).toLocaleString('fr-FR', {
             dateStyle: 'medium',
@@ -309,25 +311,25 @@ function SnapshotCard({ row, kind }: { row: SnapshotRow; kind: 'Avant' | 'Après
           })}
         </span>
       </header>
-      <p className="font-mono text-sm text-gray-900 flex items-center gap-1.5 mb-3">
-        <Tag className="w-3.5 h-3.5 text-gray-400" aria-hidden />
+      <p className="font-mono text-sm text-charcoal-900 flex items-center gap-1.5 mb-3">
+        <Tag className="w-3.5 h-3.5 text-charcoal-400" aria-hidden />
         {row.label}
       </p>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm">
-        <dt className="text-gray-500">Total pages</dt>
+        <dt className="text-charcoal-500">Total pages</dt>
         <dd className="text-right font-semibold tabular-nums">{fmtNumber(row.total_pages)}</dd>
-        <dt className="text-gray-500">Indexées</dt>
+        <dt className="text-charcoal-500">Indexées</dt>
         <dd className="text-right font-semibold tabular-nums">{fmtNumber(row.indexed_count)}</dd>
-        <dt className="text-gray-500">Orphans crit.</dt>
+        <dt className="text-charcoal-500">Orphans crit.</dt>
         <dd className="text-right font-semibold tabular-nums">{fmtNumber(row.orphan_critical)}</dd>
-        <dt className="text-gray-500">Orphans faibles</dt>
+        <dt className="text-charcoal-500">Orphans faibles</dt>
         <dd className="text-right font-semibold tabular-nums">{fmtNumber(row.orphan_weak)}</dd>
-        <dt className="text-gray-500">Score moyen</dt>
+        <dt className="text-charcoal-500">Score moyen</dt>
         <dd className="text-right font-semibold tabular-nums">
           {row.avg_link_score?.toFixed(2) ?? '0.00'}
         </dd>
       </dl>
-      {row.notes && <p className="mt-3 text-xs text-gray-600 italic">{row.notes}</p>}
+      {row.notes && <p className="mt-3 text-xs text-charcoal-600 italic">{row.notes}</p>}
     </div>
   )
 }
@@ -343,7 +345,9 @@ function DeltaTile({
 }) {
   return (
     <div className="bg-white p-4">
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{label}</p>
+      <p className="text-xs font-semibold text-charcoal-500 uppercase tracking-wider mb-2">
+        {label}
+      </p>
       <p className="text-xl font-bold tabular-nums">
         <DeltaCell value={value} invert={invert} />
       </p>

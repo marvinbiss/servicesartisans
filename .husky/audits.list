@@ -84,3 +84,4 @@ audit-banned-tokens.mjs --strict
 audit-z-index.mjs --strict
 audit-cluster-ahrefs-source.mjs --strict
 audit-not-found-metadata.mjs --strict
+audit-design-tokens.mjs --strict

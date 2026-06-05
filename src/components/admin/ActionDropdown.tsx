@@ -71,7 +71,7 @@ export function ActionDropdown({
       case 'warning':
         return 'text-amber-600 hover:bg-amber-50'
       default:
-        return 'text-gray-700 hover:bg-gray-50'
+        return 'text-charcoal-700 hover:bg-sand-50'
     }
   }
 
@@ -79,7 +79,7 @@ export function ActionDropdown({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+        className="p-2 text-charcoal-400 hover:text-charcoal-600 hover:bg-sand-100 rounded-lg transition-colors"
         aria-label="Ouvrir le menu d'actions"
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -96,13 +96,13 @@ export function ActionDropdown({
         <div
           role="menu"
           aria-label="Actions disponibles"
-          className={`absolute z-50 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 ${
+          className={`absolute z-50 mt-1 w-48 bg-white rounded-lg shadow-lg border border-sand-200 py-1 ${
             align === 'right' ? 'right-0' : 'left-0'
           }`}
         >
           {actions.map((action, index) => (
             <div key={index}>
-              {action.divider && index > 0 && <div className="my-1 border-t border-gray-100" />}
+              {action.divider && index > 0 && <div className="my-1 border-t border-sand-100" />}
               <button
                 role="menuitem"
                 onClick={() => {
@@ -114,7 +114,7 @@ export function ActionDropdown({
                 disabled={action.disabled}
                 className={`w-full flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
                   action.disabled
-                    ? 'text-gray-400 cursor-not-allowed'
+                    ? 'text-charcoal-400 cursor-not-allowed'
                     : getVariantClasses(action.variant)
                 }`}
               >

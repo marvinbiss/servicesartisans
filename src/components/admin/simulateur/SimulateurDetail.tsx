@@ -100,9 +100,9 @@ function formatEuro(n: number | null | undefined): string {
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex justify-between gap-3 py-2 border-b border-gray-100 last:border-0 text-sm">
-      <span className="text-gray-500">{label}</span>
-      <span className="text-gray-900 font-medium text-right">{value}</span>
+    <div className="flex justify-between gap-3 py-2 border-b border-sand-100 last:border-0 text-sm">
+      <span className="text-charcoal-500">{label}</span>
+      <span className="text-charcoal-900 font-medium text-right">{value}</span>
     </div>
   )
 }
@@ -133,7 +133,7 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
   }
 
   if (isLoading) {
-    return <div className="p-8 text-gray-500">Chargement…</div>
+    return <div className="p-8 text-charcoal-500">Chargement…</div>
   }
   if (error || !data?.data) {
     return (
@@ -154,25 +154,25 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
         <div>
           <Link
             href="/admin/simulateur"
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2"
+            className="inline-flex items-center gap-1 text-sm text-charcoal-500 hover:text-charcoal-700 mb-2"
           >
             <ArrowLeft className="w-4 h-4" /> Retour à la liste
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 font-mono">{est.public_id}</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-900 font-mono">{est.public_id}</h1>
+          <p className="text-sm text-charcoal-500 mt-1">
             Créé le {formatDate(est.created_at)} · Barèmes {est.barometre_version}
           </p>
           {(est.request_id || est.inputs_hash || est.consent_text_sha256) && (
-            <dl className="mt-2 text-xs text-gray-500 space-y-0.5 font-mono">
+            <dl className="mt-2 text-xs text-charcoal-500 space-y-0.5 font-mono">
               {est.request_id && (
                 <div>
-                  <dt className="inline text-gray-400">request_id :</dt>{' '}
+                  <dt className="inline text-charcoal-400">request_id :</dt>{' '}
                   <dd className="inline">{est.request_id}</dd>
                 </div>
               )}
               {est.inputs_hash && (
                 <div>
-                  <dt className="inline text-gray-400">inputs_hash :</dt>{' '}
+                  <dt className="inline text-charcoal-400">inputs_hash :</dt>{' '}
                   <dd className="inline" title={est.inputs_hash}>
                     {est.inputs_hash.slice(0, 16)}…
                   </dd>
@@ -180,7 +180,7 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
               )}
               {est.consent_text_sha256 && (
                 <div>
-                  <dt className="inline text-gray-400">consent :</dt>{' '}
+                  <dt className="inline text-charcoal-400">consent :</dt>{' '}
                   <dd className="inline" title={est.consent_text_sha256}>
                     {est.consent_text_sha256.slice(0, 24)}…
                   </dd>
@@ -208,7 +208,7 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
               href={`https://servicesartisans.pipedrive.com/deal/${est.pipedrive_deal_id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-charcoal-700 bg-white border border-sand-300 rounded-lg hover:bg-sand-50"
             >
               Pipedrive #{est.pipedrive_deal_id}
               <ExternalLink className="w-3.5 h-3.5" />
@@ -242,8 +242,8 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
             )}
           </div>
           <details className="mt-3">
-            <summary className="text-sm text-gray-600 cursor-pointer">Voir détail</summary>
-            <pre className="mt-2 p-3 bg-white rounded text-xs overflow-auto border border-gray-200">
+            <summary className="text-sm text-charcoal-600 cursor-pointer">Voir détail</summary>
+            <pre className="mt-2 p-3 bg-white rounded text-xs overflow-auto border border-sand-200">
               {JSON.stringify(
                 { stored: recompute.stored, recomputed: recompute.recomputed },
                 null,
@@ -261,8 +261,8 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
 
       <div className="grid md:grid-cols-2 gap-4">
         {/* Situation */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-3">Situation logement</h2>
+        <section className="bg-white rounded-xl border border-sand-200 p-5">
+          <h2 className="font-semibold text-charcoal-900 mb-3">Situation logement</h2>
           <Row label="Type logement" value={est.type_logement} />
           <Row label="Résidence principale" value={est.residence_principale ? 'Oui' : 'Non'} />
           <Row label="Ancienneté" value={est.anciennete} />
@@ -282,22 +282,22 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
         </section>
 
         {/* Projet */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="font-semibold text-gray-900 mb-3">Projet travaux</h2>
+        <section className="bg-white rounded-xl border border-sand-200 p-5">
+          <h2 className="font-semibold text-charcoal-900 mb-3">Projet travaux</h2>
           <Row label="Parcours" value={est.parcours} />
           <Row label="Coup de Pouce" value={est.coup_de_pouce ? 'Oui' : 'Non'} />
           <Row label="Équipement actuel" value={est.equipement_actuel ?? '—'} />
           <Row label="Sauts DPE" value={est.sauts_dpe ?? '—'} />
           <div className="mt-3">
-            <p className="text-xs text-gray-500 mb-1">Gestes</p>
+            <p className="text-xs text-charcoal-500 mb-1">Gestes</p>
             <ul className="text-sm space-y-1">
               {est.gestes.map((g, i) => (
                 <li
                   key={i}
-                  className="flex justify-between gap-2 py-1 border-b border-gray-100 last:border-0"
+                  className="flex justify-between gap-2 py-1 border-b border-sand-100 last:border-0"
                 >
-                  <span className="text-gray-700">{g.label ?? g.id}</span>
-                  <span className="text-gray-400 font-mono text-xs">{g.baremeId ?? g.id}</span>
+                  <span className="text-charcoal-700">{g.label ?? g.id}</span>
+                  <span className="text-charcoal-400 font-mono text-xs">{g.baremeId ?? g.id}</span>
                 </li>
               ))}
             </ul>
@@ -305,40 +305,40 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
         </section>
 
         {/* Résultats */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5 md:col-span-2">
-          <h2 className="font-semibold text-gray-900 mb-3">Résultats</h2>
+        <section className="bg-white rounded-xl border border-sand-200 p-5 md:col-span-2">
+          <h2 className="font-semibold text-charcoal-900 mb-3">Résultats</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <p className="text-xs text-gray-500">MPR Total</p>
-              <p className="text-xl font-bold text-gray-900">{formatEuro(est.mpr_total)}</p>
+              <p className="text-xs text-charcoal-500">MPR Total</p>
+              <p className="text-xl font-bold text-charcoal-900">{formatEuro(est.mpr_total)}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">CEE fourchette</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-xs text-charcoal-500">CEE fourchette</p>
+              <p className="text-sm font-medium text-charcoal-900">
                 {formatEuro(est.cee_fourchette_bas)} – {formatEuro(est.cee_fourchette_haut)}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Coup de Pouce</p>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xs text-charcoal-500">Coup de Pouce</p>
+              <p className="text-xl font-bold text-charcoal-900">
                 {formatEuro(est.coup_pouce_estimation)}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Écrêtement</p>
-              <p className="text-xl font-bold text-gray-900">
+              <p className="text-xs text-charcoal-500">Écrêtement</p>
+              <p className="text-xl font-bold text-charcoal-900">
                 {est.ecretement_pct ? `${est.ecretement_pct}%` : '—'}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Reste à charge</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-xs text-charcoal-500">Reste à charge</p>
+              <p className="text-sm font-medium text-charcoal-900">
                 {formatEuro(est.reste_a_charge_bas)} – {formatEuro(est.reste_a_charge_haut)}
               </p>
             </div>
             <div className="col-span-2 md:col-span-3">
-              <p className="text-xs text-gray-500">Consentement RGPD</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-xs text-charcoal-500">Consentement RGPD</p>
+              <p className="text-sm font-medium text-charcoal-900">
                 RGPD : {est.consent_rgpd ? 'Oui' : 'Non'} · Démarchage :{' '}
                 {est.consent_demarchage ? 'Oui' : 'Non'}
               </p>
@@ -347,13 +347,13 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
         </section>
 
         {/* Barème IDs */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5 md:col-span-2">
-          <h2 className="font-semibold text-gray-900 mb-3">
+        <section className="bg-white rounded-xl border border-sand-200 p-5 md:col-span-2">
+          <h2 className="font-semibold text-charcoal-900 mb-3">
             IDs barèmes utilisés ({est.bareme_ids?.length ?? 0})
           </h2>
           <div className="flex flex-wrap gap-2">
             {(est.bareme_ids ?? []).map((id) => (
-              <code key={id} className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
+              <code key={id} className="text-xs px-2 py-1 bg-sand-100 text-charcoal-700 rounded">
                 {id}
               </code>
             ))}
@@ -361,17 +361,17 @@ export default function SimulateurDetail({ publicId }: { publicId: string }) {
         </section>
 
         {/* Formule debug */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5 md:col-span-2">
-          <h2 className="font-semibold text-gray-900 mb-3">
+        <section className="bg-white rounded-xl border border-sand-200 p-5 md:col-span-2">
+          <h2 className="font-semibold text-charcoal-900 mb-3">
             Formule debug — pipeline ({est.formule_debug?.length ?? 0} étapes)
           </h2>
           <div className="space-y-3">
             {(est.formule_debug ?? []).map((step, i) => (
-              <details key={i} className="border border-gray-200 rounded-lg">
-                <summary className="px-3 py-2 cursor-pointer font-mono text-sm text-gray-800 bg-gray-50 rounded-t-lg">
+              <details key={i} className="border border-sand-200 rounded-lg">
+                <summary className="px-3 py-2 cursor-pointer font-mono text-sm text-charcoal-800 bg-sand-50 rounded-t-lg">
                   {i + 1}. {step.step}
                   {step.baremeIds && step.baremeIds.length > 0 && (
-                    <span className="ml-2 text-xs text-gray-500">
+                    <span className="ml-2 text-xs text-charcoal-500">
                       ({step.baremeIds.length} barèmes)
                     </span>
                   )}

@@ -6,7 +6,7 @@
  *   - Render de la liste d'événements (libellés français)
  *   - Empty state (aucun événement)
  *   - Smoke check défense-en-profondeur : présence des classes Tailwind
- *     du pseudo-élément vertical (`before:bg-gray-200`, `before:w-px`,
+ *     du pseudo-élément vertical (`before:bg-sand-200`, `before:w-px`,
  *     `before:h-[calc(100%-0.5rem)]`) via `data-testid="timeline-vertical-line"`.
  */
 

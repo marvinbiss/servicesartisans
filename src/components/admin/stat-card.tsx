@@ -10,7 +10,7 @@ interface AdminStatCardProps {
 
 export function AdminStatCard({ title, value, icon, trend }: AdminStatCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-sand-200 p-6">
       <div className="flex items-center justify-between">
         <span className="text-2xl">{icon}</span>
         {trend && (
@@ -24,8 +24,8 @@ export function AdminStatCard({ title, value, icon, trend }: AdminStatCardProps)
           </span>
         )}
       </div>
-      <p className="mt-4 text-3xl font-bold text-gray-900">{value}</p>
-      <p className="text-sm text-gray-500">{title}</p>
+      <p className="mt-4 text-3xl font-bold text-charcoal-900">{value}</p>
+      <p className="text-sm text-charcoal-500">{title}</p>
     </div>
   )
 }

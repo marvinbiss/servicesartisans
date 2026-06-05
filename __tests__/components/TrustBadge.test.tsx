@@ -28,7 +28,7 @@ const TrustBadge = ({
 
   const colors: Record<string, string> = {
     bronze: 'bg-amber-600',
-    silver: 'bg-gray-400',
+    silver: 'bg-charcoal-400',
     gold: 'bg-yellow-500',
     platinum: 'bg-purple-600',
   }
@@ -64,7 +64,7 @@ describe('TrustBadge Component', () => {
   it('should render silver badge correctly', () => {
     render(<TrustBadge badge="silver" />)
     expect(screen.getByTestId('trust-badge')).toHaveTextContent('Argent')
-    expect(screen.getByTestId('trust-badge')).toHaveClass('bg-gray-400')
+    expect(screen.getByTestId('trust-badge')).toHaveClass('bg-charcoal-400')
   })
 
   it('should render gold badge correctly', () => {

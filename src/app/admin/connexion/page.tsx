@@ -57,7 +57,7 @@ export default function AdminConnexionPage() {
             </div>
           </Link>
           <h1 className="text-3xl font-bold text-white mb-2">Administration</h1>
-          <p className="text-gray-400">Connectez-vous pour accéder au panel admin</p>
+          <p className="text-charcoal-400">Connectez-vous pour accéder au panel admin</p>
         </div>
 
         {/* Login Card */}
@@ -71,40 +71,42 @@ export default function AdminConnexionPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-charcoal-300 mb-2">
                 Email administrateur
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-600 rounded-full text-white placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-600 rounded-full text-white placeholder-charcoal-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="admin@example.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
+              <label className="block text-sm font-medium text-charcoal-300 mb-2">
+                Mot de passe
+              </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-500" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="w-full pl-10 pr-12 py-3 bg-slate-900 border border-slate-600 rounded-full text-white placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-slate-900 border border-slate-600 rounded-full text-white placeholder-charcoal-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-500 hover:text-charcoal-300"
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -129,7 +131,7 @@ export default function AdminConnexionPage() {
           </form>
 
           <div className="mt-6 pt-6 border-t border-slate-700">
-            <p className="text-center text-gray-500 text-sm">
+            <p className="text-center text-charcoal-500 text-sm">
               Accès réservé aux administrateurs autorisés.
             </p>
           </div>
@@ -137,7 +139,7 @@ export default function AdminConnexionPage() {
 
         {/* Back to site */}
         <div className="mt-6 text-center">
-          <Link href="/" className="text-gray-400 hover:text-white text-sm transition-colors">
+          <Link href="/" className="text-charcoal-400 hover:text-white text-sm transition-colors">
             ← Retour au site
           </Link>
         </div>

@@ -44,7 +44,12 @@ export const services = [
   // Pivot full RGE 2026-05-03 : 4 métiers commodity hors RGE retirés
   // (serrurier, carreleur, vitrier, cuisiniste).
   { slug: 'charpentier', name: 'Charpentier', icon: 'Axe', color: 'from-amber-700 to-amber-800' },
-  { slug: 'zingueur', name: 'Zingueur', icon: 'Droplets', color: 'from-zinc-500 to-zinc-600' },
+  {
+    slug: 'zingueur',
+    name: 'Zingueur',
+    icon: 'Droplets',
+    color: 'from-charcoal-600 to-charcoal-700',
+  },
   { slug: 'etancheiste', name: 'Étanchéiste', icon: 'Shield', color: 'from-blue-600 to-blue-700' },
   { slug: 'facadier', name: 'Façadier', icon: 'Building', color: 'from-orange-600 to-orange-700' },
   {
@@ -89,7 +94,12 @@ export const services = [
     icon: 'PlugZap',
     color: 'from-accent-600 to-accent-700',
   },
-  { slug: 'ramoneur', name: 'Ramoneur', icon: 'Factory', color: 'from-neutral-600 to-neutral-700' },
+  {
+    slug: 'ramoneur',
+    name: 'Ramoneur',
+    icon: 'Factory',
+    color: 'from-charcoal-700 to-charcoal-800',
+  },
   {
     slug: 'diagnostiqueur',
     name: 'Diagnostiqueur',

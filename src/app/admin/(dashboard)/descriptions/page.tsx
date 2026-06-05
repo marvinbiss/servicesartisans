@@ -57,12 +57,12 @@ const STATUS_LABEL: Record<DraftStatus | 'all', string> = {
 }
 
 const STATUS_COLOR: Record<DraftStatus, string> = {
-  pending: 'bg-gray-100 text-gray-700',
-  generating: 'bg-blue-100 text-blue-700',
+  pending: 'bg-sand-100 text-charcoal-700',
+  generating: 'bg-sand-200 text-charcoal-700',
   judged_pass: 'bg-accent-100 text-accent-700',
   judged_fail: 'bg-rose-100 text-rose-700',
   published: 'bg-indigo-100 text-indigo-700',
-  archived: 'bg-neutral-100 text-neutral-700',
+  archived: 'bg-sand-200 text-charcoal-600',
 }
 
 export default function AdminDescriptionsPage() {
@@ -111,8 +111,8 @@ export default function AdminDescriptionsPage() {
   return (
     <div className="p-6 space-y-6">
       <header>
-        <h1 className="text-2xl font-semibold text-gray-900">Descriptions RGE — modération</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-2xl font-semibold text-charcoal-900">Descriptions RGE — modération</h1>
+        <p className="text-sm text-charcoal-600">
           Pipeline v1 · prompt + rubric + model versionnés ·{' '}
           <span className="font-medium">seuil publication ≥ 7.5</span>
         </p>
@@ -122,7 +122,7 @@ export default function AdminDescriptionsPage() {
       {error && <ErrorBanner message="Erreur de chargement des drafts" />}
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="inline-flex rounded-md border border-gray-200 bg-white shadow-sm">
+        <div className="inline-flex rounded-md border border-sand-200 bg-white shadow-sm">
           {(['judged_pass', 'judged_fail', 'published', 'all'] as (DraftStatus | 'all')[]).map(
             (s) => (
               <button
@@ -132,7 +132,7 @@ export default function AdminDescriptionsPage() {
                   setPage(1)
                 }}
                 className={`px-3 py-2 text-sm font-medium ${
-                  status === s ? 'bg-accent-600 text-white' : 'text-gray-700 hover:bg-gray-50'
+                  status === s ? 'bg-accent-600 text-white' : 'text-charcoal-700 hover:bg-sand-50'
                 } first:rounded-l-md last:rounded-r-md`}
               >
                 {STATUS_LABEL[s]}
@@ -141,7 +141,7 @@ export default function AdminDescriptionsPage() {
           )}
         </div>
 
-        <label className="text-sm text-gray-700 flex items-center gap-2">
+        <label className="text-sm text-charcoal-700 flex items-center gap-2">
           Score min
           <input
             type="number"
@@ -153,11 +153,11 @@ export default function AdminDescriptionsPage() {
               setMinScore(Number(e.target.value))
               setPage(1)
             }}
-            className="w-20 rounded-md border border-gray-300 px-2 py-1 text-sm"
+            className="w-20 rounded-md border border-sand-300 px-2 py-1 text-sm"
           />
         </label>
 
-        <div className="ml-auto text-sm text-gray-600">
+        <div className="ml-auto text-sm text-charcoal-600">
           total <span className="font-semibold">{total}</span> · page {page}/{totalPages} · vue
           passés <span className="font-medium">{summary.pass}</span> · rejetés{' '}
           <span className="font-medium">{summary.fail}</span> · publiés{' '}
@@ -166,13 +166,13 @@ export default function AdminDescriptionsPage() {
       </div>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-16 text-gray-500">
+        <div className="flex items-center justify-center py-16 text-charcoal-500">
           <Loader2 className="w-6 h-6 animate-spin mr-2" /> chargement…
         </div>
       )}
 
       {!isLoading && items.length === 0 && (
-        <div className="text-center py-16 text-gray-500 border border-dashed border-gray-200 rounded-lg">
+        <div className="text-center py-16 text-charcoal-500 border border-dashed border-sand-200 rounded-lg">
           Aucun draft dans cette vue.
         </div>
       )}
@@ -185,17 +185,17 @@ export default function AdminDescriptionsPage() {
           return (
             <article
               key={item.provider_id}
-              className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-3"
+              className="bg-white rounded-lg border border-sand-200 shadow-sm p-4 space-y-3"
             >
               <header className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
+                  <h2 className="text-lg font-semibold text-charcoal-900">
                     {item.provider?.name ?? '(provider supprimé)'}
-                    <span className="ml-2 text-sm text-gray-500">
+                    <span className="ml-2 text-sm text-charcoal-500">
                       {item.provider?.address_city ?? ''}
                     </span>
                   </h2>
-                  <div className="text-xs text-gray-500 space-x-3">
+                  <div className="text-xs text-charcoal-500 space-x-3">
                     <span className={`px-2 py-0.5 rounded-full ${STATUS_COLOR[item.status]}`}>
                       {item.status}
                     </span>
@@ -240,7 +240,7 @@ export default function AdminDescriptionsPage() {
                         )
                       }
                       disabled={isBusy}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-gray-50 text-gray-700 text-sm font-medium hover:bg-gray-100 disabled:opacity-40"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-sand-50 text-charcoal-700 text-sm font-medium hover:bg-sand-100 disabled:opacity-40"
                     >
                       <Edit3 className="w-4 h-4" />
                       {isEditingThis ? 'Annuler' : 'Éditer'}
@@ -272,19 +272,19 @@ export default function AdminDescriptionsPage() {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs font-medium text-gray-500 mb-1">Description live</div>
-                  <div className="p-3 bg-gray-50 rounded-md text-sm text-gray-700 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                  <div className="text-xs font-medium text-charcoal-500 mb-1">Description live</div>
+                  <div className="p-3 bg-sand-50 rounded-md text-sm text-charcoal-700 max-h-64 overflow-y-auto whitespace-pre-wrap">
                     {item.provider?.description ?? <em>(vide)</em>}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs font-medium text-gray-500 mb-1">Draft</div>
+                  <div className="text-xs font-medium text-charcoal-500 mb-1">Draft</div>
                   {isEditingThis ? (
                     <>
                       <textarea
                         value={editing.text}
                         onChange={(e) => setEditing({ ...editing, text: e.target.value })}
-                        className="w-full h-64 p-3 border border-gray-300 rounded-md text-sm"
+                        className="w-full h-64 p-3 border border-sand-300 rounded-md text-sm"
                       />
                       <div className="flex justify-end mt-2">
                         <button
@@ -299,7 +299,7 @@ export default function AdminDescriptionsPage() {
                       </div>
                     </>
                   ) : (
-                    <div className="p-3 bg-accent-50 rounded-md text-sm text-gray-900 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                    <div className="p-3 bg-accent-50 rounded-md text-sm text-charcoal-900 max-h-64 overflow-y-auto whitespace-pre-wrap">
                       {item.draft_text ?? <em>(pas encore généré)</em>}
                     </div>
                   )}
@@ -307,9 +307,9 @@ export default function AdminDescriptionsPage() {
               </div>
 
               {item.judge_breakdown && (
-                <div className="text-xs text-gray-500 flex flex-wrap gap-2">
+                <div className="text-xs text-charcoal-500 flex flex-wrap gap-2">
                   {Object.entries(item.judge_breakdown).map(([k, v]) => (
-                    <span key={k} className="px-1.5 py-0.5 bg-gray-100 rounded">
+                    <span key={k} className="px-1.5 py-0.5 bg-sand-100 rounded">
                       {k.replace('dim', '').replace('_', '/')}: <b>{Number(v).toFixed(1)}</b>
                     </span>
                   ))}
@@ -324,14 +324,14 @@ export default function AdminDescriptionsPage() {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page <= 1}
-          className="px-3 py-1.5 rounded-md border border-gray-200 text-sm disabled:opacity-40"
+          className="px-3 py-1.5 rounded-md border border-sand-200 text-sm disabled:opacity-40"
         >
           Précédent
         </button>
         <button
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page >= totalPages}
-          className="px-3 py-1.5 rounded-md border border-gray-200 text-sm disabled:opacity-40"
+          className="px-3 py-1.5 rounded-md border border-sand-200 text-sm disabled:opacity-40"
         >
           Suivant
         </button>

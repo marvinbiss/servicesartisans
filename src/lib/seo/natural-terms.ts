@@ -165,7 +165,10 @@ export const NATURAL_TERMS: Record<string, NaturalTerms> = {
     commonQueries: [],
   },
   'panneaux-solaires': {
-    singular: 'panneaux solaires',
+    // singular volontairement « installateur de … » : la forme produit est
+    // plurielle par nature (« 1 panneaux solaires actif » impossible).
+    // plural reste « panneaux solaires » pour le KW match.
+    singular: 'installateur de panneaux solaires',
     plural: 'panneaux solaires',
     article: 'un installateur de panneaux solaires',
     feminin: false,
