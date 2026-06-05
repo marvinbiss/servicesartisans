@@ -22,6 +22,7 @@ vi.mock('@/lib/supabase', () => ({
     'pompe-a-chaleur': ['Chauffagiste', 'Climatisation'],
     electricien: ['Electricien'],
   },
+  SERVICE_RGE_DECRET_CATEGORY: {},
 }))
 
 // Mock logger pour éviter les sorties console pendant les tests

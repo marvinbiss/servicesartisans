@@ -513,19 +513,68 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   climaticien: ['climaticien'], // NAF 43.22B
 
   // === Bâtiment / Gros œuvre ===
-  zingueur: ['zingueur'], // NAF 43.91B (sous-spécialité couverture)
+  // zingueur : élargi 2026-06-05 — specialty seule = 18 RGE actifs France
+  // (soft-404 partout). La zinguerie est une sous-spécialité de la
+  // couverture (NAF 43.91B) : union couvreur/etancheiste = 3 193 RGE actifs.
+  zingueur: ['zingueur', 'couvreur', 'etancheiste'],
   etancheiste: ['etancheiste'], // NAF 43.99A
-  facadier: ['facadier'], // NAF 43.34Z + 43.99C
+  // facadier : élargi 2026-06-05 — specialty seule = 372 RGE actifs (Nice/
+  // Nantes/Bordeaux 0). Le ravalement isolant (ITE) est porté par maçons/
+  // plâtriers/peintres. Pertinence via cat décret 11 (ITE murs) : 4 445
+  // nationaux, toutes grandes villes ≥ 3.
+  facadier: [
+    'facadier',
+    'platrier',
+    'macon',
+    'peintre-en-batiment',
+    'isolation-thermique',
+    'isolation',
+  ],
   platrier: ['platrier'], // NAF 43.31Z
 
   // === Finitions / Aménagement ===
-  'salle-de-bain': ['salle-de-bain'], // NAF 43.22A + 43.33Z
+  // salle-de-bain : élargi 2026-06-05 — specialty seule = 81 RGE actifs
+  // (soft-404 sur quasi toutes les grandes villes). La rénovation de salle
+  // de bain est un cœur de métier plombier (6 828 RGE actifs en union,
+  // toutes grandes villes ≥ 3). Pas de cat décret : la SDB n'est pas un
+  // geste RGE, le listing vaut par la vérification RGE/SIREN des artisans.
+  'salle-de-bain': ['salle-de-bain', 'plombier'], // NAF 43.22A + 43.33Z
 
   // === Énergie / Chauffage ===
-  'pompe-a-chaleur': ['pompe-a-chaleur'], // NAF 43.22B
-  'panneaux-solaires': ['panneaux-solaires'], // NAF 43.21A + 43.22B
+  // pompe-a-chaleur : élargi 2026-06-05 — specialty='pompe-a-chaleur' ne
+  // couvre que 86 RGE actifs France entière alors que 13 800 providers
+  // portent la catégorie décret 5° (PAC). Les installateurs QualiPAC sont
+  // stockés chauffagiste/plombier/electricien/climaticien (NAF). La
+  // pertinence est garantie par SERVICE_RGE_DECRET_CATEGORY (filtre
+  // `rge_categories_decret @> [5]`) appliqué dans les queries rgeOnly —
+  // même pattern que borne-recharge/audit-energetique.
+  'pompe-a-chaleur': ['pompe-a-chaleur', 'chauffagiste', 'climaticien', 'plombier', 'electricien'],
+  // panneaux-solaires : élargi 2026-06-05 — specialty seule = 457 RGE actifs
+  // (Nantes 0, Bordeaux 1). QualiPV porté par électriciens/couvreurs/
+  // chauffagistes. Pertinence via cat décret 7 (EnR/PV) : 4 798 nationaux,
+  // toutes grandes villes ≥ 4.
+  'panneaux-solaires': ['panneaux-solaires', 'electricien', 'couvreur', 'chauffagiste', 'plombier'],
   'isolation-thermique': ['isolation-thermique', 'isolation'], // NAF 43.29A
-  'renovation-energetique': ['renovation-energetique'], // NAF 43.29A + 43.22B
+  // renovation-energetique : élargi 2026-06-05 — specialty seule = 17 RGE
+  // actifs France (soft-404 sur 8/8 grandes villes). Pas de filtre décret :
+  // une entreprise RGE active EST par définition un acteur de la rénovation
+  // énergétique (label « Reconnu Garant de l'Environnement »), et la cat 17
+  // (rénovation globale) ne couvre que 939 providers majoritairement
+  // géomètres/BET — inadapté à une page listing travaux. Union = 36 992
+  // RGE actifs, toutes grandes villes ≥ 29.
+  'renovation-energetique': [
+    'renovation-energetique',
+    'chauffagiste',
+    'plombier',
+    'electricien',
+    'isolation-thermique',
+    'isolation',
+    'menuisier',
+    'couvreur',
+    'macon',
+    'platrier',
+    'climaticien',
+  ],
   // borne-recharge : NAF 43.21A. Élargi à `electricien` car beaucoup
   // d'installateurs IRVE Qualifelec ont specialty='electricien' en DB —
   // le filtre `.not('rge_qualifications', 'is', null)` côté listing RGE
@@ -559,6 +608,34 @@ export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   // (services à la personne / hors BTP / cannibalisation).
   // Pivot full RGE 2026-05-03 :
   // serrurier, carreleur, vitrier, cuisiniste retirés (commodity, hors RGE).
+}
+
+/**
+ * Filtre opt-in catégorie décret 2014-812 (article 1er I, 17 catégories).
+ *
+ * Pour les services dont SERVICE_TO_SPECIALTIES retourne une union large de
+ * specialties NAF, ce filtre additionnel `rge_categories_decret @> [N]`
+ * garantit que seuls les providers portant explicitement la qualification
+ * pertinente remontent dans les listings publics (queries rgeOnly).
+ *
+ * - 5  = Pompes à chaleur (QualiPAC ; air/air exclu au backfill mig 404)
+ * - 7  = EnR hors solaire thermique/géothermie (inclut photovoltaïque)
+ * - 11 = Isolation thermique par l'extérieur (ITE murs)
+ * - 17 = Rénovation globale + Mon Accompagnateur Rénov' + Audit énergétique
+ *
+ * Source : migration 404 (backfill depuis le libellé `domaine` ADEME).
+ * Vérifié 2026-06-05 : 81/86 specialty='pompe-a-chaleur' RGE actifs portent
+ * la cat 5 (les 5 restants = PAC air/air hors décret), 0 NULL.
+ *
+ * Note : `renovation-energetique` est volontairement ABSENT — toute
+ * entreprise RGE active est un acteur de la rénovation énergétique (c'est
+ * la définition du label), le filtre RGE des queries suffit.
+ */
+export const SERVICE_RGE_DECRET_CATEGORY: Partial<Record<string, number>> = {
+  'pompe-a-chaleur': 5,
+  'panneaux-solaires': 7,
+  facadier: 11,
+  'audit-energetique': 17,
 }
 
 // ---------------------------------------------------------------------------
@@ -756,6 +833,8 @@ export async function getProvidersByServiceAndLocation(
             .eq('is_active', true)
           if (rgeOnly) {
             query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+            if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
           }
           const { data, error } = await query
             .order('rge_valid_until', { ascending: false, nullsFirst: false })
@@ -781,6 +860,8 @@ export async function getProvidersByServiceAndLocation(
             .eq('is_active', true)
           if (rgeOnly) {
             primary = primary.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+            if (decretCat) primary = primary.contains('rge_categories_decret', [decretCat])
           }
           const { data: direct, error: directError } = await primary
             // RGE certified ranked first (Option C), then phone, verified, name.
@@ -857,6 +938,8 @@ export async function getProvidersByServiceAndDepartment(
 
           if (rgeOnly) {
             query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+            const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+            if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
           }
 
           const { data, error } = await query
@@ -922,6 +1005,8 @@ export async function hasProvidersByServiceAndLocation(
             if (rgeOnly) {
               const todayIso = new Date().toISOString().slice(0, 10)
               query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+              const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+              if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
             }
             const { count, error } = await query
 
@@ -977,6 +1062,8 @@ export async function getProviderCountByServiceAndLocation(
             if (rgeOnly) {
               const todayIso = new Date().toISOString().slice(0, 10)
               query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+              const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+              if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
             }
             const { count, error } = await query
 
@@ -1026,6 +1113,8 @@ export async function getProviderCountByServiceAndLocationStrict(
     if (rgeOnly) {
       const todayIso = new Date().toISOString().slice(0, 10)
       query = query.not('rge_qualifications', 'is', null).gte('rge_valid_until', todayIso)
+      const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+      if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
     }
     const { count, error } = await query
     if (error) throw error
@@ -1065,7 +1154,7 @@ export async function getRgeProviderCountByServiceAndLocation(
 
           const cityValues = getCityValues(cityName, ville?.departementCode)
           const today = new Date().toISOString().slice(0, 10)
-          const { count, error } = await supabase
+          let query = supabase
             .from('providers_public')
             .select('id', { count: 'exact', head: true })
             .in('specialty', specialties)
@@ -1073,6 +1162,9 @@ export async function getRgeProviderCountByServiceAndLocation(
             .eq('is_active', true)
             .not('rge_qualifications', 'is', null)
             .gte('rge_valid_until', today)
+          const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
+          if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
+          const { count, error } = await query
 
           if (error) throw error
           return count ?? 0

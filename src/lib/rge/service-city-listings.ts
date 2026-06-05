@@ -16,7 +16,12 @@
  * côté MaPrimeRénov'/CEE. Toute autre spécialité est rejetée en `notFound()`.
  */
 
-import { supabase, SERVICE_TO_SPECIALTIES, IS_BUILD } from '@/lib/supabase'
+import {
+  supabase,
+  SERVICE_TO_SPECIALTIES,
+  SERVICE_RGE_DECRET_CATEGORY,
+  IS_BUILD,
+} from '@/lib/supabase'
 import { getVilleBySlug } from '@/lib/data/france'
 import { getCityValues, resolveProviderCities } from '@/lib/insee-resolver'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
@@ -239,9 +244,10 @@ export interface RgeServiceCityListing {
  * - 17 = Rénovation globale + Mon Accompagnateur Rénov' + Audit énergétique
  *   (BET OPQIBI 1905/1911, architectes CNOA, géomètres-experts mention rénov)
  */
-const RGE_DECRET_FILTER: Partial<Record<RgeAllowedService, number>> = {
-  'audit-energetique': 17,
-}
+// 2026-06-05 : map locale remplacée par la constante partagée
+// SERVICE_RGE_DECRET_CATEGORY (supabase.ts) — les queries /services et /rge
+// doivent appliquer la même coupe décret, sinon désynchro metadata ↔ render.
+const RGE_DECRET_FILTER: Partial<Record<RgeAllowedService, number>> = SERVICE_RGE_DECRET_CATEGORY
 
 /**
  * Récupère les artisans RGE actifs pour un couple (service, ville).
