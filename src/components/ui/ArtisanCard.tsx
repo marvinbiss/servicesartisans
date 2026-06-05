@@ -6,7 +6,6 @@ import { Star, MapPin, Clock, Calendar, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
-import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -272,14 +271,6 @@ export function ArtisanCard({
               </span>
             </motion.div>
           )}
-
-          {/* Bouton favori */}
-          <FavoriteButton
-            providerId={id}
-            providerName={name}
-            size="md"
-            className="absolute top-3 right-3 z-10"
-          />
 
           {/* Disponibilite */}
           {isAvailableNow ? (

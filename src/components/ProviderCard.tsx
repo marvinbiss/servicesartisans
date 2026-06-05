@@ -18,7 +18,6 @@ import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
 import { getDiceBearAvatar } from '@/lib/data/images-faces'
-import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { CompareButton } from '@/components/ui/CompareButton'
 import { trackEvent } from '@/lib/analytics/tracking'
 import RgeBadge from '@/components/artisan/RgeBadge'
@@ -64,17 +63,6 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
           : 'border-sand-300 shadow-soft hover:-translate-y-1 hover:border-primary-200 hover:shadow-card-hover'
       }`}
     >
-      {/* Bouton favori — top-right */}
-      <FavoriteButton
-        providerId={provider.stable_id || provider.id}
-        providerName={provider.name}
-        providerHref={providerUrl}
-        providerSlug={provider.slug ?? null}
-        providerCity={provider.address_city ?? null}
-        providerSpecialty={provider.specialty ?? null}
-        size="sm"
-        className="absolute top-3 right-3 z-30"
-      />
       {/* Mobile: full-card tappable overlay link */}
       <Link
         href={providerUrl}

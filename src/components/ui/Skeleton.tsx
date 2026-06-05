@@ -123,9 +123,6 @@ export function ProviderCardSkeleton() {
       aria-busy="true"
       aria-label="Chargement d'un artisan"
     >
-      {/* Top-right favourite slot (real card has FavoriteButton 36×36 absolute) */}
-      <Skeleton className="absolute top-3 right-3 w-9 h-9 rounded-full" />
-
       {/* Avatar + name + specialty pill */}
       <div className="flex items-start gap-3 pr-12">
         <Skeleton className="w-14 h-14 rounded-full flex-shrink-0" />
