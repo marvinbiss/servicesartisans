@@ -5,7 +5,7 @@
  * Calcule les métriques de santé du pipeline RGE + catalogue CEE et lève
  * des alertes structurées (logger + Sentry) si un seuil critique est violé.
  *
- * Schedule : `0 8 * * *` (quotidien, 08h UTC) — déclaré dans vercel.json.
+ * Schedule : `15 8 * * *` (quotidien, 08h15 UTC — décalé du pic 08h00) — déclaré dans vercel.json (ajout 2026-06-05, était codé mais jamais programmé).
  */
 
 import { NextResponse } from 'next/server'
