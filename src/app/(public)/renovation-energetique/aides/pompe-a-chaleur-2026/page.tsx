@@ -64,6 +64,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import MprBaremeChip from '@/components/renovation/MprBaremeChip'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
@@ -99,39 +100,39 @@ export const metadata: Metadata = {
 }
 
 const tldr = [
-  '⚠️ La "PAC à 1 €" n\'existe plus depuis 2021 (fraude DGCCRF). Toute pub "PAC gratuite" = ARNAQUE.',
+  'La "PAC à 1 €" n\'existe plus depuis 2021 (fraude DGCCRF). Toute pub "PAC gratuite" = ARNAQUE.',
   "4 vraies aides cumulables 2026 : MaPrimeRénov' (jusqu'à 11 000 €), CEE Coup de pouce (4 000 €), bonus passoire DPE F/G (1 500 €), éco-PTZ (30 000 €).",
   'Plafond MPR PAC air-eau : 5 000 € (Bleu très modestes), 4 000 € (Jaune modestes), 3 000 € (Violet intermédiaires), 2 000 € (Rose supérieurs).',
   'Plafond MPR PAC géothermie : 11 000 € (Bleu), 9 000 € (Jaune), 6 000 € (Violet), 4 000 € (Rose).',
-  "🚫 PAC AIR-AIR exclue de MaPrimeRénov' depuis 2020 (seul CEE Coup de pouce ~600 €).",
+  "PAC AIR-AIR exclue de MaPrimeRénov' depuis 2020 (seul CEE Coup de pouce ~600 €).",
   'Conditions : artisan RGE QualiPAC obligatoire, résidence principale > 15 ans, dépôt dossier AVANT chantier (pas rétroactif).',
   'Cumul maximum 2026 (PAC air-eau ménage Bleu DPE F/G) : 5 000 + 4 000 + 1 500 = 10 500 € sur projet 13 000 € → reste à charge 2 500 €.',
 ]
 
 const ANTI_ARNAQUE = [
   {
-    type: '🚫 "PAC à 1 €" / "PAC gratuite gouvernement"',
+    type: '"PAC à 1 €" / "PAC gratuite gouvernement"',
     realite:
       'L\'aide "PAC à 1 €" n\'existe plus depuis le 1er juillet 2021 (Décret 2021-895). Avant cette date, le dispositif Coup de pouce CEE pouvait théoriquement couvrir le coût d\'une PAC entrée de gamme pour les ménages très modestes — d\'où la pub mensongère "PAC à 1 €". Depuis 2021, le reste à charge MINIMUM est de 1 000 € (loi obligation reste à charge particulier). Toute pub "PAC à 1 €" en 2026 = ARNAQUE.',
     actionDgccrf:
       "Signaler immédiatement à la DGCCRF (signal.conso.gouv.fr) ou au procureur de la République. La fraude est sanctionnée pénalement (amende jusqu'à 300 000 € + 2 ans prison pour le démarcheur).",
   },
   {
-    type: '🚫 Démarchage téléphonique abusif',
+    type: 'Démarchage téléphonique abusif',
     realite:
       'Depuis le 1er mars 2023 (Décret 2022-1313), le démarchage téléphonique en rénovation énergétique est INTERDIT (sauf relation contractuelle préexistante). Toute appel non sollicité par un "conseiller énergie" ou "agence MaPrimeRénov\'" = ARNAQUE. Les vrais conseillers France Rénov\' n\'appellent JAMAIS spontanément.',
     actionDgccrf:
       "Refuser, raccrocher, signaler au numéro 0 800 941 200 (Bloctel) + DGCCRF. Ne JAMAIS donner ses coordonnées bancaires, RIB ou avis d'imposition au téléphone.",
   },
   {
-    type: "🚫 Sites pseudo-officiels imitant France-Renov'",
+    type: "Sites pseudo-officiels imitant France-Renov'",
     realite:
       'Plusieurs sites privés imitent la charte graphique France Rénov\' ou MaPrimeRénov\' (logos détournés, URL trompeuses type "primerenov-2026.fr"). Ces sites collectent vos données personnelles puis les revendent à des installateurs peu scrupuleux. Le SEUL site officiel est <strong>france-renov.gouv.fr</strong> (extension .gouv.fr obligatoire).',
     actionDgccrf:
       'Vérifier l\'extension URL (.gouv.fr = officiel). Pour MPR : passer EXCLUSIVEMENT par france-renov.gouv.fr → "Demande MPR". Le compte officiel est sur maprimerenov.gouv.fr. Tout autre site = ARNAQUE.',
   },
   {
-    type: '🚫 Faux artisans RGE',
+    type: 'Faux artisans RGE',
     realite:
       "Le label RGE QualiPAC est obligatoire pour bénéficier de MPR + CEE + TVA 5,5 % sur PAC. Certains démarcheurs prétendent être RGE sans l'être (fraude au label). En 2024, 230 dossiers de fraude RGE ont été ouverts (rapport DGCCRF). Toujours VÉRIFIER le label sur l'annuaire officiel.",
     actionDgccrf:
@@ -204,10 +205,10 @@ const TABLEAU_MPR = [
   },
   {
     type: 'PAC air-air',
-    bleu: '❌ Exclu MPR',
-    jaune: '❌ Exclu MPR',
-    violet: '❌ Exclu MPR',
-    rose: '❌ Exclu MPR',
+    bleu: 'Exclu MPR',
+    jaune: 'Exclu MPR',
+    violet: 'Exclu MPR',
+    rose: 'Exclu MPR',
     note: 'Seul CEE Coup de pouce (~600 €)',
   },
   {
@@ -231,7 +232,7 @@ const TABLEAU_MPR = [
     bleu: '4 000 €',
     jaune: '3 000 €',
     violet: '2 000 €',
-    rose: '❌ Exclu',
+    rose: 'Exclu',
     note: 'SEUL système gaz éligible MPR depuis 2024',
   },
   {
@@ -239,14 +240,14 @@ const TABLEAU_MPR = [
     bleu: '1 200 €',
     jaune: '800 €',
     violet: '400 €',
-    rose: '❌ Exclu',
+    rose: 'Exclu',
     note: 'ECS seule (pas chauffage)',
   },
 ]
 
 const SCENARIOS = [
   {
-    titre: '1️⃣ PAC air-eau, ménage Bleu (très modestes), DPE F → D',
+    titre: 'PAC air-eau, ménage Bleu (très modestes), DPE F → D',
     profil:
       'Maison 100 m² zone H1b, DPE F (passoire), revenus < plafond Bleu ANAH (~22 000 € pour couple).',
     devisMateriel: '13 000 € posé (PAC 8 kW + module hydraulique + raccordements)',
@@ -259,7 +260,7 @@ const SCENARIOS = [
       'Cumul maximal possible 2026. Reste à charge ~ 19 % du devis. Économie facture chauffage 50-65 % par an (~1 200-1 500 € économisés). ROI net après aides 2-3 ans seulement.',
   },
   {
-    titre: '2️⃣ PAC géothermique, ménage Jaune (modestes), maison ancienne',
+    titre: 'PAC géothermique, ménage Jaune (modestes), maison ancienne',
     profil:
       'Maison 130 m² zone H1c, DPE D, revenus Jaune (~30 000 € pour couple), terrain disponible 200 m².',
     devisMateriel: '24 000 € posé (capteurs horizontaux 200 m² + PAC 12 kW + ballon ECS)',
@@ -272,7 +273,7 @@ const SCENARIOS = [
       "Géothermie : aides MPR généreuses (jusqu'à 9 000 €) compensent l'investissement initial lourd. Économie facture 60-75 % par an. ROI 8-12 ans après aides. Solution durable 25-30 ans.",
   },
   {
-    titre: '3️⃣ PAC hybride, ménage Violet (intermédiaires), DPE E maintenu',
+    titre: 'PAC hybride, ménage Violet (intermédiaires), DPE E maintenu',
     profil:
       'Maison 120 m² zone H1c (climat froid), DPE E maintenu, revenus Violet (~50 000 € pour couple), conservation chaudière gaz récente.',
     devisMateriel:
@@ -289,22 +290,22 @@ const SCENARIOS = [
 
 const ELIGIBILITE_4 = [
   {
-    titre: '✅ Artisan RGE QualiPAC obligatoire',
+    titre: 'Artisan RGE QualiPAC obligatoire',
     detail:
       'L\'installateur DOIT être RGE certifié QualiPAC (organisme Qualit\'EnR) à la date du devis ET à la date de pose. Vérifier sur france-renov.gouv.fr (rubrique "Trouver un professionnel RGE"). Renouvellement annuel obligatoire — un RGE expiré = perte des aides. Notre annuaire référence des chauffagistes RGE QualiPAC vérifiés.',
   },
   {
-    titre: '✅ Résidence principale > 15 ans (MPR)',
+    titre: 'Résidence principale > 15 ans (MPR)',
     detail:
       "Pour MaPrimeRénov', le logement doit être : (1) achevé depuis plus de 15 ans (date des travaux) ; (2) occupé en résidence principale 8 mois/an minimum ; (3) propriétaire occupant ou bailleur (engagement location 6 ans). Pour CEE : > 2 ans suffisent. Pour résidence secondaire : seul CEE possible (pas MPR).",
   },
   {
-    titre: '✅ Dépôt dossier AVANT chantier',
+    titre: 'Dépôt dossier AVANT chantier',
     detail:
       "ABSOLUMENT critique : MPR + CEE doivent être déposés AVANT le démarrage des travaux. Pas d'aide rétroactive (perte sèche = plusieurs milliers d'euros). Calendrier : (1) Devis signé ; (2) Dossier MPR sur france-renov.gouv.fr ; (3) Acceptation MPR (4-6 semaines) ; (4) Dossier CEE auprès obligé (1-2 semaines) ; (5) Démarrage chantier.",
   },
   {
-    titre: '✅ Plafond ressources ANAH (MPR uniquement)',
+    titre: 'Plafond ressources ANAH (MPR uniquement)',
     detail:
       "MaPrimeRénov' applique 4 catégories de revenus selon RFR (Revenu Fiscal de Référence) sur l'avis d'imposition N-2 : Bleu (très modestes < 22 461 € couple en zone B/C), Jaune (modestes < 27 343 € couple), Violet (intermédiaires < 39 192 € couple), Rose (supérieurs au-delà — exclu pour la plupart des aides PAC). Plafonds plus élevés en zone A/Île-de-France. Pour CEE : aucun plafond de ressources, mais le forfait dépend des revenus.",
   },
@@ -324,7 +325,7 @@ const faqs = [
   {
     question: "Combien rapporte MaPrimeRénov' pour une PAC ?",
     answer:
-      "Forfaits MaPrimeRénov' 2026 par type de PAC et catégorie de revenus : (1) <strong>PAC air-eau</strong> : 5 000 € Bleu (très modestes), 4 000 € Jaune, 3 000 € Violet, 2 000 € Rose ; (2) <strong>PAC géothermique sol-eau</strong> : 11 000 € Bleu, 9 000 € Jaune, 6 000 € Violet, 4 000 € Rose ; (3) <strong>PAC eau-eau (nappe)</strong> : forfait identique géothermique ; (4) <strong>PAC hybride PAC + chaudière gaz</strong> : 4 000 € Bleu, 3 000 € Jaune, 2 000 € Violet (Rose exclu) ; (5) <strong>PAC air-air</strong> : ❌ EXCLUE de MPR depuis 2020 (seul CEE ~600 €) ; (6) <strong>Chauffe-eau thermodynamique</strong> : 1 200 € Bleu, 800 € Jaune, 400 € Violet (Rose exclu).",
+      "Forfaits MaPrimeRénov' 2026 par type de PAC et catégorie de revenus : (1) <strong>PAC air-eau</strong> : 5 000 € Bleu (très modestes), 4 000 € Jaune, 3 000 € Violet, 2 000 € Rose ; (2) <strong>PAC géothermique sol-eau</strong> : 11 000 € Bleu, 9 000 € Jaune, 6 000 € Violet, 4 000 € Rose ; (3) <strong>PAC eau-eau (nappe)</strong> : forfait identique géothermique ; (4) <strong>PAC hybride PAC + chaudière gaz</strong> : 4 000 € Bleu, 3 000 € Jaune, 2 000 € Violet (Rose exclu) ; (5) <strong>PAC air-air</strong> : EXCLUE de MPR depuis 2020 (seul CEE ~600 €) ; (6) <strong>Chauffe-eau thermodynamique</strong> : 1 200 € Bleu, 800 € Jaune, 400 € Violet (Rose exclu).",
   },
   {
     question: "Pourquoi la PAC air-air est exclue de MaPrimeRénov' ?",
@@ -492,7 +493,7 @@ export default function Page() {
           <header className="mb-8">
             <div className="inline-flex items-center gap-1.5 bg-red-50 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full mb-4">
               <AlertTriangle className="w-3.5 h-3.5" aria-hidden />
-              ⚠️ "PAC à 1 €" = ARNAQUE depuis 2021 — guide officiel anti-fraude
+              &quot;PAC à 1 €&quot; = ARNAQUE depuis 2021 — guide officiel anti-fraude
             </div>
             <h1
               data-speakable="true"
@@ -504,7 +505,7 @@ export default function Page() {
               <strong>Quelles aides pour une pompe à chaleur en 2026 ?</strong> 5 vraies aides
               cumulables : <strong>MaPrimeRénov&apos;</strong> (jusqu&apos;à 11 000 € géothermie
               ménage Bleu), <strong>CEE Coup de pouce chauffage</strong> (4 000 €), bonus sortie
-              passoire DPE F/G (1 500 €), éco-PTZ (30 000 € à 0 %), TVA 5,5 % automatique. ⚠️ La{' '}
+              passoire DPE F/G (1 500 €), éco-PTZ (30 000 € à 0 %), TVA 5,5 % automatique. La{' '}
               <strong>&quot;PAC à 1 €&quot;</strong> n&apos;existe plus depuis 2021 (Décret
               2021-895) — toute pub &quot;PAC gratuite&quot; = ARNAQUE à signaler à la DGCCRF. Cumul
               maximum ménage Bleu DPE F/G : 10 500 € sur projet 13 000 € → reste à charge 2 500 €.
@@ -519,8 +520,8 @@ export default function Page() {
               id="anti-arnaque"
               className="font-heading text-2xl font-bold text-sand-900 mb-3 flex items-center gap-2"
             >
-              <AlertTriangle className="w-5 h-5 text-red-700" aria-hidden />
-              ⚠️ 4 arnaques courantes à éviter absolument
+              <AlertTriangle className="w-5 h-5 text-red-700" aria-hidden />4 arnaques courantes à
+              éviter absolument
             </h2>
             <p className="text-sand-700 mb-5">
               La rénovation énergétique reste le secteur n°1 des fraudes en France (DGCCRF, rapport
@@ -598,10 +599,18 @@ export default function Page() {
                 <thead className="bg-sand-100">
                   <tr>
                     <th className="text-left p-3 font-semibold text-sand-900">Type PAC</th>
-                    <th className="text-left p-3 font-semibold text-blue-700">🔵 Bleu</th>
-                    <th className="text-left p-3 font-semibold text-yellow-700">🟡 Jaune</th>
-                    <th className="text-left p-3 font-semibold text-purple-700">🟣 Violet</th>
-                    <th className="text-left p-3 font-semibold text-pink-700">🌸 Rose</th>
+                    <th className="text-left p-3">
+                      <MprBaremeChip categorie="bleu" />
+                    </th>
+                    <th className="text-left p-3">
+                      <MprBaremeChip categorie="jaune" />
+                    </th>
+                    <th className="text-left p-3">
+                      <MprBaremeChip categorie="violet" />
+                    </th>
+                    <th className="text-left p-3">
+                      <MprBaremeChip categorie="rose" />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -730,7 +739,7 @@ export default function Page() {
             </ul>
             <Link
               href="/services/chauffagiste"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-500 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors"
             >
               Trouver un chauffagiste RGE QualiPAC vérifié
               <ArrowRight className="w-4 h-4" aria-hidden />

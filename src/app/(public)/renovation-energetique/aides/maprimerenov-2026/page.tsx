@@ -42,6 +42,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import MprBaremeChip from '@/components/renovation/MprBaremeChip'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
@@ -440,10 +441,18 @@ export default function Page() {
                 <thead className="bg-sand-50 text-sand-900 text-left">
                   <tr>
                     <th className="p-3 border-b border-sand-200">Foyer</th>
-                    <th className="p-3 border-b border-sand-200">Bleu (très modeste)</th>
-                    <th className="p-3 border-b border-sand-200">Jaune (modeste)</th>
-                    <th className="p-3 border-b border-sand-200">Violet (intermédiaire)</th>
-                    <th className="p-3 border-b border-sand-200">Rose (supérieur)</th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="bleu" suffix="très modeste" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="jaune" suffix="modeste" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="violet" suffix="intermédiaire" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="rose" suffix="supérieur" />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -466,10 +475,18 @@ export default function Page() {
                 <thead className="bg-sand-50 text-sand-900 text-left">
                   <tr>
                     <th className="p-3 border-b border-sand-200">Foyer</th>
-                    <th className="p-3 border-b border-sand-200">Bleu</th>
-                    <th className="p-3 border-b border-sand-200">Jaune</th>
-                    <th className="p-3 border-b border-sand-200">Violet</th>
-                    <th className="p-3 border-b border-sand-200">Rose</th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="bleu" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="jaune" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="violet" />
+                    </th>
+                    <th className="p-3 border-b border-sand-200">
+                      <MprBaremeChip categorie="rose" />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -525,7 +542,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

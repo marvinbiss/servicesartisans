@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { signToken } from '@/lib/simulateur/rgpd/signed-token'
 import ResultatActions from '@/components/simulateur/ResultatActions'
+import MprBaremeChip, { isMprCategorie } from '@/components/renovation/MprBaremeChip'
 import { BadgeCheck, Building2, Landmark, PiggyBank, Banknote, Home, Info } from 'lucide-react'
 
 const PUBLIC_ID_RE = /^EST-\d{4}-\d{2}-\d{2}-[a-z0-9]{6,12}$/i
@@ -124,8 +125,12 @@ export default async function ResultatPage({ params }: PageParams) {
           </h1>
           <p className="mt-2 text-sm text-charcoal-600">
             Barèmes {data.barometre_version} &middot; Catégorie ANAH{' '}
-            <strong className="capitalize">{data.categorie_anah}</strong> &middot; Parcours{' '}
-            <strong>{isAccompagne ? "Rénovation d'ampleur" : 'Par geste'}</strong>
+            {isMprCategorie(data.categorie_anah) ? (
+              <MprBaremeChip categorie={data.categorie_anah} />
+            ) : (
+              <strong className="capitalize">{data.categorie_anah}</strong>
+            )}{' '}
+            &middot; Parcours <strong>{isAccompagne ? "Rénovation d'ampleur" : 'Par geste'}</strong>
           </p>
         </header>
 
@@ -221,9 +226,9 @@ export default async function ResultatPage({ params }: PageParams) {
 
         {/* Prets a taux zero */}
         {(ecoPtzEligible || parEligible) && (
-          <section className="mt-5 rounded-xl border border-blue-200 bg-blue-50/40 p-5 shadow-sm">
+          <section className="mt-5 rounded-xl border border-sand-300 bg-sand-100/40 p-5 shadow-sm">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-charcoal-900">
-              <Banknote className="w-5 h-5 text-blue-600" aria-hidden="true" />
+              <Banknote className="w-5 h-5 text-charcoal-600" aria-hidden="true" />
               Prêts à taux zéro
             </h2>
             <p className="text-sm text-charcoal-600 mb-3">
@@ -239,7 +244,9 @@ export default async function ResultatPage({ params }: PageParams) {
                       (remboursement sur {ecoPtzDuree} ans max)
                     </span>
                   </dt>
-                  <dd className="font-semibold text-blue-700">jusqu&apos;à {fmtEur(ecoPtzMax)}</dd>
+                  <dd className="font-semibold text-charcoal-700">
+                    jusqu&apos;à {fmtEur(ecoPtzMax)}
+                  </dd>
                 </div>
               )}
               {parEligible && (
@@ -250,7 +257,7 @@ export default async function ResultatPage({ params }: PageParams) {
                       (remboursé à la vente/succession)
                     </span>
                   </dt>
-                  <dd className="font-semibold text-blue-700">jusqu&apos;à {fmtEur(parMax)}</dd>
+                  <dd className="font-semibold text-charcoal-700">jusqu&apos;à {fmtEur(parMax)}</dd>
                 </div>
               )}
             </dl>

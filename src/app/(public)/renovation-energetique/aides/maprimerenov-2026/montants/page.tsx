@@ -29,6 +29,7 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import FlagshipFaq from '@/components/flagship/FlagshipFaq'
 import FlagshipSources from '@/components/flagship/FlagshipSources'
 import FlagshipAuthorCard from '@/components/flagship/FlagshipAuthorCard'
+import MprBaremeChip from '@/components/renovation/MprBaremeChip'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getGovernmentServiceSchema } from '@/lib/seo/jsonld'
 import { getFlagshipArticleSchema } from '@/lib/seo/flagship-schema'
@@ -294,25 +295,36 @@ function Table({ title, rows }: { title: string; rows: typeof CHAUFFAGE }) {
   return (
     <div className="not-prose my-6">
       <h3 className="font-heading text-lg font-semibold text-sand-900 mb-2">{title}</h3>
-      <div className="bg-white border border-sand-200 rounded-xl overflow-x-auto">
+      <div className="bg-white border border-sand-300 rounded-xl overflow-x-auto shadow-sm">
         <table className="w-full text-sm">
           <thead className="bg-sand-50 text-sand-900 text-left">
             <tr>
-              <th className="p-3 border-b border-sand-200">Équipement</th>
-              <th className="p-3 border-b border-sand-200">Bleu</th>
-              <th className="p-3 border-b border-sand-200">Jaune</th>
-              <th className="p-3 border-b border-sand-200">Violet</th>
-              <th className="p-3 border-b border-sand-200">Rose</th>
+              <th className="p-3 border-b border-sand-300">Équipement</th>
+              <th className="p-3 border-b border-sand-300">
+                <MprBaremeChip categorie="bleu" />
+              </th>
+              <th className="p-3 border-b border-sand-300">
+                <MprBaremeChip categorie="jaune" />
+              </th>
+              <th className="p-3 border-b border-sand-300">
+                <MprBaremeChip categorie="violet" />
+              </th>
+              <th className="p-3 border-b border-sand-300">
+                <MprBaremeChip categorie="rose" />
+              </th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
-              <tr key={r.equip} className="border-b border-sand-100 last:border-0">
+            {rows.map((r, i) => (
+              <tr
+                key={r.equip}
+                className={`border-b border-sand-100 last:border-0 hover:bg-primary-50/60 transition-colors ${i % 2 === 1 ? 'bg-sand-50/50' : ''}`}
+              >
                 <td className="p-3 font-medium text-sand-900">{r.equip}</td>
-                <td className="p-3 text-primary-700 font-semibold">{r.bleu}</td>
-                <td className="p-3">{r.jaune}</td>
-                <td className="p-3">{r.violet}</td>
-                <td className="p-3 text-sand-500">{r.rose}</td>
+                <td className="p-3 text-primary-700 font-semibold whitespace-nowrap">{r.bleu}</td>
+                <td className="p-3 whitespace-nowrap">{r.jaune}</td>
+                <td className="p-3 whitespace-nowrap">{r.violet}</td>
+                <td className="p-3 text-sand-500 whitespace-nowrap">{r.rose}</td>
               </tr>
             ))}
           </tbody>
@@ -475,26 +487,34 @@ export default function Page() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-sand-100">
-                    <td className="p-3 font-semibold">Bleu</td>
+                  <tr className="border-b border-sand-100 hover:bg-primary-50/60 transition-colors">
+                    <td className="p-3">
+                      <MprBaremeChip categorie="bleu" />
+                    </td>
                     <td className="p-3">80 %</td>
                     <td className="p-3 text-primary-700 font-semibold">90 %</td>
                     <td className="p-3">70 000 € (90 000 € si bonus BBC)</td>
                   </tr>
-                  <tr className="border-b border-sand-100">
-                    <td className="p-3 font-semibold">Jaune</td>
+                  <tr className="border-b border-sand-100 bg-sand-50/50 hover:bg-primary-50/60 transition-colors">
+                    <td className="p-3">
+                      <MprBaremeChip categorie="jaune" />
+                    </td>
                     <td className="p-3">60 %</td>
                     <td className="p-3">70 %</td>
                     <td className="p-3">70 000 €</td>
                   </tr>
-                  <tr className="border-b border-sand-100">
-                    <td className="p-3 font-semibold">Violet</td>
+                  <tr className="border-b border-sand-100 hover:bg-primary-50/60 transition-colors">
+                    <td className="p-3">
+                      <MprBaremeChip categorie="violet" />
+                    </td>
                     <td className="p-3">45 %</td>
                     <td className="p-3">55 %</td>
                     <td className="p-3">70 000 €</td>
                   </tr>
-                  <tr>
-                    <td className="p-3 font-semibold">Rose</td>
+                  <tr className="bg-sand-50/50 hover:bg-primary-50/60 transition-colors">
+                    <td className="p-3">
+                      <MprBaremeChip categorie="rose" />
+                    </td>
                     <td className="p-3">30 %</td>
                     <td className="p-3">40 %</td>
                     <td className="p-3">70 000 €</td>
@@ -524,7 +544,7 @@ export default function Page() {
                   </p>
                   <Link
                     href="/simulateur-aides-renovation"
-                    className="inline-flex items-center gap-1.5 bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-600 transition-colors"
                   >
                     Lancer le simulateur <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>
