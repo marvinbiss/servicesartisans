@@ -223,13 +223,31 @@ export default async function EspaceArtisanCeePage() {
                 Certificats d'Économies d'Énergie — programme SA Energy
               </p>
             </div>
-            <Link
-              href="/espace-artisan/cee/nouveau"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-md motion-safe:transition-all motion-safe:hover:-translate-y-0.5 hover:bg-sand-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 motion-safe:active:translate-y-0"
-            >
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Créer un dossier
-            </Link>
+            {/* RGE invalide/expiré : un dossier CEE déposé sans qualif RGE
+                valide est rejeté par l'obligé. On désactive donc la création
+                à la source (parité avec le guard server-side de cee/nouveau). */}
+            {rgeInvalid || rgeExpired ? (
+              <span
+                aria-disabled="true"
+                title={
+                  rgeExpired
+                    ? 'Renouvelez votre qualification RGE pour créer un dossier'
+                    : 'Une qualification RGE valide est requise pour créer un dossier'
+                }
+                className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-white/60 px-5 py-2.5 text-sm font-semibold text-primary-600/60 shadow-md"
+              >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+                Créer un dossier
+              </span>
+            ) : (
+              <Link
+                href="/espace-artisan/cee/nouveau"
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 shadow-md motion-safe:transition-all motion-safe:hover:-translate-y-0.5 hover:bg-sand-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 motion-safe:active:translate-y-0"
+              >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+                Créer un dossier
+              </Link>
+            )}
           </div>
         </div>
       </header>

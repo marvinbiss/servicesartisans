@@ -46,6 +46,23 @@ export default async function NouveauDossierPage() {
     rge_qualifications: Array<{ code?: string; date_fin?: string }> | null
   }
 
+  // Defense in depth : un dossier déposé sans qualif RGE valide est rejeté par
+  // l'obligé. Le dashboard désactive déjà le CTA, mais on re-vérifie côté
+  // serveur ici (parité avec cee/page.tsx) — accès direct à l'URL → redirect.
+  const today = new Date()
+  const rgeExpired =
+    Array.isArray(providerRow.rge_qualifications) &&
+    providerRow.rge_qualifications.length > 0 &&
+    providerRow.rge_qualifications.every((q) => {
+      if (!q.date_fin) return false
+      return new Date(q.date_fin) < today
+    })
+  const rgeInvalid = !providerRow.is_rge
+
+  if (rgeInvalid || rgeExpired) {
+    redirect('/espace-artisan/cee')
+  }
+
   // Vérification partenaire actif (table cee_artisan_partners)
   const { data: partnerRow } = await supabase
     .from('cee_artisan_partners')

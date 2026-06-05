@@ -175,11 +175,14 @@ export default function ArtisanLeadsInbox() {
     return leadCity.toLowerCase().trim() === artisanCity.toLowerCase().trim()
   }
 
-  // Client-side search within current page results
+  // Client-side search within current page results.
+  // Guard `a.lead` : un assignment orphelin (devis_request supprimé, jointure
+  // non-`!inner`) peut renvoyer lead=null malgré le type — sinon crash.
   const filtered = searchQuery
     ? leads.filter((a) => {
-        const q = searchQuery.toLowerCase()
         const lead = a.lead
+        if (!lead) return false
+        const q = searchQuery.toLowerCase()
         return (
           lead.service_name.toLowerCase().includes(q) ||
           lead.client_name.toLowerCase().includes(q) ||
