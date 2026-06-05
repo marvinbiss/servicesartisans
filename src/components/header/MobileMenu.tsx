@@ -563,7 +563,7 @@ export default function MobileMenu({
                 className="flex-1 py-3 border-2 border-sand-300 text-charcoal-700 rounded-xl font-medium text-center hover:bg-sand-50 hover:border-sand-400 transition-all duration-200"
                 onClick={closeMobileMenu}
               >
-                Connexion
+                Espace artisan
               </Link>
               <Link
                 href="/devis"

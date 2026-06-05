@@ -463,12 +463,15 @@ export default function HeaderClient({
               <NavTrigger menu="renovation" label="Rénovation & aides" />
               <NavTrigger menu="aide" label="Aide" />
 
+              {/* Connexion réservée artisans/admins (espace particulier fermé
+                  2026-06-05). Label explicite pour ne pas suggérer un compte
+                  client. */}
               <Link
                 href="/connexion"
                 prefetch={false}
                 className="relative text-charcoal-600 hover:text-primary-400 px-3 py-2 rounded-lg font-medium text-[0.85rem] hover:bg-sand-100/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full"
               >
-                Connexion
+                Espace artisan
               </Link>
 
               {/* Pivot full RGE 2026-05-03 (revert partiel) : badge urgence

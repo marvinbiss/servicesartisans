@@ -62,7 +62,10 @@ export default function MobileBottomNav() {
       <div className="flex items-center justify-around h-14 pb-safe">
         {[
           ...baseNavItems,
-          { href: accountHref, icon: User, label: 'Mon compte', prefetch: false },
+          // Connexion réservée artisans/admins (espace particulier fermé
+          // 2026-06-05) — « Espace pro » plutôt que « Mon compte » pour ne
+          // pas suggérer un compte client aux particuliers.
+          { href: accountHref, icon: User, label: 'Espace pro', prefetch: false },
         ].map(({ href, icon: Icon, label, prefetch }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
 
