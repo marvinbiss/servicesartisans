@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { assertArtisanTwoFactor } from '@/lib/auth/artisan-guard'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export interface AuthContext {
@@ -19,8 +20,15 @@ export interface AuthContext {
 }
 
 /**
- * Resolve the authenticated user via Supabase cookies (RLS-respecting client).
- * Returns either the context or a prebuilt 401 NextResponse.
+ * Resolve the authenticated user for the CEE partner API (/api/cee/**).
+ *
+ * Parité avec `requireArtisan()` (/api/artisan/**) : auth → role artisan →
+ * gate 2FA verified (si activé). Le middleware ne couvre PAS /api/cee/* (son
+ * bloc API ne fait que rate-limit + CSRF), donc sans ce gate une session
+ * pré-challenge 2FA ou hijackée pourrait taper directement les mutations
+ * financières (IBAN/SEPA, activation partenaire, dépôt dossier). On ne résout
+ * PAS de provider ici : le périmètre CEE travaille sur `cee_artisan_partners`,
+ * l'ownership étant assuré en aval par `.eq('user_id', ctx.userId)` + RLS.
  */
 export async function requireArtisanAuth(): Promise<
   { ok: true; ctx: AuthContext } | { ok: false; response: NextResponse }
@@ -43,6 +51,41 @@ export async function requireArtisanAuth(): Promise<
           },
         },
         { status: 401 }
+      ),
+    }
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role, two_factor_enabled')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'artisan') {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          error: { code: 'FORBIDDEN', message: 'Accès réservé aux artisans' },
+        },
+        { status: 403 }
+      ),
+    }
+  }
+
+  // Gate 2FA — parité requireArtisan (Plan C-1, CVSS 8.1). Bloque le bypass
+  // pré-challenge et les sessions hijackées sur le périmètre financier CEE.
+  const twoFactorError = await assertArtisanTwoFactor(profile.two_factor_enabled, user.id)
+  if (twoFactorError) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        {
+          success: false,
+          error: { code: 'TWO_FACTOR_REQUIRED', message: 'Vérification 2FA requise' },
+        },
+        { status: 403 }
       ),
     }
   }

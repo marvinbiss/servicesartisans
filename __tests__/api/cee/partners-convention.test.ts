@@ -29,6 +29,10 @@ vi.mock('@/lib/logger', () => ({
 const maybeSinglePartnerMock = vi.fn()
 const maybeSingleProviderMock = vi.fn()
 const updateEqMock = vi.fn(() => Promise.resolve({ error: null }))
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
 
 const mockSupabase = {
   auth: {
@@ -38,6 +42,13 @@ const mockSupabase = {
     })),
   },
   from: vi.fn((table: string) => {
+    if (table === 'profiles') {
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({ single: profileSingleMock })),
+        })),
+      }
+    }
     if (table === 'cee_artisan_partners') {
       return {
         select: vi.fn(() => ({
@@ -95,6 +106,10 @@ beforeEach(async () => {
     NEXT_PUBLIC_SITE_URL: 'http://localhost:3000',
     YOUSIGN_API_KEY: 'test-api-key',
   }
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
+    error: null,
+  })
   maybeSinglePartnerMock.mockResolvedValue({
     data: {
       id: 'partner-1',

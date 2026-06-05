@@ -32,6 +32,18 @@ vi.mock('@/lib/logger', () => ({
 
 const rpcMock = vi.fn()
 const maybeSingleMock = vi.fn()
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
+
+const profileChain = () => ({
+  select: vi.fn(() => ({
+    eq: vi.fn(() => ({
+      single: profileSingleMock,
+    })),
+  })),
+})
 
 const mockSupabase = {
   auth: {
@@ -40,16 +52,20 @@ const mockSupabase = {
       error: null,
     })),
   },
-  from: vi.fn(() => ({
-    select: vi.fn(() => ({
-      eq: vi.fn(() => ({
-        maybeSingle: maybeSingleMock,
-      })),
-    })),
-    update: vi.fn(() => ({
-      eq: vi.fn(() => Promise.resolve({ error: null })),
-    })),
-  })),
+  from: vi.fn((table: string) =>
+    table === 'profiles'
+      ? profileChain()
+      : {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({
+              maybeSingle: maybeSingleMock,
+            })),
+          })),
+          update: vi.fn(() => ({
+            eq: vi.fn(() => Promise.resolve({ error: null })),
+          })),
+        }
+  ),
   rpc: rpcMock,
 }
 
@@ -62,6 +78,15 @@ vi.mock('@/lib/supabase/admin', () => ({
 
 vi.mock('@/lib/cee/leads-service', () => ({
   updateCeePartnerStatus: vi.fn(async () => ({ id: 'p', status: 'onboarding' })),
+}))
+
+// IP rate-limiter (10/min, defense-in-depth) is NOT reset by beforeEach and
+// accumulates across the file's requests. Neutralise it so per-test assertions
+// target the USER bucket (3/min, reset each test) and the auth gate. The
+// dedicated user-rate-limit test below still exercises the 3/min limit.
+vi.mock('@/lib/rate-limiter', () => ({
+  checkRateLimit: vi.fn(async () => ({ allowed: true, resetTime: Date.now() + 60_000 })),
+  getClientIp: vi.fn(() => 'test-ip'),
 }))
 
 type MockResult = { body: Record<string, unknown>; status: number; headers: Record<string, string> }
@@ -92,6 +117,10 @@ beforeEach(async () => {
   }
   ;(maybeSingleMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({
     data: { id: 'partner-1', status: 'invited' },
+    error: null,
+  })
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
     error: null,
   })
   ;(rpcMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({
@@ -215,5 +244,35 @@ describe('POST /api/cee/partners/onboarding/iban', () => {
     expect(serialised).not.toContain('FR1420041010050500013M02606')
     // last4 is OK
     expect(serialised).toContain('2606')
+  })
+
+  // requireArtisanAuth gate (parité requireArtisan) — durcissement audit 2026-06-05.
+  // Avant : /api/cee/** ne vérifiait ni le role ni la 2FA → bypass pré-challenge
+  // sur surface financière (IBAN/SEPA). Ces tests verrouillent le gate.
+
+  it('rejects a non-artisan role with 403 FORBIDDEN (no IBAN mutation)', async () => {
+    profileSingleMock.mockResolvedValueOnce({
+      data: { role: 'client', two_factor_enabled: false },
+      error: null,
+    })
+    const { POST } = await import('@/app/api/cee/partners/onboarding/iban/route')
+    const res = (await POST(makeRequest(VALID_BODY) as never)) as unknown as MockResult
+
+    expect(res.status).toBe(403)
+    expect(res.body).toMatchObject({ error: { code: 'FORBIDDEN' } })
+    expect(rpcMock).not.toHaveBeenCalled()
+  })
+
+  it('rejects a 2FA-enabled session without verified cookie (403 TWO_FACTOR_REQUIRED, fail-closed)', async () => {
+    profileSingleMock.mockResolvedValueOnce({
+      data: { role: 'artisan', two_factor_enabled: true },
+      error: null,
+    })
+    const { POST } = await import('@/app/api/cee/partners/onboarding/iban/route')
+    const res = (await POST(makeRequest(VALID_BODY) as never)) as unknown as MockResult
+
+    expect(res.status).toBe(403)
+    expect(res.body).toMatchObject({ error: { code: 'TWO_FACTOR_REQUIRED' } })
+    expect(rpcMock).not.toHaveBeenCalled()
   })
 })

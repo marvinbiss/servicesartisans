@@ -25,6 +25,10 @@ vi.mock('@/lib/logger', () => ({
 
 const maybeSingleMock = vi.fn()
 const updateEqMock = vi.fn(() => Promise.resolve({ error: null }))
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
 
 const mockSupabase = {
   auth: {
@@ -33,12 +37,20 @@ const mockSupabase = {
       error: null,
     })),
   },
-  from: vi.fn(() => ({
-    select: vi.fn(() => ({
-      eq: vi.fn(() => ({ maybeSingle: maybeSingleMock })),
-    })),
-    update: vi.fn(() => ({ eq: updateEqMock })),
-  })),
+  from: vi.fn((table: string) =>
+    table === 'profiles'
+      ? {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({ single: profileSingleMock })),
+          })),
+        }
+      : {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({ maybeSingle: maybeSingleMock })),
+          })),
+          update: vi.fn(() => ({ eq: updateEqMock })),
+        }
+  ),
 }
 
 vi.mock('@/lib/supabase/server', () => ({ createClient: vi.fn(async () => mockSupabase) }))
@@ -75,6 +87,10 @@ beforeEach(async () => {
   }
   ;(maybeSingleMock as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({
     data: { id: 'partner-1', status: 'convention_signed' },
+    error: null,
+  })
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
     error: null,
   })
   const rl = await import('@/lib/cee/rate-limit')

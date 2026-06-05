@@ -21,6 +21,10 @@ vi.mock('@/lib/logger', () => ({
 
 const eqMock = vi.fn()
 const maybeSingleMock = vi.fn()
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
 
 const mockSupabase = {
   auth: {
@@ -29,14 +33,22 @@ const mockSupabase = {
       error: null,
     })),
   },
-  from: vi.fn(() => ({
-    select: vi.fn(() => ({
-      eq: (col: string, val: string) => {
-        eqMock(col, val)
-        return { maybeSingle: maybeSingleMock }
-      },
-    })),
-  })),
+  from: vi.fn((table: string) =>
+    table === 'profiles'
+      ? {
+          select: vi.fn(() => ({
+            eq: vi.fn(() => ({ single: profileSingleMock })),
+          })),
+        }
+      : {
+          select: vi.fn(() => ({
+            eq: (col: string, val: string) => {
+              eqMock(col, val)
+              return { maybeSingle: maybeSingleMock }
+            },
+          })),
+        }
+  ),
 }
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -55,6 +67,10 @@ beforeEach(() => {
   vi.clearAllMocks()
   maybeSingleMock.mockResolvedValue({
     data: { id: 'partner-A', user_id: 'user-A', status: 'onboarding' },
+    error: null,
+  })
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
     error: null,
   })
 })

@@ -36,6 +36,10 @@ vi.mock('@/lib/logger', () => ({
 const getDossierMock = vi.fn()
 const getOwnerMock = vi.fn()
 const updateMock = vi.fn()
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
 const _insertEventMock = vi.fn().mockResolvedValue({ error: null })
 void _insertEventMock
 
@@ -47,6 +51,13 @@ const mockSupabase = {
     })),
   },
   from: vi.fn((table: string) => {
+    if (table === 'profiles') {
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({ single: profileSingleMock })),
+        })),
+      }
+    }
     if (table === 'cee_dossiers') {
       return {
         select: vi.fn(() => ({
@@ -143,6 +154,10 @@ beforeEach(async () => {
     NODE_ENV: 'test',
     NEXT_PUBLIC_SITE_URL: 'http://localhost:3000',
   }
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
+    error: null,
+  })
   getDossierMock.mockResolvedValue({
     data: { id: 'dossier-1', partner_id: 'partner-1', status: 'draft' },
     error: null,

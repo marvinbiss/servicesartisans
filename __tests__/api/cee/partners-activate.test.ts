@@ -18,6 +18,10 @@ vi.mock('@/lib/logger', () => ({
 }))
 
 const maybeSingleMock = vi.fn()
+const profileSingleMock = vi.fn(async () => ({
+  data: { role: 'artisan', two_factor_enabled: false },
+  error: null,
+}))
 const mockSupabase = {
   auth: {
     getUser: vi.fn(async () => ({
@@ -26,6 +30,13 @@ const mockSupabase = {
     })),
   },
   from: vi.fn((table: string) => {
+    if (table === 'profiles') {
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({ single: profileSingleMock })),
+        })),
+      }
+    }
     if (table === 'audit_logs') {
       return { insert: vi.fn(() => Promise.resolve({ error: null })) }
     }
@@ -77,6 +88,10 @@ beforeEach(() => {
   process.env = { ...originalEnv, NODE_ENV: 'test' }
   maybeSingleMock.mockResolvedValue({
     data: { id: 'partner-1', status: 'certified' },
+    error: null,
+  })
+  profileSingleMock.mockResolvedValue({
+    data: { role: 'artisan', two_factor_enabled: false },
     error: null,
   })
   updateStatusMock.mockResolvedValue({ id: 'partner-1', status: 'active' })
