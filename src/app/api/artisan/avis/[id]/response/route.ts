@@ -84,6 +84,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { error: updateError } = await updateReviewReply(
       supabase,
       id,
+      providerId,
       sanitizeUserInput(response.trim())
     )
 

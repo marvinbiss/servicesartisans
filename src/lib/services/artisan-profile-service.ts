@@ -557,6 +557,7 @@ export async function getReviewByIdForProvider(
 export async function updateReviewReply(
   supabase: SupabaseClientType,
   reviewId: string,
+  providerId: string,
   reply: string
 ): Promise<{ error: unknown }> {
   const { error } = await supabase
@@ -566,6 +567,7 @@ export async function updateReviewReply(
       reply_date: new Date().toISOString(),
     })
     .eq('id', reviewId)
+    .eq('provider_id', providerId)
 
   return { error }
 }
