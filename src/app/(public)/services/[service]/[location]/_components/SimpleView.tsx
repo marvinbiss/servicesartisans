@@ -46,6 +46,7 @@ import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
+import { getDepartementByCode } from '@/lib/data/france'
 import { buildDevisHref } from '@/lib/utils'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import type { CommuneData } from '@/lib/data/commune-data'
@@ -312,7 +313,12 @@ export default function SimpleView({
           serviceName={service.name}
           villeSlug={locationSlug}
           villeName={location.name}
-          departementSlug={location.department_code?.toLowerCase()}
+          departementSlug={
+            // Slug nom ('rhone'), pas code INSEE — variante dept-code-bug.
+            location.department_code
+              ? getDepartementByCode(location.department_code)?.slug
+              : undefined
+          }
           departementName={location.department_name}
           regionName={location.region_name}
           currentIntent="services"

@@ -492,7 +492,11 @@ const nextConfig = {
       { source: '/services/artisan/:path*', destination: '/services', permanent: true },
       { source: '/metiers', destination: '/services', permanent: true },
       { source: '/artisan/:service/:location', destination: '/services/:service/:location', permanent: true },
-      { source: '/artisan/:service', destination: '/services/:service', permanent: true },
+      // 2026-06-05 : la règle '/artisan/:service' → '/services/:service' avalait
+      // AUSSI les slugs fiche ('/artisan/plomberie-x-323720771' → '/services/...'
+      // 2 segments → gone-paths 410). Les slugs à 1 segment sont désormais
+      // résolus par la page src/app/(public)/artisan/[slug]/page.tsx qui
+      // distingue service du catalogue vs slug/stable_id provider.
       // French legal page aliases (RGPD compliance)
       { source: '/politique-de-confidentialite', destination: '/confidentialite', permanent: true },
       { source: '/politique-confidentialite', destination: '/confidentialite', permanent: true },

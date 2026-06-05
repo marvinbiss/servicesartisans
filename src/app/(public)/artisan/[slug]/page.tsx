@@ -1,6 +1,8 @@
 import { notFound, redirect } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
+import { cityValueToName } from '@/lib/insee-resolver'
 
 // ISR : ce path effectue 1 requête DB pour resoudre slug/stable_id puis
 // redirige (301). Resultat stable tant que `providers.slug/stable_id/
@@ -20,6 +22,13 @@ export default async function ArtisanRedirectPage({ params }: Props) {
   const slug = decodeURIComponent(params.slug || '').trim()
   if (!slug) notFound()
 
+  // Héritage de la règle next.config '/artisan/:service' (retirée 2026-06-05
+  // car elle avalait aussi les slugs fiche → gone-paths 410) : un slug qui
+  // est un service du catalogue redirige vers son hub.
+  if (SERVICE_TO_SPECIALTIES[slug]) {
+    redirect(`/services/${slug}`)
+  }
+
   const supabase = createAdminClient()
 
   const { data } = await supabase
@@ -37,7 +46,9 @@ export default async function ArtisanRedirectPage({ params }: Props) {
     slug: data.slug,
     stable_id: data.stable_id,
     specialty: data.specialty,
-    city: data.address_city,
+    // address_city = code INSEE pour ~91% des lignes — getArtisanUrl attend
+    // un nom de ville (résolution ici car insee-resolver est server-only).
+    city: cityValueToName(data.address_city) || data.address_city,
   })
 
   if (!url || url.endsWith('/')) notFound()

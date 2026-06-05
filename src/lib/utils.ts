@@ -147,6 +147,10 @@ export function getArtisanUrl(artisan: {
     _serviceMap.get(normalized) ||
     _specialtyToServiceSlug[normalized] ||
     slugify(artisan.specialty || 'artisan')
+  // NB : `city` doit être un NOM de ville — providers.address_city stocke un
+  // code INSEE pour ~91% des lignes, à résoudre côté appelant (server-only,
+  // cf. cityValueToName de insee-resolver — 2 MB de data, interdit ici car
+  // utils.ts part dans les bundles client).
   const locationSlug =
     _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
   const id = artisan.slug || artisan.stable_id || ''

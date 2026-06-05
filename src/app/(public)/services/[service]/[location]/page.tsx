@@ -72,6 +72,7 @@ import {
   villes,
   getVilleBySlug,
   getNearbyCities,
+  getDepartementByCode,
 } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import {
@@ -1607,7 +1608,13 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
           serviceName={service.name}
           villeSlug={locationSlug}
           villeName={location.name}
-          departementSlug={location.department_code?.toLowerCase()}
+          // /departements/[dept] attend le SLUG nom ('rhone'), pas le code
+          // INSEE ('69') — lien mort sinon (variante dept-code-bug 2026-05-05).
+          departementSlug={
+            location.department_code
+              ? getDepartementByCode(location.department_code)?.slug
+              : undefined
+          }
           departementName={location.department_name}
           regionName={location.region_name}
           currentIntent="services"

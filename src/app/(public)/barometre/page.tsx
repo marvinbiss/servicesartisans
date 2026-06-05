@@ -106,11 +106,18 @@ const faqItems = [
 // ---------------------------------------------------------------------------
 
 export default async function BarometrePage() {
-  const [stats, topMetiers, topVilles] = await Promise.all([
+  const [stats, topMetiersRaw, topVilles] = await Promise.all([
     getNationalStats(),
-    getTopMetiers(10),
+    // Surfetch : la table stats agrège aussi les métiers Tier C retirés au
+    // pivot RGE (serrurier, carreleur, paysagiste, terrassier) alors que
+    // /barometre/tarifs/[metier] les notFound() — on filtre sur le
+    // catalogue BAROMETRE_METIERS pour ne jamais linker un 404.
+    getTopMetiers(16),
     getTopVilles(10),
   ])
+  const topMetiers = topMetiersRaw
+    .filter((row) => getBarometreMetierBySlug(row.metier_slug))
+    .slice(0, 10)
 
   // Pivot RGE 2026-05-05 — barometre_stats agrège tous les artisans, on borne
   // l'affichage public à la réalité RGE (49 611 fiches publiées au 2026-04-20).
