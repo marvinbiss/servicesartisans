@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { MapPin, Phone, ArrowRight, Users, Map, Globe, ShieldCheck, Star } from 'lucide-react'
+import { MapPin, ArrowRight, Users, Map, Globe, ShieldCheck, Building2 } from 'lucide-react'
 import {
   serviceCategories,
   getCategoryColors,
@@ -50,15 +50,15 @@ export default function DesktopMegaMenus({
         aria-hidden="true"
       />
 
-      {/* ===== SERVICES MEGA MENU ===== */}
-      {openMenu === 'services' && (
+      {/* ===== TROUVER UN ARTISAN MEGA MENU ===== */}
+      {openMenu === 'trouver' && (
         <div
-          data-menu-content="services"
+          data-menu-content="trouver"
           role="menu"
           aria-label="Services artisans"
           className="absolute left-0 right-0 bg-white border-t border-sand-200 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
-          onMouseEnter={() => openMenuOnHover('services')}
+          onMouseEnter={() => openMenuOnHover('trouver')}
           onMouseLeave={closeMenusWithDelay}
         >
           <div className="max-w-7xl mx-auto">
@@ -147,110 +147,9 @@ export default function DesktopMegaMenus({
                   Voir tous les services
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
-                {/* Pivot full RGE 2026-05-03 : CTA "Urgence" remplacé par
-                    "Simulateur aides" — aligné repositionnement RGE +
-                    monétisation mandataire CEE / MaPrimeRénov. */}
-                <Link
-                  href="/simulateur-aides-renovation"
-                  onClick={closeMenus}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 font-semibold transition-all duration-200 hover:shadow-md"
-                >
-                  <Phone className="w-4 h-4" />
-                  Simuler vos aides MaPrimeRénov & CEE
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ===== VILLES MEGA MENU ===== */}
-      {openMenu === 'villes' && (
-        <div
-          data-menu-content="villes"
-          role="menu"
-          aria-label="Villes"
-          className="absolute left-0 right-0 bg-white border-t border-sand-200 shadow-2xl rounded-b-xl"
-          style={{ zIndex: 9995 }}
-          onMouseEnter={() => openMenuOnHover('villes')}
-          onMouseLeave={closeMenusWithDelay}
-        >
-          <div className="max-w-7xl mx-auto">
-            <div className="bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 px-8 py-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-heading font-bold text-lg">
-                  Trouvez un artisan par ville
-                </h3>
-                <p className="text-charcoal-300 text-sm mt-0.5">
-                  {villesCount} villes couvertes dans toute la France
-                </p>
-              </div>
-              <div className="hidden sm:flex items-center gap-3">
-                <Link
-                  href="/regions"
-                  onClick={closeMenus}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
-                >
-                  <Map className="w-4 h-4" />
-                  Voir par région
-                </Link>
-                <Link
-                  href="/departements"
-                  onClick={closeMenus}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Par département
-                </Link>
-              </div>
-            </div>
-
-            <div className="p-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {citiesByRegion.map((group) => (
-                  <div key={group.region}>
-                    <div className="flex items-center gap-2 mb-3 pb-2 border-b border-sand-200">
-                      <Globe className="w-4 h-4 text-primary-400" />
-                      <span className="font-heading font-bold text-xs text-charcoal-900 uppercase tracking-wider">
-                        {group.region}
-                      </span>
-                    </div>
-                    <div className="space-y-0.5">
-                      {group.cities.map((city) => (
-                        <Link
-                          key={city.slug}
-                          href={`/villes/${city.slug}`}
-                          onClick={closeMenus}
-                          className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-primary-50 transition-all duration-200 group/city"
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <MapPin className="w-3.5 h-3.5 text-charcoal-300 group-hover/city:text-primary-400 transition-colors" />
-                            <span className="text-sm font-medium text-charcoal-700 group-hover/city:text-primary-500 transition-colors">
-                              {city.name}
-                            </span>
-                          </div>
-                          <span className="text-[11px] text-charcoal-400 bg-sand-50 group-hover/city:bg-primary-100 group-hover/city:text-primary-500 px-2 py-0.5 rounded-full transition-colors">
-                            {city.population}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-5 border-t border-sand-200 flex items-center justify-between">
-                <Link
-                  href="/villes"
-                  onClick={closeMenus}
-                  className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold group/cta transition-colors"
-                >
-                  Voir toutes les villes
-                  <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
-                </Link>
                 <div className="flex items-center gap-2 text-sm text-charcoal-900">
                   <ShieldCheck className="w-4 h-4 text-green-500" />
-                  Artisans RGE certifiés dans chaque ville
+                  Artisans RGE certifiés partout en France
                 </div>
               </div>
             </div>
@@ -258,23 +157,26 @@ export default function DesktopMegaMenus({
         </div>
       )}
 
-      {/* ===== RÉGIONS MEGA MENU ===== */}
-      {openMenu === 'regions' && (
+      {/* ===== PAR LIEU MEGA MENU (villes + régions fusionnés) ===== */}
+      {openMenu === 'lieu' && (
         <div
-          data-menu-content="regions"
+          data-menu-content="lieu"
           role="menu"
-          aria-label="Régions"
+          aria-label="Par lieu"
           className="absolute left-0 right-0 bg-white border-t border-sand-200 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
-          onMouseEnter={() => openMenuOnHover('regions')}
+          onMouseEnter={() => openMenuOnHover('lieu')}
           onMouseLeave={closeMenusWithDelay}
         >
           <div className="max-w-7xl mx-auto">
             <div className="bg-gradient-to-r from-charcoal-900 via-charcoal-800 to-charcoal-900 px-8 py-5 flex items-center justify-between">
               <div>
-                <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
+                <h3 className="text-white font-heading font-bold text-lg">
+                  Trouvez un artisan près de chez vous
+                </h3>
                 <p className="text-charcoal-300 text-sm mt-0.5">
-                  {regionsCount} régions, {departementsCount} départements couverts
+                  {villesCount} villes, {regionsCount} régions, {departementsCount} départements
+                  couverts
                 </p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
@@ -286,10 +188,61 @@ export default function DesktopMegaMenus({
                   <MapPin className="w-4 h-4" />
                   Tous les départements
                 </Link>
+                <Link
+                  href="/regions"
+                  onClick={closeMenus}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                >
+                  <Map className="w-4 h-4" />
+                  Toutes les régions
+                </Link>
               </div>
             </div>
 
             <div className="p-8">
+              {/* Villes populaires */}
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Building2 className="w-4 h-4 text-primary-500" />
+                  <h4 className="font-heading font-bold text-sm text-charcoal-900 uppercase tracking-wider">
+                    Villes populaires
+                  </h4>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                  {citiesByRegion.map((group) => (
+                    <div key={group.region}>
+                      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-sand-200">
+                        <Globe className="w-4 h-4 text-primary-400" />
+                        <span className="font-heading font-bold text-xs text-charcoal-900 uppercase tracking-wider">
+                          {group.region}
+                        </span>
+                      </div>
+                      <div className="space-y-0.5">
+                        {group.cities.map((city) => (
+                          <Link
+                            key={city.slug}
+                            href={`/villes/${city.slug}`}
+                            onClick={closeMenus}
+                            className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-primary-50 transition-all duration-200 group/city"
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <MapPin className="w-3.5 h-3.5 text-charcoal-300 group-hover/city:text-primary-400 transition-colors" />
+                              <span className="text-sm font-medium text-charcoal-700 group-hover/city:text-primary-500 transition-colors">
+                                {city.name}
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-charcoal-400 bg-sand-50 group-hover/city:bg-primary-100 group-hover/city:text-primary-500 px-2 py-0.5 rounded-full transition-colors">
+                              {city.population}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Régions */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Map className="w-4 h-4 text-primary-500" />
@@ -352,16 +305,16 @@ export default function DesktopMegaMenus({
 
               <div className="mt-8 pt-5 border-t border-sand-200 flex items-center justify-between">
                 <Link
-                  href="/regions"
+                  href="/villes"
                   onClick={closeMenus}
                   className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold group/cta transition-colors"
                 >
-                  Voir toutes les régions
+                  Voir toutes les villes
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-charcoal-900">
-                  <Star className="w-4 h-4 text-amber-500" />
-                  Couverture nationale complète
+                  <ShieldCheck className="w-4 h-4 text-green-500" />
+                  Artisans RGE certifiés dans chaque ville
                 </div>
               </div>
             </div>

@@ -54,8 +54,8 @@ export interface DomTomRegion {
   departments?: { name: string; code: string; slug: string }[]
 }
 
-export type MenuType = 'services' | 'villes' | 'regions' | 'plus' | null
-export type MobileAccordion = 'services' | 'villes' | 'regions' | null
+export type MenuType = 'trouver' | 'lieu' | 'renovation' | 'aide' | null
+export type MobileAccordion = 'trouver' | 'lieu' | 'renovation' | 'aide' | null
 
 // ── Constants ──────────────────────────────────────────
 

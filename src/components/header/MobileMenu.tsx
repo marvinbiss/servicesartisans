@@ -17,6 +17,7 @@ import {
   Phone,
   Heart,
   BookOpen,
+  Leaf,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -183,41 +184,41 @@ export default function MobileMenu({
         </form>
 
         <nav className="space-y-2" aria-label="Menu mobile">
-          {/* ===== Services Accordion ===== */}
+          {/* ===== Trouver un artisan Accordion ===== */}
           <div className="rounded-xl border border-sand-200 overflow-hidden">
             <button
               type="button"
-              onClick={() => toggleMobileAccordion('services')}
-              aria-expanded={mobileAccordion === 'services'}
+              onClick={() => toggleMobileAccordion('trouver')}
+              aria-expanded={mobileAccordion === 'trouver'}
               className={cn(
                 'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'services' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
+                mobileAccordion === 'trouver' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
               )}
             >
               <div className="flex items-center gap-3">
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    mobileAccordion === 'services' ? 'bg-primary-100' : 'bg-white'
+                    mobileAccordion === 'trouver' ? 'bg-primary-100' : 'bg-white'
                   }`}
                 >
                   <Wrench
-                    className={`w-4 h-4 ${mobileAccordion === 'services' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                    className={`w-4 h-4 ${mobileAccordion === 'trouver' ? 'text-primary-500' : 'text-charcoal-900'}`}
                   />
                 </div>
                 <span
-                  className={`font-semibold text-sm ${mobileAccordion === 'services' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                  className={`font-semibold text-sm ${mobileAccordion === 'trouver' ? 'text-primary-600' : 'text-charcoal-900'}`}
                 >
-                  Services
+                  Trouver un artisan
                 </span>
               </div>
               <ChevronDown
                 className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
-                  mobileAccordion === 'services' ? 'rotate-180 text-primary-400' : ''
+                  mobileAccordion === 'trouver' ? 'rotate-180 text-primary-400' : ''
                 }`}
               />
             </button>
 
-            {mobileAccordion === 'services' && (
+            {mobileAccordion === 'trouver' && (
               <div className="px-4 pb-4 pt-2 bg-white">
                 {serviceCategories.map((cat) => (
                   <div key={cat.category} className="mb-3 last:mb-0">
@@ -256,41 +257,41 @@ export default function MobileMenu({
             )}
           </div>
 
-          {/* ===== Villes Accordion ===== */}
+          {/* ===== Par lieu Accordion (villes + régions fusionnés) ===== */}
           <div className="rounded-xl border border-sand-200 overflow-hidden">
             <button
               type="button"
-              onClick={() => toggleMobileAccordion('villes')}
-              aria-expanded={mobileAccordion === 'villes'}
+              onClick={() => toggleMobileAccordion('lieu')}
+              aria-expanded={mobileAccordion === 'lieu'}
               className={cn(
                 'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'villes' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
+                mobileAccordion === 'lieu' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
               )}
             >
               <div className="flex items-center gap-3">
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    mobileAccordion === 'villes' ? 'bg-primary-100' : 'bg-white'
+                    mobileAccordion === 'lieu' ? 'bg-primary-100' : 'bg-white'
                   }`}
                 >
                   <Building2
-                    className={`w-4 h-4 ${mobileAccordion === 'villes' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                    className={`w-4 h-4 ${mobileAccordion === 'lieu' ? 'text-primary-500' : 'text-charcoal-900'}`}
                   />
                 </div>
                 <span
-                  className={`font-semibold text-sm ${mobileAccordion === 'villes' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                  className={`font-semibold text-sm ${mobileAccordion === 'lieu' ? 'text-primary-600' : 'text-charcoal-900'}`}
                 >
-                  Villes
+                  Par lieu
                 </span>
               </div>
               <ChevronDown
                 className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
-                  mobileAccordion === 'villes' ? 'rotate-180 text-primary-400' : ''
+                  mobileAccordion === 'lieu' ? 'rotate-180 text-primary-400' : ''
                 }`}
               />
             </button>
 
-            {mobileAccordion === 'villes' && (
+            {mobileAccordion === 'lieu' && (
               <div className="px-4 pb-4 pt-2 bg-white">
                 <div className="flex flex-wrap gap-2">
                   {popularCities.map((city) => (
@@ -313,46 +314,9 @@ export default function MobileMenu({
                   Voir toutes les villes
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
-              </div>
-            )}
-          </div>
-
-          {/* ===== Régions Accordion ===== */}
-          <div className="rounded-xl border border-sand-200 overflow-hidden">
-            <button
-              type="button"
-              onClick={() => toggleMobileAccordion('regions')}
-              aria-expanded={mobileAccordion === 'regions'}
-              className={cn(
-                'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
-                mobileAccordion === 'regions' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    mobileAccordion === 'regions' ? 'bg-primary-100' : 'bg-white'
-                  }`}
-                >
-                  <Map
-                    className={`w-4 h-4 ${mobileAccordion === 'regions' ? 'text-primary-500' : 'text-charcoal-900'}`}
-                  />
-                </div>
-                <span
-                  className={`font-semibold text-sm ${mobileAccordion === 'regions' ? 'text-primary-600' : 'text-charcoal-900'}`}
-                >
+                <div className="text-xs font-bold text-charcoal-400 uppercase tracking-wider mt-4 mb-2 px-1">
                   Régions
-                </span>
-              </div>
-              <ChevronDown
-                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
-                  mobileAccordion === 'regions' ? 'rotate-180 text-primary-400' : ''
-                }`}
-              />
-            </button>
-
-            {mobileAccordion === 'regions' && (
-              <div className="px-4 pb-4 pt-2 bg-white">
+                </div>
                 <div className="grid grid-cols-2 gap-1.5">
                   {[...metroRegions, ...domTomRegions].map((region) => (
                     <Link
@@ -381,44 +345,207 @@ export default function MobileMenu({
                   Voir toutes les régions
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
+                <Link
+                  href="/departements"
+                  className="flex items-center gap-2 text-primary-500 text-sm font-semibold mt-2 px-1"
+                  onClick={closeAndResetAccordion}
+                >
+                  Voir tous les départements
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             )}
           </div>
 
-          {/* Liens directs SEO */}
-          <div className="grid grid-cols-2 gap-2">
-            <Link
-              href="/avis"
-              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
-              onClick={closeMobileMenu}
+          {/* ===== Rénovation & aides Accordion ===== */}
+          <div className="rounded-xl border border-sand-200 overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleMobileAccordion('renovation')}
+              aria-expanded={mobileAccordion === 'renovation'}
+              className={cn(
+                'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
+                mobileAccordion === 'renovation' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
+              )}
             >
-              <Star className="w-4 h-4 text-amber-500" />
-              <span className="font-medium text-sm text-charcoal-700">Avis</span>
-            </Link>
-            <Link
-              href="/tarifs"
-              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
-              onClick={closeMobileMenu}
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    mobileAccordion === 'renovation' ? 'bg-primary-100' : 'bg-white'
+                  }`}
+                >
+                  <Leaf
+                    className={`w-4 h-4 ${mobileAccordion === 'renovation' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                  />
+                </div>
+                <span
+                  className={`font-semibold text-sm ${mobileAccordion === 'renovation' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                >
+                  Rénovation &amp; aides
+                </span>
+              </div>
+              <ChevronDown
+                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
+                  mobileAccordion === 'renovation' ? 'rotate-180 text-primary-400' : ''
+                }`}
+              />
+            </button>
+
+            {mobileAccordion === 'renovation' && (
+              <div className="px-4 pb-4 pt-2 bg-white space-y-1.5">
+                <Link
+                  href="/simulateur-aides-renovation"
+                  className="flex items-center gap-2.5 px-3 py-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <Leaf className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-medium text-charcoal-700">Simuler mes aides</span>
+                </Link>
+                <Link
+                  href="/aides"
+                  className="flex items-center gap-2.5 px-3 py-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <Layers className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-medium text-charcoal-700">
+                    Aides à la rénovation
+                  </span>
+                </Link>
+                <Link
+                  href="/comparatif-primes-cee-2026"
+                  className="flex items-center gap-2.5 px-3 py-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <Layers className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-medium text-charcoal-700">
+                    Comparatif primes CEE 2026
+                  </span>
+                </Link>
+                <Link
+                  href="/barometre"
+                  className="flex items-center gap-2.5 px-3 py-2.5 bg-sand-50 rounded-lg hover:bg-primary-50 transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <Layers className="w-4 h-4 text-green-500" />
+                  <span className="text-sm font-medium text-charcoal-700">Baromètre prix</span>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* ===== Aide Accordion ===== */}
+          <div className="rounded-xl border border-sand-200 overflow-hidden">
+            <button
+              type="button"
+              onClick={() => toggleMobileAccordion('aide')}
+              aria-expanded={mobileAccordion === 'aide'}
+              className={cn(
+                'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
+                mobileAccordion === 'aide' ? 'bg-primary-50' : 'bg-sand-50 hover:bg-sand-100'
+              )}
             >
-              <Layers className="w-4 h-4 text-primary-400" />
-              <span className="font-medium text-sm text-charcoal-700">Tarifs</span>
-            </Link>
-            <Link
-              href="/blog"
-              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
-              onClick={closeMobileMenu}
-            >
-              <Sparkles className="w-4 h-4 text-purple-500" />
-              <span className="font-medium text-sm text-charcoal-700">Blog</span>
-            </Link>
-            <Link
-              href="/guides"
-              className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
-              onClick={closeMobileMenu}
-            >
-              <BookOpen className="w-4 h-4 text-green-500" />
-              <span className="font-medium text-sm text-charcoal-700">Guides</span>
-            </Link>
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    mobileAccordion === 'aide' ? 'bg-primary-100' : 'bg-white'
+                  }`}
+                >
+                  <BookOpen
+                    className={`w-4 h-4 ${mobileAccordion === 'aide' ? 'text-primary-500' : 'text-charcoal-900'}`}
+                  />
+                </div>
+                <span
+                  className={`font-semibold text-sm ${mobileAccordion === 'aide' ? 'text-primary-600' : 'text-charcoal-900'}`}
+                >
+                  Aide
+                </span>
+              </div>
+              <ChevronDown
+                className={`w-5 h-5 text-charcoal-400 transition-transform duration-300 ${
+                  mobileAccordion === 'aide' ? 'rotate-180 text-primary-400' : ''
+                }`}
+              />
+            </button>
+
+            {mobileAccordion === 'aide' && (
+              <div className="px-4 pb-4 pt-2 bg-white">
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/avis"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <Star className="w-4 h-4 text-amber-500" />
+                    <span className="font-medium text-sm text-charcoal-700">Avis</span>
+                  </Link>
+                  <Link
+                    href="/tarifs"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <Layers className="w-4 h-4 text-primary-400" />
+                    <span className="font-medium text-sm text-charcoal-700">Tarifs</span>
+                  </Link>
+                  <Link
+                    href="/blog"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <Sparkles className="w-4 h-4 text-purple-500" />
+                    <span className="font-medium text-sm text-charcoal-700">Blog</span>
+                  </Link>
+                  <Link
+                    href="/guides"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <BookOpen className="w-4 h-4 text-green-500" />
+                    <span className="font-medium text-sm text-charcoal-700">Guides</span>
+                  </Link>
+                  <Link
+                    href="/faq"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <BookOpen className="w-4 h-4 text-primary-400" />
+                    <span className="font-medium text-sm text-charcoal-700">FAQ</span>
+                  </Link>
+                  <Link
+                    href="/comparaison"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <Layers className="w-4 h-4 text-primary-400" />
+                    <span className="font-medium text-sm text-charcoal-700">Comparatifs</span>
+                  </Link>
+                  <Link
+                    href="/glossaire"
+                    className="flex items-center gap-2.5 px-4 py-3 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                    onClick={closeAndResetAccordion}
+                  >
+                    <BookOpen className="w-4 h-4 text-purple-500" />
+                    <span className="font-medium text-sm text-charcoal-700">Glossaire</span>
+                  </Link>
+                </div>
+                <div className="h-px bg-sand-200 my-3" />
+                <Link
+                  href="/devenir-partenaire-cee"
+                  className="flex items-center gap-2.5 px-4 py-3 bg-amber-50 hover:bg-amber-100 rounded-xl transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <span className="font-semibold text-sm text-amber-700">
+                    Pour artisans : devenir partenaire CEE
+                  </span>
+                </Link>
+                <Link
+                  href="/inscription-artisan"
+                  className="flex items-center gap-2.5 px-4 py-3 mt-2 bg-sand-50 hover:bg-primary-50 rounded-xl transition-colors"
+                  onClick={closeAndResetAccordion}
+                >
+                  <span className="font-medium text-sm text-charcoal-700">Inscription artisan</span>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* CTAs */}

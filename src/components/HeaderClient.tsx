@@ -247,8 +247,41 @@ export default function HeaderClient({
           )}
         />
       </button>
-      {/* Plus dropdown inline */}
-      {menu === 'plus' && openMenu === 'plus' && (
+      {/* Rénovation & aides dropdown inline */}
+      {menu === 'renovation' && openMenu === 'renovation' && (
+        <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-soft border border-sand-200 py-2 z-50">
+          <Link
+            href="/simulateur-aides-renovation"
+            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Simuler mes aides
+          </Link>
+          <Link
+            href="/aides"
+            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Aides à la rénovation
+          </Link>
+          <Link
+            href="/comparatif-primes-cee-2026"
+            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Comparatif primes CEE 2026
+          </Link>
+          <Link
+            href="/barometre"
+            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
+            onClick={() => setOpenMenu(null)}
+          >
+            Baromètre prix
+          </Link>
+        </div>
+      )}
+      {/* Aide dropdown inline */}
+      {menu === 'aide' && openMenu === 'aide' && (
         <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-soft border border-sand-200 py-2 z-50">
           <Link
             href="/avis"
@@ -292,13 +325,6 @@ export default function HeaderClient({
             onClick={() => setOpenMenu(null)}
           >
             Comparatifs
-          </Link>
-          <Link
-            href="/barometre"
-            className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors"
-            onClick={() => setOpenMenu(null)}
-          >
-            Baromètre prix
           </Link>
           <Link
             href="/glossaire"
@@ -434,10 +460,10 @@ export default function HeaderClient({
               className="hidden lg:flex items-center space-x-0.5"
               aria-label="Navigation principale"
             >
-              <NavTrigger menu="services" label="Services" />
-              <NavTrigger menu="villes" label="Villes" />
-              <NavTrigger menu="regions" label="Régions" />
-              <NavTrigger menu="plus" label="Plus" />
+              <NavTrigger menu="trouver" label="Trouver un artisan" />
+              <NavTrigger menu="lieu" label="Par lieu" />
+              <NavTrigger menu="renovation" label="Rénovation & aides" />
+              <NavTrigger menu="aide" label="Aide" />
 
               {/* Favoris */}
               <Link
@@ -521,7 +547,7 @@ export default function HeaderClient({
         </div>
 
         {/* Desktop Mega Menus */}
-        {mounted && openMenu && openMenu !== 'plus' && (
+        {mounted && (openMenu === 'trouver' || openMenu === 'lieu') && (
           <DesktopMegaMenus
             openMenu={openMenu}
             artisanCount={artisanCount}
