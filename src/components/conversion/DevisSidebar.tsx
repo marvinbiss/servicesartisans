@@ -1,15 +1,6 @@
 'use client'
 
-import {
-  Shield,
-  Clock,
-  CheckCircle,
-  Star,
-  Search,
-  FileText,
-  ChevronDown,
-  Phone,
-} from 'lucide-react'
+import { Shield, Clock, CheckCircle, Search, FileText, ChevronDown, Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
 
@@ -45,59 +36,8 @@ const defaultFaq = [
   },
 ]
 
-// Testimonials pool — deterministic pick based on serviceName
-const testimonials = [
-  {
-    name: 'Marie L.',
-    city: 'Lyon',
-    rating: 5,
-    text: "J'ai reçu des devis rapidement. L'artisan choisi était très professionnel. Je recommande !",
-    service: null,
-  },
-  {
-    name: 'Thomas D.',
-    city: 'Paris',
-    rating: 5,
-    text: 'Service rapide et efficace. Les devis étaient détaillés et les prix compétitifs.',
-    service: 'plombier',
-  },
-  {
-    name: 'Sophie M.',
-    city: 'Bordeaux',
-    rating: 5,
-    text: "Très satisfaite. J'ai pu comparer sereinement et choisir l'artisan qui me convenait.",
-    service: 'electricien',
-  },
-  {
-    name: 'Pierre R.',
-    city: 'Marseille',
-    rating: 4,
-    text: 'Devis reçus rapidement. Bon suivi et artisan ponctuel. Je referai appel au service.',
-    service: 'menuisier',
-  },
-  {
-    name: 'Isabelle C.',
-    city: 'Toulouse',
-    rating: 5,
-    text: "Gratuit et sans pression. J'ai comparé les devis et économisé plus de 400 € sur mes travaux.",
-    service: null,
-  },
-]
-
-function getTestimonial(serviceName?: string) {
-  if (serviceName) {
-    const serviceSlug = serviceName.toLowerCase()
-    const match = testimonials.find((t) => t.service === serviceSlug)
-    if (match) return match
-  }
-  // Deterministic pick based on service name hash
-  const hash = serviceName ? serviceName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) : 0
-  return testimonials[hash % testimonials.length]
-}
-
 export default function DevisSidebar({ serviceName, faqItems, priceRange }: DevisSidebarProps) {
   const faq = faqItems && faqItems.length > 0 ? faqItems.slice(0, 3) : defaultFaq
-  const testimonial = getTestimonial(serviceName)
 
   return (
     <aside className="space-y-6">
@@ -129,30 +69,6 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
               </div>
             )
           })}
-        </div>
-      </div>
-
-      {/* ─── Testimonial ─────────────────────────────────── */}
-      <div className="bg-white rounded-2xl border border-sand-200 p-6 shadow-soft">
-        <div className="flex items-center gap-1 mb-3">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${i < testimonial.rating ? 'text-secondary-400 fill-secondary-400' : 'text-sand-300'}`}
-            />
-          ))}
-        </div>
-        <blockquote className="text-sm text-charcoal-700 leading-relaxed mb-3 italic">
-          “{testimonial.text}”
-        </blockquote>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-            <span className="text-xs font-bold text-primary-600">{testimonial.name.charAt(0)}</span>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-charcoal-900">{testimonial.name}</p>
-            <p className="text-xs text-charcoal-400">{testimonial.city}</p>
-          </div>
         </div>
       </div>
 
