@@ -170,8 +170,12 @@ export function useDevisForm(options: UseDevisFormOptions) {
         navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
       })
       const { latitude, longitude } = position.coords
+      // 2026-06-06 : `type=municipality` renvoie systématiquement
+      // `features: []` depuis la migration BAN → Géoplateforme. Le reverse
+      // sans filtre retourne la housenumber la plus proche dont
+      // `properties.city` / `postcode` suffisent ici.
       const res = await fetch(
-        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
+        `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`
       )
       const data = await res.json()
       if (data.features?.length > 0) {

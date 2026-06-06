@@ -129,8 +129,11 @@ export async function detectGeoLocation(): Promise<{
     })
 
     const { latitude, longitude } = position.coords
+    // 2026-06-06 : `type=municipality` renvoie `features: []` depuis la
+    // migration BAN → Géoplateforme — reverse sans filtre, city/postcode
+    // sont présents sur la housenumber la plus proche.
     const res = await fetch(
-      `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
+      `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`
     )
 
     if (!res.ok) return null
