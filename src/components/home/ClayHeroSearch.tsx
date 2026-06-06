@@ -55,7 +55,16 @@ function searchCitiesSync(query: string, cityList: Ville[], limit = 6): Ville[] 
   return [...prefix, ...contains, ...postal].slice(0, limit)
 }
 
-export function ClayHeroSearch() {
+type ClayHeroSearchProps = {
+  /** Stacked layout (inputs + button in column) for narrow hero columns */
+  stacked?: boolean
+  ctaLabel?: string
+}
+
+export function ClayHeroSearch({
+  stacked = false,
+  ctaLabel = 'Trouver',
+}: ClayHeroSearchProps = {}) {
   const router = useRouter()
   const [service, setService] = useState('')
   const [ville, setVille] = useState('')
@@ -174,7 +183,7 @@ export function ClayHeroSearch() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-soft border border-sand-200 p-2 flex flex-col md:flex-row items-stretch gap-2"
+      className={`bg-white rounded-2xl shadow-soft border border-sand-200 p-2 flex flex-col items-stretch gap-2 ${stacked ? '' : 'md:flex-row'}`}
       role="search"
       aria-label="Rechercher un artisan"
       onKeyDown={handleKeyDown}
@@ -319,9 +328,9 @@ export function ClayHeroSearch() {
       <button
         type="submit"
         aria-label="Rechercher un artisan"
-        className="bg-primary-500 hover:bg-primary-600 text-white font-heading font-bold text-base px-8 h-[52px] md:h-[56px] rounded-xl shrink-0 transition-all duration-200 w-full md:w-auto shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0"
+        className={`bg-primary-500 hover:bg-primary-600 text-white font-heading font-bold text-base px-8 h-[52px] md:h-[56px] rounded-xl shrink-0 transition-all duration-200 w-full shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 ${stacked ? '' : 'md:w-auto'}`}
       >
-        Trouver
+        {ctaLabel}
       </button>
     </form>
   )

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { MagneticLink } from '@/components/ui/MagneticLink'
 import {
   Droplets,
   Zap,
@@ -171,16 +170,11 @@ function ClayFAQSection() {
 
   return (
     <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
-      <div className="text-center mb-1">
-        <div className="inline-block text-xs font-bold text-primary-400 tracking-[.12em] uppercase">
-          Questions fréquentes
-        </div>
-      </div>
       <h2
         className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900 text-center mb-12"
         style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}
       >
-        Tout ce que vous devez savoir.
+        Questions fréquentes
       </h2>
       <div className="max-w-3xl mx-auto space-y-3">
         {faqs.map((faq) => (
@@ -235,110 +229,113 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
 
   return (
     <>
-      {/* ─── HERO — Règle des 3 secondes ──────────────────────── */}
+      {/* ─── HERO — asymétrique : pitch + recherche / photo chantier ── */}
       <section className="relative bg-gradient-sand overflow-hidden">
-        {/* Subtle decorative shapes */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div
-            className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.04]"
-            style={{
-              background: 'radial-gradient(circle, #E86B4B 0%, transparent 70%)',
-              filter: 'blur(100px)',
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.03]"
-            style={{
-              background: 'radial-gradient(circle, #3D8B68 0%, transparent 70%)',
-              filter: 'blur(80px)',
-            }}
-          />
-        </div>
+        <div className="max-w-[1320px] mx-auto px-5 md:px-10 pt-10 pb-12 md:pt-16 md:pb-20 grid lg:grid-cols-[1fr_minmax(0,440px)] gap-10 lg:gap-16 items-center">
+          {/* Colonne gauche — pitch + recherche */}
+          <div>
+            <h2
+              className="font-heading font-black tracking-[-0.04em] leading-[1.05] text-charcoal-900 mb-5"
+              style={{ fontSize: 'clamp(2.25rem, 4.5vw, 3.6rem)' }}
+              aria-hidden="true"
+            >
+              Trouvez un artisan RGE certifié. <span className="text-primary-500">Vraiment.</span>
+            </h2>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-10 pt-12 pb-10 md:pt-20 md:pb-16">
-          {/* Animated badge */}
-          <div className="flex justify-center mb-6 md:mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-50 border border-accent-200 text-accent-700 text-sm font-medium">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
+            <p className="text-charcoal-600 text-base md:text-lg leading-relaxed max-w-lg mb-8">
+              {countStr} artisans vérifiés au registre RGE de l&apos;ADEME. Décrivez votre projet,
+              recevez jusqu&apos;à 3 devis gratuits sous 48&nbsp;h.
+            </p>
+
+            <div className="max-w-xl mb-4">
+              <ClayHeroSearch stacked ctaLabel="Trouver mon artisan" />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8 text-sm">
+              <Link
+                href="/devis"
+                className="inline-flex items-center gap-1.5 font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+              >
+                ou demandez directement vos devis
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/simulateur-aides-renovation"
+                className="inline-flex items-center gap-1.5 font-medium text-charcoal-500 hover:text-primary-600 transition-colors"
+              >
+                <Zap className="w-4 h-4" aria-hidden="true" />
+                Simuler mes aides
+              </Link>
+            </div>
+
+            {/* Trust line — sources officielles + note */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-charcoal-500">
+              <span className="font-medium">Source&nbsp;: registre RGE ADEME</span>
+              <span className="hidden sm:inline text-sand-400">·</span>
+              <span>data.gouv.fr</span>
+              <span className="hidden sm:inline text-sand-400">·</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-amber-400 fill-amber-400" aria-hidden="true" />
+                <strong className="text-charcoal-800">{ratingStr}/5</strong>
+                <span>sur {reviewStr} avis</span>
               </span>
-              {countStr} artisans RGE certifiés disponibles aujourd'hui
             </div>
           </div>
 
-          {/* Main headline — value-proposition first */}
-          <h2
-            className="font-heading font-black tracking-[-0.04em] leading-[1.08] text-charcoal-900 text-center mb-4 md:mb-5"
-            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
-            aria-hidden="true"
-          >
-            Recevez 3 devis d&apos;artisans RGE certifiés aujourd&apos;hui
-          </h2>
-
-          <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            Gratuit, sans frais. Réponse artisan en 24-48h.
-          </p>
-
-          {/* Primary CTA — high contrast, impossible to miss */}
-          <div className="flex flex-col items-center gap-4 mb-8 md:mb-10">
-            <MagneticLink
-              href="/devis"
-              strength={0.22}
-              className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover hover:-translate-y-1 animate-pulse-subtle"
-            >
-              <ClipboardList className="w-6 h-6" />
-              Obtenir mes 3 devis gratuits
-            </MagneticLink>
-            {/* Trust micro-copy directly under CTA */}
-            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
-              <span className="inline-flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-accent-500" />
-                {countStr} artisans RGE certifiés
-              </span>
-              <span className="text-charcoal-200">·</span>
-              <span>100% gratuit</span>
-              <span className="text-charcoal-200">·</span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-primary-400" />
-                Réponse rapide
-              </span>
+          {/* Colonne droite — photo chantier + badge vérification */}
+          <div className="relative hidden lg:block">
+            <div className="relative h-[520px] rounded-3xl overflow-hidden border border-sand-200">
+              <Image
+                src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&h=1100&fit=crop&q=80"
+                alt="Artisan RGE certifié en intervention sur une installation électrique"
+                fill
+                priority
+                sizes="(max-width: 1024px) 0px, 440px"
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
+                className="object-cover"
+              />
             </div>
-            {/* Pivot full RGE 2026-05-03 : CTA "Urgent" remplacé par
-                CTA "Simulateur aides" — repositionnement RGE. */}
-            <Link
-              href="/simulateur-aides-renovation"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-charcoal-500 hover:text-primary-400 transition-colors"
-            >
-              <Zap className="w-4 h-4" />
-              Simulez vos aides MaPrimeRénov & CEE
-            </Link>
-          </div>
-
-          {/* MASSIVE search bar */}
-          <div className="max-w-2xl mx-auto mb-5 md:mb-6">
-            <ClayHeroSearch />
-          </div>
-
-          {/* Trust line — immediately under search */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-charcoal-500">
-            <span className="inline-flex items-center gap-1.5">
-              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <strong className="text-charcoal-800">{ratingStr}/5</strong> sur {reviewStr} avis
-            </span>
-            <span className="hidden sm:inline text-charcoal-200">|</span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-accent-500" />
-              Artisans RGE certifiés
-            </span>
-            <span className="hidden sm:inline text-charcoal-200">|</span>
-            <span className="inline-flex items-center gap-1.5">
-              <Shield className="w-4 h-4 text-primary-400" />
-              Devis gratuit
-            </span>
+            <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 bg-white rounded-2xl border border-sand-200 shadow-soft px-5 py-4">
+              <div className="w-10 h-10 rounded-xl bg-accent-50 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5 text-accent-600" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-charcoal-900">
+                  Certification RGE vérifiée
+                </div>
+                <div className="text-xs text-charcoal-500">
+                  Registre ADEME, synchronisé chaque semaine
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* ─── BANDEAU CONFIANCE — sous le hero ──────────────────── */}
+      <div className="bg-white border-y border-sand-200">
+        <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-8 flex flex-wrap justify-around items-center gap-6">
+          {[
+            { Icon: ShieldCheck, label: 'SIREN vérifié', sub: 'Chaque artisan contrôlé' },
+            { Icon: Star, label: `${ratingStr}/5 moyenne`, sub: `${reviewStr} avis vérifiés` },
+            { Icon: Zap, label: 'Devis en 24h', sub: 'Gratuit et sans engagement' },
+            { Icon: Shield, label: 'Données officielles', sub: "Registres de l'État" },
+            { Icon: MapPin, label: `${deptCount} départements`, sub: 'Toute la France couverte' },
+          ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
+            <div key={label} className="flex items-center gap-3">
+              <div className="w-[42px] h-[42px] rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                <TrustIcon className="w-5 h-5 text-primary-400" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-charcoal-900">{label}</div>
+                <div className="text-xs text-charcoal-400 mt-0.5">{sub}</div>
+              </div>
+              {i < arr.length - 1 && <div className="hidden xl:block w-px h-9 ml-6 bg-sand-300" />}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ─── SIMULATEUR AIDES — CTA post-hero, pré-services ─── */}
       <ScrollReveal as="section">
@@ -355,9 +352,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="max-w-[1320px] mx-auto px-5 md:px-10">
             <div className="flex justify-between items-end mb-8">
               <div>
-                <div className="text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">
-                  Services populaires
-                </div>
                 <h2
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)' }}
@@ -411,9 +405,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
         <div className="bg-sand-100 py-16 md:py-20">
           <div className="max-w-[1320px] mx-auto px-5 md:px-10">
             <div className="text-center mb-12">
-              <div className="inline-block text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">
-                Comment ça marche
-              </div>
               <h2
                 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                 style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
@@ -607,9 +598,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="max-w-[1320px] mx-auto px-5 md:px-10">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <div className="text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">
-                  Près de vous
-                </div>
                 <h2
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
@@ -695,34 +683,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 )
               })}
             </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* ─── TRUST BAR ──────────────────────────────────────────── */}
-      <ScrollReveal>
-        <div className="bg-white border-y border-sand-200">
-          <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-14 flex flex-wrap justify-around items-center gap-6">
-            {[
-              { Icon: ShieldCheck, label: 'SIREN vérifié', sub: 'Chaque artisan contrôlé' },
-              { Icon: Star, label: `${ratingStr}/5 moyenne`, sub: `+${reviewStr} avis vérifiés` },
-              { Icon: Zap, label: 'Devis en 24h', sub: 'Gratuit et sans engagement' },
-              { Icon: Shield, label: 'Données officielles', sub: "Registres de l'État" },
-              { Icon: MapPin, label: `${deptCount} départements`, sub: 'Toute la France couverte' },
-            ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="w-[42px] h-[42px] rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-                  <TrustIcon className="w-5 h-5 text-primary-400" />
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-charcoal-900">{label}</div>
-                  <div className="text-xs text-charcoal-400 mt-0.5">{sub}</div>
-                </div>
-                {i < arr.length - 1 && (
-                  <div className="hidden xl:block w-px h-9 ml-6 bg-sand-300" />
-                )}
-              </div>
-            ))}
           </div>
         </div>
       </ScrollReveal>

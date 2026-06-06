@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, MapPin, Search, Sparkles, ShieldCheck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { SITE_URL, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import { GeographicNavigation } from '@/components/InternalLinks'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
@@ -13,15 +13,10 @@ import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 import { TOP_SERVICES, TOP_CITIES } from '@/lib/seo/top-pages'
-import TrustBar from '@/components/conversion/TrustBar'
-import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
 
 export const revalidate = 86400
 
@@ -76,7 +71,6 @@ export default async function HomePage() {
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
-        <ExitIntentPopup />
       </div>
     )
   }
@@ -145,8 +139,6 @@ export default async function HomePage() {
         </div>
       </header>
 
-      <TrustBar />
-
       <ClayHomePage
         stats={homepageData}
         serviceCounts={homepageData.serviceCounts}
@@ -166,27 +158,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SIMULATEUR AIDES RÉNOVATION — bandeau dédié */}
-      <section className="bg-sand-50 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SimulateurCTA variant="banner" />
-        </div>
-      </section>
-
       {/* SERVICE × VILLE MATRIX — bento aéré */}
       <section className="bg-white py-20 md:py-24 border-y border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-100 text-primary-600 text-xs font-bold tracking-[0.18em] uppercase mb-4">
-              <Search className="w-3.5 h-3.5" aria-hidden="true" />
-              Recherche rapide
-            </span>
-            <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight text-charcoal-900 mb-4">
-              Trouvez un artisan RGE près de chez vous.
+          <div className="mb-12">
+            <h2 className="font-heading text-3xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+              Un artisan RGE dans votre ville
             </h2>
-            <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
-              Accès direct aux artisans RGE certifiés des grandes villes pour les métiers les plus
-              demandés.
+            <p className="text-lg text-charcoal-600 max-w-2xl">
+              Accès direct aux artisans certifiés des grandes villes, métier par métier.
             </p>
           </div>
 
@@ -241,14 +221,11 @@ export default async function HomePage() {
       {/* TARIFS POPULAIRES — chips arrondis */}
       <section className="bg-sand-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
-              Tarifs par ville
-            </span>
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
-              Grilles tarifaires des métiers les plus demandés.
+          <div className="mb-10">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+              Les tarifs, ville par ville
             </h2>
-            <p className="text-charcoal-600 max-w-xl mx-auto">
+            <p className="text-charcoal-600 max-w-xl">
               Tarifs moyens d&apos;artisans RGE certifiés, mis à jour chaque mois.
             </p>
           </div>
@@ -273,16 +250,12 @@ export default async function HomePage() {
       <section className="bg-white py-20 border-y border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <GeographicSectionWrapper>
-            <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-50 border border-accent-100 text-accent-700 text-xs font-bold tracking-[0.18em] uppercase mb-4">
-                <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
-                Couverture nationale
-              </span>
-              <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight text-charcoal-900 mb-4">
-                Artisans partout en France.
+            <div className="mb-12">
+              <h2 className="font-heading text-3xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+                Partout en France
               </h2>
-              <p className="text-lg text-charcoal-600 max-w-2xl mx-auto">
-                Trouvez des professionnels RGE certifiés dans votre région, département ou ville.
+              <p className="text-lg text-charcoal-600 max-w-2xl">
+                Des professionnels RGE certifiés dans votre région, département ou ville.
               </p>
             </div>
             <GeographicNavigation />
@@ -293,19 +266,16 @@ export default async function HomePage() {
       {/* EXPLORER & RESSOURCES — chips */}
       <section className="bg-sand-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary-500 tracking-[0.18em] uppercase mb-3">
-              Explorer
-            </span>
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold tracking-tight text-charcoal-900 mb-3">
-              Préparer vos travaux.
+          <div className="mb-10">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal-900 mb-3">
+              Préparer vos travaux
             </h2>
-            <p className="text-charcoal-600 max-w-xl mx-auto">
+            <p className="text-charcoal-600 max-w-xl">
               Guides, tarifs, avis et outils pour bien choisir votre artisan.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-2.5">
+          <div className="flex flex-wrap gap-2.5">
             {[
               { href: '/avis', label: 'Avis artisans' },
               { href: '/tarifs', label: 'Tarifs artisans' },
@@ -330,28 +300,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* RÉNOVATION ÉNERGÉTIQUE — gros bento accent comme Hellio */}
+      {/* RÉNOVATION ÉNERGÉTIQUE — section sombre sobre */}
       <section className="px-4 sm:px-6 lg:px-8 py-20">
-        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white overflow-hidden relative">
-          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-            <div className="absolute -top-40 -right-40 w-[28rem] h-[28rem] rounded-full bg-accent-400/15 blur-3xl" />
-            <div className="absolute -bottom-32 -left-24 w-80 h-80 rounded-full bg-secondary-500/10 blur-3xl" />
-          </div>
-
-          <div className="relative px-6 md:px-12 lg:px-16 py-16 md:py-20">
-            <div className="text-center mb-14 max-w-3xl mx-auto">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-500/15 backdrop-blur-sm border border-secondary-400/30 text-sm font-medium text-secondary-200 mb-5">
-                <Sparkles className="w-4 h-4" aria-hidden="true" />
-                Rénovation énergétique 2026
-              </span>
+        <div className="max-w-7xl mx-auto rounded-[2rem] bg-charcoal-950 text-white overflow-hidden">
+          <div className="px-6 md:px-12 lg:px-16 py-16 md:py-20">
+            <div className="mb-14 max-w-3xl">
+              <p className="text-sm font-medium text-sand-400 mb-4">Rénovation énergétique 2026</p>
               <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.05] mb-5">
-                Jusqu&apos;à 15 000 €
-                <br className="hidden md:block" />{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-300 to-primary-300">
-                  d&apos;aides pour vos travaux.
-                </span>
+                Jusqu&apos;à 15 000 € d&apos;aides pour vos travaux
               </h2>
-              <p className="text-lg text-accent-100/95 leading-relaxed">
+              <p className="text-lg text-sand-300 leading-relaxed">
                 Primes CEE, MaPrimeRénov&apos;, artisans RGE certifiés&nbsp;: tout pour financer
                 votre rénovation énergétique.
               </p>
@@ -360,7 +318,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
                 href="/cee"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+                className="group p-7 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   19 opérations
@@ -377,7 +335,7 @@ export default async function HomePage() {
 
               <Link
                 href="/cee/guides"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+                className="group p-7 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   10 guides détaillés
@@ -396,7 +354,7 @@ export default async function HomePage() {
 
               <Link
                 href="/rge"
-                className="group p-7 rounded-3xl bg-white/8 hover:bg-white/12 border border-white/15 backdrop-blur-sm transition-all hover:-translate-y-0.5"
+                className="group p-7 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
               >
                 <div className="text-xs font-semibold text-secondary-300 mb-2 uppercase tracking-wider">
                   Source ADEME
@@ -415,7 +373,7 @@ export default async function HomePage() {
 
               <Link
                 href="/devenir-partenaire-cee"
-                className="group p-7 rounded-3xl bg-gradient-to-br from-secondary-500/20 to-primary-500/15 hover:from-secondary-500/30 hover:to-primary-500/25 border border-secondary-400/40 backdrop-blur-sm transition-all hover:-translate-y-0.5 relative"
+                className="group p-7 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-secondary-400/40 transition-colors relative"
               >
                 <span className="absolute top-4 right-4 px-2.5 py-0.5 bg-secondary-400 text-charcoal-900 text-2xs font-bold rounded-full uppercase tracking-wide">
                   Pro
@@ -460,18 +418,9 @@ export default async function HomePage() {
 
       {/* CTA FINAL — bandeau primary */}
       <section className="px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="max-w-7xl mx-auto rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white overflow-hidden relative">
-          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-            <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-secondary-400/20 blur-3xl" />
-            <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-accent-500/15 blur-3xl" />
-          </div>
-
-          <div className="relative px-6 md:px-12 lg:px-20 py-16 md:py-20 grid lg:grid-cols-12 gap-10 items-center">
+        <div className="max-w-7xl mx-auto rounded-[2rem] bg-primary-600 text-white overflow-hidden">
+          <div className="px-6 md:px-12 lg:px-20 py-16 md:py-20 grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/20 text-sm font-medium text-white mb-5">
-                <ShieldCheck className="w-4 h-4 text-secondary-300" aria-hidden="true" />
-                Devis gratuit en 30 secondes
-              </span>
               <h2 className="font-heading text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-5">
                 Prêt à lancer vos travaux&nbsp;?
               </h2>
@@ -498,8 +447,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      <ExitIntentPopup />
     </div>
   )
 }
