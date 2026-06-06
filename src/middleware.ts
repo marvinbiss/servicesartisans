@@ -132,9 +132,21 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   //    because stable_id contains mixed-case characters (HMAC-SHA256 base64)
   //    Exclude simulateur result paths: /simulateur-aides-renovation/resultat/EST-YYYY-MM-DD-xxxxxx
   //    because public_id uses uppercase EST- prefix stored as-is in DB
+  //    Exclude /api/** — no duplicate-content concern, and the 301 corrupts
+  //    case-sensitive path params (review invitation tokens) while converting
+  //    POST to GET (fetch follows 301 with method rewrite → 405)
+  //    Exclude /invitation-avis/{token} — base64url tokens are case-sensitive;
+  //    lowercasing breaks the SHA256 lookup ("Invitation introuvable")
   const isArtisanPublicIdPath = /^\/services\/[^/]+\/[^/]+\/[^/]+$/.test(pathname)
   const isSimulateurResultPath = /^\/simulateur-aides-renovation\/resultat\/[^/]+$/.test(pathname)
-  if (!isArtisanPublicIdPath && !isSimulateurResultPath && pathname !== pathname.toLowerCase()) {
+  const isCaseSensitivePath =
+    pathname.startsWith('/api/') || pathname.startsWith('/invitation-avis/')
+  if (
+    !isArtisanPublicIdPath &&
+    !isSimulateurResultPath &&
+    !isCaseSensitivePath &&
+    pathname !== pathname.toLowerCase()
+  ) {
     pathname = pathname.toLowerCase()
     needsRedirect = true
   }
