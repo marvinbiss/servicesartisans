@@ -729,7 +729,7 @@ export default function PompeAChaleurPage() {
       </div>
 
       {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
-      <StickyMobileCTA serviceSlug="chauffage" ctaText="Demander un devis gratuit" />
+      <StickyMobileCTA serviceSlug="pompe-a-chaleur" ctaText="Demander un devis gratuit" />
       <ExitIntentPopup />
     </>
   )

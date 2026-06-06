@@ -4,7 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Phone } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
-import { slugify } from '@/lib/utils'
+import { buildDevisHref } from '@/lib/utils'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { getClientPortrait } from '@/lib/data/images-faces'
@@ -38,17 +38,9 @@ export default function GeoPageCTA({
   const [isDevisOpen, setIsDevisOpen] = useState(false)
 
   // Build desktop devis link with pre-filled service + ville.
-  // 2026-05-07 — fix : pointe vers `/devis?service&ville` (formulaire pré-rempli)
-  // au lieu de `/services/[s]/[v]` (page artisans listing). Le user clique
-  // « devis », il atterrit sur le formulaire — pas une autre page.
-  const villeSlug = ville ? slugify(ville) : ''
-  const devisHref = (() => {
-    if (service && villeSlug) {
-      return `/devis?service=${encodeURIComponent(service)}&ville=${encodeURIComponent(villeSlug)}`
-    }
-    if (service) return `/devis/${service}`
-    return '/devis'
-  })()
+  // 2026-06-06 — consolidation : buildDevisHref (@/lib/utils) est la seule
+  // source de vérité. La copie inline driftait (cf. bug StickyMobileCTA).
+  const devisHref = buildDevisHref(service, ville)
 
   const handleClick = () => {
     const isDesktop = window.matchMedia('(min-width: 768px)').matches

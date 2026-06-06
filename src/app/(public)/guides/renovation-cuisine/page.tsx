@@ -709,7 +709,7 @@ export default function RenovationCuisinePage() {
       </div>
 
       {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
-      <StickyMobileCTA serviceSlug="cuisine" ctaText="Demander un devis gratuit" />
+      <StickyMobileCTA serviceSlug="menuisier" ctaText="Demander un devis gratuit" />
       <ExitIntentPopup />
     </>
   )

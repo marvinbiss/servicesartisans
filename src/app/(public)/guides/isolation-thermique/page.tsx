@@ -710,7 +710,7 @@ export default function IsolationThermiquePage() {
       </div>
 
       {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
-      <StickyMobileCTA serviceSlug="isolation" ctaText="Demander un devis gratuit" />
+      <StickyMobileCTA serviceSlug="isolation-thermique" ctaText="Demander un devis gratuit" />
       <ExitIntentPopup />
     </>
   )

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { FileText, Phone } from 'lucide-react'
 import { PHONE_TEL } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { buildDevisHref } from '@/lib/utils'
 import { getClientPortrait } from '@/lib/data/images-faces'
 import DevisBottomSheet from './DevisBottomSheet'
 import ScrollNudge from './ScrollNudge'
@@ -177,13 +178,12 @@ export default function StickyMobileCTA({
   // Format phone for tel: link
   const telHref = artisanPhone ? `tel:${artisanPhone.replace(/[\s.\-()]/g, '')}` : PHONE_TEL
 
-  // Build desktop devis link with pre-filled params
-  const devisHref =
-    serviceSlug && citySlug
-      ? `/services/${serviceSlug}/${citySlug}`
-      : serviceSlug
-        ? `/devis/${serviceSlug}`
-        : '/devis'
+  // Build desktop devis link with pre-filled params.
+  // Post-mortem 2026-05-07 (répliqué 2026-06-06) : l'ancienne logique inline
+  // pointait vers /services/[s]/[v] (self-link sur les pages listing) ou
+  // /devis/[slug] avec des slugs morts post-pivot RGE (410 middleware).
+  // buildDevisHref est la seule source de vérité : /devis?service=&ville=.
+  const devisHref = buildDevisHref(serviceSlug, cityName || citySlug)
 
   return (
     <>

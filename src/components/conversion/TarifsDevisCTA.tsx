@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight, CheckCircle, Shield, Clock } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { slugify } from '@/lib/utils'
+import { buildDevisHref } from '@/lib/utils'
 
 const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), {
   ssr: false,
@@ -28,16 +28,9 @@ export default function TarifsDevisCTA({
   const [isOpen, setIsOpen] = useState(false)
 
   // Build desktop devis link with pre-filled service + ville.
-  // 2026-05-07 — fix : pointe vers `/devis?service&ville` (formulaire pré-rempli)
-  // au lieu de `/services/[s]/[v]` (page artisans listing).
-  const villeSlug = ville ? slugify(ville) : ''
-  const devisHref = (() => {
-    if (service && villeSlug) {
-      return `/devis?service=${encodeURIComponent(service)}&ville=${encodeURIComponent(villeSlug)}`
-    }
-    if (service) return `/devis/${service}`
-    return '/devis'
-  })()
+  // 2026-06-06 — consolidation : buildDevisHref (@/lib/utils) est la seule
+  // source de vérité. La copie inline driftait (cf. bug StickyMobileCTA).
+  const devisHref = buildDevisHref(service, ville)
 
   const handleClick = () => {
     const isDesktop = window.matchMedia('(min-width: 768px)').matches

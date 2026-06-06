@@ -745,7 +745,7 @@ export default function RenovationSalleDeBainPage() {
       </div>
 
       {/* Conversion — Sticky mobile CTA + Exit intent (desktop) */}
-      <StickyMobileCTA serviceSlug="plomberie" ctaText="Demander un devis gratuit" />
+      <StickyMobileCTA serviceSlug="salle-de-bain" ctaText="Demander un devis gratuit" />
       <ExitIntentPopup />
     </>
   )
