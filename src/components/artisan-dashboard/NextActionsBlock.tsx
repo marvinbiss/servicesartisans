@@ -84,28 +84,40 @@ const SEVERITY_STYLES: Record<
 const SEVERITY_ORDER: Record<Severity, number> = { p0: 0, p1: 1, p2: 2 }
 
 export default function NextActionsBlock() {
-  const { data: rge } = useSWR<RgePayload>('/api/artisan/rge', fetcher, {
+  const { data: rge, error: rgeError } = useSWR<RgePayload>('/api/artisan/rge', fetcher, {
     revalidateOnFocus: false,
     refreshInterval: 300_000,
     dedupingInterval: 60_000,
   })
-  const { data: rep } = useSWR<ReputationPayload>('/api/artisan/reputation', fetcher, {
-    revalidateOnFocus: true,
-    refreshInterval: 60_000,
-    dedupingInterval: 10_000,
-  })
-  const { data: funnel } = useSWR<FunnelPayload>('/api/artisan/funnel?days=30', fetcher, {
-    revalidateOnFocus: false,
-    refreshInterval: 120_000,
-    dedupingInterval: 30_000,
-  })
-  const { data: stats } = useSWR<StatsPayload>('/api/artisan/stats', fetcher, {
+  const { data: rep, error: repError } = useSWR<ReputationPayload>(
+    '/api/artisan/reputation',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 60_000,
+      dedupingInterval: 10_000,
+    }
+  )
+  const { data: funnel, error: funnelError } = useSWR<FunnelPayload>(
+    '/api/artisan/funnel?days=30',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 120_000,
+      dedupingInterval: 30_000,
+    }
+  )
+  const { data: stats, error: statsError } = useSWR<StatsPayload>('/api/artisan/stats', fetcher, {
     revalidateOnFocus: true,
     refreshInterval: 30_000,
     dedupingInterval: 5_000,
   })
 
   const actions = buildActions({ rge, rep, funnel, stats })
+
+  // Les 4 sources en erreur : masquer le bloc plutôt qu'un skeleton infini
+  const allFailed = !!rgeError && !!repError && !!funnelError && !!statsError
+  if (allFailed) return null
 
   // Rien à afficher tant qu'aucune source n'a répondu
   const isLoading = !rge && !rep && !funnel && !stats

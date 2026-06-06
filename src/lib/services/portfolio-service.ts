@@ -309,7 +309,11 @@ export async function reorderPortfolioItems(
 
   // Update display_order for each item
   const updates = items.map((item) =>
-    supabase.from('portfolio_items').update({ display_order: item.display_order }).eq('id', item.id)
+    supabase
+      .from('portfolio_items')
+      .update({ display_order: item.display_order })
+      .eq('id', item.id)
+      .eq('artisan_id', artisanId)
   )
 
   const results = await Promise.all(updates)

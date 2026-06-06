@@ -24,7 +24,9 @@ export const dynamic = 'force-dynamic'
 const avatarFieldsSchema = z.object({ file: z.unknown().optional() }).passthrough()
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
-const MAX_SIZE_BYTES = 2 * 1024 * 1024 // 2 MB
+// 4 MB: aligned with the client check (AvatarSection) and under the ~4.5 MB
+// Vercel request-body cap; client-side compressImage keeps real photos far below.
+const MAX_SIZE_BYTES = 4 * 1024 * 1024
 
 type AllowedMimeType = (typeof ALLOWED_TYPES)[number]
 
@@ -124,7 +126,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (file.size > MAX_SIZE_BYTES) {
       return NextResponse.json(
-        { error: 'Fichier trop volumineux. Taille maximale: 2 Mo.' },
+        { error: 'Fichier trop volumineux. Taille maximale: 4 Mo.' },
         { status: 422 }
       )
     }

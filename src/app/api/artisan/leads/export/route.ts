@@ -29,7 +29,11 @@ export const dynamic = 'force-dynamic'
 /** Escape a value for CSV: wrap in quotes, double any existing quotes */
 function csvEscape(value: string | null | undefined): string {
   if (value == null) return ''
-  const str = String(value)
+  let str = String(value)
+  // Formula injection: client_name/description come from the public devis
+  // form — a leading = + - @ (or tab/CR) would execute in Excel on the
+  // artisan's machine. Prefix with a quote to force text interpretation.
+  if (/^[=+\-@\t\r]/.test(str)) str = `'${str}`
   // Always wrap in quotes to handle semicolons, newlines, quotes in values
   return `"${str.replace(/"/g, '""')}"`
 }

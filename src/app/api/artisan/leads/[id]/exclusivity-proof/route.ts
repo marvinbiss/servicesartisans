@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { getExclusivityProofForAssignment } from '@/lib/leads/exclusivity-proof'
 import { logger } from '@/lib/logger'
 
@@ -7,24 +7,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(_request: Request, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Non authentifie' }, { status: 401 })
-    }
-
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .maybeSingle()
-
-    if (!provider) {
-      return NextResponse.json({ error: 'Artisan introuvable' }, { status: 403 })
-    }
+    // Audit 2026-06-06 : seule route leads/[id] qui contournait le guard
+    // centralise (role artisan + gate 2FA) — alignee sur les autres.
+    const guard = await requireArtisan()
+    if (guard.error) return guard.error
+    const { provider } = guard
 
     const proof = await getExclusivityProofForAssignment(params.id)
 

@@ -11,7 +11,7 @@ interface AvatarSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_FILE_SIZE = 4 * 1024 * 1024 // 4MB - meme limite que l'API avatar
 
 export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
   const [uploading, setUploading] = useState(false)
@@ -39,7 +39,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      setError('Le fichier est trop volumineux. Taille maximum : 5 Mo.')
+      setError('Le fichier est trop volumineux. Taille maximum : 4 Mo.')
       return
     }
 
@@ -162,7 +162,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
             Ajoutez une photo de profil professionnelle pour inspirer confiance.
           </p>
           <p className="text-xs text-charcoal-500 mb-4">
-            Formats acceptés : JPEG, PNG, WebP. Taille maximale : 5 Mo.
+            Formats acceptés : JPEG, PNG, WebP. Taille maximale : 4 Mo.
           </p>
 
           <div className="flex gap-3">

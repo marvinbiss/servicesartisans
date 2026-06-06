@@ -64,11 +64,12 @@ describe('<NextActionsBlock /> — partial failure', () => {
     expect(screen.queryByText(/demandes non consultées/i)).not.toBeInTheDocument()
   })
 
-  it('toutes les sources en erreur : affiche inbox zero (pas de crash)', () => {
+  it('toutes les sources en erreur : bloc masque (ni skeleton infini, ni faux inbox zero)', () => {
     wireMixed({}, new Set(['rge', 'rep', 'funnel', 'stats']))
     const { container } = render(<NextActionsBlock />)
-    // Soit loading soit inbox zero, jamais crash
-    expect(container.firstChild).not.toBeNull()
+    // Audit 2026-06-06 : 4 sources en erreur -> return null. Un skeleton
+    // permanent ou un "Tout est sous controle" seraient mensongers.
+    expect(container.firstChild).toBeNull()
   })
 
   it('seule source rep disponible : affiche uniquement action rep', () => {
