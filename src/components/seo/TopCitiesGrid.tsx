@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { MapPin, ArrowRight } from 'lucide-react'
 import { villes } from '@/lib/data/france'
+import { buildDevisHref } from '@/lib/utils'
 
 // Top 20 villes françaises par population/volume de recherche
 const TOP_CITIES_COUNT = 20
@@ -60,7 +61,17 @@ function getCtaText(serviceName: string, intent: Intent): string {
 }
 
 function getHref(serviceSlug: string, villeSlug: string, intent: Intent): string {
-  return `/${intent}/${serviceSlug}/${villeSlug}`
+  // 2026-06-06 — /devis/[s]/[v] et /tarifs/[s]/[v] sont purgés (stratégie 140K,
+  // redirects permanents). On pointe directement les destinations vivantes
+  // pour éviter 20 hops 301/308 internes par page hub.
+  switch (intent) {
+    case 'devis':
+      return buildDevisHref(serviceSlug, villeSlug)
+    case 'tarifs':
+      return `/services/${serviceSlug}/${villeSlug}#tarifs`
+    case 'services':
+      return `/services/${serviceSlug}/${villeSlug}`
+  }
 }
 
 export default function TopCitiesGrid({
