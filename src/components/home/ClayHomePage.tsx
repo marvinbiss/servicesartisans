@@ -310,9 +310,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 <div className="text-sm font-bold text-charcoal-900">
                   Certification RGE vérifiée
                 </div>
-                <div className="text-xs text-charcoal-500">
-                  Registre ADEME, synchronisé chaque semaine
-                </div>
+                <div className="text-xs text-charcoal-500">Source&nbsp;: Registre RGE ADEME</div>
               </div>
             </div>
           </div>
@@ -498,9 +496,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 Tout le registre RGE. Rien d&apos;autre.
               </h2>
               <p className="text-charcoal-600 leading-relaxed max-w-lg mb-9">
-                Chaque fiche provient du registre officiel des artisans RGE tenu par l&apos;ADEME,
-                synchronisé chaque semaine. Pas d&apos;auto-déclaration&nbsp;: une certification
-                vérifiable, ou rien.
+                Chaque fiche provient du registre officiel des artisans RGE tenu par l&apos;ADEME.
+                Pas d&apos;auto-déclaration&nbsp;: une certification vérifiable, ou rien.
               </p>
 
               <div className="grid grid-cols-3 gap-6 max-w-md mb-10">
@@ -522,9 +519,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 </div>
                 <div>
                   <div className="font-heading text-2xl md:text-3xl font-black text-charcoal-900 tabular-nums">
-                    7&nbsp;j
+                    100&nbsp;%
                   </div>
-                  <div className="text-sm text-charcoal-500 mt-1">entre deux syncs ADEME</div>
+                  <div className="text-sm text-charcoal-500 mt-1">issues du registre ADEME</div>
                 </div>
               </div>
 
