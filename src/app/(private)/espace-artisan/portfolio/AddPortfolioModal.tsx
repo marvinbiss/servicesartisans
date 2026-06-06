@@ -58,7 +58,9 @@ export default function AddPortfolioModal({ item, onClose, onCreated }: AddPortf
       // In production, this would come from the auth context
       const formData = new FormData()
       formData.append('file', files[0])
-      formData.append('type', type)
+      // L'API n'accepte que image|video|before|after — 'main' désigne le
+      // fichier principal côté UI et se résout selon le type de média.
+      formData.append('type', type === 'main' ? (mediaType === 'video' ? 'video' : 'image') : type)
 
       const response = await fetch('/api/portfolio/upload', {
         method: 'POST',
