@@ -288,8 +288,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="relative hidden lg:block">
             <div className="relative h-[520px] rounded-3xl overflow-hidden border border-sand-200">
               <Image
-                src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&h=1100&fit=crop&q=80"
-                alt="Artisan RGE certifié en intervention sur une installation électrique"
+                src="https://images.unsplash.com/photo-1672748341520-6a839e6c05bb?w=900&h=1100&fit=crop&q=80"
+                alt="Artisan RGE certifié souriant sur un chantier de rénovation énergétique"
                 fill
                 priority
                 sizes="(max-width: 1024px) 0px, 440px"
