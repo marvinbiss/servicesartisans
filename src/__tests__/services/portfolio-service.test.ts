@@ -568,9 +568,9 @@ describe('reorderPortfolioItems', () => {
         b.in = vi.fn().mockResolvedValue({ data: [{ id: 'a' }, { id: 'b' }], error: null })
         return b
       }
-      // Individual updates
+      // Individual updates — .eq('id').eq('artisan_id') (re-filtre ownership)
       const b = createMockQueryBuilder()
-      b.eq = vi.fn().mockResolvedValue({ error: null })
+      b.eq = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ error: null }) })
       return b
     })
 
