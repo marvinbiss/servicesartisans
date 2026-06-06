@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface AnimatedCounterProps {
   /** Valeur finale à atteindre */
@@ -22,88 +22,84 @@ interface AnimatedCounterProps {
 /**
  * Hook useCountUp — anime un nombre de 0 à `end` quand l'élément entre dans le viewport.
  * Utilise IntersectionObserver + requestAnimationFrame.
+ *
+ * L'observer vit dans un useEffect keyé sur l'élément (state, pas ref) : le
+ * pattern précédent créait l'observer dans le callback ref et le détruisait
+ * dans le cleanup d'un useEffect vide — en React 18 StrictMode (dev), le
+ * double-invoke des effects déconnectait l'observer sans jamais ré-observer,
+ * et le compteur restait figé à 0.
  */
 function useCountUp(
   end: number,
   duration: number,
   decimals: number
-): { ref: React.RefCallback<HTMLElement>; value: number; hasAnimated: boolean } {
+): { ref: (node: HTMLElement | null) => void; value: number; hasAnimated: boolean } {
   const [value, setValue] = useState(0)
   const [hasAnimated, setHasAnimated] = useState(false)
-  const elementRef = useRef<HTMLElement | null>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
+  const [element, setElement] = useState<HTMLElement | null>(null)
   const rafRef = useRef<number | null>(null)
 
-  const animate = useCallback(() => {
-    const startTime = performance.now()
+  useEffect(() => {
+    if (!element || hasAnimated) return
 
-    const tick = (now: number) => {
-      const elapsed = now - startTime
-      const progress = Math.min(elapsed / duration, 1)
-
-      // Easing: easeOutCubic pour un effet naturel
-      const eased = 1 - Math.pow(1 - progress, 3)
-      const factor = Math.pow(10, decimals)
-      const current = Math.round(eased * end * factor) / factor
-
-      setValue(current)
-
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(tick)
-      } else {
-        setValue(end)
-        setHasAnimated(true)
-      }
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback : pas d'IO, afficher directement
+      setValue(end)
+      setHasAnimated(true)
+      return
     }
 
-    rafRef.current = requestAnimationFrame(tick)
-  }, [end, duration, decimals])
-
-  const ref = useCallback(
-    (node: HTMLElement | null) => {
-      // Cleanup précédent
-      if (observerRef.current && elementRef.current) {
-        observerRef.current.unobserve(elementRef.current)
-      }
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-      }
-
-      elementRef.current = node
-
-      if (!node || hasAnimated) return
-
-      if (typeof IntersectionObserver === 'undefined') {
-        // Fallback : pas d'IO, afficher directement
-        setValue(end)
-        setHasAnimated(true)
-        return
-      }
-
-      observerRef.current = new IntersectionObserver(
+    // prefers-reduced-motion : valeur finale immédiate, pas d'animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver(
         (entries) => {
-          if (entries[0]?.isIntersecting && !hasAnimated) {
-            animate()
-            observerRef.current?.disconnect()
+          if (entries[0]?.isIntersecting) {
+            observer.disconnect()
+            setValue(end)
+            setHasAnimated(true)
           }
         },
         { threshold: 0.2 }
       )
-
-      observerRef.current.observe(node)
-    },
-    [animate, end, hasAnimated]
-  )
-
-  // Cleanup au démontage
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      if (observerRef.current) observerRef.current.disconnect()
+      observer.observe(element)
+      return () => observer.disconnect()
     }
-  }, [])
 
-  return { ref, value, hasAnimated }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting) return
+        observer.disconnect()
+
+        const startTime = performance.now()
+        const tick = (now: number) => {
+          const elapsed = now - startTime
+          const progress = Math.min(elapsed / duration, 1)
+
+          // Easing: easeOutCubic pour un effet naturel
+          const eased = 1 - Math.pow(1 - progress, 3)
+          const factor = Math.pow(10, decimals)
+          setValue(Math.round(eased * end * factor) / factor)
+
+          if (progress < 1) {
+            rafRef.current = requestAnimationFrame(tick)
+          } else {
+            setValue(end)
+            setHasAnimated(true)
+          }
+        }
+        rafRef.current = requestAnimationFrame(tick)
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(element)
+    return () => {
+      observer.disconnect()
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [element, hasAnimated, end, duration, decimals])
+
+  return { ref: setElement, value, hasAnimated }
 }
 
 /**

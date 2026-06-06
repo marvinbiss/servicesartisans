@@ -18,6 +18,8 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import { ClayHeroSearch } from './ClayHeroSearch'
+import { FranceConstellation } from './FranceConstellation'
+import AnimatedCounter from '@/components/conversion/AnimatedCounter'
 import SimulateurCTA from '@/components/cee/SimulateurCTA'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
@@ -235,7 +237,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           {/* Colonne gauche — pitch + recherche */}
           <div>
             <h2
-              className="font-heading font-black tracking-[-0.04em] leading-[1.05] text-charcoal-900 mb-5"
+              className="font-heading font-black tracking-[-0.04em] leading-[1.05] text-charcoal-900 text-balance mb-5"
               style={{ fontSize: 'clamp(2.25rem, 4.5vw, 3.6rem)' }}
               aria-hidden="true"
             >
@@ -294,6 +296,10 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 placeholder="blur"
                 blurDataURL={BLUR_PLACEHOLDER}
                 className="object-cover"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-charcoal-950/35 via-transparent to-transparent"
+                aria-hidden="true"
               />
             </div>
             <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 bg-white rounded-2xl border border-sand-200 shadow-soft px-5 py-4">
@@ -472,6 +478,76 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   </ScrollReveal>
                 )
               })}
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
+
+      {/* ─── REGISTRE RGE — signature data : constellation France ── */}
+      <ScrollReveal as="section">
+        <div className="bg-white border-y border-sand-200">
+          <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-20 md:py-24 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <p className="text-sm font-medium text-charcoal-500 mb-4">
+                Source&nbsp;: registre RGE ADEME — data.gouv.fr
+              </p>
+              <h2
+                className="font-heading font-black tracking-[-0.04em] leading-[1.08] text-charcoal-900 text-balance mb-5"
+                style={{ fontSize: 'clamp(1.9rem,3.4vw,2.8rem)' }}
+              >
+                Tout le registre RGE. Rien d&apos;autre.
+              </h2>
+              <p className="text-charcoal-600 leading-relaxed max-w-lg mb-9">
+                Chaque fiche provient du registre officiel des artisans RGE tenu par l&apos;ADEME,
+                synchronisé chaque semaine. Pas d&apos;auto-déclaration&nbsp;: une certification
+                vérifiable, ou rien.
+              </p>
+
+              <div className="grid grid-cols-3 gap-6 max-w-md mb-10">
+                <div>
+                  <div className="font-heading text-2xl md:text-3xl font-black text-charcoal-900 tabular-nums">
+                    {artisanCount > 0 ? (
+                      <AnimatedCounter end={artisanCount} suffix="+" />
+                    ) : (
+                      countStr
+                    )}
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">artisans RGE</div>
+                </div>
+                <div>
+                  <div className="font-heading text-2xl md:text-3xl font-black text-charcoal-900 tabular-nums">
+                    {deptCount > 0 ? <AnimatedCounter end={deptCount} /> : '---'}
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">départements</div>
+                </div>
+                <div>
+                  <div className="font-heading text-2xl md:text-3xl font-black text-charcoal-900 tabular-nums">
+                    7&nbsp;j
+                  </div>
+                  <div className="text-sm text-charcoal-500 mt-1">entre deux syncs ADEME</div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/rge"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold shadow-cta hover:shadow-cta-hover transition-all"
+                >
+                  Explorer l&apos;annuaire RGE
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/barometre/rge"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-charcoal-600 hover:text-primary-600 transition-colors"
+                >
+                  Voir le baromètre RGE
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="max-w-[520px] lg:justify-self-end w-full">
+              <FranceConstellation />
             </div>
           </div>
         </div>
