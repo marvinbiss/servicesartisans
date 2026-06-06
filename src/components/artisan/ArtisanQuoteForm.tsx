@@ -264,7 +264,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
   return (
     <div className="bg-white rounded-2xl shadow-soft border-2 border-primary-100 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-400 to-primary-600 px-6 py-5">
+      <div className="bg-primary-600 px-6 py-5">
         <h2 className="font-heading text-xl font-bold text-white flex items-center gap-2">
           <FileText className="w-5 h-5" aria-hidden="true" />
           Devis gratuit en 2 min
@@ -279,10 +279,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
         {success ? (
           <div className="animate-fade-in-scale text-center py-6">
             <div
-              className="animate-fade-in-scale w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+              className="animate-fade-in-scale w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4"
               style={{ animationDelay: '0.1s' }}
             >
-              <CheckCircle className="w-8 h-8 text-green-600" aria-hidden="true" />
+              <CheckCircle className="w-8 h-8 text-accent-600" aria-hidden="true" />
             </div>
             <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
               Votre demande a été envoyée !
@@ -386,7 +386,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 <button
                   type="button"
                   onClick={handleContinue}
-                  className="w-full py-3 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2 shadow-lg shadow-primary-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2 shadow-cta hover:shadow-cta-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
                 >
                   Continuer
                   <ChevronRight className="w-5 h-5" aria-hidden="true" />
@@ -513,7 +513,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full py-3.5 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold text-base flex items-center justify-center gap-2.5 shadow-cta hover:shadow-cta-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   aria-label={`Envoyer ma demande de devis à ${displayName}`}
                 >
                   {loading ? (

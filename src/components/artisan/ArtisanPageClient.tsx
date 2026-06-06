@@ -35,15 +35,6 @@ import { BookingFunnel } from '@/lib/analytics/tracking'
 import { trackProviderView } from '@/lib/storage/recently-viewed'
 import { RecentlyViewedCarousel } from '@/components/providers/RecentlyViewedCarousel'
 
-// Dynamic import for exit intent (not needed on first paint)
-const ArtisanExitIntent = dynamic(
-  () =>
-    import('@/components/artisan/ArtisanExitIntent').then((mod) => ({
-      default: mod.ArtisanExitIntent,
-    })),
-  { ssr: false }
-)
-
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
   return (
@@ -509,9 +500,6 @@ export default function ArtisanPageClient({
           />
         )}
       </div>
-
-      {/* Exit intent — claimed ET unclaimed (filet de rattrapage universel) */}
-      <ArtisanExitIntent artisan={artisan} isClaimed={isClaimed} />
     </>
   )
 }

@@ -188,10 +188,10 @@ export function ArtisanBusinessCard({ artisan, isClaimed }: ArtisanBusinessCardP
       style={{ animationDelay: '0.2s' }}
     >
       {/* Header */}
-      <div className="px-6 py-5 bg-gradient-to-r from-sand-50 via-primary-50/30 to-sand-50 border-b border-sand-200">
+      <div className="px-6 py-5 bg-sand-50 border-b border-sand-200">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-sm flex-shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm flex-shrink-0">
               <Shield className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>

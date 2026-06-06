@@ -15,8 +15,7 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
 
   return (
     <div className="bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden">
-      {/* Terracotta accent */}
-      <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-600" />
+      <div className="h-1.5 bg-primary-500" />
 
       <div className="p-6">
         <h3 className="text-lg font-semibold text-charcoal-900 font-heading mb-4">
@@ -27,10 +26,7 @@ export function ArtisanContactCard({ artisan, isClaimed = false }: ArtisanContac
         <div className="flex items-center gap-3 mb-5 flex-wrap">
           {artisan.accepts_new_clients === true && (
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 border border-accent-200">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
-              </span>
+              <span className="inline-flex rounded-full h-2 w-2 bg-accent-500" />
               <span className="text-xs font-semibold text-accent-700">Disponible</span>
             </div>
           )}

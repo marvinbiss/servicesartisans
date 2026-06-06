@@ -316,8 +316,8 @@ export function UnclaimedDevisModal({
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-6"
                 >
-                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-7 h-7 text-green-600" aria-hidden="true" />
+                  <div className="w-14 h-14 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-7 h-7 text-accent-600" aria-hidden="true" />
                   </div>
                   <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">
                     Demande envoyée !
@@ -347,7 +347,7 @@ export function UnclaimedDevisModal({
                     </div>
                     <div className="relative h-1.5 bg-sand-200 rounded-full overflow-hidden">
                       <motion.div
-                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full"
+                        className="absolute inset-y-0 left-0 bg-primary-500 rounded-full"
                         initial={false}
                         animate={{ width: step === 1 ? '50%' : '100%' }}
                         transition={{ duration: 0.4, ease: 'easeOut' }}

@@ -31,8 +31,7 @@ export function UnclaimedSidebarCTA({
       className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
       style={{ animationDelay: '0.2s' }}
     >
-      {/* Gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600" />
+      <div className="h-1.5 bg-primary-500" />
 
       <div className="p-6">
         {/* Branding */}

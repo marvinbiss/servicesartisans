@@ -191,7 +191,7 @@ export function ArtisanRgeEnrichedSection({
       className="bg-white rounded-2xl shadow-soft border border-accent-100 overflow-hidden"
     >
       {/* Header */}
-      <div className="bg-gradient-to-br from-accent-600 via-accent-700 to-charcoal-900 text-white px-6 py-5">
+      <div className="bg-charcoal-950 text-white px-6 py-5">
         <div className="flex items-start gap-3">
           <div className="rounded-full bg-white/15 border border-white/25 p-2">
             <ShieldCheck className="w-5 h-5 text-accent-100" aria-hidden="true" />

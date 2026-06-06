@@ -52,8 +52,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
         role="banner"
         aria-label={`Profil de ${displayName}`}
       >
-        {/* Terracotta gradient accent bar */}
-        <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-600" />
+        <div className="h-1.5 bg-primary-500" />
 
         <div className="p-5 md:p-8">
           <div className="flex flex-col sm:flex-row gap-5 md:gap-6">
@@ -67,7 +66,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                     aria-hidden="true"
                   />
                 )}
-                <div className="w-[120px] h-[120px] rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg overflow-hidden ring-4 ring-white relative">
+                <div className="w-[120px] h-[120px] rounded-2xl bg-primary-500 flex items-center justify-center text-white text-4xl font-bold shadow-lg overflow-hidden ring-4 ring-white relative">
                   {hasPortfolioImage ? (
                     <Image
                       src={artisan.portfolio?.[0]?.imageUrl ?? ''}
@@ -198,7 +197,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                         setIsDevisOpen(true)
                       }
                     }}
-                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-500 hover:bg-primary-600 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary-500/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
+                    className="w-full sm:w-auto py-3.5 px-8 bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation"
                     aria-label="Devis gratuit en 2 min"
                   >
                     <FileText className="w-5 h-5" aria-hidden="true" />
@@ -233,7 +232,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                         target: 'artisan',
                       })
                     }}
-                    className="w-full sm:w-auto py-3.5 px-8 bg-accent-600 hover:bg-accent-700 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent-600/25 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                    className="w-full sm:w-auto py-3.5 px-8 bg-accent-600 hover:bg-accent-700 shadow-lg shadow-accent-600/20 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2.5 text-base touch-manipulation focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
                     aria-label={`Appeler ${displayName}`}
                   >
                     <Phone className="w-5 h-5" aria-hidden="true" />

@@ -77,7 +77,7 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
   if (items.length === 0) return null
 
   return (
-    <div className="animate-fade-in-up bg-gradient-to-r from-primary-50 to-sand-100 rounded-2xl border border-primary-200/40 px-5 py-3.5">
+    <div className="animate-fade-in-up bg-primary-50 rounded-2xl border border-primary-200/40 px-5 py-3.5">
       <div className="hidden sm:flex flex-wrap items-center gap-x-6 gap-y-2">
         {items.map((item) => (
           <div
@@ -85,10 +85,7 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
             className="flex items-center gap-2 text-sm font-medium text-charcoal-900"
           >
             {item.label === 'Accepte de nouveaux clients' ? (
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-500" />
-              </span>
+              <span className="inline-flex rounded-full h-2.5 w-2.5 bg-accent-500" />
             ) : (
               <item.icon className={`w-4 h-4 flex-shrink-0 ${item.color}`} aria-hidden="true" />
             )}
@@ -105,10 +102,7 @@ export function ArtisanUrgencyBanner({ artisan }: { artisan: LegacyArtisan }) {
             className="flex items-center gap-2 text-xs font-medium text-charcoal-900"
           >
             {item.label === 'Accepte de nouveaux clients' ? (
-              <span className="relative flex h-2 w-2 flex-shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
-              </span>
+              <span className="inline-flex rounded-full h-2 w-2 flex-shrink-0 bg-accent-500" />
             ) : (
               <item.icon className={`w-3.5 h-3.5 flex-shrink-0 ${item.color}`} aria-hidden="true" />
             )}

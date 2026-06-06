@@ -303,8 +303,8 @@ export default function UnclaimedQuoteWizard({
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="bg-white rounded-2xl shadow-soft border border-sand-200 p-8 md:p-12 text-center max-w-2xl mx-auto"
         >
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Check className="w-8 h-8 text-green-600" aria-hidden="true" />
+          <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Check className="w-8 h-8 text-accent-600" aria-hidden="true" />
           </div>
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-3">
             Demande envoyée !
@@ -354,7 +354,7 @@ export default function UnclaimedQuoteWizard({
           </div>
           <div className="relative h-2 bg-sand-200 rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full"
+              className="absolute inset-y-0 left-0 bg-primary-500 rounded-full"
               initial={false}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5, ease: 'easeOut' }}

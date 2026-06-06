@@ -28,11 +28,10 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
   return (
     <>
       <div
-        className="animate-fade-in-up bg-gradient-to-br from-primary-50 via-white to-accent-50 rounded-xl border border-primary-200/60 shadow-soft overflow-hidden"
+        className="animate-fade-in-up bg-white rounded-xl border border-sand-200 shadow-soft overflow-hidden"
         style={{ animationDelay: '0.15s' }}
       >
-        {/* Top accent bar */}
-        <div className="h-1 bg-gradient-to-r from-primary-400 to-accent-500" />
+        <div className="h-1 bg-primary-500" />
 
         <div className="p-5 md:p-6">
           {/* Title */}
@@ -48,7 +47,7 @@ export function ArtisanQuickQuote({ artisan }: ArtisanQuickQuoteProps) {
           {/* CTA Button */}
           <button
             onClick={handleClick}
-            className="w-full py-3.5 px-6 bg-primary-500 hover:bg-primary-600 shadow-lg shadow-primary-500/25 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full py-3.5 px-6 bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2.5 touch-manipulation"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />

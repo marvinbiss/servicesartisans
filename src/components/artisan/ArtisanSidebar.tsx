@@ -43,17 +43,13 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
       style={{ animationDelay: '0.2s' }}
     >
-      {/* Terracotta gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600" />
+      <div className="h-1.5 bg-primary-500" />
 
       <div className="p-6">
         {/* Status - Disponible */}
         {artisan.accepts_new_clients === true && (
           <div className="flex items-center gap-2 text-accent-700 mb-4 pb-4 border-b border-sand-200">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-500" />
-            </span>
+            <span className="inline-flex rounded-full h-2.5 w-2.5 bg-accent-500" />
             <span className="text-sm font-semibold">Disponible - Accepte de nouveaux clients</span>
           </div>
         )}
@@ -69,7 +65,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               })
               window.location.href = getDevisUrl(artisan)
             }}
-            className="w-full py-4 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="w-full py-4 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta hover:shadow-cta-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label="Devis gratuit en 2 min"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
@@ -95,7 +91,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           {artisan.email && (
             <button
               onClick={handleEmail}
-              className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
+              className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-charcoal-400" aria-hidden="true" />

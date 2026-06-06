@@ -171,8 +171,8 @@ export function UnclaimedInlineDevis({
   if (submitted) {
     return (
       <div className="bg-white rounded-2xl shadow-card-hover border border-sand-200 p-6 text-center">
-        <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-7 h-7 text-green-600" aria-hidden="true" />
+        <div className="w-14 h-14 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-7 h-7 text-accent-600" aria-hidden="true" />
         </div>
         <h3 className="font-heading text-lg font-bold text-charcoal-900 mb-2">Demande envoyée !</h3>
         <p className="text-charcoal-600 text-sm">Un conseiller vous rappelle rapidement.</p>

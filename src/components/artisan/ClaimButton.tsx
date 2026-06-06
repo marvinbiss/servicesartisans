@@ -165,7 +165,7 @@ export function ClaimButton({ providerId, providerName }: ClaimButtonProps) {
           capture(EVENT.ARTISAN_CLAIM_STARTED, { providerId, providerName })
           setShowModal(true)
         }}
-        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all shadow-md shadow-amber-500/20"
+        className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white py-3 px-4 rounded-xl font-semibold transition-all shadow-md shadow-amber-500/20"
       >
         <Shield className="w-5 h-5" />
         Vous êtes cet artisan ? Revendiquez cette fiche
@@ -194,8 +194,8 @@ export function ClaimButton({ providerId, providerName }: ClaimButtonProps) {
             {success ? (
               // Success state
               <div className="text-center py-4">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                <div className="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-8 h-8 text-accent-600" />
                 </div>
                 <h3 className="text-xl font-bold text-charcoal-900 mb-2">Demande envoyée !</h3>
                 <p className="text-charcoal-600 mb-6">
@@ -366,7 +366,7 @@ export function ClaimButton({ providerId, providerName }: ClaimButtonProps) {
                   <button
                     onClick={handleClaim}
                     disabled={isLoading || !isFormValid}
-                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
