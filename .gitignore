@@ -108,3 +108,6 @@ packages/sa-rge-sdk-py/**/.pytest_cache/
 packages/sa-rge-sdk-py/**/*.egg-info/
 packages/sa-rge-sdk-py/build/
 packages/sa-rge-sdk-py/.venv/
+
+# Screenshots benchmark design (artefacts locaux, regenerables via scripts/design-benchmark-shots.mjs)
+design-shots/
