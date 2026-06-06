@@ -43,6 +43,12 @@ interface ProviderRecord {
   description?: string | null
   bio?: string | null
   avatar_url?: string | null
+  // Mig 306 — déclaratif artisan (claimed-only à l'affichage, hors type
+  // Artisan par GUARD → passés en props dédiées à ArtisanCredentialsBlock)
+  certifications?: string[] | null
+  insurance?: string[] | null
+  payment_methods?: string[] | null
+  languages?: string[] | null
   address_street?: string | null
   address_city?: string | null
   address_postal_code?: string | null
@@ -1101,7 +1107,12 @@ async function renderProviderPage({ params }: PageProps) {
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
       {/* JSON-LD structured data — rendered SERVER-SIDE for immediate bot visibility */}
-      <ArtisanSchema artisan={artisan} isClaimed={isClaimed} />
+      <ArtisanSchema
+        artisan={artisan}
+        isClaimed={isClaimed}
+        paymentMethods={provider.payment_methods}
+        languages={provider.languages}
+      />
 
       {/* Google Reviews badge — affiché juste après le schéma, avant le client.
           Tous les guards (place_id + status OPERATIONAL + rating ≥ 1 + count ≥ 3)
@@ -1144,6 +1155,12 @@ async function renderProviderPage({ params }: PageProps) {
         isClaimed={isClaimed}
         hasSiret={!!provider.siret}
         hasVerifiedDescription={hasVerifiedDescription}
+        credentials={{
+          certifications: provider.certifications,
+          insurance: provider.insurance,
+          paymentMethods: provider.payment_methods,
+          languages: provider.languages,
+        }}
       />
 
       {/* ─── DEVIS CTA BANNER — only for claimed profiles ───── */}

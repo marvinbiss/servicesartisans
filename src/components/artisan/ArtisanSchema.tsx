@@ -13,9 +13,18 @@ import { getServiceLabel } from '@/lib/services/labels'
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
   isClaimed?: boolean
+  /** Mig 306 déclaratif (providers.payment_methods) — hors type Artisan (GUARD) */
+  paymentMethods?: string[] | null
+  /** Mig 306 déclaratif (providers.languages) — hors type Artisan (GUARD) */
+  languages?: string[] | null
 }
 
-export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps) {
+export function ArtisanSchema({
+  artisan,
+  isClaimed = false,
+  paymentMethods = null,
+  languages = null,
+}: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = companyIdentity.url
 
@@ -336,6 +345,23 @@ export function ArtisanSchema({ artisan, isClaimed = false }: ArtisanSchemaProps
       }
     })(),
     currenciesAccepted: 'EUR',
+
+    // paymentAccepted / knowsLanguage — mig 306 déclaratif artisan, émis
+    // UNIQUEMENT si claimed (contenu auto-déclaré ; `languages` a un DEFAULT
+    // ['Français'] sur toute la base → l'émettre hors claim = signal non
+    // validé sur ~970K fiches). knowsLanguage : LocalBusiness ⊂ Organization
+    // (availableLanguage est réservé à ContactPoint/ServiceChannel).
+    ...(() => {
+      if (!isClaimed) return {}
+      const pm = (paymentMethods ?? []).filter((v) => v && v.trim().length > 0)
+      const langs = (languages ?? []).filter((v) => v && v.trim().length > 0)
+      return {
+        ...(pm.length > 0 && { paymentAccepted: pm.join(', ') }),
+        ...(langs.length > 0 && {
+          knowsLanguage: langs.map((name) => ({ '@type': 'Language', name })),
+        }),
+      }
+    })(),
 
     // Opening hours for Google Knowledge Panel
     ...(artisan.opening_hours &&

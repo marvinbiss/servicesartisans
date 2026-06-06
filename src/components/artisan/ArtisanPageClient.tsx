@@ -28,6 +28,7 @@ import { RemovalRequestButton } from '@/components/artisan/RemovalRequestButton'
 import { PlatformSidebarCTA } from '@/components/artisan/PlatformSidebarCTA'
 import { UnclaimedStickyBar } from '@/components/artisan/UnclaimedStickyBar'
 import { ArtisanRgeAdemeCard } from '@/components/artisan/ArtisanRgeAdemeCard'
+import { ArtisanCredentialsBlock } from '@/components/artisan/ArtisanCredentialsBlock'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { buildDevisHref } from '@/lib/utils'
 import type { LegacyArtisan } from '@/types/legacy'
@@ -137,6 +138,14 @@ interface SimilarArtisan {
   is_verified?: boolean
 }
 
+/** Mig 306 déclaratif artisan — hors type Artisan (GUARD types.ts), props dédiées */
+interface ArtisanCredentials {
+  certifications?: string[] | null
+  insurance?: string[] | null
+  paymentMethods?: string[] | null
+  languages?: string[] | null
+}
+
 interface ArtisanPageClientProps {
   initialArtisan: LegacyArtisan | null
   initialReviews: Review[]
@@ -145,6 +154,7 @@ interface ArtisanPageClientProps {
   isClaimed?: boolean
   hasSiret?: boolean
   hasVerifiedDescription?: boolean
+  credentials?: ArtisanCredentials | null
 }
 
 export default function ArtisanPageClient({
@@ -155,6 +165,7 @@ export default function ArtisanPageClient({
   isClaimed = false,
   hasSiret = false,
   hasVerifiedDescription = false,
+  credentials = null,
 }: ArtisanPageClientProps) {
   const artisan = initialArtisan
   const reviews = initialReviews
@@ -397,6 +408,19 @@ export default function ArtisanPageClient({
               {isClaimed && (
                 <section id="services" aria-label="Services et tarifs">
                   <ArtisanServices artisan={artisan} isClaimed={isClaimed} />
+                </section>
+              )}
+              {/* 7b. Garanties & infos pratiques — mig 306 déclaratif, claimed only
+                  (contenu auto-déclaré non validé pour les fiches non revendiquées,
+                  languages a un DEFAULT base entière) */}
+              {isClaimed && credentials && (
+                <section aria-label="Garanties et informations pratiques">
+                  <ArtisanCredentialsBlock
+                    certifications={credentials.certifications}
+                    insurance={credentials.insurance}
+                    paymentMethods={credentials.paymentMethods}
+                    languages={credentials.languages}
+                  />
                 </section>
               )}
               {/* 8. Business card — verification details (email gated by isClaimed for RGPD) */}
