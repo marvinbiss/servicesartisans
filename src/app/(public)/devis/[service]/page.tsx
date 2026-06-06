@@ -306,7 +306,7 @@ export default async function DevisServicePage({
       {/* ─── Prestations courantes + Tarifs ──────────────── */}
       <section className="py-16 bg-white border-t border-sand-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-2xl p-8 text-center mb-12">
+          <div className="bg-sand-100 border border-sand-200 rounded-2xl p-8 text-center mb-12">
             <h2 className="text-lg font-semibold text-charcoal-700 mb-2">Tarif indicatif</h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-primary-500">
@@ -392,29 +392,31 @@ export default async function DevisServicePage({
       </section>
 
       {/* ─── CTA ─────────────────────────────────────────── */}
-      <section className="py-16 bg-gradient-primary">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Prêt à recevoir votre devis {tradeLower}&nbsp;?
-          </h2>
-          <p className="text-xl text-primary-100 mb-8">
-            Commencez par choisir votre ville pour un devis adapté aux tarifs locaux.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="#formulaire"
-              className="inline-flex items-center gap-2 bg-white text-primary-500 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-lg"
-            >
-              Demander mon devis gratuit
-              <ArrowRight className="w-5 h-5" />
-            </a>
-            <Link
-              href={`/services/${service}`}
-              className="inline-flex items-center gap-2 bg-primary-300 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-200 transition-colors text-lg border border-primary-300"
-            >
-              Trouver un {tradeLower}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-[2rem] bg-primary-600 px-6 py-12 md:px-14 md:py-14">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-white mb-3 text-balance">
+              Prêt à recevoir votre devis {tradeLower}&nbsp;?
+            </h2>
+            <p className="text-lg text-primary-100 mb-8 max-w-xl">
+              Commencez par choisir votre ville pour un devis adapté aux tarifs locaux.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#formulaire"
+                className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors"
+              >
+                Demander mon devis gratuit
+                <ArrowRight className="w-5 h-5" />
+              </a>
+              <Link
+                href={`/services/${service}`}
+                className="inline-flex items-center gap-2 border border-white/40 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-colors"
+              >
+                Trouver un {tradeLower}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

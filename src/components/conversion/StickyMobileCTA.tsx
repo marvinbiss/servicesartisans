@@ -257,7 +257,7 @@ export default function StickyMobileCTA({
               {/* Main CTA — opens bottom sheet on mobile */}
               <button
                 onClick={openSheet}
-                className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white font-semibold text-sm rounded-xl shadow-cta active:scale-[0.98] transition-all touch-manipulation"
+                className="flex-1 flex items-center justify-center gap-2 h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold text-sm rounded-xl shadow-cta transition-all touch-manipulation"
               >
                 <FileText className="w-4 h-4 flex-shrink-0" />
                 {ctaText}
@@ -293,7 +293,7 @@ export default function StickyMobileCTA({
               source: 'sticky_desktop_cta',
             })
           }}
-          className="group flex items-center gap-3 bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white font-semibold px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
+          className="group flex items-center gap-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-4 rounded-2xl shadow-cta hover:shadow-cta-hover transition-all"
         >
           <FileText className="w-5 h-5 flex-shrink-0" />
           <span className="text-base">{ctaText}</span>

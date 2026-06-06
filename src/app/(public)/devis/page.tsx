@@ -15,7 +15,7 @@ import { ArticleMeta } from '@/components/ArticleMeta'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { tradeContent } from '@/lib/data/trade-content'
-import { villes, services } from '@/lib/data/france'
+import { villes } from '@/lib/data/france'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
 export const revalidate = 86400
@@ -210,8 +210,8 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
             Devis gratuit d'artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC) — sans
             engagement
           </p>
-          <p className="text-charcoal-500 mt-2 text-sm font-medium">
-            ★ 4.8/5 — Plus de 23 000 demandes traitées
+          <p className="text-charcoal-500 mt-2 text-sm">
+            Source&nbsp;: registre RGE ADEME · data.gouv.fr — SIRET vérifiés INSEE
           </p>
           <ArticleMeta
             author="Équipe éditoriale ServicesArtisans"
@@ -322,32 +322,6 @@ export default async function DevisPage({ searchParams }: DevisPageProps) {
                 </div>
               </details>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── DEVIS PAR MÉTIER (slim — 12 services + lien vers /services) ── */}
-      <section className="py-12 bg-white border-t border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
-            Devis par métier
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {services.slice(0, 12).map((s) => (
-              <Link
-                key={`devis-${s.slug}`}
-                href={`/devis/${s.slug}`}
-                className="text-sm text-charcoal-700 hover:text-primary-500 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 px-3 py-1.5 rounded-lg transition-colors"
-              >
-                Devis {s.name.toLowerCase()}
-              </Link>
-            ))}
-            <Link
-              href="/services"
-              className="text-sm font-semibold text-primary-500 hover:text-primary-600 bg-primary-50 hover:bg-primary-100 border border-primary-200 px-3 py-1.5 rounded-lg transition-colors inline-flex items-center gap-1"
-            >
-              Tous les métiers <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
           </div>
         </div>
       </section>

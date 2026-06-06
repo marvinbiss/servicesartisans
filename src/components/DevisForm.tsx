@@ -110,7 +110,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
         aria-label="Progression du formulaire"
       >
         <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all duration-500 ease-premium"
+          className="absolute inset-y-0 left-0 bg-primary-500 rounded-full transition-all duration-500 ease-premium"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -252,16 +252,32 @@ export default function DevisForm({
   const [savedVille, setSavedVille] = useState('')
   const [savedAtLabel, setSavedAtLabel] = useState('')
 
+  // Bug 2026-06-06 : au mount, l'effet d'auto-save tournait dans le même
+  // commit que cet effet avec `showResumeBanner` encore false dans sa
+  // closure → il écrasait le draft avec l'état initial vide AVANT que
+  // l'utilisateur clique « Reprendre » (qui restaurait alors du vide).
+  // Le ref bloque l'auto-save tant que la décision resume est pendante —
+  // un ref est lu à l'exécution, pas capturé par la closure.
+  const resumePendingRef = useRef(false)
+
   useEffect(() => {
     if (isPrefilled) return
     const draft = loadDevisDraft()
     if (!draft) return
     if (draft.step > 1) {
+      resumePendingRef.current = true
       setSavedService(draft.formData.service || '')
       setSavedVille(draft.formData.ville || '')
       setSavedAtLabel(formatDraftSavedAt(draft.savedAt))
       setShowResumeBanner(true)
+    } else {
+      // Draft resté à l'étape 1 (service/ville remplis sans avancer) :
+      // restauration silencieuse, pas de bannière pour si peu.
+      form.setFormData((prev) => ({ ...prev, ...draft.formData }))
+      if (draft.villeQuery) form.setVilleQuery(draft.villeQuery)
+      if (draft.selectedVillePostal) setSelectedVillePostal(draft.selectedVillePostal)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPrefilled])
 
   const handleResume = useCallback(() => {
@@ -272,6 +288,7 @@ export default function DevisForm({
       if (draft.villeQuery) form.setVilleQuery(draft.villeQuery)
       if (draft.selectedVillePostal) setSelectedVillePostal(draft.selectedVillePostal)
     }
+    resumePendingRef.current = false
     setShowResumeBanner(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -290,6 +307,7 @@ export default function DevisForm({
     form.resetForm()
     form.setVilleQuery('')
     setSelectedVillePostal('')
+    resumePendingRef.current = false
     setShowResumeBanner(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -386,7 +404,7 @@ export default function DevisForm({
   )
 
   useEffect(() => {
-    if (form.submitted || showResumeBanner) return
+    if (form.submitted || showResumeBanner || resumePendingRef.current) return
     saveDevisDraft({
       formData: form.formData,
       step: form.step,
@@ -647,7 +665,7 @@ export default function DevisForm({
         <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
           <Link
             href="/services"
-            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
+            className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover transition-all duration-300"
           >
             Trouver d'autres artisans
           </Link>
@@ -664,17 +682,17 @@ export default function DevisForm({
 
   return (
     <div className="max-w-2xl mx-auto" data-devis-form>
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
-        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
-          <Shield className="w-3.5 h-3.5" />
-          100% Gratuit
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 mb-4 text-sm text-charcoal-600">
+        <span className="inline-flex items-center gap-1.5">
+          <Shield className="w-3.5 h-3.5 text-accent-600" />
+          100 % gratuit
         </span>
-        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
-          <Clock className="w-3.5 h-3.5" />
+        <span className="inline-flex items-center gap-1.5">
+          <Clock className="w-3.5 h-3.5 text-accent-600" />
           Réponse rapide
         </span>
-        <span className="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1 text-sm font-medium">
-          <Check className="w-3.5 h-3.5" />
+        <span className="inline-flex items-center gap-1.5">
+          <Check className="w-3.5 h-3.5 text-accent-600" />
           Sans engagement
         </span>
       </div>
@@ -748,11 +766,6 @@ export default function DevisForm({
                 </h3>
                 <p className="text-charcoal-500 text-sm">{stepTitles[0].subtitle}</p>
               </div>
-              <div className="flex items-center justify-center gap-2 text-sm text-charcoal-500">
-                <span className="text-amber-500">&#9733;</span>
-                <span>4.8/5 basé sur des milliers de demandes traitées</span>
-              </div>
-
               <div>
                 <label htmlFor="service" className={labelClass}>
                   Type de service <span className="text-red-500">*</span>
@@ -885,7 +898,7 @@ export default function DevisForm({
                 disabled={!form.isStep1Valid}
                 className={`w-full inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                   form.isStep1Valid
-                    ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                    ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover'
                     : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                 }`}
               >
@@ -1143,7 +1156,7 @@ export default function DevisForm({
                   disabled={!isStep2Valid}
                   className={`${isPrefilled && !isMinimal ? 'w-full' : 'flex-1'} inline-flex items-center justify-center gap-2 font-semibold px-6 py-4 rounded-xl transition-all duration-300 text-base ${
                     isStep2Valid
-                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 hover:scale-[1.01]'
+                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover'
                       : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >
@@ -1335,7 +1348,7 @@ export default function DevisForm({
                   disabled={form.submitting || !form.isStep3Valid}
                   className={`flex-1 inline-flex items-center justify-center gap-2 font-semibold px-6 py-5 rounded-xl transition-all duration-300 text-lg ${
                     form.isStep3Valid && !form.submitting
-                      ? 'bg-gradient-to-r from-primary-400 to-primary-600 hover:from-primary-500 hover:to-primary-700 text-white shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1'
+                      ? 'bg-primary-500 hover:bg-primary-600 text-white shadow-cta hover:shadow-cta-hover'
                       : 'bg-charcoal-200 text-charcoal-700 cursor-not-allowed'
                   }`}
                 >

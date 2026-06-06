@@ -323,7 +323,7 @@ export default function DevisConfirmation({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.27 }}
-          className={`px-4 py-3 bg-gradient-to-br from-accent-50 to-primary-50 border border-accent-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
+          className={`px-4 py-3 bg-accent-50 border border-accent-200 rounded-xl ${compact ? 'mb-3' : 'mb-5'}`}
         >
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
