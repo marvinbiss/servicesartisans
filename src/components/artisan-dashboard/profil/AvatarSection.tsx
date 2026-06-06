@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { Camera, Loader2, Trash2 } from 'lucide-react'
 import { getInitials } from '@/lib/utils'
+import { compressImage } from '@/lib/images/compress-image'
 import Image from 'next/image'
 
 interface AvatarSectionProps {
@@ -26,11 +27,15 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
   const displayUrl = previewUrl || avatarUrl
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const rawFile = e.target.files?.[0]
+    if (!rawFile) return
 
     // Reset input so same file can be selected again
     e.target.value = ''
+
+    // Compress first: shrinks phone photos under the platform body cap and
+    // converts HEIC to JPEG before the type/size checks reject them.
+    const file = await compressImage(rawFile)
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {

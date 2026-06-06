@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { FileDropzone } from '@/components/upload'
 import Button from '@/components/ui/Button'
 import { useFocusTrap } from '@/lib/hooks/use-focus-trap'
+import { compressImage } from '@/lib/images/compress-image'
 import type { PortfolioItem, MediaType, UploadedFile } from '@/types/portfolio'
 import { logger } from '@/lib/logger'
 import { PORTFOLIO_CATEGORIES } from '@/types/portfolio'
@@ -54,10 +55,9 @@ export default function AddPortfolioModal({ item, onClose, onCreated }: AddPortf
     setError(null)
 
     try {
-      // Get artisan ID from current user - we'll use a dummy for now
-      // In production, this would come from the auth context
+      const isVideoUpload = type === 'main' && mediaType === 'video'
       const formData = new FormData()
-      formData.append('file', files[0])
+      formData.append('file', isVideoUpload ? files[0] : await compressImage(files[0]))
       // L'API n'accepte que image|video|before|after — 'main' désigne le
       // fichier principal côté UI et se résout selon le type de média.
       formData.append('type', type === 'main' ? (mediaType === 'video' ? 'video' : 'image') : type)
