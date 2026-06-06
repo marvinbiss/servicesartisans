@@ -967,8 +967,11 @@ async function renderProviderPage({ params }: PageProps) {
     redirect(canonicalUrl)
   }
 
-  // Convert to Artisan format
-  const artisan = convertToArtisan(provider, service, location, serviceSlug)
+  // Convert to Artisan format. resolvedProvider (et non provider brut) :
+  // address_city peut être un code INSEE — le fallback de convertToArtisan
+  // (location null) propagerait sinon '75101' jusqu'aux CTAs devis
+  // (buildDevisHref → préfill ville illisible).
+  const artisan = convertToArtisan(resolvedProvider, service, location, serviceSlug)
 
   // Fetch reviews and similar artisans in parallel (graceful degradation).
   // raceTimeout helper hoisté en module scope (Tier 45) — partagé avec

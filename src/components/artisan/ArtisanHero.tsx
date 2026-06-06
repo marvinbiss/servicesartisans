@@ -19,6 +19,7 @@ import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
+import { buildDevisHref } from '@/lib/utils'
 
 const DevisBottomSheet = dynamic(() => import('@/components/conversion/DevisBottomSheet'), {
   ssr: false,
@@ -184,14 +185,13 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                         if (devisSection) {
                           devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
                         } else {
-                          const slug = artisan.specialty_slug || ''
-                          const city = artisan.city?.toLowerCase().replace(/\s+/g, '-') || ''
-                          window.location.href =
-                            slug && city
-                              ? `/services/${slug}/${encodeURIComponent(city)}`
-                              : slug
-                                ? `/devis/${slug}`
-                                : '/devis'
+                          // 2026-06-06 — fix : l'ancien fallback pointait le
+                          // listing /services/[s]/[v] (mauvaise destination) avec
+                          // une ville non slugifiée (accents → 410 middleware).
+                          window.location.href = buildDevisHref(
+                            artisan.specialty_slug,
+                            artisan.city
+                          )
                         }
                       } else {
                         setIsDevisOpen(true)

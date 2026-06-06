@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Sparkles, ArrowRight } from 'lucide-react'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { slugify } from '@/lib/utils'
 
 interface CeeCtaProps {
   serviceSlug?: string
@@ -11,10 +12,13 @@ interface CeeCtaProps {
   variant?: 'inline' | 'hero' | 'sticky-bottom'
 }
 
-function buildDevisHref(serviceSlug?: string, operationCode?: string): string {
+function buildCeeDevisHref(serviceSlug?: string, operationCode?: string, ville?: string): string {
   const params = new URLSearchParams()
   if (serviceSlug) params.set('service', serviceSlug)
   if (operationCode) params.set('operation', operationCode)
+  // 2026-06-06 — la ville était reçue en prop mais jamais transmise au
+  // formulaire /devis (qui consomme `?ville=` depuis 2026-05-07).
+  if (ville) params.set('ville', slugify(ville))
   params.set('source', 'cee')
   const qs = params.toString()
   return `/devis${qs ? `?${qs}` : ''}`
@@ -26,7 +30,7 @@ export default function CeeCTA({
   operationCode,
   variant = 'inline',
 }: CeeCtaProps) {
-  const href = buildDevisHref(serviceSlug, operationCode)
+  const href = buildCeeDevisHref(serviceSlug, operationCode, ville)
 
   const handleClick = () => {
     trackEvent('cee_cta_clicked', {

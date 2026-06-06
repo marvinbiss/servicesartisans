@@ -6,6 +6,7 @@ import { PHONE_TEL, PHONE_NUMBER, ADVISORS_COUNT } from '@/lib/seo/config'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getDisplayName } from '@/components/artisan/types'
 import { trackEvent } from '@/lib/analytics/tracking'
+import { buildDevisHref } from '@/lib/utils'
 
 // Clé unique pour les fiches artisans — ne bloque pas les exit intents des autres pages
 const SESSION_KEY = 'sa:exit-artisan'
@@ -39,7 +40,10 @@ export function ArtisanExitIntent({ artisan, isClaimed = false }: ArtisanExitInt
   const city = artisan.city || ''
   const displayName = getDisplayName(artisan)
   const specialtyLower = specialty.toLowerCase()
-  const devisUrl = `/devis/${slugify(specialty)}${city ? `/${slugify(city)}` : ''}`
+  // 2026-06-06 — fix : l'ancien `/devis/[s]/[v]` (2 segments) n'existe plus
+  // (301 → listing /services, ou 410 si specialty hors canon). buildDevisHref
+  // pointe le formulaire /devis avec préfill query.
+  const devisUrl = buildDevisHref(slugify(specialty), city)
 
   // Vérifier si déjà affiché cette session
   useEffect(() => {

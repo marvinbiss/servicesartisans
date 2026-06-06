@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Euro, Star, Search, AlertTriangle, FileText, HelpCircle } from 'lucide-react'
 import { getAnchorText, type Intent } from '@/lib/seo/anchor-variants'
+import { buildDevisHref } from '@/lib/utils'
 import { getProblemsByService } from '@/lib/data/problems'
 
 type CurrentIntent = 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis' | 'problemes'
@@ -31,7 +32,9 @@ const ALL_INTENTS: IntentDef[] = [
     key: 'tarifs',
     label: 'Tarifs',
     icon: Euro,
-    href: (s, v) => (v ? `/services/${s}/${v}` : `/tarifs/${s}`),
+    // /tarifs/[s]/[v] est 301 → /services/[s]/[v]#tarifs : on pointe
+    // directement l'ancre pour éviter le self-link nu sur les pages listing.
+    href: (s, v) => (v ? `/services/${s}/${v}#tarifs` : `/tarifs/${s}`),
   },
   {
     key: 'avis',
@@ -55,7 +58,10 @@ const ALL_INTENTS: IntentDef[] = [
     key: 'devis',
     label: 'Devis',
     icon: FileText,
-    href: (s, v) => (v ? `/services/${s}/${v}` : `/devis/${s}`),
+    // Post-mortem 2026-05-07 (étendu 2026-06-06) : l'intent devis pointait
+    // /services/[s]/[v] (listing = self-link sur ces pages) au lieu du
+    // formulaire. buildDevisHref = source de vérité.
+    href: (s, v) => buildDevisHref(s, v),
   },
 ]
 
