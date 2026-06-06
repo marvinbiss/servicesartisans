@@ -1,20 +1,17 @@
 'use client'
 
+/**
+ * « Ma fiche » — éditeur de la fiche publique (refonte 2026-06-06).
+ * Les 10 anciens onglets sont regroupés en 2 groupes (Identité & contact,
+ * Activité & présentation) + 2 onglets absorbés : Portfolio (ex-page
+ * /portfolio) et Avis (ex-page /avis-recus). Les anciens ?tab= (identite,
+ * contact, avatar, …) restent valides via TAB_ALIASES — ProfileCompleteness
+ * et les anciens deep-links continuent de fonctionner.
+ */
+
 import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
-import {
-  Loader2,
-  Building2,
-  Phone,
-  MapPin,
-  FileText,
-  Euro,
-  Award,
-  Clock,
-  Settings2,
-  Camera,
-  HelpCircle,
-} from 'lucide-react'
+import { Loader2, Contact, FileText, Camera, Star } from 'lucide-react'
 import { IdentiteSection } from '@/components/artisan-dashboard/profil/IdentiteSection'
 import { ContactSection } from '@/components/artisan-dashboard/profil/ContactSection'
 import { LocalisationSection } from '@/components/artisan-dashboard/profil/LocalisationSection'
@@ -25,43 +22,59 @@ import { DisponibiliteSection } from '@/components/artisan-dashboard/profil/Disp
 import { PreferencesSection } from '@/components/artisan-dashboard/profil/PreferencesSection'
 import { FaqSection } from '@/components/artisan-dashboard/profil/FaqSection'
 import { AvatarSection } from '@/components/artisan-dashboard/profil/AvatarSection'
+import { PortfolioTab } from '@/components/artisan-dashboard/profil/PortfolioTab'
+import { AvisTab } from '@/components/artisan-dashboard/profil/AvisTab'
 
-type TabId =
-  | 'identite'
-  | 'contact'
-  | 'localisation'
-  | 'presentation'
-  | 'services'
-  | 'qualifications'
-  | 'disponibilite'
-  | 'faq'
-  | 'preferences'
-  | 'avatar'
+type TabId = 'identite' | 'activite' | 'portfolio' | 'avis'
 
 const TABS = [
-  { id: 'identite' as const, label: 'Identité', icon: Building2 },
-  { id: 'contact' as const, label: 'Contact', icon: Phone },
-  { id: 'localisation' as const, label: 'Localisation', icon: MapPin },
-  { id: 'presentation' as const, label: 'Présentation', icon: FileText },
-  { id: 'services' as const, label: 'Services & Tarifs', icon: Euro },
-  { id: 'qualifications' as const, label: 'Qualifications', icon: Award },
-  { id: 'disponibilite' as const, label: 'Disponibilité', icon: Clock },
-  { id: 'faq' as const, label: 'FAQ', icon: HelpCircle },
-  { id: 'preferences' as const, label: 'Préférences', icon: Settings2 },
-  { id: 'avatar' as const, label: 'Photo de profil', icon: Camera },
+  { id: 'identite' as const, label: 'Identité & contact', icon: Contact },
+  { id: 'activite' as const, label: 'Activité & présentation', icon: FileText },
+  { id: 'portfolio' as const, label: 'Portfolio', icon: Camera },
+  { id: 'avis' as const, label: 'Avis', icon: Star },
 ]
+
+// Anciens ?tab= (10 sections pré-refonte) → nouveau groupe. Les deep-links de
+// ProfileCompleteness (?tab=avatar, ?tab=presentation, …) restent valides.
+const TAB_ALIASES: Record<string, TabId> = {
+  identite: 'identite',
+  contact: 'identite',
+  localisation: 'identite',
+  avatar: 'identite',
+  presentation: 'activite',
+  services: 'activite',
+  qualifications: 'activite',
+  disponibilite: 'activite',
+  faq: 'activite',
+  preferences: 'activite',
+  activite: 'activite',
+  portfolio: 'portfolio',
+  avis: 'avis',
+}
+
+function resolveTab(param: string | null): TabId {
+  return (param && TAB_ALIASES[param]) || 'identite'
+}
 
 export default function ProfilArtisanPage() {
   const searchParams = useSearchParams()
   const tabParam = searchParams.get('tab')
-  const validTabs = useMemo(() => TABS.map((t) => t.id), [])
-  const initialTab =
-    tabParam && validTabs.includes(tabParam as TabId) ? (tabParam as TabId) : 'identite'
 
   const [provider, setProvider] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<TabId>(initialTab)
+  const [activeTab, setActiveTab] = useState<TabId>(() => resolveTab(tabParam))
+
+  // Navigation client-side vers /profil?tab=… alors qu'on est déjà sur la page
+  // (ex. redirect de /portfolio) : resynchroniser l'onglet actif.
+  useEffect(() => {
+    setActiveTab(resolveTab(tabParam))
+  }, [tabParam])
+
+  const selectTab = (id: TabId) => {
+    setActiveTab(id)
+    window.history.replaceState(null, '', `/espace-artisan/profil?tab=${id}`)
+  }
 
   useEffect(() => {
     fetch('/api/artisan/provider')
@@ -87,10 +100,10 @@ export default function ProfilArtisanPage() {
 
   const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     let newIndex: number | null = null
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault()
       newIndex = (index + 1) % TABS.length
-    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
       e.preventDefault()
       newIndex = (index - 1 + TABS.length) % TABS.length
     } else if (e.key === 'Home') {
@@ -101,122 +114,97 @@ export default function ProfilArtisanPage() {
       newIndex = TABS.length - 1
     }
     if (newIndex !== null) {
-      setActiveTab(TABS[newIndex].id)
-      const tabEl = document.getElementById(`tab-${TABS[newIndex].id}`)
-      tabEl?.focus()
+      selectTab(TABS[newIndex].id)
+      document.getElementById(`tab-${TABS[newIndex].id}`)?.focus()
     }
   }
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
-          <p className="text-charcoal-600">Chargement du profil...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // No provider found
-  if (error || !provider) {
-    return (
-      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <div className="text-center max-w-md">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
-            <h2 className="font-semibold mb-2">Profil introuvable</h2>
-            <p className="text-sm">
-              {error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}
-            </p>
+  // Les groupes d'édition dépendent du provider ; Portfolio et Avis sont
+  // autonomes (self-fetching) et ne doivent pas attendre ce chargement.
+  const editorPanel = useMemo(() => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+            <p className="text-charcoal-600">Chargement du profil...</p>
           </div>
         </div>
+      )
+    }
+    if (error || !provider) {
+      return (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg max-w-md">
+          <h2 className="font-semibold mb-2">Profil introuvable</h2>
+          <p className="text-sm">
+            {error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}
+          </p>
+        </div>
+      )
+    }
+    if (activeTab === 'identite') {
+      return (
+        <div className="space-y-8">
+          <AvatarSection provider={provider} onSaved={handleSaved} />
+          <IdentiteSection provider={provider} onSaved={handleSaved} />
+          <ContactSection provider={provider} onSaved={handleSaved} />
+          <LocalisationSection provider={provider} onSaved={handleSaved} />
+        </div>
+      )
+    }
+    return (
+      <div className="space-y-8">
+        <PresentationSection provider={provider} onSaved={handleSaved} />
+        <ServicesTarifsSection provider={provider} onSaved={handleSaved} />
+        <QualificationsSection provider={provider} onSaved={handleSaved} />
+        <DisponibiliteSection provider={provider} onSaved={handleSaved} />
+        <FaqSection provider={provider} onSaved={handleSaved} />
+        <PreferencesSection provider={provider} onSaved={handleSaved} />
       </div>
     )
-  }
+  }, [activeTab, loading, error, provider])
 
   return (
-    <div className="min-h-screen bg-sand-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary-500 to-primary-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-2xl font-bold">Mon profil public</h1>
-          <p className="text-primary-100">Gérez les informations visibles sur votre page artisan</p>
-        </div>
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold font-heading text-charcoal-900">Ma fiche</h1>
+        <p className="text-charcoal-600">
+          Gérez les informations, photos et avis visibles sur votre page publique
+        </p>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Tab navigation */}
-          <div className="lg:col-span-1">
-            <nav
-              className="bg-white rounded-xl shadow-sm p-4 space-y-1"
-              aria-label="Sections du profil"
-              role="tablist"
-              aria-orientation="vertical"
-            >
-              {TABS.map((tab, index) => (
-                <button
-                  key={tab.id}
-                  role="tab"
-                  aria-selected={activeTab === tab.id}
-                  aria-controls={`tabpanel-${tab.id}`}
-                  id={`tab-${tab.id}`}
-                  tabIndex={activeTab === tab.id ? 0 : -1}
-                  onClick={() => setActiveTab(tab.id)}
-                  onKeyDown={(e) => handleTabKeyDown(e, index)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
-                    activeTab === tab.id
-                      ? 'bg-primary-50 text-primary-500 font-medium'
-                      : 'text-charcoal-600 hover:bg-sand-50'
-                  }`}
-                >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
-          </div>
+      <nav
+        className="flex flex-wrap gap-1 bg-white rounded-xl shadow-sm p-1.5"
+        aria-label="Sections de la fiche"
+        role="tablist"
+        aria-orientation="horizontal"
+      >
+        {TABS.map((tab, index) => (
+          <button
+            key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls={`tabpanel-${tab.id}`}
+            id={`tab-${tab.id}`}
+            tabIndex={activeTab === tab.id ? 0 : -1}
+            onClick={() => selectTab(tab.id)}
+            onKeyDown={(e) => handleTabKeyDown(e, index)}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm transition-colors ${
+              activeTab === tab.id
+                ? 'bg-primary-50 text-primary-500 font-medium'
+                : 'text-charcoal-600 hover:bg-sand-50'
+            }`}
+          >
+            <tab.icon className="w-4 h-4" />
+            {tab.label}
+          </button>
+        ))}
+      </nav>
 
-          {/* Content */}
-          <div id="main-content" className="lg:col-span-3">
-            <main
-              className="w-full"
-              role="tabpanel"
-              id={`tabpanel-${activeTab}`}
-              aria-labelledby={`tab-${activeTab}`}
-            >
-              {activeTab === 'identite' && (
-                <IdentiteSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'contact' && (
-                <ContactSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'localisation' && (
-                <LocalisationSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'presentation' && (
-                <PresentationSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'services' && (
-                <ServicesTarifsSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'qualifications' && (
-                <QualificationsSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'disponibilite' && (
-                <DisponibiliteSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
-              {activeTab === 'preferences' && (
-                <PreferencesSection provider={provider} onSaved={handleSaved} />
-              )}
-              {activeTab === 'avatar' && (
-                <AvatarSection provider={provider} onSaved={handleSaved} />
-              )}
-            </main>
-          </div>
-        </div>
+      <div role="tabpanel" id={`tabpanel-${activeTab}`} aria-labelledby={`tab-${activeTab}`}>
+        {(activeTab === 'identite' || activeTab === 'activite') && editorPanel}
+        {activeTab === 'portfolio' && <PortfolioTab />}
+        {activeTab === 'avis' && <AvisTab />}
       </div>
     </div>
   )

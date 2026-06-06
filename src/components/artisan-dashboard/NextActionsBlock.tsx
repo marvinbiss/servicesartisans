@@ -330,7 +330,7 @@ function buildActions(args: {
           : `Seulement ${photoCount} photo${photoCount > 1 ? 's' : ''} sur votre profil`,
       detail:
         "Les profils avec au moins 3 photos reçoivent significativement plus d'appels et de demandes.",
-      href: '/espace-artisan/portfolio',
+      href: '/espace-artisan/profil?tab=portfolio',
       ctaLabel: 'Ajouter',
     })
   }
