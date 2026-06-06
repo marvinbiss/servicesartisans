@@ -326,7 +326,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       if (authError || !user) {
         const redirectUrl = isSafeRedirectPath(pathname)
           ? encodeURIComponent(pathname)
-          : encodeURIComponent('/espace-client')
+          : encodeURIComponent('/espace-artisan')
         return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
       }
 
@@ -352,7 +352,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
           }
           if (!verifiedPayload) {
             const verifyUrl = new URL('/verifier-2fa', request.url)
-            const nextPath = isSafeRedirectPath(pathname) ? pathname : '/espace-client'
+            const nextPath = isSafeRedirectPath(pathname) ? pathname : '/espace-artisan'
             verifyUrl.searchParams.set('next', nextPath)
             const redirectResp = NextResponse.redirect(verifyUrl)
             // Si pas de cookie pending non plus, le user n'a même pas franchi
@@ -369,7 +369,10 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
         }
 
         if (pathname.startsWith('/espace-artisan') && profile.role !== 'artisan') {
-          return NextResponse.redirect(new URL('/espace-client', request.url))
+          // Espace particulier fermé 2026-06-05 : ne jamais y envoyer un
+          // admin ; un client legacy garde son espace (RGPD conservé).
+          const target = profile.role === 'super_admin' ? '/admin' : '/espace-client'
+          return NextResponse.redirect(new URL(target, request.url))
         }
         if (pathname.startsWith('/espace-client') && profile.role === 'artisan') {
           return NextResponse.redirect(new URL('/espace-artisan', request.url))
@@ -383,7 +386,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
       const loginUrl = new URL('/connexion', request.url)
       loginUrl.searchParams.set(
         'redirect',
-        isSafeRedirectPath(request.nextUrl.pathname) ? request.nextUrl.pathname : '/espace-client'
+        isSafeRedirectPath(request.nextUrl.pathname) ? request.nextUrl.pathname : '/espace-artisan'
       )
       return NextResponse.redirect(loginUrl)
     }

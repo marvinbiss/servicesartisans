@@ -100,8 +100,8 @@ export async function POST(request: Request) {
           bookingId,
           userId: user.id,
         },
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-client/reservations?payment=cancelled`,
+        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/?payment=success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/?payment=cancelled`,
       },
       { idempotencyKey: `booking-payment:${bookingId}` }
     )
