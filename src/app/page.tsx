@@ -19,9 +19,6 @@ import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
 const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
 const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
   ssr: false,
 })
@@ -79,7 +76,6 @@ export default async function HomePage() {
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
-        <StickyMobileCTA ctaText="Devis gratuit en 30s" />
         <ExitIntentPopup />
       </div>
     )
@@ -493,17 +489,16 @@ export default async function HomePage() {
                 <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
               <Link
-                href="/services"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-secondary-500 hover:bg-secondary-400 text-charcoal-900 font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-secondary-300"
+                href="/espace-artisan"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-[1.5px] border-white/40 text-white font-bold hover:bg-white/10 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-white"
               >
-                Voir les services
+                Je suis artisan
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <StickyMobileCTA ctaText="Devis gratuit en 30s" />
       <ExitIntentPopup />
     </div>
   )

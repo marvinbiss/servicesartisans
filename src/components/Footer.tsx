@@ -75,23 +75,14 @@ export default function Footer() {
       {/* Newsletter Section Premium */}
       <div className="relative border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-primary-900/30">
-            {/* Decorative gradient orbs */}
-            <div
-              className="absolute -top-20 -right-20 w-60 h-60 bg-primary-300/20 rounded-full blur-3xl"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary-200/15 rounded-full blur-3xl"
-              aria-hidden="true"
-            />
-            <div className="relative text-center lg:text-left">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-charcoal-800 rounded-2xl p-8 lg:p-10 border border-charcoal-700">
+            <div className="text-center lg:text-left">
               <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">
                 Restez informé
               </h3>
-              <p className="text-white/80 text-base">Recevez nos conseils et offres exclusives</p>
+              <p className="text-sand-400 text-base">Recevez nos conseils et offres exclusives</p>
             </div>
-            <div className="relative w-full lg:w-auto">
+            <div className="w-full lg:w-auto">
               <NewsletterForm />
             </div>
           </div>

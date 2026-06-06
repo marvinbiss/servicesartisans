@@ -31,11 +31,6 @@ import {
 } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
-import dynamic from 'next/dynamic'
-
-const SocialProofToast = dynamic(() => import('@/components/conversion/SocialProofToast'), {
-  ssr: false,
-})
 
 interface Props {
   stats: SiteStats
@@ -293,7 +288,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               className="inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-2xl font-heading font-extrabold text-lg md:text-xl text-white bg-primary-500 hover:bg-primary-600 shadow-cta hover:shadow-cta-hover hover:-translate-y-1 animate-pulse-subtle"
             >
               <ClipboardList className="w-6 h-6" />
-              Obtenir mes 3 devis gratuits — en 2 min
+              Obtenir mes 3 devis gratuits
             </MagneticLink>
             {/* Trust micro-copy directly under CTA */}
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-charcoal-500">
@@ -367,7 +362,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                   style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)' }}
                 >
-                  50+ corps de métier — Trouvez le bon artisan en 2 min
+                  Trouvez le bon artisan, métier par métier
                 </h2>
               </div>
               <Link
@@ -423,7 +418,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900"
                 style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}
               >
-                Devis gratuit en 2 min — 48h réponse garantie — 100% artisans RGE certifiés
+                Un devis gratuit en trois étapes
               </h2>
             </div>
 
@@ -444,7 +439,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 {
                   n: '1',
                   title: 'Décrivez votre besoin',
-                  desc: 'Type de travaux, localisation, urgence --- 2 minutes suffisent.',
+                  desc: 'Type de travaux, localisation, urgence : 2 minutes suffisent.',
                   icon: ClipboardList,
                 },
                 {
@@ -738,55 +733,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <ClayFAQSection />
         </div>
       </ScrollReveal>
-
-      {/* ─── CTA FINAL — Bannière pleine largeur ────────────── */}
-      <ScrollReveal as="section">
-        <div className="relative overflow-hidden flex items-center" style={{ minHeight: '360px' }}>
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
-              alt="Artisan RGE certifié sur un chantier de rénovation énergétique en France"
-              fill
-              loading="lazy"
-              sizes="100vw"
-              placeholder="blur"
-              blurDataURL={BLUR_PLACEHOLDER}
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-terra opacity-[0.92]" />
-
-          <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10 py-20 text-center w-full">
-            <h2
-              className="font-heading font-black tracking-[-0.04em] text-white leading-[1.05] mb-4"
-              style={{ fontSize: 'clamp(1.75rem,4vw,2.8rem)' }}
-            >
-              Prêt à démarrer votre projet ?
-            </h2>
-            <p className="text-base leading-[1.7] mb-8 max-w-xl mx-auto text-white/80">
-              Des milliers de propriétaires font confiance à ServicesArtisans pour leurs travaux.
-            </p>
-            <div className="flex gap-3 flex-wrap justify-center">
-              <MagneticLink
-                href="/devis"
-                strength={0.2}
-                className="font-heading text-primary-600 text-sm font-extrabold px-8 py-4 rounded-full bg-white shadow-lg hover:shadow-xl"
-              >
-                Obtenir mon devis gratuit
-              </MagneticLink>
-              <Link
-                href="/espace-artisan"
-                className="text-white text-sm font-bold px-7 py-4 rounded-full transition-all duration-200 hover:bg-white/10 border-[1.5px] border-white/40"
-              >
-                Je suis artisan <ArrowRight className="w-4 h-4 inline ml-1" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
-      {/* ─── Social Proof Toast — Booking.com style ──────────── */}
-      <SocialProofToast initialDelay={6000} displayDuration={5000} interval={15000} maxToasts={4} />
     </>
   )
 }

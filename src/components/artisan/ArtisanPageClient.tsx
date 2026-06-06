@@ -44,11 +44,6 @@ const ArtisanExitIntent = dynamic(
   { ssr: false }
 )
 
-// Social proof toast — uses framer-motion AnimatePresence, lazy-loaded
-const SocialProofToast = dynamic(() => import('@/components/conversion/SocialProofToast'), {
-  ssr: false,
-})
-
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
   return (
@@ -517,9 +512,6 @@ export default function ArtisanPageClient({
 
       {/* Exit intent — claimed ET unclaimed (filet de rattrapage universel) */}
       <ArtisanExitIntent artisan={artisan} isClaimed={isClaimed} />
-
-      {/* Social proof toast — Booking.com style */}
-      <SocialProofToast initialDelay={8000} displayDuration={4500} interval={18000} maxToasts={3} />
     </>
   )
 }
