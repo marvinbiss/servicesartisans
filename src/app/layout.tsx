@@ -7,6 +7,7 @@ import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import SiteChrome from '@/components/SiteChrome'
 import { CompareProviderWrapper as CompareProviderWrapperStatic } from '@/components/compare/CompareProvider'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
@@ -288,12 +289,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             >
               Aller au contenu principal
             </a>
-            <Header artisanCount={artisanCount} />
-            <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">
+            {/* SiteChrome masque Header/Footer/MobileBottomNav sur les espaces
+                applicatifs (/espace-artisan, /espace-client, /admin) qui ont
+                leur propre shell. Header/Footer restent rendus server-side ici
+                (props ReactNode) — SSR Googlebot préservé. */}
+            <SiteChrome
+              header={<Header artisanCount={artisanCount} />}
+              footer={<Footer />}
+              mobileNav={<MobileBottomNav />}
+            >
               {children}
-            </main>
-            <Footer />
-            <MobileBottomNav />
+            </SiteChrome>
             <CompareBar />
             <CommandPaletteMount />
             <ServiceWorkerRegistration />
