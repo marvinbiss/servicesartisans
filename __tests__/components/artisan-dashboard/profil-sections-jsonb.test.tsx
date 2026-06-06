@@ -18,6 +18,7 @@ vi.mock('@/components/artisan-dashboard/AvailabilityManager', () => ({
 import { ServicesTarifsSection } from '@/components/artisan-dashboard/profil/ServicesTarifsSection'
 import { FaqSection } from '@/components/artisan-dashboard/profil/FaqSection'
 import { DisponibiliteSection } from '@/components/artisan-dashboard/profil/DisponibiliteSection'
+import { providerArtisanUpdateSchema } from '@/schemas/provider'
 
 const noop = () => {}
 
@@ -53,6 +54,24 @@ describe('FaqSection — faq jsonb', () => {
   it('rend sans crash quand faq = {} (drift objet vs tableau)', () => {
     render(<FaqSection provider={{ id: 'p1', faq: {} }} onSaved={noop} />)
     expect(screen.getByText('Foire aux questions')).toBeInTheDocument()
+  })
+})
+
+describe('providerArtisanUpdateSchema — service_prices jsonb', () => {
+  it("tolère le DEFAUT DB '{}' (objet vide → tableau vide)", () => {
+    const parsed = providerArtisanUpdateSchema.parse({ service_prices: {} })
+    expect(parsed.service_prices).toEqual([])
+  })
+
+  it('rejette un objet NON vide (vraie corruption, pas le défaut DB)', () => {
+    expect(() => providerArtisanUpdateSchema.parse({ service_prices: { a: 1 } })).toThrow()
+  })
+
+  it('accepte un tableau normal', () => {
+    const parsed = providerArtisanUpdateSchema.parse({
+      service_prices: [{ name: 'Dépannage', price: '80 €', description: '', duration: '1h' }],
+    })
+    expect(parsed.service_prices).toHaveLength(1)
   })
 })
 

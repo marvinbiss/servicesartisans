@@ -133,7 +133,17 @@ export const providerArtisanUpdateSchema = z
 
     // Services & Pricing
     services_offered: z.array(z.string().min(1).max(100)).max(30).optional(),
-    service_prices: z.array(servicePriceSchema).max(20).optional(),
+    // DEFAUT DB '{}'::jsonb : les fiches jamais éditées renvoient un objet
+    // vide — le tolérer comme tableau vide (uniquement s'il est VIDE), sinon
+    // tout save de la section Services échoue en 400 tant que la colonne n'a
+    // pas été réécrite.
+    service_prices: z.preprocess(
+      (v) =>
+        v !== null && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 0
+          ? []
+          : v,
+      z.array(servicePriceSchema).max(20).optional()
+    ),
     free_quote: z.boolean().optional(),
     // hourly_rate_min/max : NUMERIC(10,2) + CHECK max >= min (mig 306)
     hourly_rate_min: z.number().min(0).max(10000).optional().nullable(),
