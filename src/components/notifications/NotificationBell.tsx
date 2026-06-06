@@ -205,7 +205,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                     setIsOpen(false)
                     // Espace particulier fermé 2026-06-05 : la cloche n'est
                     // plus rendue que dans le dashboard artisan.
-                    window.location.href = '/espace-artisan/leads'
+                    window.location.href = '/espace-artisan/demandes'
                   }}
                 >
                   Voir toutes les notifications

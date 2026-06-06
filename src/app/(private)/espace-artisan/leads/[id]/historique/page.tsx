@@ -52,7 +52,7 @@ export default function LeadHistoryPage() {
       if (res.ok) {
         setEvents(data.events || [])
       } else if (res.status === 401) {
-        window.location.href = '/connexion?redirect=/espace-artisan/leads'
+        window.location.href = '/connexion?redirect=/espace-artisan/demandes'
         return
       } else {
         setError(data.error || 'Erreur')
@@ -84,7 +84,7 @@ export default function LeadHistoryPage() {
             Espace Artisan
           </Link>
           <span className="mx-2">/</span>
-          <Link href="/espace-artisan/leads" className="hover:text-charcoal-900">
+          <Link href="/espace-artisan/demandes" className="hover:text-charcoal-900">
             Leads
           </Link>
           <span className="mx-2">/</span>

@@ -140,7 +140,7 @@ export default function FunnelBlock() {
           Conversion des demandes (30 jours)
         </h2>
         <Link
-          href="/espace-artisan/demandes-recues"
+          href="/espace-artisan/demandes"
           className="text-primary-500 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-primary-400 rounded flex items-center gap-1"
         >
           Voir les demandes <ArrowRight className="w-3.5 h-3.5" aria-hidden />

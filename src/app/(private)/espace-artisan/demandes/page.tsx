@@ -1,5 +1,389 @@
-import { redirect } from 'next/navigation'
+'use client'
 
-export default function DemandesPage() {
-  redirect('/espace-artisan/demandes-recues')
+/**
+ * « Mes demandes » — inbox unifiée des leads (refonte 2026-06-06).
+ * Fusionne /leads + /demandes-recues (même table lead_assignments, même
+ * endpoint /api/artisan/leads — les deux pages étaient un doublon).
+ * Le workflow d'action (consulter, envoyer devis, décliner) vit sur la page
+ * de détail /espace-artisan/leads/[id]. Les métriques vivent sur l'index.
+ */
+
+import { useState, useEffect, useCallback } from 'react'
+import {
+  Clock,
+  MapPin,
+  Phone,
+  Loader2,
+  AlertCircle,
+  ChevronRight,
+  Search,
+  RefreshCw,
+  Download,
+} from 'lucide-react'
+import Link from 'next/link'
+import { URGENCY_META, STATUS_META, type Lead, type AssignmentStatusFilter } from '@/types/leads'
+import { StatusTabs } from '@/components/dashboard/StatusTabs'
+import { Pagination } from '@/components/dashboard/Pagination'
+import { EmptyState } from '@/components/ui/EmptyState'
+
+interface Assignment {
+  id: string
+  status: string
+  assigned_at: string
+  viewed_at: string | null
+  lead: Lead
+}
+
+type StatusFilter = AssignmentStatusFilter
+
+function formatRelative(dateStr: string): string {
+  const d = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - d.getTime()
+  const diffMin = Math.floor(diffMs / 60000)
+  if (diffMin < 1) return "À l'instant"
+  if (diffMin < 60) return `il y a ${diffMin} min`
+  const diffH = Math.floor(diffMin / 60)
+  if (diffH < 24) return `il y a ${diffH}h`
+  const diffD = Math.floor(diffH / 24)
+  if (diffD < 7) return `il y a ${diffD}j`
+  return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Europe/Paris' })
+}
+
+interface PaginationMeta {
+  page: number
+  pageSize: number
+  totalPages: number
+  totalItems: number
+}
+
+interface StatusCounts {
+  all: number
+  pending: number
+  viewed: number
+  quoted: number
+  declined: number
+}
+
+export default function MesDemandesPage() {
+  const [leads, setLeads] = useState<Assignment[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [page, setPage] = useState(1)
+  const [artisanCity, setArtisanCity] = useState<string | null>(null)
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
+    page: 1,
+    pageSize: 20,
+    totalPages: 1,
+    totalItems: 0,
+  })
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    all: 0,
+    pending: 0,
+    viewed: 0,
+    quoted: 0,
+    declined: 0,
+  })
+  const pageSize = 20
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/artisan/leads/stats')
+      if (!res.ok) return
+      const data = await res.json()
+      if (data.stats) {
+        setStatusCounts({
+          all: data.stats.total ?? 0,
+          pending: data.stats.pending ?? 0,
+          viewed: data.stats.viewed ?? 0,
+          quoted: data.stats.quoted ?? 0,
+          declined: data.stats.declined ?? 0,
+        })
+      }
+    } catch {
+      // Non-blocking — counts will just stay at 0
+    }
+  }, [])
+
+  const fetchLeads = useCallback(
+    async (p: number, status: StatusFilter) => {
+      try {
+        setError(null)
+        setLoading(true)
+        const params = new URLSearchParams({
+          page: String(p),
+          pageSize: String(pageSize),
+        })
+        if (status !== 'all') {
+          params.set('status', status)
+        }
+        const response = await fetch(`/api/artisan/leads?${params}`)
+        const data = await response.json()
+
+        if (response.ok) {
+          setLeads(data.leads || [])
+          if (data.pagination) {
+            setPaginationMeta(data.pagination)
+          }
+          if (data.provider_city) {
+            setArtisanCity(data.provider_city)
+          }
+        } else if (response.status === 401) {
+          window.location.href = '/connexion?redirect=/espace-artisan/demandes'
+          return
+        } else {
+          setError(data.error || 'Erreur lors du chargement')
+        }
+      } catch {
+        setError('Erreur de connexion')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [pageSize]
+  )
+
+  useEffect(() => {
+    fetchLeads(page, statusFilter)
+  }, [fetchLeads, page, statusFilter])
+
+  useEffect(() => {
+    fetchStats()
+  }, [fetchStats])
+
+  const handleRefresh = useCallback(() => {
+    fetchLeads(page, statusFilter)
+    fetchStats()
+  }, [fetchLeads, fetchStats, page, statusFilter])
+
+  /** Check if a lead city matches the artisan's city (case-insensitive) */
+  const isInZone = (leadCity: string | null): boolean => {
+    if (!artisanCity || !leadCity) return false
+    return leadCity.toLowerCase().trim() === artisanCity.toLowerCase().trim()
+  }
+
+  // Client-side search within current page results.
+  // Guard `a.lead` : un assignment orphelin (devis_request supprimé, jointure
+  // non-`!inner`) peut renvoyer lead=null malgré le type — sinon crash.
+  const filtered = searchQuery
+    ? leads.filter((a) => {
+        const lead = a.lead
+        if (!lead) return false
+        const q = searchQuery.toLowerCase()
+        return (
+          lead.service_name.toLowerCase().includes(q) ||
+          lead.client_name.toLowerCase().includes(q) ||
+          (lead.city || '').toLowerCase().includes(q) ||
+          (lead.postal_code || '').includes(q)
+        )
+      })
+    : leads
+
+  const totalPages = searchQuery
+    ? Math.max(1, Math.ceil(filtered.length / pageSize))
+    : paginationMeta.totalPages
+  const paginated = searchQuery ? filtered : leads
+
+  const tabs = [
+    { key: 'all', label: 'Toutes', count: statusCounts.all },
+    { key: 'pending', label: 'Nouvelles', count: statusCounts.pending },
+    { key: 'viewed', label: 'Consultées', count: statusCounts.viewed },
+    { key: 'quoted', label: 'Devis envoyé', count: statusCounts.quoted },
+    { key: 'declined', label: 'Déclinées', count: statusCounts.declined },
+  ]
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+          <p className="text-sm text-charcoal-500 mt-2">Chargement des demandes...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-6">
+      {/* En-tête sobre — le shell fournit le contexte global */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-charcoal-900 font-heading">Mes demandes</h1>
+          <p className="text-charcoal-500 text-sm mt-0.5">
+            Chaque demande vous est attribuée en exclusivité.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              const params = new URLSearchParams()
+              if (statusFilter !== 'all') params.set('status', statusFilter)
+              window.location.href = `/api/artisan/leads/export${params.toString() ? `?${params}` : ''}`
+            }}
+            className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700 border border-sand-200 rounded-lg px-3 py-1.5 bg-white"
+          >
+            <Download className="w-4 h-4" aria-hidden="true" />
+            <span className="hidden sm:inline">Exporter CSV</span>
+          </button>
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700 p-1.5"
+            aria-label="Rafraîchir les demandes"
+          >
+            <RefreshCw className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <StatusTabs
+            tabs={tabs}
+            activeTab={statusFilter}
+            onTabChange={(k) => {
+              setStatusFilter(k as StatusFilter)
+              setPage(1)
+            }}
+          />
+        </div>
+        <div className="relative">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400"
+            aria-hidden="true"
+          />
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            aria-label="Rechercher dans les demandes"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setPage(1)
+            }}
+            className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-sand-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      {error && (
+        <div
+          role="alert"
+          className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3"
+        >
+          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" aria-hidden="true" />
+          <p className="text-red-700 text-sm">{error}</p>
+        </div>
+      )}
+
+      {/* Lead list */}
+      {paginated.length === 0 ? (
+        <div className="bg-white rounded-xl border border-sand-200">
+          {searchQuery ? (
+            <EmptyState
+              variant="search"
+              title="Aucune demande pour cette recherche"
+              description={`Pas de résultat pour « ${searchQuery} ». Essayez un autre mot-clé ou retirez le filtre.`}
+              action={{ label: 'Effacer la recherche', onClick: () => setSearchQuery('') }}
+            />
+          ) : (
+            <EmptyState
+              variant="inbox"
+              title="Aucune demande pour le moment"
+              description="Les demandes de devis correspondant à votre métier et votre zone vous seront attribuées automatiquement. Complétez votre fiche pour augmenter vos chances."
+              action={{ label: 'Compléter ma fiche', href: '/espace-artisan/profil' }}
+              secondaryAction={{ label: "Voir Aujourd'hui", href: '/espace-artisan' }}
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="space-y-3">
+            {paginated.map((assignment) => {
+              const lead = assignment.lead
+              if (!lead) return null
+              const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
+              const st = STATUS_META[assignment.status] || STATUS_META.pending
+              const isNew = assignment.status === 'pending'
+
+              return (
+                <Link
+                  key={assignment.id}
+                  href={`/espace-artisan/leads/${assignment.id}`}
+                  className={`block bg-white rounded-xl border transition-all hover:shadow-md group ${
+                    isNew ? 'border-primary-200 ring-1 ring-primary-100' : 'border-sand-200'
+                  }`}
+                >
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          {isNew && (
+                            <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
+                          )}
+                          <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-600 transition-colors">
+                            {lead.service_name}
+                          </h3>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}
+                          >
+                            {urg.label}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}
+                          >
+                            {st.label}
+                          </span>
+                        </div>
+
+                        <p className="text-charcoal-600 text-sm mb-3 line-clamp-2">
+                          {lead.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-charcoal-500">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                            {formatRelative(lead.created_at)}
+                          </span>
+                          {lead.city && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+                              {lead.city} {lead.postal_code && `(${lead.postal_code})`}
+                            </span>
+                          )}
+                          {lead.city &&
+                            artisanCity &&
+                            (isInZone(lead.city) ? (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                <MapPin className="w-3 h-3" aria-hidden="true" />
+                                Dans votre zone
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                                <MapPin className="w-3 h-3" aria-hidden="true" />
+                                {lead.city}
+                              </span>
+                            ))}
+                          <span className="flex items-center gap-1">
+                            <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+                            {lead.client_name}
+                          </span>
+                        </div>
+                      </div>
+
+                      <ChevronRight className="w-5 h-5 text-charcoal-300 group-hover:text-primary-500 flex-shrink-0 mt-1 transition-colors" />
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        </>
+      )}
+    </div>
+  )
 }

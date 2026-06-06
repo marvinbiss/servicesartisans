@@ -242,7 +242,7 @@ function buildActions(args: {
       }`,
       detail:
         "Consulter sous 24h maintient votre priorité dans l'attribution des nouvelles demandes.",
-      href: '/espace-artisan/demandes-recues?filter=pending',
+      href: '/espace-artisan/demandes?filter=pending',
       ctaLabel: 'Voir',
     })
   }
@@ -284,7 +284,7 @@ function buildActions(args: {
       title: `Taux de réponse à ${responseRate}% sur 30 jours`,
       detail:
         'Nous priorisons les artisans qui consultent vite. Sous 50%, le volume de leads diminue.',
-      href: '/espace-artisan/demandes-recues',
+      href: '/espace-artisan/demandes',
       ctaLabel: 'Voir',
     })
   }

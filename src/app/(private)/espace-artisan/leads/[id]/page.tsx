@@ -62,7 +62,7 @@ export default function LeadDetailPage() {
       if (res.ok) {
         setAssignment(data.assignment)
       } else if (res.status === 401) {
-        window.location.href = '/connexion?redirect=/espace-artisan/leads'
+        window.location.href = '/connexion?redirect=/espace-artisan/demandes'
         return
       } else {
         setError(data.error || 'Erreur')
@@ -130,7 +130,7 @@ export default function LeadDetailPage() {
         body: JSON.stringify({ action, ...extraData }),
       })
       if (res.ok) {
-        router.push('/espace-artisan/leads')
+        router.push('/espace-artisan/demandes')
       } else {
         const data = await res.json()
         setError(data.error || 'Erreur')
@@ -175,7 +175,7 @@ export default function LeadDetailPage() {
               <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
               <p className="text-red-700 font-medium">{error}</p>
               <Link
-                href="/espace-artisan/leads"
+                href="/espace-artisan/demandes"
                 className="text-primary-500 hover:underline text-sm mt-4 block"
               >
                 Retour aux leads
@@ -202,7 +202,7 @@ export default function LeadDetailPage() {
               Espace Artisan
             </Link>
             <span>/</span>
-            <Link href="/espace-artisan/leads" className="hover:text-charcoal-900">
+            <Link href="/espace-artisan/demandes" className="hover:text-charcoal-900">
               Leads
             </Link>
             <span>/</span>
@@ -214,7 +214,7 @@ export default function LeadDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div>
           <Link
-            href="/espace-artisan/leads"
+            href="/espace-artisan/demandes"
             className="inline-flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-900 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
