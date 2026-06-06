@@ -261,7 +261,7 @@ function buildNotificationSpec(
         type: 'lead_dispatched',
         title: 'Nouveau lead reçu',
         message: `Demande de ${lead.client_name} pour «\u00a0${lead.service_name}\u00a0» à ${location}.`,
-        link: '/espace-artisan/leads',
+        link: '/espace-artisan/demandes',
         emailSubject: `Nouveau lead – ${lead.service_name} à ${location}`,
         emailHtml: emailTemplate({
           heading: 'Nouveau lead disponible',
@@ -309,7 +309,7 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Devis accepté !',
         message: `${lead.client_name} a accepté votre devis pour «\u00a0${lead.service_name}\u00a0».`,
-        link: '/espace-artisan/leads',
+        link: '/espace-artisan/demandes',
         emailSubject: `Devis accepté – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Votre devis a été accepté',
@@ -327,7 +327,7 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Devis refusé',
         message: `Votre devis pour «\u00a0${lead.service_name}\u00a0» n’a pas été retenu.`,
-        link: '/espace-artisan/leads',
+        link: '/espace-artisan/demandes',
         emailSubject: '',
         emailHtml: '',
       }
@@ -355,7 +355,7 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Mission terminée',
         message: `La mission «\u00a0${lead.service_name}\u00a0» pour ${lead.client_name} est terminée.`,
-        link: '/espace-artisan/leads',
+        link: '/espace-artisan/demandes',
         emailSubject: `Mission terminée – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Mission terminée',
@@ -391,7 +391,7 @@ function buildNotificationSpec(
         type: 'lead_closed',
         title: 'Lead expiré',
         message: `Le lead «\u00a0${lead.service_name}\u00a0» de ${lead.client_name} a expiré.`,
-        link: '/espace-artisan/leads',
+        link: '/espace-artisan/demandes',
         emailSubject: `Lead expiré – ${lead.service_name}`,
         emailHtml: emailTemplate({
           heading: 'Lead expiré',

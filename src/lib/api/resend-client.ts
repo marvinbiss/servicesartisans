@@ -651,7 +651,7 @@ export async function sendQuoteRequestEmail(params: {
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/espace-artisan/demandes-recues" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/espace-artisan/demandes" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Répondre à la demande
     </a>
   </div>

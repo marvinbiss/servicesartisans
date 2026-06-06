@@ -31,6 +31,15 @@ import {
   MOCK_CEE_DOSSIER,
 } from '../fixtures/cee-mocks'
 
+// Session artisan requise (cf. NB ci-dessus) : skip sans storageState fourni.
+test.use({ storageState: process.env.E2E_ARTISAN_STORAGE_STATE ?? undefined })
+test.beforeEach(() => {
+  test.skip(
+    !process.env.E2E_ARTISAN_STORAGE_STATE,
+    'Session artisan requise — définir E2E_ARTISAN_STORAGE_STATE'
+  )
+})
+
 test.describe('Espace artisan — dossiers CEE', () => {
   test.beforeEach(async ({ page }) => {
     await mockArtisanAuth(page)

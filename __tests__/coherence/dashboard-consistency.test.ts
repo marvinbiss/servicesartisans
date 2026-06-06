@@ -110,9 +110,9 @@ describe('Invariant 5 — a11y aria-label sur les 3 dashboards', () => {
     expect(page).toMatch(/aria-label="Métriques CEO"/)
   })
 
-  it('artisan dashboard marque main#main-content', () => {
-    const page = readFile('src/app/(private)/espace-artisan/dashboard/page.tsx')
-    expect(page).toMatch(/id="main-content"/)
+  it('artisan dashboard marque main#main-content (fourni par SiteChrome depuis la refonte 2026-06-06)', () => {
+    const chrome = readFile('src/components/SiteChrome.tsx')
+    expect(chrome).toMatch(/id="main-content"/)
   })
 })
 
@@ -129,7 +129,7 @@ describe("Invariant 6 — retry disponible sur les 3 dashboards en cas d'erreur"
   })
 
   it("artisan dashboard a un bouton Réessayer dans la banner d'erreur", () => {
-    const page = readFile('src/app/(private)/espace-artisan/dashboard/page.tsx')
+    const page = readFile('src/app/(private)/espace-artisan/page.tsx')
     expect(page).toMatch(/Réessayer/)
   })
 })

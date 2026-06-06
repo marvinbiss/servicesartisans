@@ -2,7 +2,7 @@
  * E2E — artisan dashboard new blocks
  *
  * Couvre en vrai réseau (Playwright route intercept) les 5 blocs ajoutés sur
- * /espace-artisan/dashboard sous 4 scénarios :
+ * /espace-artisan (page « Aujourd'hui ») sous 4 scénarios :
  *   - Profil A : RGE actif, flywheel avis en empty state, funnel sain (healthy path)
  *   - Profil B : RGE expiré, leads pending, responseRate 30% → 4+ actions P0/P1
  *   - Profil C : pas RGE, portfolio vide, inbox zero côté leads
@@ -10,6 +10,17 @@
  *     ne crashe pas, blocs failed affichent null, les autres rendent
  */
 import { test, expect, type Page } from '@playwright/test'
+
+// ⚠️ Session artisan requise : le middleware (server-side) redirige tout anon
+// vers /connexion — les page.route() n'interceptent que le XHR navigateur.
+// Fournir un storageState authentifié via E2E_ARTISAN_STORAGE_STATE, sinon skip.
+test.use({ storageState: process.env.E2E_ARTISAN_STORAGE_STATE ?? undefined })
+test.beforeEach(() => {
+  test.skip(
+    !process.env.E2E_ARTISAN_STORAGE_STATE,
+    'Session artisan requise — définir E2E_ARTISAN_STORAGE_STATE (voir en-tête du fichier)'
+  )
+})
 
 // ─── Shared mocks pour /api/artisan/stats (déjà référencé par NextActionsBlock) ─
 
@@ -164,27 +175,27 @@ test.describe('Dashboard artisan — Profil A : RGE actif, healthy', () => {
   })
 
   test('affiche badge RGE Active + date', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText('Active').first()).toBeVisible()
   })
 
   test('affiche nudge vert "Excellent taux de réponse"', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Excellent taux de réponse/i)).toBeVisible()
   })
 
   test('affiche empty state flywheel sur ReputationBlock', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/flywheel avis démarre bientôt/i)).toBeVisible()
   })
 
   test('NextActionsBlock affiche inbox zero', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/inbox zero/i)).toBeVisible()
   })
 
   test('PerformanceTrendBlock affiche 4 sparklines SVG', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText('Tendance sur 30 jours')).toBeVisible()
     const svgs = page.locator('[role="img"]')
     await expect(svgs.first()).toBeVisible()
@@ -245,12 +256,12 @@ test.describe('Dashboard artisan — Profil B : crisis mode', () => {
   })
 
   test('RGE expired bandeau rouge affiché', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Votre qualification RGE est expirée/i)).toBeVisible()
   })
 
   test("NextActionsBlock liste les actions P0 d'abord", async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     const items = page.getByRole('listitem')
     // Le premier item doit être P0 (RGE expired ou pending leads)
     const firstText = await items.first().textContent()
@@ -258,12 +269,12 @@ test.describe('Dashboard artisan — Profil B : crisis mode', () => {
   })
 
   test('nudge amber funnel "< 50%" visible', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Votre taux de réponse est inférieur à 50%/i)).toBeVisible()
   })
 
   test('action "X avis en attente" visible et linkée', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     const link = page.getByRole('link', { name: /avis en attente de votre réponse/i }).first()
     await expect(link).toBeVisible()
     await expect(link).toHaveAttribute('href', /avis\?filter=unresponded/)
@@ -309,22 +320,22 @@ test.describe('Dashboard artisan — Profil C : pas RGE + empty data', () => {
   })
 
   test('bandeau "Aucune qualification RGE détectée"', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Aucune qualification RGE détectée/i)).toBeVisible()
   })
 
   test('FunnelBlock empty state', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Aucune demande reçue/i)).toBeVisible()
   })
 
   test('PerformanceTrendBlock empty state', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Aucune activité enregistrée/i)).toBeVisible()
   })
 
   test('NextActionsBlock propose "Devenez RGE" et "Ajoutez des photos"', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/Devenez Reconnu Garant/i)).toBeVisible()
     await expect(page.getByText(/Ajoutez des photos/i)).toBeVisible()
   })
@@ -367,29 +378,29 @@ test.describe('Dashboard artisan — SWR partial failure (2/4 en erreur)', () =>
   })
 
   test('la page ne crashe pas et affiche le header', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
-    await expect(page.getByRole('heading', { name: /Tableau de bord/i })).toBeVisible()
+    await page.goto('/espace-artisan')
+    await expect(page.getByRole('heading', { name: /Aujourd'hui/i })).toBeVisible()
   })
 
   test('RgeStatusBlock reste rendu (source OK)', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText('Active').first()).toBeVisible()
   })
 
   test('ReputationBlock reste rendu (source OK)', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     await expect(page.getByText(/flywheel avis démarre bientôt/i)).toBeVisible()
   })
 
   test('FunnelBlock et PerformanceTrendBlock disparaissent (error → null)', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     // Les titres des 2 blocs en erreur ne doivent PAS apparaître
     await expect(page.getByText('Tendance sur 30 jours')).not.toBeVisible()
     await expect(page.getByText('Conversion des demandes (30 jours)')).not.toBeVisible()
   })
 
   test('NextActionsBlock fonctionne en mode dégradé (2 sources sur 4)', async ({ page }) => {
-    await page.goto('/espace-artisan/dashboard')
+    await page.goto('/espace-artisan')
     // Soit il affiche inbox zero (pas d'action déduite), soit il affiche des actions
     // basées sur rge+reputation. Dans tous les cas, pas de crash.
     const inbox = page.getByText(/inbox zero|À faire en priorité/i)

@@ -170,7 +170,7 @@ export async function sendLeadAlert(
   }
 
   const supabase = createAdminClient()
-  const dashboardUrl = `${SITE_URL}/espace-artisan/demandes-recues`
+  const dashboardUrl = `${SITE_URL}/espace-artisan/demandes`
 
   // Fetch provider details
   let query = supabase
@@ -222,7 +222,7 @@ export async function sendLeadAlert(
           type: 'new_lead',
           title: `Nouvelle demande de ${service || 'devis'}`,
           message: `${client_name || 'Un client'} cherche un ${service || 'artisan'} à ${city || 'proximité'}`,
-          link: '/espace-artisan/demandes-recues',
+          link: '/espace-artisan/demandes',
         })
       } catch {
         // notifications insert best-effort; FK/RLS errors non-fatal here

@@ -160,6 +160,6 @@ describe('<FunnelBlock />', () => {
     })
     render(<FunnelBlock />)
     const link = screen.getByRole('link', { name: /Voir les demandes/i })
-    expect(link).toHaveAttribute('href', '/espace-artisan/demandes-recues')
+    expect(link).toHaveAttribute('href', '/espace-artisan/demandes')
   })
 })

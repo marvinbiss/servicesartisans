@@ -6,15 +6,17 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    ['html', { open: 'never' }],
-    ['list'],
-  ],
+  reporter: [['html', { open: 'never' }], ['list']],
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3099',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    // Against a local `next start` (NODE_ENV=production), the middleware
+    // 301-redirects http→https. Mimic the Vercel proxy so tests stay on http.
+    ...(process.env.E2E_FORWARD_HTTPS
+      ? { extraHTTPHeaders: { 'x-forwarded-proto': 'https' } }
+      : {}),
   },
 
   projects: [
@@ -41,12 +43,14 @@ export default defineConfig({
   ],
 
   // In CI, the server is started externally (next start on BASE_URL port)
-  ...(!process.env.CI ? {
-    webServer: {
-      command: 'npm run dev -- --port 3099',
-      url: 'http://localhost:3099',
-      reuseExistingServer: true,
-      timeout: 180 * 1000,
-    },
-  } : {}),
+  ...(!process.env.CI
+    ? {
+        webServer: {
+          command: 'npm run dev -- --port 3099',
+          url: 'http://localhost:3099',
+          reuseExistingServer: true,
+          timeout: 180 * 1000,
+        },
+      }
+    : {}),
 })
