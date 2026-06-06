@@ -18,8 +18,6 @@ import {
   Phone,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
-import { getArtisanUrl } from '@/lib/utils'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { logger } from '@/lib/logger'
 
@@ -75,7 +73,6 @@ export default function DemandesRecuesPage() {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [devisForm, setDevisForm] = useState({
     amount: '',
@@ -111,27 +108,6 @@ export default function DemandesRecuesPage() {
   useEffect(() => {
     fetchLeads(1, filterStatus)
   }, [filterStatus, fetchLeads])
-
-  useEffect(() => {
-    const fetchPublicUrl = async () => {
-      try {
-        const response = await fetch('/api/artisan/stats')
-        const data = await response.json()
-        if (response.ok && data.provider) {
-          const url = getArtisanUrl({
-            stable_id: data.provider.stable_id ?? null,
-            slug: data.provider.slug ?? null,
-            specialty: data.provider.specialty ?? null,
-            city: data.provider.address_city ?? null,
-          })
-          setPublicUrl(url)
-        }
-      } catch {
-        // Silently fail — link just won't show
-      }
-    }
-    fetchPublicUrl()
-  }, [])
 
   const handlePageChange = (page: number) => {
     fetchLeads(page, filterStatus)
@@ -223,8 +199,6 @@ export default function DemandesRecuesPage() {
     router.push('/espace-artisan/messages')
   }
 
-  const pendingCount = leads.filter((l) => l.status === 'pending').length
-
   return (
     <div className="min-h-screen bg-sand-50">
       {/* Toast notification */}
@@ -269,187 +243,177 @@ export default function DemandesRecuesPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar
-            activePage="demandes-recues"
-            newDemandesCount={pendingCount}
-            publicUrl={publicUrl}
-          />
-
-          {/* Content */}
-          <main id="main-content" className="lg:col-span-3">
-            {/* Filters */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4">
-                <Filter className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => handleFilterChange('all')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'all'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
-                    }`}
-                  >
-                    Toutes ({filterStatus === 'all' ? totalItems : '—'})
-                  </button>
-                  <button
-                    onClick={() => handleFilterChange('pending')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'pending'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
-                    }`}
-                  >
-                    Nouvelles
-                  </button>
-                  <button
-                    onClick={() => handleFilterChange('quoted')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'quoted'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
-                    }`}
-                  >
-                    Devis envoyés
-                  </button>
-                  <button
-                    onClick={() => handleFilterChange('accepted')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'accepted'
-                        ? 'bg-primary-500 text-white'
-                        : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
-                    }`}
-                  >
-                    Acceptées
-                  </button>
-                </div>
+        {/* Content */}
+        <main id="main-content">
+          {/* Filters */}
+          <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+              <Filter className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleFilterChange('all')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filterStatus === 'all'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
+                  }`}
+                >
+                  Toutes ({filterStatus === 'all' ? totalItems : '—'})
+                </button>
+                <button
+                  onClick={() => handleFilterChange('pending')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filterStatus === 'pending'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
+                  }`}
+                >
+                  Nouvelles
+                </button>
+                <button
+                  onClick={() => handleFilterChange('quoted')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filterStatus === 'quoted'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
+                  }`}
+                >
+                  Devis envoyés
+                </button>
+                <button
+                  onClick={() => handleFilterChange('accepted')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filterStatus === 'accepted'
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-sand-100 text-charcoal-700 hover:bg-sand-300'
+                  }`}
+                >
+                  Acceptées
+                </button>
               </div>
             </div>
+          </div>
 
-            {/* Leads list */}
-            {loading ? (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
-                <p className="text-charcoal-600">Chargement des demandes...</p>
-              </div>
-            ) : (
-              <>
-                <div className="space-y-4">
-                  {leads.map((item) => {
-                    const lead = item.lead
-                    if (!lead) return null
-                    const statusInfo = statusConfig[item.status] || {
-                      label: item.status,
-                      color: 'bg-sand-100 text-charcoal-700',
-                    }
-                    return (
-                      <div
-                        key={item.id}
-                        className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-2 flex-wrap">
-                              <h3 className="font-semibold text-charcoal-900">
-                                {lead.service_name}
-                              </h3>
-                              <span
-                                className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}
-                              >
-                                {statusInfo.label}
+          {/* Leads list */}
+          {loading ? (
+            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+              <p className="text-charcoal-600">Chargement des demandes...</p>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-4">
+                {leads.map((item) => {
+                  const lead = item.lead
+                  if (!lead) return null
+                  const statusInfo = statusConfig[item.status] || {
+                    label: item.status,
+                    color: 'bg-sand-100 text-charcoal-700',
+                  }
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
+                            <h3 className="font-semibold text-charcoal-900">{lead.service_name}</h3>
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}
+                            >
+                              {statusInfo.label}
+                            </span>
+                            {lead.urgency === 'urgent' && (
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                                Urgent
                               </span>
-                              {lead.urgency === 'urgent' && (
-                                <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                                  Urgent
-                                </span>
-                              )}
-                              {lead.urgency === 'tres_urgent' && (
-                                <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                  Très urgent
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-charcoal-600 mb-3">{lead.description}</p>
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-charcoal-500">
-                              <span className="font-medium text-charcoal-900">
-                                {lead.client_name}
+                            )}
+                            {lead.urgency === 'tres_urgent' && (
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                Très urgent
                               </span>
-                              <span className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                {lead.city || lead.postal_code || 'Non précisé'}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                                  timeZone: 'Europe/Paris',
-                                })}
-                              </span>
-                            </div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {item.status === 'pending' && (
-                              <>
-                                <button
-                                  onClick={() => openDevisModal(item)}
-                                  className="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors text-sm"
-                                >
-                                  <Send className="w-4 h-4" />
-                                  <span className="hidden sm:inline">Envoyer</span> devis
-                                </button>
-                                <button
-                                  onClick={() => openDetailModal(item)}
-                                  className="p-2 text-charcoal-400 hover:text-charcoal-600 transition-colors"
-                                  aria-label="Voir les détails"
-                                >
-                                  <Eye className="w-5 h-5" />
-                                </button>
-                              </>
-                            )}
-                            {(item.status === 'viewed' || item.status === 'quoted') && (
-                              <button
-                                onClick={handleContact}
-                                className="flex items-center gap-2 border border-sand-400 text-charcoal-700 px-4 py-2 rounded-lg font-medium hover:bg-sand-50 transition-colors text-sm"
-                              >
-                                <MessageSquare className="w-4 h-4" />
-                                Contacter
-                              </button>
-                            )}
-                            {item.status === 'accepted' && (
-                              <span className="text-green-600 font-medium text-sm">
-                                Mission confirmée
-                              </span>
-                            )}
-                            {item.status === 'declined' && (
-                              <span className="text-charcoal-500 font-medium text-sm">Refusé</span>
-                            )}
-                            <ChevronRight className="w-5 h-5 text-charcoal-400 hidden sm:block" />
+                          <p className="text-charcoal-600 mb-3">{lead.description}</p>
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-charcoal-500">
+                            <span className="font-medium text-charcoal-900">
+                              {lead.client_name}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              {lead.city || lead.postal_code || 'Non précisé'}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                                timeZone: 'Europe/Paris',
+                              })}
+                            </span>
                           </div>
                         </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {item.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => openDevisModal(item)}
+                                className="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors text-sm"
+                              >
+                                <Send className="w-4 h-4" />
+                                <span className="hidden sm:inline">Envoyer</span> devis
+                              </button>
+                              <button
+                                onClick={() => openDetailModal(item)}
+                                className="p-2 text-charcoal-400 hover:text-charcoal-600 transition-colors"
+                                aria-label="Voir les détails"
+                              >
+                                <Eye className="w-5 h-5" />
+                              </button>
+                            </>
+                          )}
+                          {(item.status === 'viewed' || item.status === 'quoted') && (
+                            <button
+                              onClick={handleContact}
+                              className="flex items-center gap-2 border border-sand-400 text-charcoal-700 px-4 py-2 rounded-lg font-medium hover:bg-sand-50 transition-colors text-sm"
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                              Contacter
+                            </button>
+                          )}
+                          {item.status === 'accepted' && (
+                            <span className="text-green-600 font-medium text-sm">
+                              Mission confirmée
+                            </span>
+                          )}
+                          {item.status === 'declined' && (
+                            <span className="text-charcoal-500 font-medium text-sm">Refusé</span>
+                          )}
+                          <ChevronRight className="w-5 h-5 text-charcoal-400 hidden sm:block" />
+                        </div>
                       </div>
-                    )
-                  })}
+                    </div>
+                  )
+                })}
+              </div>
+
+              {leads.length === 0 && (
+                <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                  <FileText className="w-12 h-12 text-sand-500 mx-auto mb-4" />
+                  <h3 className="font-medium text-charcoal-900 mb-2">Aucune demande</h3>
+                  <p className="text-charcoal-500">Aucune demande ne correspond à ce filtre.</p>
                 </div>
+              )}
 
-                {leads.length === 0 && (
-                  <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                    <FileText className="w-12 h-12 text-sand-500 mx-auto mb-4" />
-                    <h3 className="font-medium text-charcoal-900 mb-2">Aucune demande</h3>
-                    <p className="text-charcoal-500">Aucune demande ne correspond à ce filtre.</p>
-                  </div>
-                )}
-
-                {pagination.totalPages > 1 && (
-                  <Pagination
-                    page={pagination.page}
-                    totalPages={pagination.totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                )}
-              </>
-            )}
-          </main>
-        </div>
+              {pagination.totalPages > 1 && (
+                <Pagination
+                  page={pagination.page}
+                  totalPages={pagination.totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )}
+            </>
+          )}
+        </main>
       </div>
 
       {/* Modal Envoyer Devis */}

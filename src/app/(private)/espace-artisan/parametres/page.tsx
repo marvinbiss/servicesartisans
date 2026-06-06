@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   Loader2,
   AlertCircle,
@@ -94,11 +93,8 @@ export default function ArtisanSettingsPage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="parametres" />
-            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
-              <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
-            </div>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
           </div>
         </div>
       </div>
@@ -118,124 +114,121 @@ export default function ArtisanSettingsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar activePage="parametres" />
-          <div className="lg:col-span-3">
-            <h1 className="text-2xl font-bold text-charcoal-900 mb-8">Paramètres</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-charcoal-900 mb-8">Paramètres</h1>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 text-red-500" />
-                <p className="text-red-700">{error}</p>
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              <p className="text-red-700">{error}</p>
+            </div>
+          )}
+
+          {success && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500" />
+              <p className="text-green-700">{success}</p>
+            </div>
+          )}
+
+          {/* Account status */}
+          <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6">
+            <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-charcoal-400" />
+              Statut du compte
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="text-charcoal-500">Email :</span>{' '}
+                <span className="text-charcoal-900">{data?.profile?.email || '—'}</span>
               </div>
-            )}
-
-            {success && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <p className="text-green-700">{success}</p>
+              <div>
+                <span className="text-charcoal-500">Type :</span>{' '}
+                <span className="text-charcoal-900 capitalize">{data?.profile?.role || '—'}</span>
               </div>
-            )}
-
-            {/* Account status */}
-            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6">
-              <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-charcoal-400" />
-                Statut du compte
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-charcoal-500">Email :</span>{' '}
-                  <span className="text-charcoal-900">{data?.profile?.email || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-charcoal-500">Type :</span>{' '}
-                  <span className="text-charcoal-900 capitalize">{data?.profile?.role || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-charcoal-500">Compte actif :</span>{' '}
-                  {data?.provider?.is_active ? (
-                    <span className="text-green-600 font-medium">Oui</span>
-                  ) : (
-                    <span className="text-red-600 font-medium">Non</span>
-                  )}
-                </div>
-                <div>
-                  <span className="text-charcoal-500">Vérifié :</span>{' '}
-                  {data?.provider?.is_verified ? (
-                    <span className="text-green-600 font-medium">Oui</span>
-                  ) : (
-                    <span className="text-orange-600 font-medium">En attente</span>
-                  )}
-                </div>
+              <div>
+                <span className="text-charcoal-500">Compte actif :</span>{' '}
+                {data?.provider?.is_active ? (
+                  <span className="text-green-600 font-medium">Oui</span>
+                ) : (
+                  <span className="text-red-600 font-medium">Non</span>
+                )}
+              </div>
+              <div>
+                <span className="text-charcoal-500">Vérifié :</span>{' '}
+                {data?.provider?.is_verified ? (
+                  <span className="text-green-600 font-medium">Oui</span>
+                ) : (
+                  <span className="text-orange-600 font-medium">En attente</span>
+                )}
               </div>
             </div>
+          </div>
 
-            {/* 2FA shortcut */}
-            <Link
-              href="/espace-artisan/securite/2fa"
-              className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6 flex items-center justify-between gap-4 hover:bg-sand-50 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <ShieldCheck className="w-6 h-6 text-primary-600" />
-                <div>
-                  <h2 className="font-semibold text-charcoal-900">
-                    Vérification en deux étapes (2FA)
-                  </h2>
-                  <p className="text-sm text-charcoal-500">
-                    Activez la 2FA pour exiger un code TOTP à chaque connexion.
-                  </p>
-                </div>
+          {/* 2FA shortcut */}
+          <Link
+            href="/espace-artisan/securite/2fa"
+            className="bg-white rounded-xl shadow-sm border border-sand-200 p-6 mb-6 flex items-center justify-between gap-4 hover:bg-sand-50 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="w-6 h-6 text-primary-600" />
+              <div>
+                <h2 className="font-semibold text-charcoal-900">
+                  Vérification en deux étapes (2FA)
+                </h2>
+                <p className="text-sm text-charcoal-500">
+                  Activez la 2FA pour exiger un code TOTP à chaque connexion.
+                </p>
               </div>
-              <ChevronRight className="w-5 h-5 text-charcoal-400" />
-            </Link>
+            </div>
+            <ChevronRight className="w-5 h-5 text-charcoal-400" />
+          </Link>
 
-            {/* Edit form */}
-            <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
-              <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                <User className="w-5 h-5 text-charcoal-400" />
-                Informations
-              </h2>
+          {/* Edit form */}
+          <div className="bg-white rounded-xl shadow-sm border border-sand-200 p-6">
+            <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+              <User className="w-5 h-5 text-charcoal-400" />
+              Informations
+            </h2>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-charcoal-700 mb-1">
-                    Nom / Raison sociale
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-charcoal-700 mb-1 flex items-center gap-1">
-                    <Phone className="w-4 h-4" />
-                    Téléphone
-                  </label>
-                  <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
-                    placeholder="06 12 34 56 78"
-                  />
-                </div>
-
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
-                >
-                  {saving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <CheckCircle className="w-4 h-4" />
-                  )}
-                  Enregistrer
-                </button>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1">
+                  Nom / Raison sociale
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
+                />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-charcoal-700 mb-1 flex items-center gap-1">
+                  <Phone className="w-4 h-4" />
+                  Téléphone
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-3 py-2 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400"
+                  placeholder="06 12 34 56 78"
+                />
+              </div>
+
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50"
+              >
+                {saving ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="w-4 h-4" />
+                )}
+                Enregistrer
+              </button>
             </div>
           </div>
         </div>

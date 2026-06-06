@@ -15,7 +15,6 @@ import {
   Camera,
   HelpCircle,
 } from 'lucide-react'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { IdentiteSection } from '@/components/artisan-dashboard/profil/IdentiteSection'
 import { ContactSection } from '@/components/artisan-dashboard/profil/ContactSection'
 import { LocalisationSection } from '@/components/artisan-dashboard/profil/LocalisationSection'
@@ -26,7 +25,6 @@ import { DisponibiliteSection } from '@/components/artisan-dashboard/profil/Disp
 import { PreferencesSection } from '@/components/artisan-dashboard/profil/PreferencesSection'
 import { FaqSection } from '@/components/artisan-dashboard/profil/FaqSection'
 import { AvatarSection } from '@/components/artisan-dashboard/profil/AvatarSection'
-import { getArtisanUrl } from '@/lib/utils'
 
 type TabId =
   | 'identite'
@@ -109,19 +107,6 @@ export default function ProfilArtisanPage() {
     }
   }
 
-  // Build public URL from provider data using the shared utility
-  const publicUrl = provider
-    ? getArtisanUrl({
-        stable_id: provider.stable_id as string | null,
-        slug: provider.slug as string | null,
-        specialty: provider.specialty as string | null,
-        city: provider.address_city as string | null,
-      })
-    : null
-
-  // Only show the link if we have an identifier
-  const showPublicUrl = provider && (provider.stable_id || provider.slug) ? publicUrl : null
-
   // Loading state
   if (loading) {
     return (
@@ -162,13 +147,10 @@ export default function ProfilArtisanPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
+          {/* Tab navigation */}
           <div className="lg:col-span-1">
-            <ArtisanSidebar activePage="profil" publicUrl={showPublicUrl} />
-
-            {/* Tab navigation */}
             <nav
-              className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1"
+              className="bg-white rounded-xl shadow-sm p-4 space-y-1"
               aria-label="Sections du profil"
               role="tablist"
               aria-orientation="vertical"

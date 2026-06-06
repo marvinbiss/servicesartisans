@@ -14,7 +14,7 @@ import { resolveProviderCity } from '@/lib/insee-resolver'
  * rendre la moindre page. Fail-closed : pas d'artisan → redirect.
  *
  * Refonte 2026-06-06 : monte aussi ArtisanShell (sidebar + topbar) une seule
- * fois pour toutes les pages — l'ancienne ArtisanSidebar 13 entrées montée
+ * fois pour toutes les pages — l'ancienne sidebar 13 entrées montée
  * en dur dans chaque page est supprimée. Le chrome public (Header/Footer)
  * est masqué par SiteChrome dans le root layout.
  */

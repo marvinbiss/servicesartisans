@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   Loader2,
   AlertCircle,
@@ -156,13 +155,10 @@ export default function LeadDetailPage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="leads" />
-            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
-              <div className="text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto" />
-                <p className="text-sm text-charcoal-500 mt-2">Chargement...</p>
-              </div>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto" />
+              <p className="text-sm text-charcoal-500 mt-2">Chargement...</p>
             </div>
           </div>
         </div>
@@ -174,19 +170,16 @@ export default function LeadDetailPage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="leads" />
-            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
-              <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
-                <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-                <p className="text-red-700 font-medium">{error}</p>
-                <Link
-                  href="/espace-artisan/leads"
-                  className="text-primary-500 hover:underline text-sm mt-4 block"
-                >
-                  Retour aux leads
-                </Link>
-              </div>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
+              <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
+              <p className="text-red-700 font-medium">{error}</p>
+              <Link
+                href="/espace-artisan/leads"
+                className="text-primary-500 hover:underline text-sm mt-4 block"
+              >
+                Retour aux leads
+              </Link>
             </div>
           </div>
         </div>
@@ -219,252 +212,249 @@ export default function LeadDetailPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar activePage="leads" />
-          <div className="lg:col-span-3">
-            <Link
-              href="/espace-artisan/leads"
-              className="inline-flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-900 mb-6 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Retour aux leads
-            </Link>
+        <div>
+          <Link
+            href="/espace-artisan/leads"
+            className="inline-flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-900 mb-6 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Retour aux leads
+          </Link>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 text-red-500" />
-                <p className="text-red-700 text-sm">{error}</p>
-              </div>
-            )}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Main content */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* Exclusivity proof — DGCCRF-proof badge */}
-                <ExclusivityProofBadge assignmentId={assignment.id} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Exclusivity proof — DGCCRF-proof badge */}
+              <ExclusivityProofBadge assignmentId={assignment.id} />
 
-                {/* Lead header card */}
-                <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
-                  <div className="px-6 py-4 bg-sand-50 border-b border-sand-200">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h1 className="text-xl font-bold text-charcoal-900">{lead.service_name}</h1>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
-                        {urg.label}
-                      </span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
-                        {st.label}
+              {/* Lead header card */}
+              <div className="bg-white rounded-xl border border-sand-300 overflow-hidden">
+                <div className="px-6 py-4 bg-sand-50 border-b border-sand-200">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h1 className="text-xl font-bold text-charcoal-900">{lead.service_name}</h1>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                      {urg.label}
+                    </span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                      {st.label}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <p className="text-charcoal-700 leading-relaxed mb-6">{lead.description}</p>
+
+                  {lead.budget && (
+                    <div className="flex items-center gap-2 text-sm text-charcoal-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
+                      <Euro className="w-4 h-4 text-green-600" />
+                      <span>
+                        <strong>Budget indicatif :</strong> {lead.budget}
                       </span>
                     </div>
-                  </div>
+                  )}
 
-                  <div className="p-6">
-                    <p className="text-charcoal-700 leading-relaxed mb-6">{lead.description}</p>
-
-                    {lead.budget && (
-                      <div className="flex items-center gap-2 text-sm text-charcoal-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
-                        <Euro className="w-4 h-4 text-green-600" />
-                        <span>
-                          <strong>Budget indicatif :</strong> {lead.budget}
-                        </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
+                      <Calendar className="w-4 h-4 text-charcoal-400" />
+                      <div>
+                        <p className="text-xs text-charcoal-400">Reçu le</p>
+                        <p className="text-sm text-charcoal-700">
+                          {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZone: 'Europe/Paris',
+                          })}
+                        </p>
                       </div>
-                    )}
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    </div>
+                    {lead.city && (
                       <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
-                        <Calendar className="w-4 h-4 text-charcoal-400" />
+                        <MapPin className="w-4 h-4 text-charcoal-400" />
                         <div>
-                          <p className="text-xs text-charcoal-400">Reçu le</p>
+                          <p className="text-xs text-charcoal-400">Localisation</p>
                           <p className="text-sm text-charcoal-700">
-                            {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                              day: 'numeric',
-                              month: 'long',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              timeZone: 'Europe/Paris',
-                            })}
+                            {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                           </p>
                         </div>
                       </div>
-                      {lead.city && (
-                        <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
-                          <MapPin className="w-4 h-4 text-charcoal-400" />
-                          <div>
-                            <p className="text-xs text-charcoal-400">Localisation</p>
-                            <p className="text-sm text-charcoal-700">
-                              {lead.city} {lead.postal_code && `(${lead.postal_code})`}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
-                        <User className="w-4 h-4 text-charcoal-400" />
-                        <div>
-                          <p className="text-xs text-charcoal-400">Client</p>
-                          <p className="text-sm text-charcoal-700">{lead.client_name}</p>
-                        </div>
+                    )}
+                    <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
+                      <User className="w-4 h-4 text-charcoal-400" />
+                      <div>
+                        <p className="text-xs text-charcoal-400">Client</p>
+                        <p className="text-sm text-charcoal-700">{lead.client_name}</p>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
-                        <Phone className="w-4 h-4 text-charcoal-400" />
-                        <div>
-                          <p className="text-xs text-charcoal-400">Téléphone</p>
-                          <p className="text-sm text-charcoal-700">{lead.client_phone}</p>
-                        </div>
-                      </div>
-                      {lead.client_email && (
-                        <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg sm:col-span-2">
-                          <Mail className="w-4 h-4 text-charcoal-400" />
-                          <div>
-                            <p className="text-xs text-charcoal-400">Email</p>
-                            <p className="text-sm text-charcoal-700">{lead.client_email}</p>
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                {assignment.status !== 'quoted' && assignment.status !== 'declined' && (
-                  <div className="bg-white rounded-xl border border-sand-300 p-6">
-                    <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-charcoal-400" />
-                      Actions
-                    </h2>
-
-                    {showQuoteForm ? (
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                            Montant du devis (€)
-                          </label>
-                          <input
-                            type="number"
-                            min="1"
-                            step="0.01"
-                            value={quoteAmount}
-                            onChange={(e) => setQuoteAmount(e.target.value)}
-                            className="w-full px-3 py-2.5 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent"
-                            placeholder="ex: 350.00"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
-                            Description du devis
-                          </label>
-                          <textarea
-                            value={quoteDesc}
-                            onChange={(e) => setQuoteDesc(e.target.value)}
-                            rows={4}
-                            className="w-full px-3 py-2.5 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent"
-                            placeholder="Détails de l'intervention, matériaux, délais..."
-                          />
-                        </div>
-                        <div className="flex gap-3">
-                          <button
-                            onClick={handleQuoteSubmit}
-                            disabled={actionLoading === 'quote'}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
-                          >
-                            {actionLoading === 'quote' ? (
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                            ) : (
-                              <Send className="w-4 h-4" />
-                            )}
-                            Envoyer le devis
-                          </button>
-                          <button
-                            onClick={() => setShowQuoteForm(false)}
-                            className="px-4 py-2.5 border border-sand-300 rounded-lg text-sm text-charcoal-600 hover:bg-sand-50 transition-colors"
-                          >
-                            Annuler
-                          </button>
-                        </div>
+                    <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg">
+                      <Phone className="w-4 h-4 text-charcoal-400" />
+                      <div>
+                        <p className="text-xs text-charcoal-400">Téléphone</p>
+                        <p className="text-sm text-charcoal-700">{lead.client_phone}</p>
                       </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-3">
-                        {assignment.status === 'pending' && (
-                          <button
-                            onClick={() => handleAction('view')}
-                            disabled={!!actionLoading}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-medium hover:bg-yellow-100 disabled:opacity-50 transition-colors"
-                          >
-                            <Eye className="w-4 h-4" />
-                            Marquer comme vu
-                          </button>
-                        )}
-                        <button
-                          onClick={() => setShowQuoteForm(true)}
-                          className="flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
-                        >
-                          <FileText className="w-4 h-4" />
-                          Envoyer un devis
-                        </button>
-                        <button
-                          onClick={() => handleAction('decline')}
-                          disabled={!!actionLoading}
-                          className="flex items-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-600 rounded-lg text-sm font-medium hover:bg-sand-50 disabled:opacity-50 transition-colors"
-                        >
-                          {actionLoading === 'decline' ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <X className="w-4 h-4" />
-                          )}
-                          Décliner
-                        </button>
+                    </div>
+                    {lead.client_email && (
+                      <div className="flex items-center gap-3 p-3 bg-sand-50 rounded-lg sm:col-span-2">
+                        <Mail className="w-4 h-4 text-charcoal-400" />
+                        <div>
+                          <p className="text-xs text-charcoal-400">Email</p>
+                          <p className="text-sm text-charcoal-700">{lead.client_email}</p>
+                        </div>
                       </div>
                     )}
                   </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              {assignment.status !== 'quoted' && assignment.status !== 'declined' && (
+                <div className="bg-white rounded-xl border border-sand-300 p-6">
+                  <h2 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-charcoal-400" />
+                    Actions
+                  </h2>
+
+                  {showQuoteForm ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                          Montant du devis (€)
+                        </label>
+                        <input
+                          type="number"
+                          min="1"
+                          step="0.01"
+                          value={quoteAmount}
+                          onChange={(e) => setQuoteAmount(e.target.value)}
+                          className="w-full px-3 py-2.5 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent"
+                          placeholder="ex: 350.00"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-charcoal-700 mb-1.5">
+                          Description du devis
+                        </label>
+                        <textarea
+                          value={quoteDesc}
+                          onChange={(e) => setQuoteDesc(e.target.value)}
+                          rows={4}
+                          className="w-full px-3 py-2.5 border border-sand-400 rounded-lg text-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent"
+                          placeholder="Détails de l'intervention, matériaux, délais..."
+                        />
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={handleQuoteSubmit}
+                          disabled={actionLoading === 'quote'}
+                          className="flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 disabled:opacity-50 transition-colors"
+                        >
+                          {actionLoading === 'quote' ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Send className="w-4 h-4" />
+                          )}
+                          Envoyer le devis
+                        </button>
+                        <button
+                          onClick={() => setShowQuoteForm(false)}
+                          className="px-4 py-2.5 border border-sand-300 rounded-lg text-sm text-charcoal-600 hover:bg-sand-50 transition-colors"
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-3">
+                      {assignment.status === 'pending' && (
+                        <button
+                          onClick={() => handleAction('view')}
+                          disabled={!!actionLoading}
+                          className="flex items-center gap-2 px-4 py-2.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-medium hover:bg-yellow-100 disabled:opacity-50 transition-colors"
+                        >
+                          <Eye className="w-4 h-4" />
+                          Marquer comme vu
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setShowQuoteForm(true)}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Envoyer un devis
+                      </button>
+                      <button
+                        onClick={() => handleAction('decline')}
+                        disabled={!!actionLoading}
+                        className="flex items-center gap-2 px-4 py-2.5 border border-sand-300 text-charcoal-600 rounded-lg text-sm font-medium hover:bg-sand-50 disabled:opacity-50 transition-colors"
+                      >
+                        {actionLoading === 'decline' ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                        Décliner
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Sidebar: Timeline */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl border border-sand-300 p-6">
+                <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                  <History className="w-5 h-5 text-charcoal-400" />
+                  Historique
+                </h3>
+                {eventsLoading ? (
+                  <div className="flex justify-center py-6">
+                    <Loader2 className="w-5 h-5 animate-spin text-charcoal-400" />
+                  </div>
+                ) : (
+                  <EventTimeline events={events} compact />
                 )}
               </div>
 
-              {/* Sidebar: Timeline */}
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl border border-sand-300 p-6">
-                  <h3 className="font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                    <History className="w-5 h-5 text-charcoal-400" />
-                    Historique
-                  </h3>
-                  {eventsLoading ? (
-                    <div className="flex justify-center py-6">
-                      <Loader2 className="w-5 h-5 animate-spin text-charcoal-400" />
-                    </div>
-                  ) : (
-                    <EventTimeline events={events} compact />
-                  )}
-                </div>
-
-                {/* Quick info */}
-                <div className="bg-white rounded-xl border border-sand-300 p-6">
-                  <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">Informations</h3>
-                  <div className="space-y-3 text-sm">
+              {/* Quick info */}
+              <div className="bg-white rounded-xl border border-sand-300 p-6">
+                <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">Informations</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-charcoal-500">ID Assignment</span>
+                    <span className="text-charcoal-700 font-mono text-xs">{id.slice(0, 8)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-charcoal-500">Assigné le</span>
+                    <span className="text-charcoal-700">
+                      {new Date(assignment.assigned_at).toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'short',
+                        timeZone: 'Europe/Paris',
+                      })}
+                    </span>
+                  </div>
+                  {assignment.viewed_at && (
                     <div className="flex justify-between">
-                      <span className="text-charcoal-500">ID Assignment</span>
-                      <span className="text-charcoal-700 font-mono text-xs">{id.slice(0, 8)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-charcoal-500">Assigné le</span>
+                      <span className="text-charcoal-500">Vu le</span>
                       <span className="text-charcoal-700">
-                        {new Date(assignment.assigned_at).toLocaleDateString('fr-FR', {
+                        {new Date(assignment.viewed_at).toLocaleDateString('fr-FR', {
                           day: 'numeric',
                           month: 'short',
                           timeZone: 'Europe/Paris',
                         })}
                       </span>
                     </div>
-                    {assignment.viewed_at && (
-                      <div className="flex justify-between">
-                        <span className="text-charcoal-500">Vu le</span>
-                        <span className="text-charcoal-700">
-                          {new Date(assignment.viewed_at).toLocaleDateString('fr-FR', {
-                            day: 'numeric',
-                            month: 'short',
-                            timeZone: 'Europe/Paris',
-                          })}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

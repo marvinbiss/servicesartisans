@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import {
   Users,
   Plus,
@@ -241,11 +240,8 @@ export default function EquipePage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="equipe" />
-            <div className="lg:col-span-3 flex items-center justify-center min-h-[50vh]">
-              <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
-            </div>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
           </div>
         </div>
       </div>
@@ -272,155 +268,152 @@ export default function EquipePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar activePage="equipe" />
-          <div className="lg:col-span-3">
-            {/* Error message */}
-            {error && (
-              <div
-                role="alert"
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
-              >
-                <AlertCircle
-                  className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
-                  aria-hidden="true"
-                />
-                <p className="text-red-700">{error}</p>
-              </div>
-            )}
+        <div>
+          {/* Error message */}
+          {error && (
+            <div
+              role="alert"
+              className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
+            >
+              <AlertCircle
+                className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
+              <p className="text-red-700">{error}</p>
+            </div>
+          )}
 
-            {/* Add member button */}
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-lg font-semibold text-charcoal-900">
-                  Membres de l'équipe ({members.length})
-                </h2>
-                <p className="text-sm text-charcoal-500">
-                  Ajoutez des membres pour leur assigner des créneaux
-                </p>
-              </div>
+          {/* Add member button */}
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-lg font-semibold text-charcoal-900">
+                Membres de l'équipe ({members.length})
+              </h2>
+              <p className="text-sm text-charcoal-500">
+                Ajoutez des membres pour leur assigner des créneaux
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setEditingMember(null)
+                setFormData({
+                  name: '',
+                  email: '',
+                  phone: '',
+                  role: '',
+                  color: COLORS[0].value,
+                })
+                setShowAddModal(true)
+              }}
+              className="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600"
+            >
+              <Plus className="w-4 h-4" />
+              Ajouter un membre
+            </button>
+          </div>
+
+          {/* Team members grid */}
+          {members.length === 0 ? (
+            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+              <Users className="w-12 h-12 text-sand-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-charcoal-900 mb-2">
+                Aucun membre dans l'équipe
+              </h3>
+              <p className="text-charcoal-500 mb-6">
+                Ajoutez des membres pour leur assigner des créneaux de disponibilité
+              </p>
               <button
-                onClick={() => {
-                  setEditingMember(null)
-                  setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    role: '',
-                    color: COLORS[0].value,
-                  })
-                  setShowAddModal(true)
-                }}
-                className="flex items-center gap-2 bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600"
+                onClick={() => setShowAddModal(true)}
+                className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600"
               >
                 <Plus className="w-4 h-4" />
-                Ajouter un membre
+                Ajouter le premier membre
               </button>
             </div>
-
-            {/* Team members grid */}
-            {members.length === 0 ? (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <Users className="w-12 h-12 text-sand-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-charcoal-900 mb-2">
-                  Aucun membre dans l'équipe
-                </h3>
-                <p className="text-charcoal-500 mb-6">
-                  Ajoutez des membres pour leur assigner des créneaux de disponibilité
-                </p>
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="inline-flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-lg hover:bg-primary-600"
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {members.map((member) => (
+                <div
+                  key={member.id}
+                  className={`bg-white rounded-xl shadow-sm p-6 border-l-4 ${
+                    member.is_active ? '' : 'opacity-60'
+                  }`}
+                  style={{ borderLeftColor: member.color }}
                 >
-                  <Plus className="w-4 h-4" />
-                  Ajouter le premier membre
-                </button>
-              </div>
-            ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {members.map((member) => (
-                  <div
-                    key={member.id}
-                    className={`bg-white rounded-xl shadow-sm p-6 border-l-4 ${
-                      member.is_active ? '' : 'opacity-60'
-                    }`}
-                    style={{ borderLeftColor: member.color }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                          style={{ backgroundColor: member.color }}
-                        >
-                          {member.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-charcoal-900">{member.name}</h3>
-                          <p className="text-sm text-charcoal-500">{member.role}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => openEditModal(member)}
-                          className="p-2 text-charcoal-400 hover:text-primary-500 hover:bg-primary-50 rounded-lg"
-                          aria-label={`Modifier ${member.name}`}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(member.id)}
-                          className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                          aria-label={`Supprimer ${member.name}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2 text-charcoal-600">
-                        <Mail className="w-4 h-4" />
-                        <span>{member.email}</span>
-                      </div>
-                      {member.phone && (
-                        <div className="flex items-center gap-2 text-charcoal-600">
-                          <Phone className="w-4 h-4" />
-                          <span>{member.phone}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                      <span
-                        className={`text-sm ${member.is_active ? 'text-green-600' : 'text-charcoal-400'}`}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                        style={{ backgroundColor: member.color }}
                       >
-                        {member.is_active ? 'Actif' : 'Inactif'}
-                      </span>
+                        {member.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-charcoal-900">{member.name}</h3>
+                        <p className="text-sm text-charcoal-500">{member.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
                       <button
-                        onClick={() => toggleActive(member)}
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          member.is_active
-                            ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                            : 'bg-green-100 text-green-700 hover:bg-green-200'
-                        }`}
+                        onClick={() => openEditModal(member)}
+                        className="p-2 text-charcoal-400 hover:text-primary-500 hover:bg-primary-50 rounded-lg"
+                        aria-label={`Modifier ${member.name}`}
                       >
-                        {member.is_active ? 'Désactiver' : 'Activer'}
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(member.id)}
+                        className="p-2 text-charcoal-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                        aria-label={`Supprimer ${member.name}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
 
-            {/* Info box */}
-            <div className="mt-8 p-4 bg-primary-50 rounded-lg">
-              <h4 className="font-medium text-primary-800 mb-2">Comment ça fonctionne ?</h4>
-              <ul className="text-sm text-primary-600 space-y-1">
-                <li>1. Ajoutez les membres de votre équipe avec leur nom et rôle</li>
-                <li>2. Définissez leur rôle (employé ou apprenti)</li>
-                <li>3. Gérez votre équipe depuis cette page</li>
-              </ul>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-charcoal-600">
+                      <Mail className="w-4 h-4" />
+                      <span>{member.email}</span>
+                    </div>
+                    {member.phone && (
+                      <div className="flex items-center gap-2 text-charcoal-600">
+                        <Phone className="w-4 h-4" />
+                        <span>{member.phone}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t flex items-center justify-between">
+                    <span
+                      className={`text-sm ${member.is_active ? 'text-green-600' : 'text-charcoal-400'}`}
+                    >
+                      {member.is_active ? 'Actif' : 'Inactif'}
+                    </span>
+                    <button
+                      onClick={() => toggleActive(member)}
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        member.is_active
+                          ? 'bg-red-100 text-red-700 hover:bg-red-200'
+                          : 'bg-green-100 text-green-700 hover:bg-green-200'
+                      }`}
+                    >
+                      {member.is_active ? 'Désactiver' : 'Activer'}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
+          )}
+
+          {/* Info box */}
+          <div className="mt-8 p-4 bg-primary-50 rounded-lg">
+            <h4 className="font-medium text-primary-800 mb-2">Comment ça fonctionne ?</h4>
+            <ul className="text-sm text-primary-600 space-y-1">
+              <li>1. Ajoutez les membres de votre équipe avec leur nom et rôle</li>
+              <li>2. Définissez leur rôle (employé ou apprenti)</li>
+              <li>3. Gérez votre équipe depuis cette page</li>
+            </ul>
           </div>
         </div>
       </div>

@@ -12,7 +12,6 @@ import {
   X,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { PortfolioCard } from '@/components/portfolio'
 import Button from '@/components/ui/Button'
 import type { PortfolioItem, MediaType } from '@/types/portfolio'
@@ -180,13 +179,10 @@ export default function PortfolioPage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="portfolio" />
-            <div className="lg:col-span-3 flex items-center justify-center py-20">
-              <div className="text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
-                <p className="text-charcoal-600">Chargement...</p>
-              </div>
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
+              <p className="text-charcoal-600">Chargement...</p>
             </div>
           </div>
         </div>
@@ -198,23 +194,20 @@ export default function PortfolioPage() {
     return (
       <div className="min-h-screen bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-4 gap-8">
-            <ArtisanSidebar activePage="portfolio" />
-            <div className="lg:col-span-3 flex items-center justify-center py-20">
-              <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
-                <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-charcoal-900 mb-2">Erreur</h2>
-                <p className="text-charcoal-600 mb-6">{error}</p>
-                <button
-                  onClick={() => {
-                    setLoading(true)
-                    fetchPortfolio()
-                  }}
-                  className="bg-primary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors"
-                >
-                  Réessayer
-                </button>
-              </div>
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
+              <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-charcoal-900 mb-2">Erreur</h2>
+              <p className="text-charcoal-600 mb-6">{error}</p>
+              <button
+                onClick={() => {
+                  setLoading(true)
+                  fetchPortfolio()
+                }}
+                className="bg-primary-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-600 transition-colors"
+              >
+                Réessayer
+              </button>
             </div>
           </div>
         </div>
@@ -267,126 +260,122 @@ export default function PortfolioPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar activePage="portfolio" />
-
-          {/* Main content */}
-          <main id="main-content" className="lg:col-span-3 space-y-6">
-            {/* Stats summary */}
-            <div className="bg-white rounded-xl shadow-sm p-4">
-              <h4 className="font-medium text-charcoal-900 mb-3">Statistiques</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-charcoal-600">
-                  <span>Total</span>
-                  <span className="font-medium text-charcoal-900">{stats.total}</span>
-                </div>
-                <div className="flex justify-between text-charcoal-600">
-                  <span>Images</span>
-                  <span className="font-medium text-charcoal-900">{stats.images}</span>
-                </div>
-                <div className="flex justify-between text-charcoal-600">
-                  <span>Vidéos</span>
-                  <span className="font-medium text-charcoal-900">{stats.videos}</span>
-                </div>
-                <div className="flex justify-between text-charcoal-600">
-                  <span>Avant/Après</span>
-                  <span className="font-medium text-charcoal-900">{stats.beforeAfter}</span>
-                </div>
-                <div className="flex justify-between text-charcoal-600">
-                  <span>Mis en avant</span>
-                  <span className="font-medium text-amber-600">{stats.featured}</span>
-                </div>
+        {/* Main content */}
+        <main id="main-content" className="space-y-6">
+          {/* Stats summary */}
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <h4 className="font-medium text-charcoal-900 mb-3">Statistiques</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between text-charcoal-600">
+                <span>Total</span>
+                <span className="font-medium text-charcoal-900">{stats.total}</span>
+              </div>
+              <div className="flex justify-between text-charcoal-600">
+                <span>Images</span>
+                <span className="font-medium text-charcoal-900">{stats.images}</span>
+              </div>
+              <div className="flex justify-between text-charcoal-600">
+                <span>Vidéos</span>
+                <span className="font-medium text-charcoal-900">{stats.videos}</span>
+              </div>
+              <div className="flex justify-between text-charcoal-600">
+                <span>Avant/Après</span>
+                <span className="font-medium text-charcoal-900">{stats.beforeAfter}</span>
+              </div>
+              <div className="flex justify-between text-charcoal-600">
+                <span>Mis en avant</span>
+                <span className="font-medium text-amber-600">{stats.featured}</span>
               </div>
             </div>
+          </div>
 
-            {/* Filters */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Filter className="w-5 h-5 text-charcoal-500" />
-              <button
-                onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filter === 'all'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
-                }`}
-              >
-                Tout ({items.length})
-              </button>
-              <button
-                onClick={() => setFilter('image')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                  filter === 'image'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
-                }`}
-              >
-                <ImageIcon className="w-4 h-4" />
-                Images ({stats.images})
-              </button>
-              <button
-                onClick={() => setFilter('video')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                  filter === 'video'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
-                }`}
-              >
-                <Video className="w-4 h-4" />
-                Vidéos ({stats.videos})
-              </button>
-              <button
-                onClick={() => setFilter('before_after')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                  filter === 'before_after'
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
-                }`}
-              >
-                <Layers className="w-4 h-4" />
-                Avant/Après ({stats.beforeAfter})
-              </button>
+          {/* Filters */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <Filter className="w-5 h-5 text-charcoal-500" />
+            <button
+              onClick={() => setFilter('all')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === 'all'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
+              }`}
+            >
+              Tout ({items.length})
+            </button>
+            <button
+              onClick={() => setFilter('image')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                filter === 'image'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
+              }`}
+            >
+              <ImageIcon className="w-4 h-4" />
+              Images ({stats.images})
+            </button>
+            <button
+              onClick={() => setFilter('video')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                filter === 'video'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
+              }`}
+            >
+              <Video className="w-4 h-4" />
+              Vidéos ({stats.videos})
+            </button>
+            <button
+              onClick={() => setFilter('before_after')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                filter === 'before_after'
+                  ? 'bg-primary-500 text-white'
+                  : 'bg-white text-charcoal-700 hover:bg-sand-50 border border-sand-300'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              Avant/Après ({stats.beforeAfter})
+            </button>
+          </div>
+
+          {/* Portfolio grid */}
+          {filteredItems.length === 0 ? (
+            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+              <ImageIcon className="w-16 h-16 text-sand-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-charcoal-900 mb-2">
+                {items.length === 0 ? 'Aucune réalisation' : 'Aucun résultat pour ce filtre'}
+              </h3>
+              <p className="text-charcoal-500 mb-6">
+                {items.length === 0
+                  ? 'Ajoutez vos premières réalisations pour les mettre en valeur sur votre profil.'
+                  : 'Essayez un autre filtre.'}
+              </p>
+              {items.length === 0 && (
+                <Button
+                  variant="primary"
+                  leftIcon={<Plus className="w-5 h-5" />}
+                  onClick={() => setShowAddModal(true)}
+                >
+                  Ajouter ma première réalisation
+                </Button>
+              )}
             </div>
-
-            {/* Portfolio grid */}
-            {filteredItems.length === 0 ? (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <ImageIcon className="w-16 h-16 text-sand-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-charcoal-900 mb-2">
-                  {items.length === 0 ? 'Aucune réalisation' : 'Aucun résultat pour ce filtre'}
-                </h3>
-                <p className="text-charcoal-500 mb-6">
-                  {items.length === 0
-                    ? 'Ajoutez vos premières réalisations pour les mettre en valeur sur votre profil.'
-                    : 'Essayez un autre filtre.'}
-                </p>
-                {items.length === 0 && (
-                  <Button
-                    variant="primary"
-                    leftIcon={<Plus className="w-5 h-5" />}
-                    onClick={() => setShowAddModal(true)}
-                  >
-                    Ajouter ma première réalisation
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredItems.map((item, index) => (
-                  <PortfolioCard
-                    key={item.id}
-                    item={item}
-                    showActions
-                    onClick={() => setLightboxIndex(index)}
-                    onEdit={() => setEditingItem(item)}
-                    onDelete={() => handleDelete(item.id)}
-                    onToggleVisibility={() => handleToggleVisibility(item)}
-                    onToggleFeatured={() => handleToggleFeatured(item)}
-                  />
-                ))}
-              </div>
-            )}
-          </main>
-        </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredItems.map((item, index) => (
+                <PortfolioCard
+                  key={item.id}
+                  item={item}
+                  showActions
+                  onClick={() => setLightboxIndex(index)}
+                  onEdit={() => setEditingItem(item)}
+                  onDelete={() => handleDelete(item.id)}
+                  onToggleVisibility={() => handleToggleVisibility(item)}
+                  onToggleFeatured={() => handleToggleFeatured(item)}
+                />
+              ))}
+            </div>
+          )}
+        </main>
       </div>
 
       {/* Add Modal */}

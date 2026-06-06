@@ -16,7 +16,6 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import FunnelBlock from '@/components/artisan-dashboard/FunnelBlock'
 import NextActionsBlock from '@/components/artisan-dashboard/NextActionsBlock'
 import PerformanceTrendBlock from '@/components/artisan-dashboard/PerformanceTrendBlock'
@@ -25,7 +24,6 @@ import ReputationBlock from '@/components/artisan-dashboard/ReputationBlock'
 import RgeStatusBlock from '@/components/artisan-dashboard/RgeStatusBlock'
 import { StatCard } from '@/components/dashboard/StatCard'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
-import { getArtisanUrl } from '@/lib/utils'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -296,14 +294,6 @@ export default function DashboardArtisanPage() {
 
   const displayName = profile?.full_name || 'Mon entreprise'
   const displayCity = provider?.address_city || ''
-  const publicUrl = provider
-    ? getArtisanUrl({
-        stable_id: provider.stable_id,
-        slug: provider.slug,
-        specialty: provider.specialty,
-        city: provider.address_city,
-      })
-    : null
 
   const statsCards = stats
     ? [
@@ -380,177 +370,166 @@ export default function DashboardArtisanPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
-          <ArtisanSidebar
-            activePage="dashboard"
-            newDemandesCount={stats?.pendingDemandesCount ?? 0}
-            unreadMessagesCount={stats?.unreadMessages ?? 0}
-            publicUrl={publicUrl}
-          />
-
-          {/* Main content */}
-          <main id="main-content" className="lg:col-span-3 space-y-8">
-            {/* Inline error banner */}
-            {hasGenericError && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4"
-                role="alert"
+        {/* Main content */}
+        <main id="main-content" className="space-y-8">
+          {/* Inline error banner */}
+          {hasGenericError && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl p-4"
+              role="alert"
+            >
+              <AlertCircle className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
+              <p className="text-sm text-red-700 flex-1">
+                Erreur de connexion. Veuillez vérifier votre connexion internet.
+              </p>
+              <button
+                onClick={() => mutate()}
+                className="text-sm font-medium text-red-700 hover:text-red-800 underline focus-visible:ring-2 focus-visible:ring-red-500 rounded"
               >
-                <AlertCircle className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
-                <p className="text-sm text-red-700 flex-1">
-                  Erreur de connexion. Veuillez vérifier votre connexion internet.
-                </p>
-                <button
-                  onClick={() => mutate()}
-                  className="text-sm font-medium text-red-700 hover:text-red-800 underline focus-visible:ring-2 focus-visible:ring-red-500 rounded"
-                >
-                  Réessayer
-                </button>
-              </motion.div>
+                Réessayer
+              </button>
+            </motion.div>
+          )}
+
+          {/* Photo Upload Banner */}
+          {data?.stats?.portfolioPhotoCount !== undefined && (
+            <PhotoUploadBanner photoCount={data.stats.portfolioPhotoCount} />
+          )}
+
+          {/* Next actions — priority inbox consolidant RGE + leads + avis + profil */}
+          <NextActionsBlock />
+
+          {/* Stats Section */}
+          <section aria-label="Statistiques" aria-live="polite">
+            {isLoading ? (
+              <StatsSkeleton />
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {statsCards.map((card, index) => (
+                  <StatCard
+                    key={card.title}
+                    title={card.title}
+                    value={card.value}
+                    trend={card.trend}
+                    icon={card.icon}
+                    color={card.color}
+                    delay={index * 0.05}
+                  />
+                ))}
+              </div>
             )}
+          </section>
 
-            {/* Photo Upload Banner */}
-            {data?.stats?.portfolioPhotoCount !== undefined && (
-              <PhotoUploadBanner photoCount={data.stats.portfolioPhotoCount} />
-            )}
+          {/* 30-day sparklines — tendance vs "current + %change" des stats cards */}
+          <PerformanceTrendBlock />
 
-            {/* Next actions — priority inbox consolidant RGE + leads + avis + profil */}
-            <NextActionsBlock />
+          {/* RGE status — critical cliff signal, first above Reputation */}
+          <RgeStatusBlock />
 
-            {/* Stats Section */}
-            <section aria-label="Statistiques" aria-live="polite">
+          {/* Reputation block — flywheel visibility (S3 supply-side) */}
+          <ReputationBlock />
+
+          {/* Lead conversion funnel — rend le signal dispatch visible (migrations 461+462) */}
+          <FunnelBlock />
+
+          {/* Two-column layout: Demandes + Profile widget */}
+          <div className={showProfileWidget ? 'grid lg:grid-cols-3 gap-8' : ''}>
+            {/* Dernières demandes */}
+            <section
+              className={showProfileWidget ? 'lg:col-span-2' : ''}
+              aria-label="Dernières demandes"
+            >
               {isLoading ? (
-                <StatsSkeleton />
+                <DemandesSkeleton />
               ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  {statsCards.map((card, index) => (
-                    <StatCard
-                      key={card.title}
-                      title={card.title}
-                      value={card.value}
-                      trend={card.trend}
-                      icon={card.icon}
-                      color={card.color}
-                      delay={index * 0.05}
-                    />
-                  ))}
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-white rounded-xl border border-sand-300 p-6"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-charcoal-900">Dernières demandes</h2>
+                    <Link
+                      href="/espace-artisan/demandes-recues"
+                      className="text-primary-500 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-primary-400 rounded"
+                    >
+                      Voir tout
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {demandes.length === 0 ? (
+                      <EmptyDemandesState />
+                    ) : (
+                      demandes.map((demande, index) => (
+                        <motion.div
+                          key={demande.id}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.25 + index * 0.04 }}
+                        >
+                          <Link
+                            href={`/espace-artisan/demandes-recues?id=${demande.id}`}
+                            className="block border border-sand-300 rounded-lg p-4 hover:shadow-md hover:border-primary-200 focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 transition-all"
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <h3 className="font-medium text-charcoal-900">
+                                    {demande.service_name}
+                                  </h3>
+                                  <span
+                                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses(demande.status)}`}
+                                    role="status"
+                                  >
+                                    {getStatusLabel(demande.status)}
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-charcoal-500">
+                                  <span>{demande.client_name}</span>
+                                  <span>{demande.city || 'Non précisé'}</span>
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" aria-hidden="true" />
+                                    {new Date(demande.created_at).toLocaleDateString('fr-FR', {
+                                      timeZone: 'Europe/Paris',
+                                    })}
+                                  </span>
+                                </div>
+                                {demande.postal_code && (
+                                  <div className="mt-2 text-sm font-medium text-primary-500">
+                                    Code postal : {demande.postal_code}
+                                  </div>
+                                )}
+                              </div>
+                              <ChevronRight
+                                className="w-5 h-5 text-charcoal-400 hidden sm:block shrink-0"
+                                aria-hidden="true"
+                              />
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))
+                    )}
+                  </div>
+                </motion.div>
               )}
             </section>
 
-            {/* 30-day sparklines — tendance vs "current + %change" des stats cards */}
-            <PerformanceTrendBlock />
-
-            {/* RGE status — critical cliff signal, first above Reputation */}
-            <RgeStatusBlock />
-
-            {/* Reputation block — flywheel visibility (S3 supply-side) */}
-            <ReputationBlock />
-
-            {/* Lead conversion funnel — rend le signal dispatch visible (migrations 461+462) */}
-            <FunnelBlock />
-
-            {/* Two-column layout: Demandes + Profile widget */}
-            <div className={showProfileWidget ? 'grid lg:grid-cols-3 gap-8' : ''}>
-              {/* Dernières demandes */}
-              <section
-                className={showProfileWidget ? 'lg:col-span-2' : ''}
-                aria-label="Dernières demandes"
+            {/* Profile Completeness widget (right column) */}
+            {showProfileWidget && !isLoading && provider && (
+              <motion.aside
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                aria-label="Complétion du profil"
               >
-                {isLoading ? (
-                  <DemandesSkeleton />
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-white rounded-xl border border-sand-300 p-6"
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-lg font-semibold text-charcoal-900">
-                        Dernières demandes
-                      </h2>
-                      <Link
-                        href="/espace-artisan/demandes-recues"
-                        className="text-primary-500 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-primary-400 rounded"
-                      >
-                        Voir tout
-                      </Link>
-                    </div>
-                    <div className="space-y-4">
-                      {demandes.length === 0 ? (
-                        <EmptyDemandesState />
-                      ) : (
-                        demandes.map((demande, index) => (
-                          <motion.div
-                            key={demande.id}
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.25 + index * 0.04 }}
-                          >
-                            <Link
-                              href={`/espace-artisan/demandes-recues?id=${demande.id}`}
-                              className="block border border-sand-300 rounded-lg p-4 hover:shadow-md hover:border-primary-200 focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 transition-all"
-                            >
-                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                <div className="min-w-0">
-                                  <div className="flex items-center gap-2 flex-wrap">
-                                    <h3 className="font-medium text-charcoal-900">
-                                      {demande.service_name}
-                                    </h3>
-                                    <span
-                                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClasses(demande.status)}`}
-                                      role="status"
-                                    >
-                                      {getStatusLabel(demande.status)}
-                                    </span>
-                                  </div>
-                                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-1 text-sm text-charcoal-500">
-                                    <span>{demande.client_name}</span>
-                                    <span>{demande.city || 'Non précisé'}</span>
-                                    <span className="flex items-center gap-1">
-                                      <Calendar className="w-4 h-4" aria-hidden="true" />
-                                      {new Date(demande.created_at).toLocaleDateString('fr-FR', {
-                                        timeZone: 'Europe/Paris',
-                                      })}
-                                    </span>
-                                  </div>
-                                  {demande.postal_code && (
-                                    <div className="mt-2 text-sm font-medium text-primary-500">
-                                      Code postal : {demande.postal_code}
-                                    </div>
-                                  )}
-                                </div>
-                                <ChevronRight
-                                  className="w-5 h-5 text-charcoal-400 hidden sm:block shrink-0"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                            </Link>
-                          </motion.div>
-                        ))
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </section>
-
-              {/* Profile Completeness widget (right column) */}
-              {showProfileWidget && !isLoading && provider && (
-                <motion.aside
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  aria-label="Complétion du profil"
-                >
-                  <ProfileCompleteness provider={provider} />
-                </motion.aside>
-              )}
-            </div>
-          </main>
-        </div>
+                <ProfileCompleteness provider={provider} />
+              </motion.aside>
+            )}
+          </div>
+        </main>
       </div>
     </div>
   )
