@@ -20,6 +20,7 @@ import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { ArtisanSchema } from '@/components/artisan/ArtisanSchema'
 import { GoogleReviewsBadge } from '@/components/artisan/GoogleReviewsBadge'
 import { Review } from '@/components/artisan'
+import type { PortfolioItem } from '@/components/artisan/types'
 import type { LegacyArtisan } from '@/types/legacy'
 import type { Service, Location } from '@/types'
 import { getServiceImageForContext } from '@/lib/data/images'
@@ -41,6 +42,7 @@ interface ProviderRecord {
   specialty?: string | null
   description?: string | null
   bio?: string | null
+  avatar_url?: string | null
   address_street?: string | null
   address_city?: string | null
   address_postal_code?: string | null
@@ -202,6 +204,23 @@ function convertToArtisan(
   const isRgePhoneExposable = hasActiveRgeQualification(provider.rge_qualifications)
   const canExposePhone = isClaimedForPhone || isRgePhoneExposable
 
+  // Photo de profil (mig 306 avatar_url, upload via /api/artisan/avatar) :
+  // le GUARD du type Artisan (types.ts) interdit d'ajouter avatar_url —
+  // on synthétise une entrée portfolio[0] que <ArtisanHero> lit déjà
+  // (hasPortfolioImage). avatar_url n'est renseignée que par un artisan
+  // claimed authentifié → pas d'enjeu PII/unclaimed.
+  const portfolio: PortfolioItem[] = provider.avatar_url
+    ? [
+        {
+          id: 'avatar',
+          title: 'Photo de profil',
+          description: '',
+          imageUrl: provider.avatar_url,
+          category: 'profil',
+        },
+      ]
+    : []
+
   return {
     id: provider.id,
     stable_id: provider.stable_id || undefined,
@@ -243,6 +262,7 @@ function convertToArtisan(
     prices_are_estimated: false,
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
+    portfolio: portfolio.length > 0 ? portfolio : undefined,
     available_24h: provider.available_24h || false,
     // SLA-99.9 / PII : phone_secondary reste gated `isClaimedForPhone` strict —
     // pas d'équivalent ADEME public, ce champ n'est saisi que par l'artisan
@@ -566,6 +586,58 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
     return []
   } catch {
     // On error, return empty array (no fake reviews!)
+    return []
+  }
+}
+
+/** Raw portfolio_items row (subset lu pour la fiche publique) */
+interface PortfolioItemRow {
+  id: string
+  title: string | null
+  description: string | null
+  image_url: string | null
+  thumbnail_url: string | null
+  category: string | null
+  media_type: 'image' | 'video' | 'before_after' | null
+  video_url: string | null
+  before_image_url: string | null
+  after_image_url: string | null
+}
+
+// Réalisations publiques de l'artisan (table portfolio_items, upload via
+// /espace-artisan). portfolio_items.artisan_id référence profiles(id)
+// (= auth.uid(), mig 004) — on requête donc par provider.user_id, ce qui
+// gate naturellement aux fiches claimed (user_id NULL sinon). RLS public :
+// "Public can view visible portfolios" (is_visible = TRUE, mig 101).
+async function getProviderPortfolio(userId: string): Promise<PortfolioItem[]> {
+  try {
+    const { data } = await supabase
+      .from('portfolio_items')
+      .select(
+        'id, title, description, image_url, thumbnail_url, category, media_type, video_url, before_image_url, after_image_url'
+      )
+      .eq('artisan_id', userId)
+      .eq('is_visible', true)
+      .order('display_order', { ascending: true })
+      .order('created_at', { ascending: false })
+      .limit(12)
+
+    return ((data as PortfolioItemRow[] | null) || [])
+      .filter((row) => !!row.image_url)
+      .map((row) => ({
+        id: row.id,
+        title: row.title || 'Réalisation',
+        description: row.description || '',
+        imageUrl: row.image_url as string,
+        category: row.category || 'Réalisation',
+        mediaType: row.media_type || 'image',
+        videoUrl: row.video_url || undefined,
+        beforeImageUrl: row.before_image_url || undefined,
+        afterImageUrl: row.after_image_url || undefined,
+        thumbnailUrl: row.thumbnail_url || undefined,
+      }))
+  } catch {
+    // Graceful degradation — fiche rendue sans galerie
     return []
   }
 }
@@ -980,8 +1052,9 @@ async function renderProviderPage({ params }: PageProps) {
   // documente 12 890 pages 5xx dont 57 % sur ce template.
   let reviews: Review[] = []
   let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
+  let portfolioItems: PortfolioItem[] = []
   try {
-    ;[reviews, similarArtisans] = await Promise.all([
+    ;[reviews, similarArtisans, portfolioItems] = await Promise.all([
       raceTimeout(
         getProviderReviews(provider.id, service?.name || artisan.specialty),
         [] as Review[]
@@ -990,9 +1063,20 @@ async function renderProviderPage({ params }: PageProps) {
         getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
         [] as Awaited<ReturnType<typeof getSimilarArtisans>>
       ),
+      // Portfolio uniquement pour les fiches claimed (user_id requis pour
+      // uploader) — 0 query supplémentaire sur les ~49K fiches non claim.
+      provider.user_id
+        ? raceTimeout(getProviderPortfolio(provider.user_id), [] as PortfolioItem[])
+        : Promise.resolve([] as PortfolioItem[]),
     ])
   } catch {
     // Graceful degradation — page renders without reviews/similar artisans
+  }
+
+  // Galerie réalisations après la photo de profil (synthétisée portfolio[0]
+  // par convertToArtisan depuis avatar_url — <ArtisanHero> lit portfolio[0]).
+  if (portfolioItems.length > 0) {
+    artisan.portfolio = [...(artisan.portfolio || []), ...portfolioItems]
   }
 
   const isClaimed = !!provider.user_id

@@ -18,8 +18,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const displayName = getDisplayName(artisan)
 
-  // Only show real portfolio photos — no fake stock images
-  const photos = artisan.portfolio && artisan.portfolio.length > 0 ? artisan.portfolio : []
+  // Only show real portfolio photos — no fake stock images.
+  // L'entrée id='avatar' est la photo de profil synthétisée depuis
+  // providers.avatar_url (lue par <ArtisanHero>) — hors galerie réalisations.
+  const photos = (artisan.portfolio || []).filter((p) => p.id !== 'avatar')
 
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
