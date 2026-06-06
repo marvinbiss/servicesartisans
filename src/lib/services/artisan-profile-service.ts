@@ -61,6 +61,14 @@ export interface ProviderFullRow {
   service_prices: unknown
   faq: unknown
   team_size: number | null
+  // Mig 306 — éditables « Ma fiche » (refonte 2026-06-06)
+  hourly_rate_min: number | null
+  hourly_rate_max: number | null
+  payment_methods: string[] | null
+  emergency_available: boolean | null
+  certifications: string[] | null
+  insurance: string[] | null
+  languages: string[] | null
 }
 
 export interface ProviderProfileRow {
@@ -276,7 +284,7 @@ export async function getProviderFull(
   const { data, error } = await supabase
     .from('providers')
     .select(
-      'id, stable_id, name, slug, email, phone, phone_secondary, website, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at, opening_hours, accepts_new_clients, free_quote, available_24h, intervention_radius_km, services_offered, service_prices, faq, team_size'
+      'id, stable_id, name, slug, email, phone, phone_secondary, website, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, avatar_url, created_at, updated_at, opening_hours, accepts_new_clients, free_quote, available_24h, intervention_radius_km, services_offered, service_prices, faq, team_size, hourly_rate_min, hourly_rate_max, payment_methods, emergency_available, certifications, insurance, languages'
     )
     .eq('user_id', userId)
     .or('is_active.eq.true,is_active.is.null')

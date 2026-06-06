@@ -73,6 +73,11 @@ export interface Provider {
   bio?: string
   hourly_rate_min?: number | null
   hourly_rate_max?: number | null
+  // Mig 306 — déclaratif artisan, éditable « Ma fiche » (refonte 2026-06-06)
+  payment_methods?: string[] | null
+  certifications?: string[] | null
+  insurance?: string[] | null
+  languages?: string[] | null
   user_id?: string | null
   claimed_at?: string | null
   // RGE ADEME (migration 380) — certifications officielles data.gouv.fr

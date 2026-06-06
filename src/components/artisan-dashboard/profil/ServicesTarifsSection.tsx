@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Euro, Plus, X } from 'lucide-react'
 import { SectionCard } from './SectionCard'
+import { TagListField } from './TagListField'
 import { useProviderForm } from './useProviderForm'
 
 interface ServicesTarifsSectionProps {
@@ -20,7 +21,16 @@ interface ServicePrice {
 const MAX_SERVICES = 30
 const MAX_SERVICE_PRICES = 20
 
-const FIELDS = ['services_offered', 'service_prices', 'free_quote'] as const
+const FIELDS = [
+  'services_offered',
+  'service_prices',
+  'free_quote',
+  'hourly_rate_min',
+  'hourly_rate_max',
+  'payment_methods',
+] as const
+
+const PAYMENT_SUGGESTIONS = ['Carte bancaire', 'Virement', 'Chèque', 'Espèces']
 
 export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
@@ -37,6 +47,20 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
   const servicesOffered = (formData.services_offered as string[]) || []
   const servicePrices = (formData.service_prices as ServicePrice[]) || []
   const freeQuote = formData.free_quote !== false
+  const hourlyRateMin = formData.hourly_rate_min as number | null
+  const hourlyRateMax = formData.hourly_rate_max as number | null
+  const paymentMethods = (formData.payment_methods as string[]) || []
+  const hourlyRateInvalid =
+    hourlyRateMin != null && hourlyRateMax != null && hourlyRateMax < hourlyRateMin
+
+  const setRate = (field: 'hourly_rate_min' | 'hourly_rate_max', raw: string) => {
+    if (raw === '') {
+      setField(field, null)
+      return
+    }
+    const n = Number(raw)
+    if (Number.isFinite(n) && n >= 0) setField(field, n)
+  }
 
   const addService = () => {
     const trimmed = newService.trim()
@@ -288,6 +312,66 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             })}
           </div>
         </div>
+
+        {/* Hourly rate range (mig 306) */}
+        <div>
+          <span className="block text-sm font-medium text-charcoal-700 mb-2">
+            Tarif horaire indicatif
+          </span>
+          <div className="grid grid-cols-2 gap-4 max-w-md">
+            <div>
+              <label htmlFor="hourly-rate-min" className="block text-xs text-charcoal-500 mb-1">
+                Minimum (€/h)
+              </label>
+              <input
+                id="hourly-rate-min"
+                type="number"
+                min={0}
+                max={10000}
+                step="0.5"
+                value={hourlyRateMin ?? ''}
+                onChange={(e) => setRate('hourly_rate_min', e.target.value)}
+                placeholder="Ex: 45"
+                className="w-full px-3 py-2 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="hourly-rate-max" className="block text-xs text-charcoal-500 mb-1">
+                Maximum (€/h)
+              </label>
+              <input
+                id="hourly-rate-max"
+                type="number"
+                min={0}
+                max={10000}
+                step="0.5"
+                value={hourlyRateMax ?? ''}
+                onChange={(e) => setRate('hourly_rate_max', e.target.value)}
+                placeholder="Ex: 75"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 text-sm ${
+                  hourlyRateInvalid ? 'border-amber-400' : 'border-sand-400'
+                }`}
+              />
+            </div>
+          </div>
+          {hourlyRateInvalid && (
+            <p className="text-xs text-amber-600 mt-1">
+              Le maximum doit être supérieur ou égal au minimum.
+            </p>
+          )}
+        </div>
+
+        {/* Payment methods (mig 306) */}
+        <TagListField
+          id="services-payment-methods"
+          label="Moyens de paiement acceptés"
+          values={paymentMethods}
+          max={10}
+          maxLength={50}
+          placeholder="Ex: Carte bancaire"
+          suggestions={PAYMENT_SUGGESTIONS}
+          onChange={(values) => setField('payment_methods', values)}
+        />
 
         {/* Free quote toggle */}
         <div className="flex items-center justify-between">
