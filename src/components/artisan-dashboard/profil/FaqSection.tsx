@@ -31,7 +31,8 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
     if (updated) onSaved(updated)
   }
 
-  const faqItems = (formData.faq as FaqItem[]) || []
+  // jsonb en DB : un objet '{}' (défaut ou drift) n'est pas un tableau.
+  const faqItems = Array.isArray(formData.faq) ? (formData.faq as FaqItem[]) : []
 
   const addFaq = () => {
     if (faqItems.length >= MAX_FAQ) return

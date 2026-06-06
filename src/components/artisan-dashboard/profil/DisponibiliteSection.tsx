@@ -34,8 +34,19 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
     if (updated) onSaved(updated)
   }
 
-  const isUsingDefaults = !provider['opening_hours']
-  const openingHours = (formData.opening_hours as OpeningHoursValue) || DEFAULT_OPENING_HOURS
+  // opening_hours a un DEFAUT '{}'::jsonb en DB : un objet vide (ou partiel)
+  // est truthy mais l'éditeur lit chaque jour (.ouvert) — merger jour par jour
+  // sur les défauts évite le crash.
+  const rawHours = formData.opening_hours as Partial<OpeningHoursValue> | null | undefined
+  const hasStoredHours =
+    rawHours != null && typeof rawHours === 'object' && Object.keys(rawHours).length > 0
+  const isUsingDefaults = !hasStoredHours
+  const openingHours = Object.fromEntries(
+    Object.entries(DEFAULT_OPENING_HOURS).map(([day, fallback]) => [
+      day,
+      rawHours?.[day as keyof OpeningHoursValue] ?? fallback,
+    ])
+  ) as OpeningHoursValue
   const available24h = Boolean(formData.available_24h)
   const acceptsNewClients = formData.accepts_new_clients !== false
 

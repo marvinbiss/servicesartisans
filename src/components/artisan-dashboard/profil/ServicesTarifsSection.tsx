@@ -44,8 +44,20 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
     if (updated) onSaved(updated)
   }
 
-  const servicesOffered = (formData.services_offered as string[]) || []
-  const servicePrices = (formData.service_prices as ServicePrice[]) || []
+  const servicesOffered = Array.isArray(formData.services_offered)
+    ? (formData.services_offered as string[])
+    : []
+  // service_prices a un DEFAUT '{}'::jsonb en DB — un objet vide n'est pas un
+  // tableau et ferait crasher .map/.length ; les rows legacy peuvent aussi
+  // omettre des champs (inputs contrôlés + .trim exigent des strings).
+  const servicePrices = Array.isArray(formData.service_prices)
+    ? (formData.service_prices as Partial<ServicePrice>[]).map((r) => ({
+        name: r?.name ?? '',
+        description: r?.description ?? '',
+        price: r?.price ?? '',
+        duration: r?.duration ?? '',
+      }))
+    : []
   const freeQuote = formData.free_quote !== false
   const hourlyRateMin = formData.hourly_rate_min as number | null
   const hourlyRateMax = formData.hourly_rate_max as number | null
