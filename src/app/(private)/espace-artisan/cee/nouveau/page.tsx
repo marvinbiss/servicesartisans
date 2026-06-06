@@ -66,12 +66,17 @@ export default async function NouveauDossierPage() {
   // Vérification partenaire actif (table cee_artisan_partners)
   const { data: partnerRow } = await supabase
     .from('cee_artisan_partners')
-    .select('status, certified_at')
+    .select('status, certified_at, commission_rate_effective')
     .eq('provider_id', providerRow.id)
     .maybeSingle()
 
-  const partner = partnerRow as { status?: string; certified_at?: string | null } | null
+  const partner = partnerRow as {
+    status?: string
+    certified_at?: string | null
+    commission_rate_effective?: number | string | null
+  } | null
   const isCertified = partner?.status === 'active' || partner?.status === 'certified'
+  const commissionRate = Number(partner?.commission_rate_effective ?? 10)
 
   return (
     <div className="min-h-screen bg-sand-50">
@@ -100,10 +105,9 @@ export default async function NouveauDossierPage() {
 
       <main id="main-content" className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <NouveauDossierForm
-          providerId={providerRow.id}
-          providerName={providerRow.name ?? ''}
           rgeQualifications={providerRow.rge_qualifications ?? []}
           isCertified={isCertified}
+          commissionRate={commissionRate}
         />
       </main>
     </div>

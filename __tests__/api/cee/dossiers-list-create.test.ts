@@ -5,8 +5,11 @@
  *   - Auth obligatoire (401)
  *   - CSRF validateOrigin sur POST (403)
  *   - Rate-limit POST 10/min (429)
- *   - Ownership check partner_id → user_id (403)
- *   - Création retourne 201, idempotent retourne 200
+ *   - Partner résolu côté serveur par user_id (404 si absent)
+ *   - Fail-closed CEE_PII_KEY absente (500)
+ *   - Commune inconnue du référentiel (400)
+ *   - Barème introuvable (422) / surface requise (400)
+ *   - Création 201 avec PII chiffrées + snapshot serveur, idempotent 200
  *   - Business gate errors mappés en bon HTTP status
  *   - GET retourne liste vide si pas de partner
  */
@@ -35,7 +38,7 @@ vi.mock('@/lib/logger', () => ({
 // Supabase mock
 // ---------------------------------------------------------------------------
 const maybeSinglePartner = vi.fn()
-const maybeSingleOwnerCheck = vi.fn()
+const maybeSingleZone = vi.fn()
 const listDossiers = vi.fn()
 const profileSingleMock = vi.fn(async () => ({
   data: { role: 'artisan', two_factor_enabled: false },
@@ -61,12 +64,17 @@ const mockSupabase = {
       return {
         select: vi.fn(() => ({
           eq: vi.fn(() => ({
-            eq: vi.fn(() => ({
-              maybeSingle: maybeSingleOwnerCheck,
-            })),
             maybeSingle: maybeSinglePartner,
           })),
-          maybeSingle: maybeSinglePartner,
+        })),
+      }
+    }
+    if (table === 'zones_climatiques_ref') {
+      return {
+        select: vi.fn(() => ({
+          eq: vi.fn(() => ({
+            maybeSingle: maybeSingleZone,
+          })),
         })),
       }
     }
@@ -89,49 +97,27 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(async () => mockSupabase),
 }))
 
-// createDossier mock
+// createDossier mock (validation interne testée dans dossier-creation)
 const createDossierMock = vi.fn()
 vi.mock('@/lib/cee/dossier-creation', () => ({
-  CreateDossierInputSchema: {
-    safeParse: (data: unknown) => {
-      // Minimal validation: check required fields exist
-      const d = data as Record<string, unknown>
-      const required = [
-        'partner_id',
-        'provider_id',
-        'operation_code',
-        'client_code_postal',
-        'client_email_hash',
-        'montant_ht_cts',
-        'montant_ttc_cts',
-        'date_devis',
-        'forfait_id',
-        'forfait_version',
-        'prime_cee_cts',
-        'commission_rate',
-        'client_nom_b64',
-        'client_prenom_b64',
-        'client_email_b64',
-        'client_adresse_b64',
-        'client_commune_insee',
-        'foyer_personnes',
-        'revenus_categorie',
-        'type_travaux',
-      ]
-      const missing = required.filter((k) => d[k] === undefined)
-      if (missing.length > 0) {
-        return {
-          success: false,
-          error: { issues: missing.map((k) => ({ path: [k], message: 'required' })) },
-        }
-      }
-      return { success: true, data: d }
-    },
-  },
   createDossier: (...args: unknown[]) =>
     (createDossierMock as (...a: unknown[]) => unknown)(...args),
-  hashEmailForDossier: (email: string) => `hash:${email}`,
-  generateDossierReference: () => 'SAE-202604-001234',
+  hashEmailForDossier: (_email: string) => 'h'.repeat(64),
+  generateDossierReference: () => 'SAE-202606-001234',
+}))
+
+// Barème mock — snapshot serveur
+const lookupForfaitMock = vi.fn()
+vi.mock('@/lib/cee/bareme', () => ({
+  lookupForfaitSnapshot: (...args: unknown[]) =>
+    (lookupForfaitMock as (...a: unknown[]) => unknown)(...args),
+}))
+
+// PII crypto mock — pas de clé en environnement de test
+const isConfiguredMock = vi.fn(() => true)
+vi.mock('@/lib/cee/pii-crypto', () => ({
+  isPiiCryptoConfigured: () => isConfiguredMock(),
+  encryptPiiToB64: (v: string) => Buffer.from(`enc:${v}`).toString('base64'),
 }))
 
 type MockResult = { body: Record<string, unknown>; status: number }
@@ -150,33 +136,26 @@ function makePostRequest(body: unknown, headers?: Record<string, string>) {
 
 function makeValidBody() {
   return {
-    partner_id: 'partner-1',
-    provider_id: 'provider-1',
-    client_nom_b64: 'RHVwb250',
-    client_prenom_b64: 'SmVhbg==',
-    client_email_b64: 'amVhbkBleGFtcGxlLmNvbQ==',
-    client_email_hash: 'a'.repeat(64),
-    client_telephone_b64: null,
-    client_adresse_b64: 'MXJ1ZWRlbGFQYWl4',
-    client_code_postal: '75001',
-    client_commune_insee: '75056',
+    operation_code: 'BAR-TH-171',
+    client: {
+      nom: 'Dupont',
+      prenom: 'Jean',
+      email: 'Jean@Example.com',
+      telephone: '06 12 34 56 78',
+      adresse: '12 rue de la Paix',
+      code_postal: '75011',
+      commune_insee: '75056',
+    },
     foyer_personnes: 2,
     revenus_categorie: 'modeste',
-    rfr_declared_cts: null,
-    operation_code: 'BAR-TH-171',
-    type_travaux: 'Installation PAC',
-    surface_m2: null,
-    annee_construction: null,
-    energie_remplacee: null,
-    montant_ht_cts: 500000,
-    montant_ttc_cts: 600000,
-    date_devis: '2026-04-10',
+    type_travaux: 'Pompe à chaleur air/eau — etas=130, cop=4.2',
+    surface_m2: 100,
+    annee_construction: 1985,
+    energie_remplacee: 'fioul',
+    montant_ht_eur: 8500,
+    montant_ttc_eur: 8967.5,
+    date_devis: '2026-06-01',
     date_chantier_prevue: null,
-    forfait_id: 1,
-    forfait_version: 'v1',
-    prime_cee_cts: 120000,
-    prime_mpr_cts: null,
-    commission_rate: 10,
   }
 }
 
@@ -193,12 +172,23 @@ beforeEach(async () => {
     data: { role: 'artisan', two_factor_enabled: false },
     error: null,
   })
-  maybeSinglePartner.mockResolvedValue({ data: { id: 'partner-1' }, error: null })
-  maybeSingleOwnerCheck.mockResolvedValue({ data: { id: 'partner-1' }, error: null })
+  maybeSinglePartner.mockResolvedValue({
+    data: { id: 'partner-1', provider_id: 'provider-1', commission_rate_effective: 12.5 },
+    error: null,
+  })
+  maybeSingleZone.mockResolvedValue({
+    data: { code_insee: '75056', zone: 'H1' },
+    error: null,
+  })
+  lookupForfaitMock.mockResolvedValue({
+    ok: true,
+    snapshot: { forfait_id: 42, forfait_version: '2026-01-01:96000', prime_cee_cts: 96000 },
+  })
+  isConfiguredMock.mockReturnValue(true)
   listDossiers.mockResolvedValue({ data: [], error: null })
   createDossierMock.mockResolvedValue({
     ok: true,
-    dossier: { id: 'dossier-1', status: 'draft', reference: 'SAE-202604-001234' },
+    dossier: { id: 'dossier-1', status: 'draft', reference: 'SAE-202606-001234' },
     status: 'draft',
   })
   const rl = await import('@/lib/cee/rate-limit')
@@ -234,8 +224,8 @@ describe('GET /api/cee/dossiers', () => {
   it('returns dossier list for authenticated artisan', async () => {
     listDossiers.mockResolvedValueOnce({
       data: [
-        { id: 'd-1', reference: 'SAE-202604-000001', status: 'draft' },
-        { id: 'd-2', reference: 'SAE-202604-000002', status: 'submitted_by_artisan' },
+        { id: 'd-1', reference: 'SAE-202606-000001', status: 'draft' },
+        { id: 'd-2', reference: 'SAE-202606-000002', status: 'submitted_by_artisan' },
       ],
       error: null,
     })
@@ -277,18 +267,87 @@ describe('POST /api/cee/dossiers', () => {
     expect(res.status).toBe(429)
   })
 
-  it('returns 403 when partner_id does not belong to authenticated user', async () => {
-    maybeSingleOwnerCheck.mockResolvedValueOnce({ data: null, error: null })
+  it('returns 400 on invalid body (missing required fields)', async () => {
     const { POST } = await import('@/app/api/cee/dossiers/route')
-    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
-    expect(res.status).toBe(403)
+    const res = (await POST(
+      makePostRequest({ operation_code: 'BAR-TH-171' }) as never
+    )) as unknown as MockResult
+    expect(res.status).toBe(400)
   })
 
-  it('returns 201 on successful creation', async () => {
+  it('returns 400 when TTC < HT', async () => {
+    const body = makeValidBody()
+    body.montant_ttc_eur = 100
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(body) as never)) as unknown as MockResult
+    expect(res.status).toBe(400)
+  })
+
+  it('returns 500 fail-closed when CEE_PII_KEY is not configured', async () => {
+    isConfiguredMock.mockReturnValue(false)
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
+    expect(res.status).toBe(500)
+    expect(createDossierMock).not.toHaveBeenCalled()
+  })
+
+  it('returns 404 when no partner exists for the authenticated user', async () => {
+    maybeSinglePartner.mockResolvedValueOnce({ data: null, error: null })
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
+    expect(res.status).toBe(404)
+    expect((res.body as { error: { code: string } }).error.code).toBe('PARTNER_NOT_FOUND')
+  })
+
+  it('returns 400 COMMUNE_INCONNUE when commune is not in referential', async () => {
+    maybeSingleZone.mockResolvedValueOnce({ data: null, error: null })
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
+    expect(res.status).toBe(400)
+  })
+
+  it('returns 422 BAREME_NOT_FOUND when no forfait in force', async () => {
+    lookupForfaitMock.mockResolvedValueOnce({ ok: false, error: 'BAREME_NOT_FOUND' })
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
+    expect(res.status).toBe(422)
+  })
+
+  it('returns 400 SURFACE_REQUIRED for per-m² operation without surface', async () => {
+    lookupForfaitMock.mockResolvedValueOnce({ ok: false, error: 'SURFACE_REQUIRED' })
+    const { POST } = await import('@/app/api/cee/dossiers/route')
+    const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
+    expect(res.status).toBe(400)
+  })
+
+  it('returns 201 and builds CreateDossierInput entirely server-side', async () => {
     const { POST } = await import('@/app/api/cee/dossiers/route')
     const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
     expect(res.status).toBe(201)
     expect((res.body as { success: boolean }).success).toBe(true)
+
+    const input = createDossierMock.mock.calls[0][1] as Record<string, unknown>
+    // Attribution serveur — jamais depuis le payload
+    expect(input.partner_id).toBe('partner-1')
+    expect(input.provider_id).toBe('provider-1')
+    expect(input.commission_rate).toBe(12.5)
+    // Snapshot barème serveur
+    expect(input.forfait_id).toBe(42)
+    expect(input.prime_cee_cts).toBe(96000)
+    // PII chiffrées (mock enc:) — jamais le plaintext
+    expect(Buffer.from(input.client_nom_b64 as string, 'base64').toString()).toBe('enc:Dupont')
+    expect(input.client_email_hash).toHaveLength(64)
+    // Email normalisé lowercase par le schéma
+    expect(Buffer.from(input.client_email_b64 as string, 'base64').toString()).toBe(
+      'enc:jean@example.com'
+    )
+    // Téléphone normalisé (espaces retirés)
+    expect(Buffer.from(input.client_telephone_b64 as string, 'base64').toString()).toBe(
+      'enc:0612345678'
+    )
+    // Montants convertis en centimes
+    expect(input.montant_ht_cts).toBe(850000)
+    expect(input.montant_ttc_cts).toBe(896750)
   })
 
   it('returns 200 (not 201) when idempotent existing dossier returned', async () => {
@@ -321,13 +380,5 @@ describe('POST /api/cee/dossiers', () => {
     const { POST } = await import('@/app/api/cee/dossiers/route')
     const res = (await POST(makePostRequest(makeValidBody()) as never)) as unknown as MockResult
     expect(res.status).toBe(422)
-  })
-
-  it('returns 400 on invalid body (missing required fields)', async () => {
-    const { POST } = await import('@/app/api/cee/dossiers/route')
-    const res = (await POST(
-      makePostRequest({ partner_id: 'only-this' }) as never
-    )) as unknown as MockResult
-    expect(res.status).toBe(400)
   })
 })

@@ -4,19 +4,24 @@
  * NouveauDossierForm — formulaire multi-étapes de création de dossier CEE (V3).
  *
  * Étapes :
- *   1. Client (nom, email, téléphone, adresse, code postal)
- *   2. Chantier (type logement, surface, année construction, zone climatique auto)
- *   3. Fiche CEE (opération filtrée par qualifications artisan, paramètres techniques)
- *   4. Aperçu estimation (kWhc, prime, commission) + soumission
+ *   1. Client (identité, contact, adresse + commune INSEE, foyer, revenus)
+ *   2. Chantier (type logement, surface, année, énergie remplacée)
+ *   3. Fiche CEE + devis (opération, paramètres techniques, montants, dates)
+ *   4. Aperçu estimation (prime, commission) + soumission
  *
- * API : POST /api/cee/dossiers → redirect /espace-artisan/cee/[id]
+ * API : POST /api/cee/dossiers (DossierClientInputSchema) → redirect
+ * /espace-artisan/cee/[id]. La prime et la commission affichées ici sont
+ * INDICATIVES : le snapshot opposable est recalculé côté serveur (bareme.ts)
+ * puis au dépôt délégataire.
+ *
+ * Commune INSEE : résolue via api-adresse.data.gouv.fr (getCommunesByCodePostal)
+ * — la FK cee_dossiers.client_commune_insee exige un code du référentiel.
  *
  * WCAG 2.1 AA : labels, aria-describedby sur erreurs, aria-live sur messages.
- * 8 states implémentés pour tous les interactifs.
  * Light-only, zéro dark:*.
  */
 
-import { useState, useId } from 'react'
+import { useState, useId, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -33,6 +38,7 @@ import {
   Info,
 } from 'lucide-react'
 import { postalCodeToClimateZone } from '@/lib/cee/climate-zones'
+import { getCommunesByCodePostal } from '@/lib/api/adresse'
 
 // ── Types locaux ────────────────────────────────────────────────────────────
 
@@ -42,30 +48,44 @@ interface RgeQualification {
 }
 
 interface NouveauDossierFormProps {
-  providerId: string
-  providerName: string
   rgeQualifications: RgeQualification[]
   isCertified: boolean
+  /** Taux de commission effectif du partner (cee_artisan_partners), en %. */
+  commissionRate: number
 }
 
 interface ClientData {
   nom: string
+  prenom: string
   email: string
   phone: string
   adresse: string
   codePostal: string
+  communeInsee: string
+  communeName: string
+  foyerPersonnes: string
+  revenusCategorie: '' | 'tres_modeste' | 'modeste' | 'intermediaire' | 'superieur'
 }
 
 interface ChantierData {
   typeLogement: 'maison' | 'appartement' | ''
   surface: string
   anneeConstruction: string
-  precarite: boolean
+  energieRemplacee: string
 }
 
 interface FicheData {
   operationCode: string
   parametresTechniques: Record<string, string>
+  montantHt: string
+  montantTtc: string
+  dateDevis: string
+  dateChantierPrevue: string
+}
+
+interface CommuneOption {
+  insee: string
+  name: string
 }
 
 type StepId = 'client' | 'chantier' | 'fiche' | 'apercu'
@@ -77,7 +97,16 @@ const STEPS: Array<{ id: StepId; label: string; icon: typeof User }> = [
   { id: 'apercu', label: 'Aperçu', icon: Eye },
 ]
 
+const REVENUS_OPTIONS: Array<{ value: ClientData['revenusCategorie']; label: string }> = [
+  { value: 'tres_modeste', label: 'Très modeste (plafonds ANAH bleu)' },
+  { value: 'modeste', label: 'Modeste (plafonds ANAH jaune)' },
+  { value: 'intermediaire', label: 'Intermédiaire (plafonds ANAH violet)' },
+  { value: 'superieur', label: 'Supérieur (plafonds ANAH rose)' },
+]
+
 // ── Operations CEE disponibles par qualification ─────────────────────────────
+// Codes alignés sur src/lib/cee/forfaits-cee-2026.ts (source Légifrance) et le
+// seed cee_operations_ref (mig 543).
 
 const CEE_OPERATIONS_BY_QUAL: Record<
   string,
@@ -97,7 +126,7 @@ const CEE_OPERATIONS_BY_QUAL: Record<
       ],
     },
     {
-      code: 'BAR-TH-159',
+      code: 'BAR-TH-129',
       label: 'Pompe à chaleur air/air',
       params: [{ key: 'cop', label: 'COP', unit: '' }],
     },
@@ -105,38 +134,41 @@ const CEE_OPERATIONS_BY_QUAL: Record<
   Qualibat: [
     {
       code: 'BAR-EN-101',
-      label: 'Isolation combles perdus',
+      label: 'Isolation combles ou toitures',
       params: [{ key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' }],
     },
     {
       code: 'BAR-EN-102',
-      label: 'Isolation plancher bas',
-      params: [{ key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' }],
-    },
-    {
-      code: 'BAR-EN-103',
-      label: 'Isolation murs par l’extérieur',
+      label: 'Isolation des murs',
       params: [
         { key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' },
         { key: 'classe_ite', label: 'Classe ITE', unit: '' },
       ],
     },
+    {
+      code: 'BAR-EN-103',
+      label: 'Isolation d’un plancher',
+      params: [{ key: 'resistance', label: 'Résistance thermique R (m².K/W)', unit: 'm².K/W' }],
+    },
   ],
   QualiBois: [
     {
       code: 'BAR-TH-112',
-      label: 'Appareil de chauffage au bois — insert',
+      label: 'Appareil de chauffage au bois — insert / poêle',
       params: [{ key: 'rendement', label: 'Rendement (%)', unit: '%' }],
     },
   ],
   Qualifelec: [
     {
-      code: 'BAR-TH-175',
+      code: 'BAR-TH-148',
       label: 'Chauffe-eau thermodynamique',
       params: [{ key: 'cop', label: 'COP', unit: '' }],
     },
   ],
 }
+
+/** Opérations dont le forfait indicatif est exprimé par m² (parité bareme.ts). */
+const PER_M2_OPS = new Set(['BAR-EN-101', 'BAR-EN-102', 'BAR-EN-103'])
 
 // Mapping qualification code prefix → famille
 function getQualFamille(code: string): string | null {
@@ -151,37 +183,47 @@ function getQualFamille(code: string): string | null {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-function estimatePrime(
-  operationCode: string,
-  surface: number,
-  precarite: boolean,
+/**
+ * Estimation indicative — mêmes bases que le seed cee_forfaits (mig 543) :
+ * zone H1 ×1,2 / H2 ×1,0 / H3 ×0,8 ; précarité (très modeste + modeste) ×1,5 ;
+ * forfait par m² pour les BAR-EN. La commission suit la colonne générée DB :
+ * montant HT × taux partner.
+ */
+function estimatePrime(args: {
+  operationCode: string
+  surface: number
+  revenusCategorie: ClientData['revenusCategorie']
   zoneClimatique: string | null
-): { kwhc: number; prime: number; commission: number } | null {
-  // Forfaits simplifiés (en production, appel à l'API /api/cee/estimate)
+  montantHt: number
+  commissionRate: number
+}): { kwhc: number; prime: number; commission: number } | null {
   const FORFAITS: Record<string, { kwhc_base: number; prime_base: number }> = {
     'BAR-TH-171': { kwhc_base: 30000, prime_base: 800 },
-    'BAR-TH-159': { kwhc_base: 18000, prime_base: 450 },
+    'BAR-TH-129': { kwhc_base: 18000, prime_base: 450 },
     'BAR-EN-101': { kwhc_base: 1500, prime_base: 12 },
-    'BAR-EN-102': { kwhc_base: 1200, prime_base: 10 },
-    'BAR-EN-103': { kwhc_base: 2500, prime_base: 20 },
+    'BAR-EN-102': { kwhc_base: 2500, prime_base: 20 },
+    'BAR-EN-103': { kwhc_base: 1200, prime_base: 10 },
     'BAR-TH-112': { kwhc_base: 15000, prime_base: 600 },
-    'BAR-TH-175': { kwhc_base: 20000, prime_base: 700 },
+    'BAR-TH-148': { kwhc_base: 20000, prime_base: 700 },
   }
 
-  const forfait = FORFAITS[operationCode]
+  const forfait = FORFAITS[args.operationCode]
   if (!forfait) return null
 
-  const zoneMultiplier = zoneClimatique === 'H1' ? 1.2 : zoneClimatique === 'H2' ? 1.0 : 0.8
+  const zoneMultiplier =
+    args.zoneClimatique === 'H1' ? 1.2 : args.zoneClimatique === 'H2' ? 1.0 : 0.8
+  const precarite = args.revenusCategorie === 'tres_modeste' || args.revenusCategorie === 'modeste'
   const precariteMultiplier = precarite ? 1.5 : 1.0
-  const surfaceMultiplier = operationCode.startsWith('BAR-EN') ? surface / 50 : 1
+  const surfaceMultiplier = PER_M2_OPS.has(args.operationCode) ? args.surface : 1
 
   const kwhc = Math.round(
-    forfait.kwhc_base * zoneMultiplier * precariteMultiplier * surfaceMultiplier
+    forfait.kwhc_base * zoneMultiplier * (PER_M2_OPS.has(args.operationCode) ? args.surface : 1)
   )
   const prime = Math.round(
     forfait.prime_base * zoneMultiplier * precariteMultiplier * surfaceMultiplier
   )
-  const commission = Math.round(prime * 0.3) // 30% commission artisan (indicatif)
+  const commission =
+    args.montantHt > 0 ? Math.round((args.montantHt * args.commissionRate) / 100) : 0
 
   return { kwhc, prime, commission }
 }
@@ -194,12 +236,16 @@ function formatEuros(v: number): string {
   }).format(v)
 }
 
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
 // ── Composant principal ──────────────────────────────────────────────────────
 
 export default function NouveauDossierForm({
-  providerId,
   rgeQualifications,
   isCertified,
+  commissionRate,
 }: NouveauDossierFormProps) {
   const router = useRouter()
   const formId = useId()
@@ -210,18 +256,26 @@ export default function NouveauDossierForm({
 
   const [clientData, setClientData] = useState<ClientData>({
     nom: '',
+    prenom: '',
     email: '',
     phone: '',
     adresse: '',
     codePostal: '',
+    communeInsee: '',
+    communeName: '',
+    foyerPersonnes: '',
+    revenusCategorie: '',
   })
-  const [clientErrors, setClientErrors] = useState<Partial<ClientData>>({})
+  const [clientErrors, setClientErrors] = useState<Partial<Record<keyof ClientData, string>>>({})
+
+  const [communes, setCommunes] = useState<CommuneOption[]>([])
+  const [communesLoading, setCommunesLoading] = useState(false)
 
   const [chantierData, setChantierData] = useState<ChantierData>({
     typeLogement: '',
     surface: '',
     anneeConstruction: '',
-    precarite: false,
+    energieRemplacee: '',
   })
   const [chantierErrors, setChantierErrors] = useState<Partial<Record<keyof ChantierData, string>>>(
     {}
@@ -230,6 +284,10 @@ export default function NouveauDossierForm({
   const [ficheData, setFicheData] = useState<FicheData>({
     operationCode: '',
     parametresTechniques: {},
+    montantHt: '',
+    montantTtc: '',
+    dateDevis: todayIso(),
+    dateChantierPrevue: '',
   })
   const [ficheErrors, setFicheErrors] = useState<Partial<Record<string, string>>>({})
 
@@ -239,35 +297,76 @@ export default function NouveauDossierForm({
       ? (postalCodeToClimateZone(clientData.codePostal) ?? null)
       : null
 
+  // Communes du code postal (api-adresse — la FK DB exige un code INSEE valide)
+  useEffect(() => {
+    let cancelled = false
+    if (!/^\d{5}$/.test(clientData.codePostal)) {
+      setCommunes([])
+      return
+    }
+    setCommunesLoading(true)
+    getCommunesByCodePostal(clientData.codePostal)
+      .then((suggestions) => {
+        if (cancelled) return
+        const options = suggestions.map((s) => ({ insee: s.citycode, name: s.city || s.name }))
+        setCommunes(options)
+        // Auto-sélection si une seule commune
+        if (options.length === 1) {
+          setClientData((p) => ({
+            ...p,
+            communeInsee: options[0].insee,
+            communeName: options[0].name,
+          }))
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setCommunes([])
+      })
+      .finally(() => {
+        if (!cancelled) setCommunesLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [clientData.codePostal])
+
   // Opérations disponibles selon les qualifications artisan
   const availableOps = useMemo_ops(rgeQualifications)
 
   // Estimation CEE
-  const estimation =
-    ficheData.operationCode && chantierData.surface && chantierData.typeLogement
-      ? estimatePrime(
-          ficheData.operationCode,
-          parseFloat(chantierData.surface) || 0,
-          chantierData.precarite,
-          zoneClimatique
-        )
-      : null
+  const estimation = ficheData.operationCode
+    ? estimatePrime({
+        operationCode: ficheData.operationCode,
+        surface: parseFloat(chantierData.surface) || 0,
+        revenusCategorie: clientData.revenusCategorie,
+        zoneClimatique,
+        montantHt: parseFloat(ficheData.montantHt) || 0,
+        commissionRate,
+      })
+    : null
 
   // ── Validation par étape ─────────────────────────────────────────────────
 
   function validateClient(): boolean {
-    const errors: Partial<ClientData> = {}
+    const errors: Partial<Record<keyof ClientData, string>> = {}
     if (!clientData.nom.trim()) errors.nom = 'Le nom est requis.'
+    if (!clientData.prenom.trim()) errors.prenom = 'Le prénom est requis.'
     if (!clientData.email.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(clientData.email))
       errors.email = 'Adresse email invalide.'
     if (
       !clientData.phone.trim() ||
-      !/^(\+33|0)[1-9][\d\s]{7,}$/.test(clientData.phone.replace(/\s/g, ''))
+      !/^(\+33|0)[1-9]\d{8}$/.test(clientData.phone.replace(/[\s.-]/g, ''))
     )
       errors.phone = 'Numéro de téléphone invalide.'
-    if (!clientData.adresse.trim()) errors.adresse = 'L’adresse est requise.'
+    if (clientData.adresse.trim().length < 5) errors.adresse = 'L’adresse est requise.'
     if (!clientData.codePostal.trim() || !/^\d{5}$/.test(clientData.codePostal))
       errors.codePostal = 'Code postal invalide (5 chiffres).'
+    if (!clientData.communeInsee) errors.communeInsee = 'Veuillez sélectionner la commune.'
+    const foyer = parseInt(clientData.foyerPersonnes, 10)
+    if (!clientData.foyerPersonnes || isNaN(foyer) || foyer < 1 || foyer > 12)
+      errors.foyerPersonnes = 'Nombre de personnes invalide (1 à 12).'
+    if (!clientData.revenusCategorie)
+      errors.revenusCategorie = 'La catégorie de revenus est requise.'
     setClientErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -295,6 +394,18 @@ export default function NouveauDossierForm({
         if (!val || !val.trim()) errors[param.key] = `${param.label} est requis.`
       }
     }
+    const ht = parseFloat(ficheData.montantHt)
+    if (!ficheData.montantHt || isNaN(ht) || ht <= 0)
+      errors.montantHt = 'Montant HT du devis invalide.'
+    const ttc = parseFloat(ficheData.montantTtc)
+    if (!ficheData.montantTtc || isNaN(ttc) || ttc <= 0)
+      errors.montantTtc = 'Montant TTC du devis invalide.'
+    if (!errors.montantHt && !errors.montantTtc && ttc < ht)
+      errors.montantTtc = 'Le montant TTC doit être supérieur ou égal au HT.'
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ficheData.dateDevis))
+      errors.dateDevis = 'Date du devis requise.'
+    if (ficheData.dateChantierPrevue && !/^\d{4}-\d{2}-\d{2}$/.test(ficheData.dateChantierPrevue))
+      errors.dateChantierPrevue = 'Date prévisionnelle invalide.'
     setFicheErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -331,29 +442,39 @@ export default function NouveauDossierForm({
     setSubmitError(null)
     setSubmitting(true)
     try {
+      const op = availableOps.find((o) => o.code === ficheData.operationCode)
+      // type_travaux porte le libellé + les paramètres techniques (pas de
+      // colonne dédiée — les justificatifs portent le détail réglementaire)
+      const paramsSummary = Object.entries(ficheData.parametresTechniques)
+        .filter(([, v]) => v.trim())
+        .map(([k, v]) => `${k}=${v}`)
+        .join(', ')
+      const typeTravaux = [op?.label ?? ficheData.operationCode, paramsSummary]
+        .filter(Boolean)
+        .join(' — ')
+        .slice(0, 200)
+
       const body = {
-        provider_id: providerId,
         operation_code: ficheData.operationCode,
-        postal_code: clientData.codePostal,
-        zone_climatique: zoneClimatique,
-        precarite: chantierData.precarite,
-        kwhc_estime: estimation?.kwhc ?? null,
-        prime_estimee_eur: estimation?.prime ?? null,
-        metadata: {
-          _actor_type: 'artisan',
-          client: {
-            nom: clientData.nom,
-            email: clientData.email,
-            phone: clientData.phone,
-            adresse: clientData.adresse,
-          },
-          chantier: {
-            typeLogement: chantierData.typeLogement,
-            surface: parseFloat(chantierData.surface) || null,
-            anneeConstruction: parseInt(chantierData.anneeConstruction, 10) || null,
-          },
-          parametresTechniques: ficheData.parametresTechniques,
+        client: {
+          nom: clientData.nom.trim(),
+          prenom: clientData.prenom.trim(),
+          email: clientData.email.trim(),
+          telephone: clientData.phone.trim() || null,
+          adresse: clientData.adresse.trim(),
+          code_postal: clientData.codePostal,
+          commune_insee: clientData.communeInsee,
         },
+        foyer_personnes: parseInt(clientData.foyerPersonnes, 10),
+        revenus_categorie: clientData.revenusCategorie,
+        type_travaux: typeTravaux,
+        surface_m2: parseFloat(chantierData.surface) || null,
+        annee_construction: parseInt(chantierData.anneeConstruction, 10) || null,
+        energie_remplacee: chantierData.energieRemplacee || null,
+        montant_ht_eur: parseFloat(ficheData.montantHt),
+        montant_ttc_eur: parseFloat(ficheData.montantTtc),
+        date_devis: ficheData.dateDevis,
+        date_chantier_prevue: ficheData.dateChantierPrevue || null,
       }
 
       const res = await fetch('/api/cee/dossiers', {
@@ -362,14 +483,18 @@ export default function NouveauDossierForm({
         body: JSON.stringify(body),
       })
 
-      if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string; code?: string }
-        throw new Error(data.error ?? `Erreur serveur (${res.status})`)
+      const payload = (await res.json().catch(() => ({}))) as {
+        success?: boolean
+        data?: { id?: string }
+        error?: { code?: string; message?: string }
       }
 
-      const created = (await res.json()) as { id?: string }
-      if (!created.id) throw new Error('Réponse serveur invalide.')
-      router.push(`/espace-artisan/cee/${created.id}`)
+      if (!res.ok || !payload.success) {
+        throw new Error(payload.error?.message ?? `Erreur serveur (${res.status})`)
+      }
+
+      if (!payload.data?.id) throw new Error('Réponse serveur invalide.')
+      router.push(`/espace-artisan/cee/${payload.data.id}`)
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue.')
       setSubmitting(false)
@@ -454,19 +579,35 @@ export default function NouveauDossierForm({
               Informations client
             </legend>
             <div className="space-y-4">
-              <FormField label="Nom complet" id="client-nom" required error={clientErrors.nom}>
-                <input
-                  id="client-nom"
-                  type="text"
-                  autoComplete="name"
-                  value={clientData.nom}
-                  onChange={(e) => setClientData((p) => ({ ...p, nom: e.target.value }))}
-                  aria-describedby={clientErrors.nom ? 'client-nom-error' : undefined}
-                  aria-invalid={!!clientErrors.nom}
-                  className={inputCx(!!clientErrors.nom)}
-                  placeholder="Jean Dupont"
-                />
-              </FormField>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField label="Nom" id="client-nom" required error={clientErrors.nom}>
+                  <input
+                    id="client-nom"
+                    type="text"
+                    autoComplete="family-name"
+                    value={clientData.nom}
+                    onChange={(e) => setClientData((p) => ({ ...p, nom: e.target.value }))}
+                    aria-describedby={clientErrors.nom ? 'client-nom-error' : undefined}
+                    aria-invalid={!!clientErrors.nom}
+                    className={inputCx(!!clientErrors.nom)}
+                    placeholder="Dupont"
+                  />
+                </FormField>
+
+                <FormField label="Prénom" id="client-prenom" required error={clientErrors.prenom}>
+                  <input
+                    id="client-prenom"
+                    type="text"
+                    autoComplete="given-name"
+                    value={clientData.prenom}
+                    onChange={(e) => setClientData((p) => ({ ...p, prenom: e.target.value }))}
+                    aria-describedby={clientErrors.prenom ? 'client-prenom-error' : undefined}
+                    aria-invalid={!!clientErrors.prenom}
+                    className={inputCx(!!clientErrors.prenom)}
+                    placeholder="Jean"
+                  />
+                </FormField>
+              </div>
 
               <FormField
                 label="Adresse email"
@@ -520,29 +661,121 @@ export default function NouveauDossierForm({
                 />
               </FormField>
 
-              <FormField
-                label="Code postal"
-                id="client-cp"
-                required
-                error={clientErrors.codePostal}
-                hint={zoneClimatique ? `Zone climatique détectée : ${zoneClimatique}` : undefined}
-              >
-                <input
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Code postal"
                   id="client-cp"
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={5}
-                  autoComplete="postal-code"
-                  value={clientData.codePostal}
-                  onChange={(e) =>
-                    setClientData((p) => ({ ...p, codePostal: e.target.value.replace(/\D/g, '') }))
-                  }
-                  aria-describedby={clientErrors.codePostal ? 'client-cp-error' : undefined}
-                  aria-invalid={!!clientErrors.codePostal}
-                  className={inputCx(!!clientErrors.codePostal)}
-                  placeholder="75011"
-                />
-              </FormField>
+                  required
+                  error={clientErrors.codePostal}
+                  hint={zoneClimatique ? `Zone climatique détectée : ${zoneClimatique}` : undefined}
+                >
+                  <input
+                    id="client-cp"
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={5}
+                    autoComplete="postal-code"
+                    value={clientData.codePostal}
+                    onChange={(e) =>
+                      setClientData((p) => ({
+                        ...p,
+                        codePostal: e.target.value.replace(/\D/g, ''),
+                        communeInsee: '',
+                        communeName: '',
+                      }))
+                    }
+                    aria-describedby={clientErrors.codePostal ? 'client-cp-error' : undefined}
+                    aria-invalid={!!clientErrors.codePostal}
+                    className={inputCx(!!clientErrors.codePostal)}
+                    placeholder="75011"
+                  />
+                </FormField>
+
+                <FormField
+                  label="Commune"
+                  id="client-commune"
+                  required
+                  error={clientErrors.communeInsee}
+                  hint={communesLoading ? 'Recherche des communes…' : undefined}
+                >
+                  <select
+                    id="client-commune"
+                    value={clientData.communeInsee}
+                    onChange={(e) => {
+                      const opt = communes.find((c) => c.insee === e.target.value)
+                      setClientData((p) => ({
+                        ...p,
+                        communeInsee: e.target.value,
+                        communeName: opt?.name ?? '',
+                      }))
+                    }}
+                    disabled={communes.length === 0}
+                    aria-invalid={!!clientErrors.communeInsee}
+                    className={inputCx(!!clientErrors.communeInsee)}
+                  >
+                    <option value="">
+                      {communes.length === 0 ? 'Saisir le code postal…' : 'Sélectionner…'}
+                    </option>
+                    {communes.map((c) => (
+                      <option key={c.insee} value={c.insee}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  label="Personnes au foyer"
+                  id="client-foyer"
+                  required
+                  error={clientErrors.foyerPersonnes}
+                >
+                  <input
+                    id="client-foyer"
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    max={12}
+                    value={clientData.foyerPersonnes}
+                    onChange={(e) =>
+                      setClientData((p) => ({ ...p, foyerPersonnes: e.target.value }))
+                    }
+                    aria-invalid={!!clientErrors.foyerPersonnes}
+                    className={inputCx(!!clientErrors.foyerPersonnes)}
+                    placeholder="4"
+                  />
+                </FormField>
+
+                <FormField
+                  label="Catégorie de revenus"
+                  id="client-revenus"
+                  required
+                  error={clientErrors.revenusCategorie}
+                  hint="Selon le revenu fiscal de référence du ménage (plafonds ANAH)"
+                >
+                  <select
+                    id="client-revenus"
+                    value={clientData.revenusCategorie}
+                    onChange={(e) =>
+                      setClientData((p) => ({
+                        ...p,
+                        revenusCategorie: e.target.value as ClientData['revenusCategorie'],
+                      }))
+                    }
+                    aria-invalid={!!clientErrors.revenusCategorie}
+                    className={inputCx(!!clientErrors.revenusCategorie)}
+                  >
+                    <option value="">Sélectionner…</option>
+                    {REVENUS_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+              </div>
             </div>
           </fieldset>
         )}
@@ -621,31 +854,36 @@ export default function NouveauDossierForm({
                 />
               </FormField>
 
-              <div className="flex items-start gap-3">
-                <input
-                  id="chantier-precarite"
-                  type="checkbox"
-                  checked={chantierData.precarite}
-                  onChange={(e) => setChantierData((p) => ({ ...p, precarite: e.target.checked }))}
-                  className="mt-0.5 h-4 w-4 rounded border-sand-300 text-primary-500 focus:ring-2 focus:ring-primary-400 focus:ring-offset-1"
-                />
-                <label
-                  htmlFor="chantier-precarite"
-                  className="text-sm text-charcoal-700 cursor-pointer"
+              <FormField
+                label="Énergie remplacée"
+                id="chantier-energie"
+                hint="Optionnel — pour les remplacements de chauffage"
+              >
+                <select
+                  id="chantier-energie"
+                  value={chantierData.energieRemplacee}
+                  onChange={(e) =>
+                    setChantierData((p) => ({ ...p, energieRemplacee: e.target.value }))
+                  }
+                  className={inputCx(false)}
                 >
-                  Ménage en situation de précarité énergétique
-                  <span className="ml-1 text-xs text-charcoal-500">(prime majorée × 1,5)</span>
-                </label>
-              </div>
+                  <option value="">Aucune / non applicable</option>
+                  <option value="fioul">Fioul</option>
+                  <option value="gaz">Gaz</option>
+                  <option value="electrique">Électrique</option>
+                  <option value="charbon">Charbon</option>
+                  <option value="bois">Bois</option>
+                </select>
+              </FormField>
             </div>
           </fieldset>
         )}
 
-        {/* ─ Étape 3 : Fiche CEE ──────────────────────────────────────── */}
+        {/* ─ Étape 3 : Fiche CEE + devis ─────────────────────────────── */}
         {step === 'fiche' && (
           <fieldset>
             <legend className="mb-5 text-lg font-semibold text-charcoal-900">
-              Fiche CEE et paramètres techniques
+              Fiche CEE, devis et paramètres techniques
             </legend>
             {availableOps.length === 0 ? (
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
@@ -666,7 +904,11 @@ export default function NouveauDossierForm({
                     id="fiche-operation"
                     value={ficheData.operationCode}
                     onChange={(e) =>
-                      setFicheData({ operationCode: e.target.value, parametresTechniques: {} })
+                      setFicheData((p) => ({
+                        ...p,
+                        operationCode: e.target.value,
+                        parametresTechniques: {},
+                      }))
                     }
                     aria-invalid={!!ficheErrors.operationCode}
                     className={inputCx(!!ficheErrors.operationCode)}
@@ -726,6 +968,84 @@ export default function NouveauDossierForm({
                       </div>
                     )
                   })()}
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField
+                    label="Montant du devis HT (€)"
+                    id="fiche-ht"
+                    required
+                    error={ficheErrors.montantHt}
+                  >
+                    <input
+                      id="fiche-ht"
+                      type="number"
+                      inputMode="decimal"
+                      min={0}
+                      step="0.01"
+                      value={ficheData.montantHt}
+                      onChange={(e) => setFicheData((p) => ({ ...p, montantHt: e.target.value }))}
+                      aria-invalid={!!ficheErrors.montantHt}
+                      className={inputCx(!!ficheErrors.montantHt)}
+                      placeholder="8500"
+                    />
+                  </FormField>
+
+                  <FormField
+                    label="Montant du devis TTC (€)"
+                    id="fiche-ttc"
+                    required
+                    error={ficheErrors.montantTtc}
+                  >
+                    <input
+                      id="fiche-ttc"
+                      type="number"
+                      inputMode="decimal"
+                      min={0}
+                      step="0.01"
+                      value={ficheData.montantTtc}
+                      onChange={(e) => setFicheData((p) => ({ ...p, montantTtc: e.target.value }))}
+                      aria-invalid={!!ficheErrors.montantTtc}
+                      className={inputCx(!!ficheErrors.montantTtc)}
+                      placeholder="8967.50"
+                    />
+                  </FormField>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField
+                    label="Date du devis"
+                    id="fiche-date-devis"
+                    required
+                    error={ficheErrors.dateDevis}
+                  >
+                    <input
+                      id="fiche-date-devis"
+                      type="date"
+                      value={ficheData.dateDevis}
+                      onChange={(e) => setFicheData((p) => ({ ...p, dateDevis: e.target.value }))}
+                      aria-invalid={!!ficheErrors.dateDevis}
+                      className={inputCx(!!ficheErrors.dateDevis)}
+                    />
+                  </FormField>
+
+                  <FormField
+                    label="Début de chantier prévu"
+                    id="fiche-date-chantier"
+                    error={ficheErrors.dateChantierPrevue}
+                    hint="Optionnel"
+                  >
+                    <input
+                      id="fiche-date-chantier"
+                      type="date"
+                      value={ficheData.dateChantierPrevue}
+                      onChange={(e) =>
+                        setFicheData((p) => ({ ...p, dateChantierPrevue: e.target.value }))
+                      }
+                      aria-invalid={!!ficheErrors.dateChantierPrevue}
+                      className={inputCx(!!ficheErrors.dateChantierPrevue)}
+                    />
+                  </FormField>
+                </div>
               </div>
             )}
           </fieldset>
@@ -739,12 +1059,20 @@ export default function NouveauDossierForm({
             {/* Récap */}
             <div className="grid gap-4 sm:grid-cols-2">
               <RecapSection title="Client">
-                <RecapItem label="Nom" value={clientData.nom} />
+                <RecapItem label="Nom" value={`${clientData.prenom} ${clientData.nom}`.trim()} />
                 <RecapItem label="Email" value={clientData.email} />
                 <RecapItem label="Téléphone" value={clientData.phone} />
                 <RecapItem
                   label="Adresse"
-                  value={`${clientData.adresse}, ${clientData.codePostal}`}
+                  value={`${clientData.adresse}, ${clientData.codePostal} ${clientData.communeName}`}
+                />
+                <RecapItem label="Foyer" value={`${clientData.foyerPersonnes} personne(s)`} />
+                <RecapItem
+                  label="Revenus"
+                  value={
+                    REVENUS_OPTIONS.find((o) => o.value === clientData.revenusCategorie)?.label ??
+                    '—'
+                  }
                 />
               </RecapSection>
 
@@ -758,15 +1086,25 @@ export default function NouveauDossierForm({
                 <RecapItem label="Surface" value={`${chantierData.surface} m²`} />
                 <RecapItem label="Année construction" value={chantierData.anneeConstruction} />
                 <RecapItem label="Zone climatique" value={zoneClimatique ?? '—'} />
-                <RecapItem label="Précarité" value={chantierData.precarite ? 'Oui' : 'Non'} />
+                <RecapItem label="Énergie remplacée" value={chantierData.energieRemplacee || '—'} />
               </RecapSection>
             </div>
 
-            <RecapSection title="Fiche CEE">
+            <RecapSection title="Fiche CEE et devis">
               <RecapItem label="Opération" value={ficheData.operationCode} />
               {Object.entries(ficheData.parametresTechniques).map(([k, v]) => (
                 <RecapItem key={k} label={k} value={v} />
               ))}
+              <RecapItem
+                label="Devis HT"
+                value={ficheData.montantHt ? formatEuros(parseFloat(ficheData.montantHt)) : '—'}
+              />
+              <RecapItem
+                label="Devis TTC"
+                value={ficheData.montantTtc ? formatEuros(parseFloat(ficheData.montantTtc)) : '—'}
+              />
+              <RecapItem label="Date devis" value={ficheData.dateDevis} />
+              <RecapItem label="Chantier prévu" value={ficheData.dateChantierPrevue || '—'} />
             </RecapSection>
 
             {/* Estimation */}
@@ -797,8 +1135,8 @@ export default function NouveauDossierForm({
                 </div>
                 <p className="mt-3 flex items-start gap-1.5 text-xs text-charcoal-500">
                   <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />* Commission
-                  indicative versée après validation PNCEE. Le montant définitif est calculé au
-                  dépôt.
+                  indicative ({commissionRate} % du devis HT), versée après validation PNCEE. Le
+                  montant définitif est calculé au dépôt.
                 </p>
               </div>
             ) : (
