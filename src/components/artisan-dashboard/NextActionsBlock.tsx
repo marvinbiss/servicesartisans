@@ -269,7 +269,7 @@ function buildActions(args: {
       title: `${pendingResponse} avis en attente de votre réponse`,
       detail:
         'Répondre à vos avis améliore votre conversion et votre positionnement dans les résultats.',
-      href: '/espace-artisan/avis?filter=unresponded',
+      href: '/espace-artisan/profil?tab=avis',
       ctaLabel: 'Répondre',
     })
   }
@@ -286,21 +286,6 @@ function buildActions(args: {
         'Nous priorisons les artisans qui consultent vite. Sous 50%, le volume de leads diminue.',
       href: '/espace-artisan/demandes',
       ctaLabel: 'Voir',
-    })
-  }
-
-  const unreadMessages = stats?.stats?.unreadMessages ?? 0
-  if (unreadMessages > 0) {
-    out.push({
-      id: 'unread-messages',
-      severity: 'p1',
-      icon: MessageCircle,
-      title: `${unreadMessages} message${unreadMessages > 1 ? 's' : ''} non lu${
-        unreadMessages > 1 ? 's' : ''
-      }`,
-      detail: 'Un client vous attend dans la messagerie.',
-      href: '/espace-artisan/messages',
-      ctaLabel: 'Ouvrir',
     })
   }
 

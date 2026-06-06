@@ -8,7 +8,7 @@
  *  - populated KPIs (avg rating, invitations 7j, completion rate)
  *  - action cards : pending response, pending invites, next scheduled
  *  - distribution bar rendering quand published > 0
- *  - lien /espace-artisan/avis
+ *  - lien /espace-artisan/profil?tab=avis
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
@@ -131,7 +131,7 @@ describe('<ReputationBlock />', () => {
     const link = screen.getByRole('link', {
       name: /2 avis en attente de votre réponse/i,
     })
-    expect(link).toHaveAttribute('href', '/espace-artisan/avis?filter=unresponded')
+    expect(link).toHaveAttribute('href', '/espace-artisan/profil?tab=avis')
   })
 
   it('affiche "invitation en attente" au pluriel si pending30d>1', () => {
@@ -146,10 +146,10 @@ describe('<ReputationBlock />', () => {
     expect(screen.getByText(/3 invitations client en attente de réponse/i)).toBeInTheDocument()
   })
 
-  it('lien "Gérer mes avis" vers /espace-artisan/avis', () => {
+  it('lien "Gérer mes avis" vers /espace-artisan/profil?tab=avis', () => {
     setSWR({ data: emptyData })
     render(<ReputationBlock />)
     const link = screen.getByRole('link', { name: /Gérer mes avis/i })
-    expect(link).toHaveAttribute('href', '/espace-artisan/avis')
+    expect(link).toHaveAttribute('href', '/espace-artisan/profil?tab=avis')
   })
 })

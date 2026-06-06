@@ -100,7 +100,7 @@ export default function ReputationBlock() {
           Votre réputation
         </h2>
         <Link
-          href="/espace-artisan/avis"
+          href="/espace-artisan/profil?tab=avis"
           className="text-primary-500 hover:underline text-sm focus-visible:ring-2 focus-visible:ring-primary-400 rounded flex items-center gap-1"
         >
           Gérer mes avis <ArrowRight className="w-3.5 h-3.5" aria-hidden />
@@ -173,7 +173,7 @@ export default function ReputationBlock() {
           <div className="flex flex-col gap-2">
             {reviews.pendingResponse > 0 && (
               <Link
-                href="/espace-artisan/avis?filter=unresponded"
+                href="/espace-artisan/profil?tab=avis"
                 className="flex items-center justify-between gap-3 p-3 bg-amber-50 border border-amber-200 rounded-lg hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-amber-400 transition-colors"
               >
                 <div className="flex items-center gap-2.5 min-w-0">

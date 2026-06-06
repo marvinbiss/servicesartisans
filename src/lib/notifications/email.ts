@@ -208,8 +208,8 @@ ${SITE_NAME}
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${SITE_URL}/espace-artisan/calendrier" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
-                  Voir mon calendrier
+                <a href="${SITE_URL}/espace-artisan" style="display: inline-block; background: #059669; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                  Accéder à mon espace artisan
                 </a>
               </div>
 

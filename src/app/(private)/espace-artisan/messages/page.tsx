@@ -322,7 +322,7 @@ export default function MessagesArtisanPage() {
                         </div>
                       </div>
                       <Link
-                        href="/espace-artisan/demandes-recues"
+                        href="/espace-artisan/demandes"
                         className="text-sm text-primary-500 hover:underline"
                       >
                         Voir la demande

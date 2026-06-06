@@ -100,11 +100,14 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
   if (config.targetRoles.includes('client') && lead.client_id) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('id, email, full_name')
+      .select('id, email, full_name, role')
       .eq('id', lead.client_id)
       .single()
 
-    if (profile) {
+    // Un artisan connecté qui dépose un devis (test de son propre formulaire)
+    // devient client_id du lead — ne pas lui pousser les notifications
+    // côté client (« Demande bien reçue » → /contact) dans son espace artisan.
+    if (profile && profile.role === 'client') {
       targets.push({
         userId: profile.id,
         email: profile.email || lead.client_email,
@@ -268,7 +271,7 @@ function buildNotificationSpec(
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Vous avez reçu une nouvelle demande de <strong>${lead.client_name}</strong> pour <strong>${lead.service_name}</strong> à ${location}. Consultez-la et envoyez votre devis.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/espace-artisan/demandes`,
           ctaLabel: 'Voir le lead',
           footer: 'Répondez rapidement pour maximiser vos chances.',
         }),
@@ -316,7 +319,7 @@ function buildNotificationSpec(
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l’intervention.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/espace-artisan/demandes`,
           ctaLabel: 'Voir le lead',
           footer: '',
         }),
@@ -362,7 +365,7 @@ function buildNotificationSpec(
           color: '#059669',
           greeting: `Bonjour ${target.name}`,
           body: `La mission <strong>${lead.service_name}</strong> pour ${lead.client_name} est terminée. Bravo !`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/espace-artisan/demandes`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),
@@ -398,7 +401,7 @@ function buildNotificationSpec(
           color: '#d97706',
           greeting: `Bonjour ${target.name}`,
           body: `Le lead <strong>${lead.service_name}</strong> de ${lead.client_name} a expiré.`,
-          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaUrl: `${SITE_URL}/espace-artisan/demandes`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),
