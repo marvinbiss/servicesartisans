@@ -176,6 +176,20 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                 </div>
               )}
 
+              {/* « Le mot de l'artisan » (mig 546) — citation perso, claimed only.
+                  Voix de l'artisan, signée : différencie une fiche habitée
+                  d'une fiche annuaire. */}
+              {isClaimed && artisan.artisan_quote && (
+                <blockquote className="mt-4 rounded-xl border border-sand-200 bg-sand-50 px-4 py-3.5">
+                  <p className="text-sm text-charcoal-700 italic leading-relaxed">
+                    &laquo;&nbsp;{artisan.artisan_quote}&nbsp;&raquo;
+                  </p>
+                  <footer className="mt-1.5 text-xs font-semibold text-charcoal-500 not-italic">
+                    — {displayName}
+                  </footer>
+                </blockquote>
+              )}
+
               {/* Chips infos clés (ex-bloc « En bref ») */}
               {((yearsExperience !== null && yearsExperience > 1) || artisan.available_24h) && (
                 <div className="flex flex-wrap items-center gap-2 mt-3">

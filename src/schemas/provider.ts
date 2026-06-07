@@ -129,6 +129,9 @@ export const providerArtisanUpdateSchema = z
     // Presentation
     description: z.string().max(5000).optional().nullable(),
     bio: z.string().max(5000).optional().nullable(),
+    // Mig 546 — « Le mot de l'artisan » : citation courte affichée dans le
+    // hero de la fiche publique (CHECK 200 chars en DB)
+    artisan_quote: z.string().max(200).optional().nullable(),
     specialty: z.string().max(200).optional().nullable(),
 
     // Services & Pricing

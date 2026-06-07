@@ -42,6 +42,8 @@ interface ProviderRecord {
   specialty?: string | null
   description?: string | null
   bio?: string | null
+  /** Mig 546 — « Le mot de l'artisan » (citation hero, claimed only) */
+  artisan_quote?: string | null
   avatar_url?: string | null
   // Mig 306 — déclaratif artisan (claimed-only à l'affichage, hors type
   // Artisan par GUARD → passés en props dédiées à ArtisanCredentialsBlock)
@@ -248,6 +250,9 @@ function convertToArtisan(
     city_slug: location?.slug || undefined,
     description: description,
     bio: provider.bio || undefined,
+    // Mig 546 — « Le mot de l'artisan » : saisi uniquement via le dashboard
+    // (donc claimed par construction), gate claimed par cohérence.
+    artisan_quote: isClaimedForPhone ? provider.artisan_quote || undefined : undefined,
     // Supabase retourne les colonnes NUMERIC en string ("3.5") pour préserver
     // la précision. Coerce via Number() sinon .toFixed() throw dans ArtisanSchema.
     average_rating: Number(provider.rating_average ?? provider.average_rating ?? 0) || 0,

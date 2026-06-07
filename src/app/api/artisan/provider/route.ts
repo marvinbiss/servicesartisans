@@ -128,7 +128,7 @@ export async function PUT(request: Request) {
 
     // Sanitize text fields (XSS prevention + DOMPurify for rich text)
     const updateData: Record<string, unknown> = {}
-    const freeTextFields = new Set(['description', 'bio'])
+    const freeTextFields = new Set(['description', 'bio', 'artisan_quote'])
 
     for (const [key, value] of Object.entries(validated)) {
       if (value === undefined) continue

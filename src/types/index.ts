@@ -71,6 +71,8 @@ export interface Provider {
   team_size?: number
   services_offered?: string[]
   bio?: string
+  /** Mig 546 — « Le mot de l'artisan », citation hero fiche publique (≤200 chars) */
+  artisan_quote?: string | null
   hourly_rate_min?: number | null
   hourly_rate_max?: number | null
   // Mig 306 — déclaratif artisan, éditable « Ma fiche » (refonte 2026-06-06)

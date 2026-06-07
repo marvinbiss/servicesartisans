@@ -69,6 +69,8 @@ export interface Artisan {
   free_quote?: boolean
   intervention_radius_km?: number
   bio?: string
+  /** Mig 546 — « Le mot de l'artisan », citation hero (claimed only) */
+  artisan_quote?: string
   created_at?: string
   updated_at?: string
   // RGE ADEME (migration 380) — certifications officielles depuis data.gouv.fr

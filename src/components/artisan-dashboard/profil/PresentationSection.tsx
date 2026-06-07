@@ -9,7 +9,7 @@ interface PresentationSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['description', 'bio', 'specialty'] as const
+const FIELDS = ['description', 'bio', 'specialty', 'artisan_quote'] as const
 
 export function PresentationSection({ provider, onSaved }: PresentationSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(
@@ -24,6 +24,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
 
   const descriptionLength = ((formData.description as string) || '').length
   const bioLength = ((formData.bio as string) || '').length
+  const quoteLength = ((formData.artisan_quote as string) || '').length
 
   return (
     <SectionCard
@@ -36,6 +37,34 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
       success={success}
     >
       <div className="space-y-6">
+        <div>
+          <label
+            htmlFor="presentation-quote"
+            className="block text-sm font-medium text-charcoal-700 mb-2"
+          >
+            Le mot de l&apos;artisan
+          </label>
+          <textarea
+            id="presentation-quote"
+            value={(formData.artisan_quote as string) || ''}
+            onChange={(e) => setField('artisan_quote', e.target.value || null)}
+            rows={2}
+            maxLength={200}
+            placeholder="Ex: 22 ans de métier, je réponds moi-même à chaque demande et je me déplace gratuitement pour chiffrer vos travaux."
+            className="w-full px-4 py-3 border border-sand-400 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"
+          />
+          <div className="flex justify-between items-center mt-1">
+            <p className="text-xs text-charcoal-500">
+              Votre message personnel, affiché en haut de votre fiche publique avec votre nom.
+            </p>
+            <span
+              className={`text-xs ${quoteLength > 180 ? 'text-amber-600' : 'text-charcoal-400'}`}
+            >
+              {quoteLength} / 200
+            </span>
+          </div>
+        </div>
+
         <div>
           <label
             htmlFor="presentation-specialty"

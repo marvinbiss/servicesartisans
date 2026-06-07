@@ -423,6 +423,10 @@ const PROVIDER_DETAIL_SELECT = [
   'payment_methods',
   'languages',
   'avatar_url',
+  // Mig 546 — « Le mot de l'artisan » (citation hero, claimed only).
+  // ⚠️ NE PAS déployer ce SELECT avant d'avoir appliqué la mig 546 en prod
+  // (colonne absente = 400 sur toutes les fiches, post-mortem mig 483).
+  'artisan_quote',
 ].join(',')
 
 /**
