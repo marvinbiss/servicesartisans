@@ -267,10 +267,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
       <div className="bg-primary-600 px-6 py-5">
         <h2 className="font-heading text-xl font-bold text-white flex items-center gap-2">
           <FileText className="w-5 h-5" aria-hidden="true" />
-          Devis gratuit en 2 min
+          Décrivez votre projet
         </h2>
         <p className="text-primary-100 text-sm mt-1">
-          Réponse rapide d&apos;artisans RGE certifiés
+          Devis gratuit, sans engagement — réponse sous 2h
         </p>
       </div>
 
@@ -313,13 +313,10 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
           </div>
         ) : (
           <div>
-            {/* Social proof */}
+            {/* Social proof — conseillers humains, différenciateur plateforme */}
             <p className="text-sm text-charcoal-600 mb-4 flex items-center gap-1.5">
               <Users className="w-4 h-4 text-accent-700 flex-shrink-0" aria-hidden="true" />
-              <span>
-                <span className="font-semibold text-accent-700">{ADVISORS_LABEL}</span> · Devis
-                gratuit sans engagement
-              </span>
+              <span className="font-semibold text-accent-700">{ADVISORS_LABEL}</span>
             </p>
 
             {/* Progress indicator */}

@@ -13,7 +13,7 @@ import {
   getProviderCountByServiceAndLocation,
   supabase,
 } from '@/lib/supabase'
-import { buildDevisHref, getArtisanUrl } from '@/lib/utils'
+import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
@@ -1163,38 +1163,8 @@ async function renderProviderPage({ params }: PageProps) {
         }}
       />
 
-      {/* ─── DEVIS CTA BANNER — only for claimed profiles ───── */}
-      {isClaimed && (
-        <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <h2 className="text-lg font-bold text-charcoal-900 font-heading">
-                  Besoin de ce professionnel ?
-                </h2>
-                <p className="text-sm text-charcoal-600 mt-1">
-                  Demandez un devis gratuit et sans engagement.
-                </p>
-              </div>
-              <Link
-                href={buildDevisHref(serviceSlug, artisan.city)}
-                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
-              >
-                Obtenir mon devis gratuit
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Devis CTA banner retiré 2026-06-07 — redondant avec le formulaire
+          #devis + hero CTA + sticky bar (audit redondances fiche publique). */}
 
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
       <section className="py-6 bg-white border-t border-sand-200">

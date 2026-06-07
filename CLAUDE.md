@@ -103,7 +103,7 @@ Sur les ~45 480 fiches `providers` avec au moins une qualification RGE active (`
 
 - `Array.isArray(rge_qualifications) && au moins 1 qualif active` (helper `hasActiveRgeQualification` dans `src/lib/rge/has-active-qualification.ts`)
 - Mention "Source : Registre RGE ADEME" obligatoire à côté du numéro (transparence)
-- `ArtisanQuickQuote` / `ArtisanQuoteForm` / `ArtisanServices` (devis spécifique artisan) restent **gated `isClaimed`** — ne JAMAIS impliquer un engagement plateforme
+- `ArtisanQuoteForm` / `ArtisanServices` (devis spécifique artisan) restent **gated `isClaimed`** — ne JAMAIS impliquer un engagement plateforme (`ArtisanQuickQuote` supprimé lors de la refonte fiche 2026-06-07)
 - CTA "C'est ma fiche ? Revendiquez-la" version discrète conservé (funnel claim préservé)
 - ArtisanSchema JSON-LD `telephone` étendu via gate `(isClaimed || isRgeActive) && phone`
 

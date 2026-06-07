@@ -12,6 +12,8 @@ import {
   ShieldCheck,
   FileText,
   Phone,
+  Clock,
+  Award,
 } from 'lucide-react'
 import { getDisplayName } from './types'
 import RgeBadge from './RgeBadge'
@@ -45,6 +47,11 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
   const isRgeActive = hasActiveRgeQualification(artisan.rge_qualifications)
   const cleanPhone = artisan.phone?.replace(/[^\d+]/g, '') ?? ''
   const showPhoneCta = cleanPhone.length >= 10 && (isClaimed || isRgeActive)
+
+  // Fusion ex-ArtisanStats (2026-06-07) : les données uniques du bloc « En bref »
+  // remontent ici en chips compactes ; le bloc dédié a été supprimé (redondance).
+  const creationYear = artisan.creation_date ? new Date(artisan.creation_date).getFullYear() : null
+  const yearsExperience = creationYear ? new Date().getFullYear() - creationYear : null
 
   return (
     <>
@@ -166,6 +173,24 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
                 <div className="flex items-center gap-1.5 text-sm text-charcoal-600">
                   <CalendarCheck className="w-4 h-4 text-charcoal-400" aria-hidden="true" />
                   <span>Inscrit depuis {artisan.member_since}</span>
+                </div>
+              )}
+
+              {/* Chips infos clés (ex-bloc « En bref ») */}
+              {((yearsExperience !== null && yearsExperience > 1) || artisan.available_24h) && (
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  {yearsExperience !== null && yearsExperience > 1 && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-100 border border-sand-200 text-xs font-medium text-charcoal-700">
+                      <Award className="w-3.5 h-3.5 text-primary-400" aria-hidden="true" />
+                      {yearsExperience} ans d&apos;expérience
+                    </span>
+                  )}
+                  {artisan.available_24h && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-50 border border-primary-100 text-xs font-medium text-primary-600">
+                      <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                      Disponible 24h/7j
+                    </span>
+                  )}
                 </div>
               )}
 

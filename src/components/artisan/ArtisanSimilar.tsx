@@ -39,6 +39,13 @@ interface ArtisanSimilarProps {
   isClaimed?: boolean
 }
 
+// « chauffagiste » → « chauffagistes » ; les métiers du catalogue sont tous
+// pluralisables par suffixe simple (pas de pluriel irrégulier dans les 21 slugs)
+function pluralizeSpecialty(specialty?: string): string {
+  const s = specialty?.toLowerCase() || 'artisans'
+  return s.endsWith('s') || s.endsWith('x') ? s : `${s}s`
+}
+
 export function ArtisanSimilar({
   artisan: _artisan,
   similarArtisans,
@@ -64,10 +71,10 @@ export function ArtisanSimilar({
         <p className="text-charcoal-600 mb-4">
           {!isClaimed
             ? `Ces artisans ont rejoint ServicesArtisans et acceptent les demandes de devis`
-            : `Découvrez d'autres ${_artisan.specialty?.toLowerCase() || 'artisans'} à ${_artisan.city}`}
+            : `Découvrez d'autres ${pluralizeSpecialty(_artisan.specialty)} à ${_artisan.city}`}
         </p>
         <Link href={hubUrl} className="text-clay-400 hover:text-clay-600 font-medium">
-          Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
+          Voir tous les {pluralizeSpecialty(_artisan.specialty)} à {_artisan.city} →
         </Link>
       </div>
     )
@@ -241,7 +248,7 @@ export function ArtisanSimilar({
             href={hubUrl}
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:text-primary-700 transition-colors"
           >
-            Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
+            Voir tous les {pluralizeSpecialty(_artisan.specialty)} à {_artisan.city} →
           </Link>
         </div>
       )}

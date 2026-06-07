@@ -166,8 +166,11 @@ const checks = [
   },
   {
     id: 'contact_card_gated',
-    label: 'ArtisanContactCard rendu UNIQUEMENT si isClaimed',
-    ok: /\{isClaimed\s*&&[\s\S]{0,400}?<ArtisanContactCard/.test(clientSrc),
+    label:
+      'ArtisanContactCard rendu UNIQUEMENT si isClaimed (ou composant supprimé — refonte fiche 2026-06-07)',
+    ok:
+      !/ArtisanContactCard/.test(clientSrc) ||
+      /\{isClaimed\s*&&[\s\S]{0,400}?<ArtisanContactCard/.test(clientSrc),
   },
   {
     id: 'services_card_gated',
@@ -176,8 +179,11 @@ const checks = [
   },
   {
     id: 'devis_cta_banner_gated',
-    label: 'Bannière « Obtenir mon devis » gated par isClaimed dans page.tsx',
-    ok: /\{isClaimed\s*&&[\s\S]{0,2000}?Obtenir mon devis/.test(pageSrc),
+    label:
+      'Bannière « Obtenir mon devis » gated par isClaimed dans page.tsx (ou retirée — refonte fiche 2026-06-07)',
+    ok:
+      !/Obtenir mon devis/.test(pageSrc) ||
+      /\{isClaimed\s*&&[\s\S]{0,2000}?Obtenir mon devis/.test(pageSrc),
   },
 ]
 

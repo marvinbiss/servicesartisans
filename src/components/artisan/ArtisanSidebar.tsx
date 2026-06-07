@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Mail, FileText, ShieldCheck, Phone, Users } from 'lucide-react'
+import { Mail, FileText, ShieldCheck, Phone } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { PHONE_TEL, PHONE_NUMBER, ADVISORS_LABEL_SHORT } from '@/lib/seo/config'
+import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { buildDevisHref } from '@/lib/utils'
 import { useCompare } from '@/components/compare/CompareProvider'
 
@@ -54,7 +54,8 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           </div>
         )}
 
-        {/* CTA principal - MASSIF */}
+        {/* CTA principal — ancre vers le formulaire #devis (toujours présent
+            sur les fiches claimed, seul contexte où la sidebar est rendue) */}
         <div className="space-y-3 mb-5" role="group" aria-label="Actions de contact">
           <button
             onClick={() => {
@@ -63,30 +64,19 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
                 artisanName: artisan.business_name || '',
                 source: 'sidebar_devis',
               })
-              window.location.href = getDevisUrl(artisan)
+              const devisSection = document.getElementById('devis')
+              if (devisSection) {
+                devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              } else {
+                window.location.href = getDevisUrl(artisan)
+              }
             }}
             className="w-full py-4 px-5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta hover:shadow-cta-hover transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            aria-label="Devis gratuit en 2 min"
+            aria-label="Demander un devis"
           >
             <FileText className="w-5 h-5" aria-hidden="true" />
-            Devis gratuit en 2 min
+            Demander un devis
           </button>
-
-          {/* Trust reassurance under CTA */}
-          <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
-            <span className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-              {ADVISORS_LABEL_SHORT}
-            </span>
-            <span className="text-charcoal-300" aria-hidden="true">
-              ·
-            </span>
-            <span>Gratuit</span>
-            <span className="text-charcoal-300" aria-hidden="true">
-              ·
-            </span>
-            <span>Sans engagement</span>
-          </div>
 
           {artisan.email && (
             <button
@@ -121,35 +111,11 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           </a>
         </div>
 
-        {/* Trust badges */}
-        <div className="space-y-2.5 mb-5 pb-5 border-b border-sand-200">
-          <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">
-            Vérifications
-          </h4>
-          {artisan.is_verified && (
-            <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
-              <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" />
-              <span>Identité vérifiée (SIREN)</span>
-            </div>
-          )}
+        {/* Vérifications — résumé sidebar, détail complet dans ArtisanBusinessCard */}
+        {artisan.is_verified && (
           <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
-            <Users className="w-4 h-4 text-primary-400 flex-shrink-0" />
-            <span>Devis 100% gratuit, sans engagement</span>
-          </div>
-        </div>
-
-        {/* Urgency nudge */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 mb-5">
-          <p className="text-xs text-amber-800 font-medium">
-            <span className="font-bold">Conseil :</span> les artisans disponibles reçoivent beaucoup
-            de demandes. Envoyez votre devis maintenant pour obtenir une réponse rapide.
-          </p>
-        </div>
-
-        {/* SIRET */}
-        {artisan.siret && (
-          <div className="pt-2">
-            <div className="text-xs text-charcoal-400 font-mono">SIRET : {artisan.siret}</div>
+            <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" />
+            <span>Identité vérifiée (SIREN)</span>
           </div>
         )}
       </div>
@@ -182,58 +148,45 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
       aria-label="Actions rapides"
       aria-hidden={!active}
     >
-      <div className="flex flex-col items-center gap-2">
-        {/* Primary row: Phone + Devis CTA */}
-        <div className="flex gap-2 w-full">
-          {/* Tap-to-call platform */}
-          <a
-            href={PHONE_TEL}
-            onClick={() => {
-              trackEvent('phone_click', {
-                artisanId: artisan.id,
-                source: 'mobile_cta_platform_phone',
-              })
-            }}
-            className="flex flex-col items-center justify-center w-14 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
-            aria-label="Appeler un conseiller ServicesArtisans"
-          >
-            <Phone className="w-5 h-5" />
-            <span className="text-2xs leading-tight mt-0.5">Conseiller</span>
-          </a>
+      {/* Primary row: Phone + Devis CTA */}
+      <div className="flex gap-2 w-full">
+        {/* Tap-to-call platform */}
+        <a
+          href={PHONE_TEL}
+          onClick={() => {
+            trackEvent('phone_click', {
+              artisanId: artisan.id,
+              source: 'mobile_cta_platform_phone',
+            })
+          }}
+          className="flex flex-col items-center justify-center w-14 h-12 bg-accent-500 hover:bg-accent-600 text-white rounded-xl shadow-sm active:scale-[0.96] transition-all touch-manipulation flex-shrink-0"
+          aria-label="Appeler un conseiller ServicesArtisans"
+        >
+          <Phone className="w-5 h-5" />
+          <span className="text-2xs leading-tight mt-0.5">Conseiller</span>
+        </a>
 
-          {/* Primary: Devis CTA - MASSIF */}
-          <button
-            onClick={() => {
-              trackEvent('artisan_devis_click', {
-                artisanId: artisan.id,
-                artisanName: artisan.business_name || '',
-                source: 'mobile_cta',
-              })
+        {/* Primary: Devis CTA — ancre vers le formulaire #devis */}
+        <button
+          onClick={() => {
+            trackEvent('artisan_devis_click', {
+              artisanId: artisan.id,
+              artisanName: artisan.business_name || '',
+              source: 'mobile_cta',
+            })
+            const devisSection = document.getElementById('devis')
+            if (devisSection) {
+              devisSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            } else {
               window.location.href = getDevisUrl(artisan)
-            }}
-            className="flex-1 py-4 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            aria-label="Devis gratuit en 2 min"
-          >
-            <FileText className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-            Devis gratuit en 2 min
-          </button>
-        </div>
-
-        {/* Trust line under CTA */}
-        <div className="flex items-center justify-center gap-3 text-xs text-charcoal-500">
-          <span className="flex items-center gap-1">
-            <Users className="w-3 h-3 text-accent-500" aria-hidden="true" />
-            {ADVISORS_LABEL_SHORT}
-          </span>
-          <span className="text-charcoal-300" aria-hidden="true">
-            ·
-          </span>
-          <span>Gratuit</span>
-          <span className="text-charcoal-300" aria-hidden="true">
-            ·
-          </span>
-          <span>Sans engagement</span>
-        </div>
+            }
+          }}
+          className="flex-1 py-4 px-6 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-lg shadow-primary-500/25 transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          aria-label="Demander un devis"
+        >
+          <FileText className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+          Demander un devis
+        </button>
       </div>
     </div>
   )

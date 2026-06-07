@@ -1,7 +1,6 @@
 // Export all artisan components
 export * from './types'
 export { ArtisanHero } from './ArtisanHero'
-export { ArtisanStats } from './ArtisanStats'
 export { ArtisanAbout } from './ArtisanAbout'
 export { ArtisanServices } from './ArtisanServices'
 export { ArtisanGallery } from './ArtisanGallery'
@@ -22,8 +21,3 @@ export {
   ArtisanSidebarSkeleton,
 } from './ArtisanSkeleton'
 export { ArtisanBusinessCard } from './ArtisanBusinessCard'
-export { ArtisanContactCard } from './ArtisanContactCard'
-export { ArtisanUrgencyBanner } from './ArtisanUrgencyBanner'
-export { ArtisanWhyChoose } from './ArtisanWhyChoose'
-export { ArtisanExitIntent } from './ArtisanExitIntent'
-export { ArtisanQuickQuote } from './ArtisanQuickQuote'

@@ -8,7 +8,6 @@ import {
   Review,
   getDisplayName,
   ArtisanHero,
-  ArtisanStats,
   ArtisanAbout,
   ArtisanServices,
   ArtisanSidebar,
@@ -16,10 +15,6 @@ import {
   ArtisanBreadcrumb,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
-import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
-
-import { ArtisanQuickQuote } from '@/components/artisan/ArtisanQuickQuote'
-import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
 import { ArtisanRgeEnrichedSection } from '@/components/artisan/ArtisanRgeEnrichedSection'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -106,15 +101,6 @@ const ArtisanBusinessCard = dynamic(
       default: mod.ArtisanBusinessCard,
     })),
   { loading: () => <SectionSkeleton height="h-64" /> }
-)
-
-// Contact card (sticky sidebar on desktop, section on mobile)
-const ArtisanContactCard = dynamic(
-  () =>
-    import('@/components/artisan/ArtisanContactCard').then((mod) => ({
-      default: mod.ArtisanContactCard,
-    })),
-  { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
 function slugify(text: string): string {
@@ -243,7 +229,7 @@ export default function ArtisanPageClient({
       </nav>
 
       {/* pb-44 = space for sticky bar + bottom nav on mobile; lg:pb-8 for desktop where sidebar takes over */}
-      <div className={`min-h-screen bg-sand-50 ${isClaimed ? 'pb-44 lg:pb-8' : 'pb-44 lg:pb-8'}`}>
+      <div className="min-h-screen bg-sand-50 pb-44 lg:pb-8">
         {/* Header - sticky navigation */}
         <header className="bg-white/95 backdrop-blur-lg border-b border-sand-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3.5">
@@ -337,17 +323,17 @@ export default function ArtisanPageClient({
 
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left column - Main content (ordered for conversion) */}
+            {/* Left column - Main content.
+                Ordre conversion 2026-06-07 : confiance d'abord (avis, à-propos),
+                transaction ensuite (services, formulaire), preuve administrative
+                en fin (fiche entreprise). 1 seul bloc devis dans la colonne —
+                hero CTA + sidebar/sticky ancrent vers #devis. */}
             <div className="lg:col-span-2 space-y-6">
-              {/* 1. Hero — first impression, identity, trust signals */}
+              {/* 1. Hero — identity, trust badge, primary CTA */}
               <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} isClaimed={isClaimed} />
               </section>
-              {/* 1b. Why choose — trust cards (claimed + unclaimed) */}
-              <section aria-label="Pourquoi choisir cet artisan">
-                <ArtisanWhyChoose artisan={artisan} />
-              </section>
-              {/* 1c. RGE enrichi — cross-links vers guides qualifications + CEE
+              {/* 2. RGE enrichi — cross-links vers guides qualifications + CEE
                      débloquées. No-op pour les fiches non-RGE. */}
               <ArtisanRgeEnrichedSection
                 qualifications={artisan.rge_qualifications}
@@ -366,35 +352,11 @@ export default function ArtisanPageClient({
                     : undefined
                 }
               />
-              {/* 1d. Quick Quote CTA — only if claimed */}
-              {isClaimed && (
-                <section aria-label="Demande de devis rapide">
-                  <ArtisanQuickQuote artisan={artisan} />
-                </section>
-              )}
-              {/* 2. Urgency — only if claimed */}
-              {isClaimed && (
-                <section aria-label="Disponibilité et avantages">
-                  <ArtisanUrgencyBanner artisan={artisan} />
-                </section>
-              )}
-
-              {/* 3. DEVIS — claimed only: direct form */}
-              {isClaimed && (
-                <section id="devis" aria-label="Demande de devis">
-                  <ArtisanQuoteForm artisan={artisan} />
-                </section>
-              )}
-
-              {/* 4. Stats — social proof reinforces after form view */}
-              <section aria-label="Statistiques">
-                <ArtisanStats artisan={artisan} />
-              </section>
-              {/* 5. Reviews — strongest trust signal */}
+              {/* 3. Reviews — strongest trust signal, before any form */}
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews reviews={reviews} />
               </section>
-              {/* 6. About — affiché si : claim, OU description vérifiée (DB-stored LLM
+              {/* 4. About — affiché si : claim, OU description vérifiée (DB-stored LLM
                   ≈50K RGE rubric v1.3, ou rendu ADEME-grounded via generateRgeMinimalDescription).
                   Cachée pour les fiches sans source vérifiée (fallback generateDescription
                   boilerplate = HCU-flaggable). */}
@@ -403,14 +365,20 @@ export default function ArtisanPageClient({
                   <ArtisanAbout artisan={artisan} />
                 </section>
               )}
-
-              {/* 7. Services & pricing — transactional detail (hidden for unclaimed) */}
+              {/* 5. Services & pricing — transactional detail (hidden for unclaimed) */}
               {isClaimed && (
                 <section id="services" aria-label="Services et tarifs">
                   <ArtisanServices artisan={artisan} isClaimed={isClaimed} />
                 </section>
               )}
-              {/* 7b. Garanties & infos pratiques — mig 306 déclaratif, claimed only
+              {/* 6. DEVIS — claimed only: le SEUL formulaire de la page (#devis,
+                  cible des ancres hero/sidebar/sticky) */}
+              {isClaimed && (
+                <section id="devis" aria-label="Demande de devis">
+                  <ArtisanQuoteForm artisan={artisan} />
+                </section>
+              )}
+              {/* 7. Garanties & infos pratiques — mig 306 déclaratif, claimed only
                   (contenu auto-déclaré non validé pour les fiches non revendiquées,
                   languages a un DEFAULT base entière) */}
               {isClaimed && credentials && (
@@ -427,12 +395,6 @@ export default function ArtisanPageClient({
               <section aria-label="Fiche entreprise">
                 <ArtisanBusinessCard artisan={artisan} isClaimed={isClaimed} />
               </section>
-              {/* Mobile-only contact section — only if claimed */}
-              {isClaimed && (
-                <section className="lg:hidden" aria-label="Contacter cet artisan">
-                  <ArtisanContactCard artisan={artisan} isClaimed={isClaimed} />
-                </section>
-              )}
               {/* Claim button on mobile — non-RGE unclaimed uniquement.
                   Sur RGE unclaimed, la version discrète est déjà inline dans
                   ArtisanRgeAdemeCard en haut de page (pas de double CTA). */}
