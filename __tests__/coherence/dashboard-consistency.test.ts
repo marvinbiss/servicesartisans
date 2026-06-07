@@ -52,10 +52,7 @@ describe('Invariant 2 — locale FR sur formatage dates et nombres', () => {
     expect(page).toMatch(/toLocaleString\('fr-FR'/)
   })
 
-  it('RgeStatusBlock utilise fr-FR pour dates', () => {
-    const block = readFile('src/components/artisan-dashboard/RgeStatusBlock.tsx')
-    expect(block).toMatch(/toLocaleDateString\('fr-FR'/)
-  })
+  // RgeStatusBlock supprimé 2026-06-07 (gel RGE/CEE dans le dashboard artisan)
 })
 
 describe('Invariant 3 — delta fonctions partagées', () => {
@@ -154,11 +151,10 @@ describe('Invariant 7 — pas de PII leak dans les endpoints artisan', () => {
 })
 
 describe('Invariant 8 — empty states en français', () => {
-  it('les 5 blocs artisan ont un empty state FR', () => {
+  it('les 4 blocs artisan ont un empty state FR', () => {
     const blocks = [
       'src/components/artisan-dashboard/FunnelBlock.tsx',
       'src/components/artisan-dashboard/ReputationBlock.tsx',
-      'src/components/artisan-dashboard/RgeStatusBlock.tsx',
       'src/components/artisan-dashboard/PerformanceTrendBlock.tsx',
       'src/components/artisan-dashboard/NextActionsBlock.tsx',
     ]

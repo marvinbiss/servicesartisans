@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-05-21",
-  "routes_count": 336,
+  "routes_count": 342,
   "routes": [
     "/connexion",
     "/embed/rge",
@@ -17,6 +17,12 @@
     "/espace-artisan/avis",
     "/espace-artisan/avis-recus",
     "/espace-artisan/calendrier",
+    "/espace-artisan/cee",
+    "/espace-artisan/cee/commissions",
+    "/espace-artisan/cee/formation",
+    "/espace-artisan/cee/nouveau",
+    "/espace-artisan/cee/onboarding",
+    "/espace-artisan/cee/[dossierId]",
     "/espace-artisan/dashboard",
     "/espace-artisan/demandes",
     "/espace-artisan/demandes-recues",

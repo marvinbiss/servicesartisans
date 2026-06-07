@@ -77,11 +77,13 @@ describe('audit-canonicals — détection des patterns noindex', () => {
   it('détecte robots: { index: false } inline', () => {
     const { stdout } = runAudit(['--json'])
     const report = JSON.parse(stdout)
-    // Les 5 pages (private)/espace-artisan/cee/* doivent être exclues
-    const privateCEE = report.excluded_noindex.filter((p: string) =>
-      p.includes('(private)/espace-artisan/cee/')
+    // Pages (private) avec robots.index:false inline (les pages CEE artisan,
+    // gelées 2026-06-07, sont devenues des stubs redirect sans metadata)
+    const privateNoindex = report.excluded_noindex.filter((p: string) => p.includes('(private)/'))
+    expect(privateNoindex.length).toBeGreaterThanOrEqual(1)
+    expect(report.excluded_noindex).toContain(
+      'src/app/(private)/espace-artisan/securite/2fa/page.tsx'
     )
-    expect(privateCEE.length).toBeGreaterThanOrEqual(5)
   })
 
   it('détecte les pages force-dynamic redirect (artisan/[slug])', () => {

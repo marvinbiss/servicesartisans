@@ -89,14 +89,14 @@ describe('<NextActionsBlock /> — partial failure', () => {
   it('mélange : rge OK + rep KO + funnel OK + stats KO', () => {
     wireMixed(
       {
-        rge: { hasRge: false, status: 'none', daysUntilExpiry: null }, // P2
+        rge: { hasRge: false, status: 'none', daysUntilExpiry: null },
         funnel: { counts: { pending: 4, assigned: 10 }, rates: { responseRate: 70 } },
       },
       new Set(['rep', 'stats'])
     )
     render(<NextActionsBlock />)
-    // "Devenir RGE" (P2) et pas d'autres sources
-    expect(screen.getByText(/Devenez Reconnu Garant/i)).toBeInTheDocument()
+    // Gel RGE dashboard 2026-06-07 : hasRge=false ne génère plus d'action
+    expect(screen.queryByText(/Devenez Reconnu Garant/i)).not.toBeInTheDocument()
     // pending=4 dans funnel → pending lead action (P0) car on lit counts.pending
     expect(screen.getByText(/4 demandes non consultées/i)).toBeInTheDocument()
   })

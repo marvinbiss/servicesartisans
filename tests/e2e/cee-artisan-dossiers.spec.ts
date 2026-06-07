@@ -1,96 +1,31 @@
 /**
- * E2E — Parcours artisan « dossiers CEE » (liste + détail + upload).
+ * E2E — Section « Dossiers CEE » gelée (2026-06-07).
  *
- * Couvre 2 cas :
- *   3. Liste : /espace-artisan/cee doit afficher au moins 1 dossier mocké
- *   4. Détail + upload : /espace-artisan/cee/[id] accepte un fichier et
- *      affiche un toast de succès
- *
- * Mocks :
- *   - Auth Supabase mockée (utilisateur artisan)
- *   - `GET /api/cee/dossiers` + `GET /api/cee/dossiers/:id` mockés
- *   - Fallback REST Supabase `/rest/v1/cee_dossiers*` également intercepté
- *   - Storage `/storage/v1/object/**` pour l'upload
- *
- * Pages couvertes :
- *   - `src/app/(private)/espace-artisan/cee/page.tsx` (liste)
- *   - `src/app/(private)/espace-artisan/cee/[dossierId]/page.tsx` (détail)
- *
- * NB : les pages artisan sont des Server Components qui appellent Supabase
- * côté serveur via `@/lib/supabase/server`. Les `page.route()` ne peuvent
- * intercepter que le trafic navigateur — le vrai fetch DB ne passe pas par
- * là. Ces tests restent donc dépendants d'un backend mocké par ailleurs
- * (run CI avec stub Supabase local) ou d'un compte de test.
+ * Les pages /espace-artisan/cee/** sont des stubs redirect vers
+ * /espace-artisan (dashboard recentré métier). Le parcours d'origine
+ * (liste + détail + upload) est restaurable depuis l'historique git.
  */
 
 import { test, expect } from '@playwright/test'
-import {
-  mockArtisanAuth,
-  mockArtisanCeeDossiers,
-  mockCeeJustificatifUpload,
-  MOCK_CEE_DOSSIER,
-} from '../fixtures/cee-mocks'
+import { mockArtisanAuth } from '../fixtures/cee-mocks'
 
-// Session artisan requise (cf. NB ci-dessus) : skip sans storageState fourni.
-test.use({ storageState: process.env.E2E_ARTISAN_STORAGE_STATE ?? undefined })
-test.beforeEach(() => {
-  test.skip(
-    !process.env.E2E_ARTISAN_STORAGE_STATE,
-    'Session artisan requise — définir E2E_ARTISAN_STORAGE_STATE'
-  )
-})
-
-test.describe('Espace artisan — dossiers CEE', () => {
+test.describe('Dossiers CEE — gel', () => {
   test.beforeEach(async ({ page }) => {
     await mockArtisanAuth(page)
-    await mockArtisanCeeDossiers(page)
-    await mockCeeJustificatifUpload(page)
   })
 
-  test('la liste affiche au moins 1 dossier mocké', async ({ page }) => {
+  test('/espace-artisan/cee redirige vers le dashboard', async ({ page }) => {
     await page.goto('/espace-artisan/cee')
-
-    // Le titre de la page doit mentionner CEE / dossiers.
-    await expect(page.getByRole('heading', { name: /Mes dossiers CEE/i })).toBeVisible()
-
-    // La section liste doit être montée.
-    await expect(page.getByTestId('cee-dossier-list-section')).toBeVisible()
-
-    // Au moins un dossier mocké doit être rendu (on cible le code opération).
-    await expect(page.getByText(MOCK_CEE_DOSSIER.operation_code).first()).toBeVisible()
+    await expect(page).toHaveURL(/\/espace-artisan(\?.*)?$/)
   })
 
-  test('détail + upload : un fichier uploadé déclenche un toast success', async ({ page }) => {
-    await page.goto(`/espace-artisan/cee/${MOCK_CEE_DOSSIER.id}`)
+  test('/espace-artisan/cee/nouveau redirige vers le dashboard', async ({ page }) => {
+    await page.goto('/espace-artisan/cee/nouveau')
+    await expect(page).toHaveURL(/\/espace-artisan(\?.*)?$/)
+  })
 
-    // Vérifier que la page détail est bien chargée (H1 contient le code opération).
-    await expect(
-      page.getByRole('heading', {
-        name: new RegExp(MOCK_CEE_DOSSIER.operation_code, 'i'),
-      })
-    ).toBeVisible()
-
-    // Sélectionner le type de pièce (le <select> est requis par le formulaire).
-    const codeSelect = page.locator('#cee-just-code')
-    await codeSelect.selectOption({ index: 0 })
-
-    // Sélectionner le 1er input file visible et uploader un fichier fictif.
-    const fileInput = page.locator('#cee-just-file')
-    await fileInput.setInputFiles({
-      name: 'facture.pdf',
-      mimeType: 'application/pdf',
-      buffer: Buffer.from('%PDF-1.4 mock contents'),
-    })
-
-    // Soumettre le formulaire.
-    await page.getByRole('button', { name: /Envoyer la pièce/i }).click()
-
-    // Un toast de succès (role="status") doit apparaître.
-    // On tolère plusieurs formulations françaises courantes.
-    const toast = page
-      .getByRole('status')
-      .filter({ hasText: /(enregistré|téléchargé|succès|ajouté)/i })
-      .first()
-    await expect(toast).toBeVisible({ timeout: 10_000 })
+  test("le détail d'un dossier redirige vers le dashboard", async ({ page }) => {
+    await page.goto('/espace-artisan/cee/00000000-0000-4000-8000-000000000001')
+    await expect(page).toHaveURL(/\/espace-artisan(\?.*)?$/)
   })
 })

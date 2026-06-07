@@ -1,7 +1,6 @@
 /**
- * Tests — GET /api/cee/partners/me (gelé 501)
+ * Tests — GET + PATCH /api/cee/dossiers/[id] (gelés 501)
  * Gel 2026-06-07 : section « Dossiers CEE » retirée de l'espace artisan.
- * Tests d'origine restaurables depuis l'historique git avec la route.
  */
 
 import { describe, it, expect, vi } from 'vitest'
@@ -17,10 +16,17 @@ interface MockResult {
   status: number
 }
 
-describe('GET /api/cee/partners/me — gelé', () => {
-  it('returns 501 without touching auth or DB', async () => {
-    const { GET } = await import('@/app/api/cee/partners/me/route')
+describe('/api/cee/dossiers/[id] — gelé', () => {
+  it('GET returns 501 without touching auth or DB', async () => {
+    const { GET } = await import('@/app/api/cee/dossiers/[id]/route')
     const result = (await GET()) as unknown as MockResult
+    expect(result.status).toBe(501)
+    expect(result.body.error.message).toBe('Dossiers CEE artisan gelés')
+  })
+
+  it('PATCH returns 501 without touching auth or DB', async () => {
+    const { PATCH } = await import('@/app/api/cee/dossiers/[id]/route')
+    const result = (await PATCH()) as unknown as MockResult
     expect(result.status).toBe(501)
     expect(result.body.error.message).toBe('Dossiers CEE artisan gelés')
   })

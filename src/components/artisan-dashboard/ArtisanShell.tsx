@@ -4,19 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
-import {
-  LayoutDashboard,
-  Inbox,
-  Contact,
-  Zap,
-  Settings,
-  ExternalLink,
-  Menu,
-  X,
-  Plus,
-  GraduationCap,
-  Banknote,
-} from 'lucide-react'
+import { LayoutDashboard, Inbox, Contact, Settings, ExternalLink, Menu, X } from 'lucide-react'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 
@@ -25,9 +13,10 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
  * mobile, monté UNE FOIS dans (private)/espace-artisan/layout.tsx.
  * Remplace l'ancienne ArtisanSidebar 13 entrées montée en dur dans chaque page.
  *
- * Nav 4 sections + paramètres discret :
- *   Aujourd'hui · Mes demandes · Ma fiche · Dossiers CEE · Paramètres
- * Gelés (hors nav, routes redirigées) : calendrier, équipe, abonnement.
+ * Nav 3 sections + paramètres discret :
+ *   Aujourd'hui · Mes demandes · Ma fiche · Paramètres
+ * Gelés (hors nav, routes redirigées) : calendrier, équipe, abonnement,
+ * dossiers CEE (2026-06-07 — dashboard recentré métier).
  * Messages : gelé lecture seule, accessible par URL directe uniquement.
  */
 
@@ -75,17 +64,6 @@ const NAV: NavEntry[] = [
     icon: Contact,
     match: ['/espace-artisan/portfolio', '/espace-artisan/avis-recus', '/espace-artisan/avis'],
   },
-  {
-    href: '/espace-artisan/cee',
-    label: 'Dossiers CEE',
-    icon: Zap,
-  },
-]
-
-const CEE_SUBNAV: NavEntry[] = [
-  { href: '/espace-artisan/cee/nouveau', label: 'Nouveau dossier', icon: Plus },
-  { href: '/espace-artisan/cee/formation', label: 'Formation', icon: GraduationCap },
-  { href: '/espace-artisan/cee/commissions', label: 'Commissions', icon: Banknote },
 ]
 
 const PARAMETRES: NavEntry = {
@@ -164,28 +142,21 @@ export default function ArtisanShell({ userId, publicUrl, children }: ArtisanShe
     }
   }, [])
 
-  const ceeActive =
-    pathname === '/espace-artisan/cee' || pathname.startsWith('/espace-artisan/cee/')
-
-  const renderEntry = (entry: NavEntry, sub = false) => {
+  const renderEntry = (entry: NavEntry) => {
     const Icon = entry.icon
-    const active = sub
-      ? pathname === entry.href || pathname.startsWith(`${entry.href}/`)
-      : isActive(entry)
+    const active = isActive(entry)
     return (
       <Link
         key={entry.href}
         href={entry.href}
         aria-current={active ? 'page' : undefined}
-        className={`flex items-center gap-3 rounded-lg border-l-[3px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
-          sub ? 'px-3 py-1.5 ml-7 text-sm' : 'px-3 py-2.5'
-        } ${
+        className={`flex items-center gap-3 rounded-lg border-l-[3px] px-3 py-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
           active
             ? 'bg-primary-50 text-primary-600 font-medium border-primary-500'
             : 'text-charcoal-700 hover:bg-sand-50 border-transparent'
         }`}
       >
-        <Icon className={`${sub ? 'w-4 h-4' : 'w-5 h-5'} shrink-0`} aria-hidden="true" />
+        <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
         <span>{entry.label}</span>
         {entry.badge && pendingCount > 0 && (
           <span
@@ -202,18 +173,7 @@ export default function ArtisanShell({ userId, publicUrl, children }: ArtisanShe
 
   const navContent = (
     <div className="flex flex-col h-full">
-      <div className="space-y-1">
-        {NAV.map((entry) => (
-          <div key={entry.href}>
-            {renderEntry(entry)}
-            {entry.href === '/espace-artisan/cee' && ceeActive && (
-              <div className="mt-1 space-y-0.5">
-                {CEE_SUBNAV.map((sub) => renderEntry(sub, true))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <div className="space-y-1">{NAV.map((entry) => renderEntry(entry))}</div>
       <div className="mt-auto pt-4 space-y-1">
         {publicUrl && (
           <Link

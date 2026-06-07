@@ -3,7 +3,7 @@
 /**
  * « Aujourd'hui » — accueil action-first de l'espace artisan (refonte
  * 2026-06-06). Absorbe l'ancien /dashboard (redirigé ici) et /statistiques :
- * les actions en haut (NextActions, RGE, demandes récentes, complétion),
+ * les actions en haut (NextActions, demandes récentes, complétion),
  * les métriques sous la fold (StatCards, tendances, réputation, funnel).
  */
 
@@ -27,7 +27,6 @@ import NextActionsBlock from '@/components/artisan-dashboard/NextActionsBlock'
 import PerformanceTrendBlock from '@/components/artisan-dashboard/PerformanceTrendBlock'
 import ProfileCompleteness from '@/components/artisan-dashboard/ProfileCompleteness'
 import ReputationBlock from '@/components/artisan-dashboard/ReputationBlock'
-import RgeStatusBlock from '@/components/artisan-dashboard/RgeStatusBlock'
 import { StatCard } from '@/components/dashboard/StatCard'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
 
@@ -380,11 +379,8 @@ export default function AujourdhuiPage() {
         <PhotoUploadBanner photoCount={data.stats.portfolioPhotoCount} />
       )}
 
-      {/* Next actions — priority inbox consolidant RGE + leads + avis + profil */}
+      {/* Next actions — priority inbox : leads + avis + profil (+ alerte RGE expiré) */}
       <NextActionsBlock />
-
-      {/* RGE status — critical cliff signal */}
-      <RgeStatusBlock />
 
       {/* Dernières demandes + complétion fiche */}
       <div className={showProfileWidget ? 'grid lg:grid-cols-3 gap-8' : ''}>

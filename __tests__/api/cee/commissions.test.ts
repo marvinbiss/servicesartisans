@@ -1,7 +1,6 @@
 /**
- * Tests — POST /api/cee/dossiers/[id]/justificatifs (gelé 501)
+ * Tests — GET /api/cee/commissions (gelé 501)
  * Gel 2026-06-07 : section « Dossiers CEE » retirée de l'espace artisan.
- * Tests d'origine restaurables depuis l'historique git avec la route.
  */
 
 import { describe, it, expect, vi } from 'vitest'
@@ -17,10 +16,10 @@ interface MockResult {
   status: number
 }
 
-describe('POST /api/cee/dossiers/[id]/justificatifs — gelé', () => {
+describe('GET /api/cee/commissions — gelé', () => {
   it('returns 501 without touching auth or DB', async () => {
-    const { POST } = await import('@/app/api/cee/dossiers/[id]/justificatifs/route')
-    const result = (await POST()) as unknown as MockResult
+    const { GET } = await import('@/app/api/cee/commissions/route')
+    const result = (await GET()) as unknown as MockResult
     expect(result.status).toBe(501)
     expect(result.body.error.message).toBe('Dossiers CEE artisan gelés')
   })

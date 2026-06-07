@@ -5,13 +5,11 @@
  * Couvre la logique de priorisation multi-source :
  *  - Loading (toutes sources undefined)
  *  - Inbox zero (aucun signal)
- *  - P0 RGE expired en tête
+ *  - P0 RGE expired en tête (seul signal RGE conservé — gel 2026-06-07)
  *  - P0 pending leads
- *  - P1 expiring_soon, avis non-répondu, responseRate<50 (avec assigned>=3)
- *  - P1 messages non lus
- *  - P2 pas RGE, <3 photos
+ *  - P1 avis non-répondu, responseRate<50 (avec assigned>=3)
+ *  - P2 <3 photos
  *  - Tri p0 → p1 → p2
- *  - Overflow "+ N autres actions"
  *
  * NextActionsBlock consomme 4 clés SWR — on mocke useSWR par URL passée.
  */
@@ -130,7 +128,7 @@ describe('<NextActionsBlock />', () => {
     expect(screen.getByText(/Taux de réponse à 30%/i)).toBeInTheDocument()
   })
 
-  it('P2 devenir RGE si hasRge=false', () => {
+  it('hasRge=false ne génère plus d’action (gel RGE dashboard 2026-06-07)', () => {
     wireSources({
       rge: { hasRge: false, status: 'none', daysUntilExpiry: null },
       rep: { reviews: { pendingResponse: 0 }, invitations: { nextScheduledAt: null } },
@@ -140,7 +138,22 @@ describe('<NextActionsBlock />', () => {
       },
     })
     render(<NextActionsBlock />)
-    expect(screen.getByText(/Devenez Reconnu Garant/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Devenez Reconnu Garant/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/inbox zero/i)).toBeInTheDocument()
+  })
+
+  it('expiring_soon ne génère plus d’action (gel RGE dashboard 2026-06-07)', () => {
+    wireSources({
+      rge: { hasRge: true, status: 'expiring_soon', daysUntilExpiry: 12 },
+      rep: { reviews: { pendingResponse: 0 }, invitations: { nextScheduledAt: null } },
+      funnel: { counts: { pending: 0, assigned: 0 }, rates: { responseRate: null } },
+      stats: {
+        stats: { pendingDemandesCount: 0, unreadMessages: 0, portfolioPhotoCount: 5 },
+      },
+    })
+    render(<NextActionsBlock />)
+    expect(screen.queryByText(/RGE expire dans/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/inbox zero/i)).toBeInTheDocument()
   })
 
   it('P2 portfolio thin si <3 photos', () => {
@@ -158,25 +171,27 @@ describe('<NextActionsBlock />', () => {
 
   it('tri : P0 avant P1 avant P2', () => {
     wireSources({
-      rge: { hasRge: false, status: 'none', daysUntilExpiry: null }, // P2 devenir RGE
+      rge: { hasRge: true, status: 'active', daysUntilExpiry: 200 },
       rep: { reviews: { pendingResponse: 2 }, invitations: { nextScheduledAt: null } }, // P1
       funnel: { counts: { pending: 3, assigned: 10 }, rates: { responseRate: 60 } }, // P0 pending leads
       stats: {
-        stats: { pendingDemandesCount: 3, unreadMessages: 0, portfolioPhotoCount: 5 },
+        stats: { pendingDemandesCount: 3, unreadMessages: 0, portfolioPhotoCount: 1 }, // P2 portfolio
       },
     })
     render(<NextActionsBlock />)
     const items = screen.getAllByRole('listitem')
     expect(items.length).toBeGreaterThanOrEqual(3)
-    // Premier = P0 pending leads (P0 RGE absent)
+    // Premier = P0 pending leads
     expect(items[0].textContent).toMatch(/3 demandes non consultées/i)
-    // Le dernier rendu doit être P2 devenir RGE
-    expect(items[items.length - 1].textContent).toMatch(/Devenez Reconnu Garant/i)
+    // Le dernier rendu doit être P2 portfolio thin
+    expect(items[items.length - 1].textContent).toMatch(/Seulement 1 photo/i)
   })
 
-  it('overflow : affiche "+ N autres actions" si plus de 5', () => {
+  it('toutes les actions possibles tiennent sous le cap de 5 — pas d’overflow', () => {
+    // Post-gel RGE (2026-06-07), le max d'actions simultanées = 5 :
+    // rge-expired P0 + pending P0 + avis P1 + responseRate P1 + portfolio P2.
     wireSources({
-      rge: { hasRge: false, status: 'expired', daysUntilExpiry: -10 }, // P0
+      rge: { hasRge: true, status: 'expired', daysUntilExpiry: -10 }, // P0
       rep: { reviews: { pendingResponse: 5 }, invitations: { nextScheduledAt: null } }, // P1
       funnel: { counts: { pending: 3, assigned: 10 }, rates: { responseRate: 30 } }, // P0 + P1
       stats: {
@@ -184,8 +199,9 @@ describe('<NextActionsBlock />', () => {
       },
     })
     render(<NextActionsBlock />)
-    // hasRge=false → "Devenir RGE" P2 ; + rge expired P0 ; + pending P0 ;
-    // + avis P1 ; + responseRate P1 ; + messages P1 ; + portfolio P2 = 7 actions
-    expect(screen.getByText(/\+ \d+ autres? actions? moins prioritaires?/i)).toBeInTheDocument()
+    expect(screen.getAllByRole('listitem')).toHaveLength(5)
+    expect(
+      screen.queryByText(/\+ \d+ autres? actions? moins prioritaires?/i)
+    ).not.toBeInTheDocument()
   })
 })

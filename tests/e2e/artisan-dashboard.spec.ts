@@ -399,7 +399,7 @@ test.describe("Flow 1 — Navigation espace artisan (Aujourd'hui)", () => {
     await expect(page.getByRole('heading', { name: /Aujourd'hui/i })).toBeVisible()
   })
 
-  test('la sidebar du shell affiche les 4 entrées de navigation', async ({ page }) => {
+  test('la sidebar du shell affiche les 3 entrées de navigation', async ({ page }) => {
     await page.goto('/espace-artisan')
 
     const sidebar = page.locator('nav[aria-label="Menu espace artisan"]').first()
@@ -408,7 +408,8 @@ test.describe("Flow 1 — Navigation espace artisan (Aujourd'hui)", () => {
     await expect(sidebar.getByRole('link', { name: /Aujourd'hui/i })).toBeVisible()
     await expect(sidebar.getByRole('link', { name: /Mes demandes/i })).toBeVisible()
     await expect(sidebar.getByRole('link', { name: /Ma fiche/i })).toBeVisible()
-    await expect(sidebar.getByRole('link', { name: /Dossiers CEE/i })).toBeVisible()
+    // Gel 2026-06-07 : la section Dossiers CEE n'est plus dans la nav
+    await expect(sidebar.getByRole('link', { name: /Dossiers CEE/i })).toHaveCount(0)
   })
 
   test('les stat cards sont affichées avec les valeurs', async ({ page }) => {

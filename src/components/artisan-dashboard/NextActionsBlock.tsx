@@ -4,7 +4,6 @@ import Link from 'next/link'
 import useSWR from 'swr'
 import {
   AlertOctagon,
-  AlertTriangle,
   ArrowRight,
   CheckCircle2,
   Clock,
@@ -260,18 +259,6 @@ function buildActions(args: {
   }
 
   // ─── P1 — impact métier direct, fenêtre 7-30j ───────────────────────────
-  if (rge?.status === 'expiring_soon' && rge.daysUntilExpiry != null) {
-    out.push({
-      id: 'rge-expiring',
-      severity: 'p1',
-      icon: AlertTriangle,
-      title: `RGE expire dans ${rge.daysUntilExpiry} jour${rge.daysUntilExpiry > 1 ? 's' : ''}`,
-      detail: 'Lancez le renouvellement maintenant pour rester visible sur les pages RGE.',
-      href: '/espace-artisan/profil',
-      ctaLabel: 'Renouveler',
-    })
-  }
-
   const pendingResponse = rep?.reviews?.pendingResponse ?? 0
   if (pendingResponse > 0) {
     out.push({
@@ -302,19 +289,6 @@ function buildActions(args: {
   }
 
   // ─── P2 — optimisation conversion, fenêtre lente ────────────────────────
-  if (rge && !rge.hasRge) {
-    out.push({
-      id: 'become-rge',
-      severity: 'p2',
-      icon: Sparkles,
-      title: "Devenez Reconnu Garant de l'Environnement (RGE)",
-      detail:
-        "Les artisans RGE captent les demandes MaPrimeRénov' / CEE — un levier majeur de volume.",
-      href: '/espace-artisan/profil',
-      ctaLabel: 'Démarrer',
-    })
-  }
-
   const photoCount = stats?.stats?.portfolioPhotoCount ?? 0
   if (photoCount < 3) {
     out.push({
