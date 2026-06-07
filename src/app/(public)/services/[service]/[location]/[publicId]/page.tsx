@@ -286,14 +286,19 @@ function convertToArtisan(
     legal_form: provider.legal_form_code || provider.legal_form || undefined,
     // SLA-99.9 / PII :
     //   phone → exposé si claimed OU RGE actif (source ADEME publique)
-    //   email → reste gated `isClaimedForPhone` strict (mention "Source ADEME"
-    //           ne suffit pas à justifier exposer un email dont l'artisan
-    //           ignore l'usage marketing potentiel)
+    //   email → JAMAIS exposé (décision 2026-06-07) : même non rendu en UI,
+    //           tout champ mappé ici finit dans le payload RSC/flight crawlable
+    //           par les scrapers. Contact = formulaire devis + tel conseiller.
     phone: canExposePhone ? provider.phone || undefined : undefined,
-    email: isClaimedForPhone ? provider.email || undefined : undefined,
+    email: undefined,
     website: provider.website || undefined,
-    latitude: provider.latitude || undefined,
-    longitude: provider.longitude || undefined,
+    // Coords GPS : précises (provider) sinon centroïde commune (table communes,
+    // via getLocationBySlug) — permet d'afficher la carte Leaflet au lieu du
+    // fallback « Voir sur Google Maps » (2026-06-07). `coords_are_city_level`
+    // pilote le zoom côté <ArtisanMap>.
+    latitude: provider.latitude || location?.latitude || undefined,
+    longitude: provider.longitude || location?.longitude || undefined,
+    coords_are_city_level: !provider.latitude && !!location?.latitude,
     faq: provider.faq && provider.faq.length > 0 ? provider.faq : undefined,
     updated_at: provider.updated_at || undefined,
     // RGE ADEME — certifications officielles issues du dataset data.gouv.fr

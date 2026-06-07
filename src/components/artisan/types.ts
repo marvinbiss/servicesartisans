@@ -60,6 +60,9 @@ export interface Artisan {
   website?: string
   latitude?: number
   longitude?: number
+  /** true = lat/lng issus du centroïde commune (fallback), pas de l'adresse
+   *  exacte — ArtisanMap dézoome pour ne pas suggérer une précision fausse */
+  coords_are_city_level?: boolean
   prices_are_estimated?: boolean
   available_24h?: boolean
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>

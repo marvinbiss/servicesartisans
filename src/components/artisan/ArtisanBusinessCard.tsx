@@ -7,7 +7,6 @@ import {
   Hash,
   Scale,
   Users,
-  Briefcase,
 } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -108,15 +107,8 @@ function formatLegalForm(code: string): string {
 
 interface ArtisanBusinessCardProps {
   artisan: LegacyArtisan
-  /**
-   * Required guard pour exposition email INSEE.
-   * Audit RGPD 2026-05-01 : `artisan.email` provient de SIRENE/INSEE pour les
-   * fiches non-claimed — afficher cet email en clair sur 970K fiches publiques
-   * viole CLAUDE.md ("NEVER display artisan phone numbers from DB on public
-   * pages") + RGPD art. 5(1)(c) minimisation. Email visible UNIQUEMENT si
-   * l'artisan a explicitement claim sa fiche (consentement implicite via
-   * onboarding) ou si la donnée est entrée à la main par l'artisan claim.
-   */
+  /** Conservé pour compat appelant — l'email n'est plus rendu du tout
+   *  (décision 2026-06-07), le gate isClaimed n'a plus d'usage interne. */
   isClaimed: boolean
 }
 
@@ -161,20 +153,14 @@ function formatTeamSize(size: number): string {
   return `${size} salariés`
 }
 
-export function ArtisanBusinessCard({ artisan, isClaimed }: ArtisanBusinessCardProps) {
+export function ArtisanBusinessCard({ artisan, isClaimed: _isClaimed }: ArtisanBusinessCardProps) {
   const hasSiret = !!artisan.siret
   const hasEmployees = artisan.team_size != null && artisan.team_size >= 0
-  // Email exposé UNIQUEMENT si fiche claimed (RGPD art. 5(1)(c) minimisation +
-  // CLAUDE.md). Pour les 970K fiches non-claimed, l'email INSEE n'est jamais
-  // rendu en HTML public.
-  const showEmail = isClaimed && !!artisan.email
+  // Email JAMAIS rendu sur la fiche publique (décision 2026-06-07 : tous les
+  // contacts passent par le formulaire devis + tel conseiller — anti-scraping
+  // + RGPD art. 5(1)(c) minimisation).
   const hasAnyData =
-    hasSiret ||
-    !!artisan.legal_form ||
-    !!artisan.creation_date ||
-    showEmail ||
-    !!artisan.website ||
-    hasEmployees
+    hasSiret || !!artisan.legal_form || !!artisan.creation_date || !!artisan.website || hasEmployees
 
   if (!hasAnyData) return null
 
@@ -300,20 +286,9 @@ export function ArtisanBusinessCard({ artisan, isClaimed }: ArtisanBusinessCardP
         </dl>
 
         {/* Secondary links */}
-        {(showEmail || artisan.website) && (
+        {artisan.website && (
           <div className="mt-5 pt-5 border-t border-sand-200">
             <div className="flex flex-wrap gap-3">
-              {showEmail && (
-                <a
-                  href={`mailto:${artisan.email}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-sand-300 text-sm font-medium text-charcoal-700 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2"
-                  aria-label={`Envoyer un email à ${artisan.email}`}
-                >
-                  <Briefcase className="w-4 h-4 text-charcoal-400" aria-hidden="true" />
-                  <span className="truncate max-w-[200px]">{artisan.email}</span>
-                </a>
-              )}
-
               {artisan.website && (
                 <a
                   href={

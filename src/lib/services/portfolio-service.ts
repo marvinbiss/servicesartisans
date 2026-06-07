@@ -5,6 +5,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
+import { slugify } from '@/lib/utils'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // ---------------------------------------------------------------------------
@@ -79,12 +80,13 @@ async function revalidateArtisanPages(supabase: SupabaseClient, userId: string):
       .single()
 
     if (provider) {
-      const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
-      const serviceSlug = toSlug(provider.specialty || '')
-      const locationSlug = toSlug(provider.address_city || '')
-      if (serviceSlug && locationSlug && provider.stable_id) {
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
+      // 2026-06-07 : slugify accent-safe + slug || stable_id (cf. provider/route.ts)
+      const serviceSlug = slugify(provider.specialty || '')
+      const locationSlug = slugify(provider.address_city || '')
+      const publicId = provider.slug || provider.stable_id
+      if (serviceSlug && locationSlug && publicId) {
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
       }
     }
   } catch (revalidateError) {

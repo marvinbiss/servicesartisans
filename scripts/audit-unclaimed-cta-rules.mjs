@@ -131,10 +131,11 @@ const checks = [
   },
   {
     id: 'schema_email_gated',
-    label: 'ArtisanSchema gate email par `isClaimed && artisan.email` (inchangé)',
+    label:
+      'ArtisanSchema : email absent du JSON-LD (décision 2026-06-07) ou gated `isClaimed && artisan.email`',
     ok:
-      /isClaimed\s*&&\s*artisan\.email/.test(schemaSrc) ||
-      /isClaimed[^|]+&&[^|]+email/.test(schemaSrc),
+      !/email:\s*artisan\.email/.test(schemaSrc) ||
+      /isClaimed\s*&&\s*artisan\.email\s*&&\s*\{\s*email/.test(schemaSrc),
   },
   {
     id: 'rge_ademe_card_present',

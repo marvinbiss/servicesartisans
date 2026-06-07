@@ -69,20 +69,22 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         Zone d'intervention
       </h2>
 
-      {/* Leaflet map when GPS coordinates are available */}
+      {/* Leaflet map — coords exactes (zoom 14) ou centroïde commune (zoom 12,
+          fallback 2026-06-07 qui remplace l'ancien lien « Voir sur Google
+          Maps » : la carte s'affiche désormais comme sur les autres fiches) */}
       {hasCoordinates ? (
         <div className="rounded-xl overflow-hidden mb-4">
           <GeographicMap
             centerLat={artisan.latitude ?? 0}
             centerLng={artisan.longitude ?? 0}
-            zoom={14}
+            zoom={artisan.coords_are_city_level ? 12 : 14}
             providers={mapProvider}
             locationName={artisan.city}
             height="280px"
           />
         </div>
       ) : hasCity ? (
-        /* No GPS coordinates — show a styled Google Maps link */
+        /* Aucune coordonnée (même pas la commune) — lien Google Maps discret */
         <a
           href={mapsLink}
           target="_blank"

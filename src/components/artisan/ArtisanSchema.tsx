@@ -130,10 +130,9 @@ export function ArtisanSchema({
       artisan.phone.replace(/\D/g, '').length >= 10 && {
         telephone: artisan.phone,
       }),
-    // Email reste strictement gated `isClaimed` — pas exposé par l'ADEME
-    // public, donc même les fiches RGE actives non revendiquées ne doivent
-    // pas afficher d'email côté JSON-LD.
-    ...(isClaimed && artisan.email && { email: artisan.email }),
+    // Email JAMAIS émis (décision 2026-06-07) — même claimed. Le JSON-LD est
+    // crawlable par les scrapers ; tous les contacts passent par le formulaire
+    // devis + tel conseiller. (Ancien gate : isClaimed && artisan.email.)
     url: artisanUrl,
     parentOrganization: {
       '@type': 'Organization',

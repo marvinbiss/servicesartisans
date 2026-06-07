@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Mail, FileText, ShieldCheck, Phone } from 'lucide-react'
+import { FileText, ShieldCheck, Phone } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
@@ -27,17 +27,6 @@ interface ArtisanSidebarProps {
 }
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
-  const handleEmail = () => {
-    if (artisan.email) {
-      trackEvent('artisan_email_click', {
-        artisanId: artisan.id,
-        artisanName: artisan.business_name || '',
-        source: 'sidebar',
-      })
-      window.location.href = `mailto:${artisan.email}`
-    }
-  }
-
   return (
     <div
       className="animate-fade-in-right bg-white rounded-2xl shadow-card-hover border border-sand-200 overflow-hidden"
@@ -77,17 +66,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             <FileText className="w-5 h-5" aria-hidden="true" />
             Demander un devis
           </button>
-
-          {artisan.email && (
-            <button
-              onClick={handleEmail}
-              className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
-              aria-label={`Envoyer un email à ${artisan.email}`}
-            >
-              <Mail className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
-              Envoyer un email
-            </button>
-          )}
 
           {/* Platform phone — always available */}
           <a

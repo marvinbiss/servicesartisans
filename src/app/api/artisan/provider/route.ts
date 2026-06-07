@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
 import { sanitizeUserInput } from '@/lib/sanitize'
+import { slugify } from '@/lib/utils'
 import { assertArtisanTwoFactor } from '@/lib/auth/artisan-guard'
 import {
   getProviderFull,
@@ -169,14 +170,17 @@ export async function PUT(request: Request) {
       )
     }
 
-    // Revalidate public artisan page (ISR cache bust)
+    // Revalidate public artisan page (ISR cache bust).
+    // 2026-06-07 : slugify() de @/lib/utils (l'ancien toSlug naïf cassait les
+    // accents — « Électricien »/« Saint-Étienne » → path jamais revalidé) +
+    // publicId = slug || stable_id (les fiches claimed sont servies par slug).
     try {
-      const toSlug = (s: string) => s.toLowerCase().replace(/\s+/g, '-')
-      const serviceSlug = toSlug(provider.specialty || '')
-      const locationSlug = toSlug(provider.address_city || '')
-      if (serviceSlug && locationSlug && provider.stable_id) {
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${provider.stable_id}`)
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`)
+      const serviceSlug = slugify(provider.specialty || '')
+      const locationSlug = slugify(provider.address_city || '')
+      const publicId = provider.slug || provider.stable_id
+      if (serviceSlug && locationSlug && publicId) {
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
+        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
       }
     } catch (revalidateError) {
       logger.error('Revalidation error after provider update:', revalidateError)
