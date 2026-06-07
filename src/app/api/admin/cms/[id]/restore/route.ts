@@ -7,8 +7,8 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { invalidateCache } from '@/lib/cache'
 import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { z } from 'zod'
-// DOMPurify lazy-imported inside POST to avoid JSDOM crash in serverless cold start
 import { UUID_RE } from '@/lib/cms-utils'
+import { sanitizeRichHtml } from '@/lib/sanitize-html-content'
 
 export const dynamic = 'force-dynamic'
 
@@ -114,8 +114,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     // Update the page with the version's content (sanitize HTML)
     let sanitizedHtml = version.content_html
     if (version.content_html) {
-      const { default: DOMPurify } = await import('isomorphic-dompurify')
-      sanitizedHtml = DOMPurify.sanitize(version.content_html)
+      sanitizedHtml = sanitizeRichHtml(version.content_html)
     }
     // SLA-99.9 : Promise.race timeout 5s sur l'update.
     const { data: page, error: updateError } = await withSupabaseTimeout(

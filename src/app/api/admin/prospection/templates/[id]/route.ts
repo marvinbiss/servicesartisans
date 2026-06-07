@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
-// DOMPurify lazy-imported inside PATCH to avoid JSDOM crash in serverless cold start
+import { sanitizeRichHtml } from '@/lib/sanitize-html-content'
 import { z } from 'zod'
 import {
   getTemplateById,
@@ -92,8 +92,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (sanitizedData.subject)
       sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
     if (sanitizedData.html_body) {
-      const { default: DOMPurify } = await import('isomorphic-dompurify')
-      sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+      sanitizedData.html_body = sanitizeRichHtml(sanitizedData.html_body)
     }
 
     const supabase = createAdminClient()

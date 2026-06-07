@@ -7,6 +7,7 @@ import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { invalidateCache } from '@/lib/cache'
 import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { UUID_RE, updatePageSchema, sanitizeTextFields } from '@/lib/cms-utils'
+import { sanitizeRichHtml } from '@/lib/sanitize-html-content'
 
 export const dynamic = 'force-dynamic'
 
@@ -136,10 +137,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const validated = parsed.data
 
-    // Sanitize HTML content (lazy-import to avoid JSDOM crash in serverless cold start)
+    // Sanitize HTML content (sanitize-html: pure JS, no jsdom crash risk)
     if (validated.content_html) {
-      const { default: DOMPurify } = await import('isomorphic-dompurify')
-      validated.content_html = DOMPurify.sanitize(validated.content_html)
+      validated.content_html = sanitizeRichHtml(validated.content_html)
     }
 
     // Strip HTML from text-only fields

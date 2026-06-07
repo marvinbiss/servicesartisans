@@ -6,6 +6,7 @@ import { captureError } from '@/lib/monitoring/sentry'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { z } from 'zod'
 import { pageSchema, pageSizeSchema } from '@/lib/validations/schemas'
+import { sanitizeRichHtml } from '@/lib/sanitize-html-content'
 
 export const dynamic = 'force-dynamic'
 
@@ -182,11 +183,8 @@ export async function POST(request: Request) {
     const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error
 
-    // Lazy imports — only needed for POST, avoids crashing GET if deps are missing
-    const [{ default: DOMPurify }, { createPageSchema, sanitizeTextFields }] = await Promise.all([
-      import('isomorphic-dompurify'),
-      import('@/lib/cms-utils'),
-    ])
+    // Lazy import of cms-utils — only needed for POST.
+    const { createPageSchema, sanitizeTextFields } = await import('@/lib/cms-utils')
 
     let body: unknown
     try {
@@ -213,7 +211,7 @@ export async function POST(request: Request) {
 
     // Sanitize HTML content
     if (validated.content_html) {
-      validated.content_html = DOMPurify.sanitize(validated.content_html)
+      validated.content_html = sanitizeRichHtml(validated.content_html)
     }
 
     // Strip HTML from text-only fields

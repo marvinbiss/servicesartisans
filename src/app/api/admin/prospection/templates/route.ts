@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
-// DOMPurify lazy-imported inside POST to avoid JSDOM crash in serverless cold start
 import { z } from 'zod'
 import { listTemplates, createTemplate } from '@/lib/services/prospection-service'
+import { sanitizeRichHtml } from '@/lib/sanitize-html-content'
 
 const createSchema = z.object({
   name: z.string().min(1).max(200),
@@ -92,8 +92,7 @@ export async function POST(request: NextRequest) {
       sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
     // Sanitize HTML body (allow safe HTML tags only)
     if (sanitizedData.html_body) {
-      const { default: DOMPurify } = await import('isomorphic-dompurify')
-      sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+      sanitizedData.html_body = sanitizeRichHtml(sanitizedData.html_body)
     }
 
     const { data, error } = await createTemplate(supabase, sanitizedData, authResult.admin.id)
