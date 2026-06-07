@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-05-21",
-  "routes_count": 342,
+  "routes_count": 344,
   "routes": [
     "/connexion",
     "/embed/rge",
@@ -25,6 +25,8 @@
     "/espace-artisan/cee/[dossierId]",
     "/espace-artisan/dashboard",
     "/espace-artisan/demandes",
+    "/espace-artisan/demandes/[id]",
+    "/espace-artisan/demandes/[id]/historique",
     "/espace-artisan/demandes-recues",
     "/espace-artisan/equipe",
     "/espace-artisan/leads",

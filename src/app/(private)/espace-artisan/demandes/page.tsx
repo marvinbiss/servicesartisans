@@ -5,7 +5,7 @@
  * Fusionne /leads + /demandes-recues (même table lead_assignments, même
  * endpoint /api/artisan/leads — les deux pages étaient un doublon).
  * Le workflow d'action (consulter, envoyer devis, décliner) vit sur la page
- * de détail /espace-artisan/leads/[id]. Les métriques vivent sur l'index.
+ * de détail /espace-artisan/demandes/[id]. Les métriques vivent sur l'index.
  */
 
 import { useState, useEffect, useCallback } from 'react'
@@ -311,7 +311,7 @@ export default function MesDemandesPage() {
               return (
                 <Link
                   key={assignment.id}
-                  href={`/espace-artisan/leads/${assignment.id}`}
+                  href={`/espace-artisan/demandes/${assignment.id}`}
                   className={`block bg-white rounded-xl border transition-all hover:shadow-md group ${
                     isNew ? 'border-primary-200 ring-1 ring-primary-100' : 'border-sand-200'
                   }`}

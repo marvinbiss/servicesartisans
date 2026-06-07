@@ -481,6 +481,16 @@ test.describe('Flow 2 — Page « Mes demandes »', () => {
     await expect(page).toHaveURL(/\/espace-artisan\/demandes$/)
   })
 
+  test('/espace-artisan/leads/[id] redirige vers /espace-artisan/demandes/[id]', async ({
+    page,
+  }) => {
+    // Cohérence IA 2026-06-07 : le détail vit sous le namespace de la liste
+    await page.goto('/espace-artisan/leads/00000000-0000-4000-8000-000000000001')
+    await expect(page).toHaveURL(
+      /\/espace-artisan\/demandes\/00000000-0000-4000-8000-000000000001$/
+    )
+  })
+
   test("la liste des demandes s'affiche", async ({ page }) => {
     await page.goto('/espace-artisan/demandes')
 

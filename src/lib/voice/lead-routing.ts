@@ -199,7 +199,7 @@ export async function createVoiceLead(
       `Nouveau lead ServicesArtisans !\n` +
       `${serviceName}${location}\n` +
       `Client : ${callerName}\n` +
-      `Connectez-vous pour répondre : servicesartisans.fr/espace-artisan/leads`
+      `Connectez-vous pour répondre : servicesartisans.fr/espace-artisan/demandes`
 
     const smsResult = await sendSMS(artisan.phone, smsMessage)
 

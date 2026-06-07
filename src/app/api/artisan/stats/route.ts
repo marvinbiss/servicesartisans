@@ -212,15 +212,15 @@ export async function GET(request: Request) {
             .lt('assigned_at', currentStart)
         : Promise.resolve({ count: 0 }),
 
-      // Recent 5 lead_assignments for the dashboard list
+      // Recent 5 lead_assignments for the dashboard list (id = lien détail)
       providerId
         ? supabase
             .from('lead_assignments')
-            .select('lead_id')
+            .select('id, lead_id')
             .eq('provider_id', providerId)
             .order('assigned_at', { ascending: false })
             .limit(5)
-        : Promise.resolve({ data: [] as { lead_id: string }[] }),
+        : Promise.resolve({ data: [] as { id: string; lead_id: string }[] }),
 
       // Reviews (positive = rating >= 4) for clientsSatisfaits
       supabase
@@ -291,9 +291,12 @@ export async function GET(request: Request) {
     // Wave 2 — Dependent queries (need results from wave 1)
     // -----------------------------------------------------------------------
     const convIds = (conversationsResult.data ?? []).map((c) => c.id)
-    const recentLeadIds = (recentAssignmentsResult.data ?? []).map(
-      (a: { lead_id: string }) => a.lead_id
-    )
+    const recentAssignments = (recentAssignmentsResult.data ?? []) as {
+      id: string
+      lead_id: string
+    }[]
+    const recentLeadIds = recentAssignments.map((a) => a.lead_id)
+    const assignmentIdByLeadId = new Map(recentAssignments.map((a) => [a.lead_id, a.id]))
 
     const [unreadResult, recentDemandesResult] = await Promise.all([
       // Unread client messages in provider conversations
@@ -425,7 +428,11 @@ export async function GET(request: Request) {
         stats,
         profile,
         provider: providerForUnread || null,
-        recentDemandes: recentDemandesResult.data || [],
+        // assignment_id = lien direct vers /espace-artisan/demandes/[id]
+        recentDemandes: (recentDemandesResult.data || []).map((d: { id: string }) => ({
+          ...d,
+          assignment_id: assignmentIdByLeadId.get(d.id) ?? null,
+        })),
       },
       {
         headers: {
@@ -536,15 +543,15 @@ async function getLegacyStats(
           .lt('assigned_at', currentStart)
       : Promise.resolve({ count: 0 }),
 
-    // Recent 5 assignments
+    // Recent 5 assignments (id = lien détail)
     providerId
       ? supabase
           .from('lead_assignments')
-          .select('lead_id')
+          .select('id, lead_id')
           .eq('provider_id', providerId)
           .order('assigned_at', { ascending: false })
           .limit(5)
-      : Promise.resolve({ data: [] as { lead_id: string }[] }),
+      : Promise.resolve({ data: [] as { id: string; lead_id: string }[] }),
 
     // All reviews (for average rating)
     supabase.from('reviews').select('id, rating').eq('provider_id', providerId),
@@ -612,9 +619,12 @@ async function getLegacyStats(
   // Wave 2 — Dependent queries
   // -----------------------------------------------------------------------
   const convIds = (conversationsResult.data ?? []).map((c) => c.id)
-  const recentLeadIds = (recentAssignmentsResult.data ?? []).map(
-    (a: { lead_id: string }) => a.lead_id
-  )
+  const recentAssignments = (recentAssignmentsResult.data ?? []) as {
+    id: string
+    lead_id: string
+  }[]
+  const recentLeadIds = recentAssignments.map((a) => a.lead_id)
+  const assignmentIdByLeadId = new Map(recentAssignments.map((a) => [a.lead_id, a.id]))
 
   const [unreadResult, recentDemandesResult] = await Promise.all([
     supabase
@@ -727,7 +737,11 @@ async function getLegacyStats(
       stats,
       profile,
       provider: legacyProvider || null,
-      recentDemandes: recentDemandesResult.data || [],
+      // assignment_id = lien direct vers /espace-artisan/demandes/[id]
+      recentDemandes: (recentDemandesResult.data || []).map((d: { id: string }) => ({
+        ...d,
+        assignment_id: assignmentIdByLeadId.get(d.id) ?? null,
+      })),
     },
     {
       headers: {

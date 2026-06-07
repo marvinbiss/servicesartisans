@@ -123,9 +123,9 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
 
 describe('Dashboard V2 — No Public Imports', () => {
   const dashboardFiles = [
-    'src/app/(private)/espace-artisan/leads/page.tsx',
-    'src/app/(private)/espace-artisan/leads/[id]/page.tsx',
-    'src/app/(private)/espace-artisan/leads/[id]/historique/page.tsx',
+    'src/app/(private)/espace-artisan/demandes/page.tsx',
+    'src/app/(private)/espace-artisan/demandes/[id]/page.tsx',
+    'src/app/(private)/espace-artisan/demandes/[id]/historique/page.tsx',
     'src/app/(private)/espace-artisan/parametres/page.tsx',
     'src/app/admin/(dashboard)/leads/page.tsx',
     'src/app/admin/(dashboard)/dispatch/page.tsx',

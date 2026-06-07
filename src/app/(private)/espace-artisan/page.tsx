@@ -44,6 +44,8 @@ interface StatsData {
 
 interface Demande {
   id: string
+  /** lead_assignments.id — lien direct vers /espace-artisan/demandes/[id] */
+  assignment_id: string | null
   client_name: string
   service_name: string
   city: string | null
@@ -418,7 +420,11 @@ export default function AujourdhuiPage() {
                       transition={{ delay: 0.15 + index * 0.04 }}
                     >
                       <Link
-                        href={`/espace-artisan/demandes?id=${demande.id}`}
+                        href={
+                          demande.assignment_id
+                            ? `/espace-artisan/demandes/${demande.assignment_id}`
+                            : '/espace-artisan/demandes'
+                        }
                         className="block border border-sand-300 rounded-lg p-4 hover:shadow-md hover:border-primary-200 focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 transition-all"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">

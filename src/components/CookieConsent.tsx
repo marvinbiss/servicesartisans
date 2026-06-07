@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useId, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface CookiePreferences {
@@ -48,7 +49,16 @@ function enableClarity() {
   }
 }
 
+// Espaces connectés : la bannière ne s'affiche pas (UX dashboard). Tant que
+// le consentement n'est pas donné, analytics/marketing restent OFF (RGPD,
+// défauts à false) — la bannière réapparaît sur les pages publiques.
+const PRIVATE_PREFIXES = ['/espace-artisan', '/espace-client', '/admin']
+
 export default function CookieConsent() {
+  const pathname = usePathname()
+  const isPrivateSpace = PRIVATE_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`)
+  )
   const [isVisible, setIsVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -176,7 +186,7 @@ export default function CookieConsent() {
     }
   }
 
-  if (!isVisible) return null
+  if (isPrivateSpace || !isVisible) return null
 
   return (
     <AnimatePresence>
