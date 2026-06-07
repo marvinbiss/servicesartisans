@@ -9,7 +9,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
-import { sanitizeUserInput } from '@/lib/sanitize'
+import { sanitizeUserInput, stripHtmlTags } from '@/lib/sanitize'
 import { slugify } from '@/lib/utils'
 import { assertArtisanTwoFactor } from '@/lib/auth/artisan-guard'
 import {
@@ -18,7 +18,6 @@ import {
   updateProviderById,
   syncProviderToProfile,
 } from '@/lib/services/artisan-profile-service'
-// DOMPurify lazy-imported inside PUT to avoid JSDOM crash in serverless cold start
 
 export const dynamic = 'force-dynamic'
 
@@ -126,7 +125,7 @@ export async function PUT(request: Request) {
 
     const validated = result.data
 
-    // Sanitize text fields (XSS prevention + DOMPurify for rich text)
+    // Sanitize text fields (XSS prevention + plain-text strip for description)
     const updateData: Record<string, unknown> = {}
     const freeTextFields = new Set(['description', 'bio', 'artisan_quote'])
 
@@ -134,14 +133,11 @@ export async function PUT(request: Request) {
       if (value === undefined) continue
 
       if (key === 'description') {
-        // Sanitize user input first, then strip all HTML tags via DOMPurify
-        if (typeof value === 'string') {
-          const sanitized = sanitizeUserInput(value)
-          const { default: DOMPurify } = await import('isomorphic-dompurify')
-          updateData[key] = DOMPurify.sanitize(sanitized, { ALLOWED_TAGS: [] })
-        } else {
-          updateData[key] = value
-        }
+        // Sanitize user input first, then strip all remaining HTML tags.
+        // stripHtmlTags is pure JS (no jsdom) — DOMPurify crashed on serverless
+        // cold start, which 500'd every "Activité & présentation" save (2026-06-07).
+        updateData[key] =
+          typeof value === 'string' ? stripHtmlTags(sanitizeUserInput(value)) : value
       } else if (freeTextFields.has(key)) {
         // Sanitize free-text fields against XSS
         updateData[key] = typeof value === 'string' ? sanitizeUserInput(value) : value

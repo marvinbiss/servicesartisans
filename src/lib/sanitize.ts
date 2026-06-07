@@ -79,6 +79,32 @@ export function sanitizeUserInput(input: string): string {
 }
 
 /**
+ * Strip ALL HTML tags from a string, leaving plain text only.
+ * Equivalent to DOMPurify.sanitize(value, { ALLOWED_TAGS: [] }) but pure JS —
+ * no jsdom, so it never crashes on a serverless cold start.
+ * Run sanitizeUserInput() first (it removes <script> blocks + js:/on-handlers),
+ * then strip the remaining markup.
+ */
+export function stripHtmlTags(input: string): string {
+  if (!input || typeof input !== 'string') {
+    return ''
+  }
+
+  // Remove any tag-like construct repeatedly (handles nested/malformed `<a<b>>`).
+  let stripped = input
+  let prev
+  do {
+    prev = stripped
+    stripped = stripped.replace(/<[^>]*>/g, '')
+  } while (stripped !== prev)
+
+  // Drop any dangling angle brackets left after tag removal.
+  stripped = stripped.replace(/[<>]/g, '')
+
+  return stripped.trim()
+}
+
+/**
  * Validate and sanitize email
  */
 export function sanitizeEmail(input: string): string {
