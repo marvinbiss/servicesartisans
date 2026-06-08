@@ -58,122 +58,93 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const gridPhotos = photos.slice(0, 5)
   const remainingCount = photos.length - 5
 
+  // Cellule réutilisable : la grille s'adapte au nombre de photos pour éviter
+  // les cases vides (1 photo remplissait une demi-grille Airbnb → moitié vide).
+  const renderCell = (
+    photo: (typeof gridPhotos)[number],
+    index: number,
+    opts: { className?: string; overlay?: React.ReactNode } = {}
+  ) => (
+    <div
+      key={photo.id}
+      className={`relative overflow-hidden ${opts.className ?? ''}`}
+      role="button"
+      tabIndex={0}
+      onClick={() => openLightbox(index)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          openLightbox(index)
+        }
+      }}
+    >
+      <Image
+        src={photo.imageUrl}
+        alt={
+          index === 0
+            ? `${displayName} - ${artisan.specialty} à ${artisan.city}`
+            : `Réalisation de ${displayName}${photo.title ? ` - ${photo.title}` : ''}`
+        }
+        fill
+        decoding="async"
+        className="object-cover transition-transform duration-300 hover:scale-105"
+        placeholder="blur"
+        blurDataURL={BLUR_DATA_URL}
+        sizes="(max-width: 768px) 50vw, 33vw"
+        {...(index === 0 ? { priority: true } : { loading: 'lazy' as const })}
+      />
+      <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
+      {opts.overlay}
+    </div>
+  )
+
+  // Classes statiques (Tailwind ne purge pas les littéraux).
+  const equalCols: Record<number, string> = {
+    2: 'grid-cols-2',
+    3: 'grid-cols-3',
+    4: 'grid-cols-4',
+  }
+
   return (
     <>
-      {/* Airbnb-style Photo Grid */}
       <div className="animate-fade-in-up relative rounded-2xl overflow-hidden cursor-pointer group">
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-56 md:h-72 lg:h-80">
-          {/* Main hero image (left half) */}
-          <div
-            className="col-span-2 row-span-2 relative overflow-hidden"
-            onClick={() => openLightbox(0)}
-          >
-            <Image
-              src={gridPhotos[0]?.imageUrl}
-              alt={`${displayName} - ${artisan.specialty} à ${artisan.city}`}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              placeholder="blur"
-              blurDataURL={BLUR_DATA_URL}
-              sizes="(max-width: 768px) 50vw, 33vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+        {photos.length === 1 ? (
+          // 1 photo : image unique, largeur colonne, hauteur contenue.
+          renderCell(gridPhotos[0], 0, { className: 'h-64 md:h-80' })
+        ) : photos.length >= 5 ? (
+          // ≥5 : mosaïque Airbnb (héros + 4).
+          <div className="grid grid-cols-4 grid-rows-2 gap-2 h-56 md:h-72 lg:h-80">
+            {renderCell(gridPhotos[0], 0, { className: 'col-span-2 row-span-2' })}
+            {renderCell(gridPhotos[1], 1)}
+            {renderCell(gridPhotos[2], 2)}
+            {renderCell(gridPhotos[3], 3)}
+            {renderCell(gridPhotos[4], 4, {
+              overlay:
+                remainingCount > 0 ? (
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <span className="text-white font-semibold text-lg">+{remainingCount}</span>
+                  </div>
+                ) : null,
+            })}
           </div>
+        ) : (
+          // 2 à 4 : colonnes égales sur une rangée, aucune case vide.
+          <div className={`grid ${equalCols[gridPhotos.length]} gap-2 h-56 md:h-72 lg:h-80`}>
+            {gridPhotos.map((photo, i) => renderCell(photo, i))}
+          </div>
+        )}
 
-          {/* Top right images */}
-          {gridPhotos[1] && (
-            <div className="relative overflow-hidden" onClick={() => openLightbox(1)}>
-              <Image
-                src={gridPhotos[1].imageUrl}
-                alt={`Réalisation de ${displayName}${gridPhotos[1].title ? ` - ${gridPhotos[1].title}` : ''}`}
-                fill
-                loading="lazy"
-                decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-110"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 17vw"
-              />
-              <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
-            </div>
-          )}
-
-          {gridPhotos[2] && (
-            <div
-              className="relative overflow-hidden rounded-tr-2xl"
-              onClick={() => openLightbox(2)}
-            >
-              <Image
-                src={gridPhotos[2].imageUrl}
-                alt={`Réalisation de ${displayName}${gridPhotos[2].title ? ` - ${gridPhotos[2].title}` : ''}`}
-                fill
-                loading="lazy"
-                decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-110"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 17vw"
-              />
-              <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
-            </div>
-          )}
-
-          {/* Bottom right images */}
-          {gridPhotos[3] && (
-            <div className="relative overflow-hidden" onClick={() => openLightbox(3)}>
-              <Image
-                src={gridPhotos[3].imageUrl}
-                alt={`Réalisation de ${displayName}${gridPhotos[3].title ? ` - ${gridPhotos[3].title}` : ''}`}
-                fill
-                loading="lazy"
-                decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-110"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 17vw"
-              />
-              <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
-            </div>
-          )}
-
-          {gridPhotos[4] && (
-            <div
-              className="relative overflow-hidden rounded-br-2xl"
-              onClick={() => openLightbox(4)}
-            >
-              <Image
-                src={gridPhotos[4].imageUrl}
-                alt={`Réalisation de ${displayName}${gridPhotos[4].title ? ` - ${gridPhotos[4].title}` : ''}`}
-                fill
-                loading="lazy"
-                decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-110"
-                placeholder="blur"
-                blurDataURL={BLUR_DATA_URL}
-                sizes="(max-width: 768px) 25vw, 17vw"
-              />
-              <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors" />
-
-              {/* Show more overlay */}
-              {remainingCount > 0 && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <span className="text-white font-semibold text-lg">+{remainingCount}</span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Show all photos button */}
-        <button
-          onClick={() => openLightbox(0)}
-          className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-charcoal-900 shadow-lg flex items-center gap-2 hover:bg-sand-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 active:scale-[0.98]"
-          aria-label={`Voir les ${photos.length} photos en plein ecran`}
-        >
-          <Grid3X3 className="w-4 h-4" aria-hidden="true" />
-          Voir les {photos.length} photos
-        </button>
+        {/* Bouton plein écran — masqué quand une seule photo (ouverte au clic). */}
+        {photos.length > 1 && (
+          <button
+            onClick={() => openLightbox(0)}
+            className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-charcoal-900 shadow-lg flex items-center gap-2 hover:bg-sand-50 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 active:scale-[0.98]"
+            aria-label={`Voir les ${photos.length} photos en plein ecran`}
+          >
+            <Grid3X3 className="w-4 h-4" aria-hidden="true" />
+            Voir les {photos.length} photos
+          </button>
+        )}
       </div>
 
       {/* Lightbox Modal */}
