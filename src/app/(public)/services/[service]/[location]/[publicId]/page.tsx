@@ -26,6 +26,7 @@ import type { Service, Location } from '@/types'
 import { getServiceImageForContext } from '@/lib/data/images'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import { cleanAdemeText } from '@/lib/descriptions/retrieval'
+import { stripValidityDate, appendLiveValidity } from '@/lib/descriptions/strip-validity-date'
 import { getCeeOpsForRgeService } from '@/lib/rge/service-guides-map'
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { logger } from '@/lib/logger'
@@ -178,10 +179,13 @@ function convertToArtisan(
   //      (pas de texte boilerplate hallucinant à la Helpful Content Update).
   //      Les ~3 700 judged_fail en attente de Sonnet regen tombent ici.
   //   3. Fallback générique (derniers cas : non-RGE sans description).
-  const existingDesc = provider.description || provider.bio
+  // Retire toute date de validité RGE FIGÉE de la prose stockée, puis ré-injecte
+  // la date LIVE (`rge_valid_until`, resync hebdo ADEME) → la prose porte toujours
+  // la vraie date, jamais une date périmée. Cf. strip-validity-date.
+  const existingDesc = stripValidityDate(provider.description || provider.bio)
   const hasRgeQualifs =
     Array.isArray(provider.rge_qualifications) && provider.rge_qualifications.length > 0
-  const description =
+  const baseDescription =
     existingDesc && existingDesc.length > 50
       ? existingDesc
       : hasRgeQualifs
@@ -195,6 +199,9 @@ function convertToArtisan(
             provider.rge_valid_until ?? null
           )
         : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
+  const description = hasRgeQualifs
+    ? appendLiveValidity(baseDescription, provider.rge_valid_until ?? null)
+    : baseDescription
 
   // Only show member_since if it's a meaningful past year.
   // Providers imported in the current year (e.g. 2026 bulk import) would show
@@ -818,7 +825,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rating = provider.rating_average ? Number(provider.rating_average) : 0
     const reviewCount = provider.review_count || 0
 
-    const enriched = provider.description?.replace(/\s+/g, ' ').trim() || ''
+    const enriched = stripValidityDate(provider.description).replace(/\s+/g, ' ').trim()
     let description: string
     if (enriched.length >= 120) {
       // Coupe propre sur la frontière mot. Google SERP affiche ~155 chars desktop.

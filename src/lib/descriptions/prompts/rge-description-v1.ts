@@ -90,7 +90,6 @@ export const buildRgeDescriptionPrompt = (provider: ProviderContext): string => 
     address_region,
     specialty,
     rge_qualifications,
-    rge_valid_until,
     claimed_at,
     ademe_categories,
     ademe_meta_domains,
@@ -129,7 +128,7 @@ If a fact is missing, omit it. Never fill a gap with a plausible guess.
 
 1. Business identity: name, city, region.
 2. Specialty / craft focus (single clear sentence).
-3. RGE qualifications held, each named explicitly, with the validity end date (\`rge_valid_until\`).
+3. RGE qualifications held, each named explicitly. Do NOT state a specific validity end date or year in the prose — that date is volatile (renewed by ADEME) and is displayed live elsewhere on the page; a frozen date in the text would go stale.
 4. ADEME recognised categories and meta-domains when they add specificity.
 5. When the "Registre officiel INSEE" block is available, fold at least one objective signal from it into the narrative (e.g. official creation year, salaried headcount band, multi-establishment presence). This is the Experience / Authoritativeness pillar of E-E-A-T and must stay strictly factual — no superlatives, no "plus de X ans d'expérience" boilerplate, just the bare datum from the registry.
 6. One closing sentence, practical, stating the local intervention area and indicating that the reader can request a quote via ServicesArtisans (the directory). Do not give a phone number or email.
@@ -142,7 +141,6 @@ Region: ${address_region}
 Primary specialty: ${specialty}
 RGE qualifications (the ONLY certifications you may name):
 ${formatList(rge_qualifications)}
-RGE validity end date (to cite textually): ${rge_valid_until}
 ADEME categories:
 ${formatList(ademe_categories)}
 ADEME meta-domains:
