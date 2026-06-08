@@ -14,6 +14,7 @@ import {
   getProviderForAvatar,
   updateProviderAvatarUrl,
 } from '@/lib/services/artisan-profile-service'
+import { revalidateArtisanProfile } from '@/lib/revalidate-artisan'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -184,6 +185,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
     }
 
+    // Revalider la fiche publique (ISR cache bust)
+    await revalidateArtisanProfile(supabase, user.id)
+
     // Retourner l'URL publique
     return NextResponse.json({ url: publicUrl }, { status: 200 })
   } catch (error) {
@@ -243,6 +247,9 @@ export async function DELETE(): Promise<NextResponse> {
     if (updateError) {
       return NextResponse.json({ error: 'Échec de la mise à jour du profil' }, { status: 500 })
     }
+
+    // Revalider la fiche publique (ISR cache bust)
+    await revalidateArtisanProfile(supabase, user.id)
 
     // Retourner succès
     return NextResponse.json({ success: true }, { status: 200 })

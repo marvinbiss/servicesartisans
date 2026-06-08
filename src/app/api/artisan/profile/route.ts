@@ -5,10 +5,9 @@
  */
 
 import { NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
-import { slugify } from '@/lib/utils'
+import { revalidateArtisanProfile } from '@/lib/revalidate-artisan'
 import { z } from 'zod'
 import {
   getProfileById,
@@ -141,34 +140,11 @@ export async function PUT(request: Request) {
       provider = data
     }
 
-    // Revalidation on-demand des pages affectées (non-bloquant)
+    // Revalidation on-demand de la fiche publique (non-bloquant).
+    // Helper central : construit le chemin via getArtisanUrl (résolution INSEE)
+    // pour matcher l'URL réellement servie.
     if (provider) {
-      try {
-        const serviceSlug = slugify(provider.specialty || 'artisan')
-        const locationSlug = slugify(provider.address_city || 'france')
-        const publicId = provider.slug || provider.stable_id
-
-        // Page profil artisan
-        if (publicId) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-        }
-        // Listing ville
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-        // Listing service
-        revalidatePath(`/services/${serviceSlug}`, 'page')
-
-        logger.info('Revalidated paths after profile update', {
-          providerId: provider.id,
-          paths: [
-            `/services/${serviceSlug}/${locationSlug}/${publicId}`,
-            `/services/${serviceSlug}/${locationSlug}`,
-            `/services/${serviceSlug}`,
-          ],
-        })
-      } catch (revalError) {
-        // Ne pas bloquer la réponse si la revalidation échoue
-        logger.error('Revalidation failed after profile update:', revalError)
-      }
+      await revalidateArtisanProfile(supabase, user.id)
     }
 
     return NextResponse.json(
