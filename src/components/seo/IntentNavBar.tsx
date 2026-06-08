@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Search, FileText, Euro, AlertTriangle, Star } from 'lucide-react'
+import { Search, AlertTriangle, Star } from 'lucide-react'
 
 interface IntentNavBarProps {
   serviceSlug: string
@@ -19,18 +19,9 @@ const TABS = [
     icon: Search,
     href: (s: string, v: string) => `/services/${s}/${v}`,
   },
-  {
-    intent: 'devis' as const,
-    label: 'Devis gratuit',
-    icon: FileText,
-    href: (s: string, v: string) => `/services/${s}/${v}`,
-  },
-  {
-    intent: 'tarifs' as const,
-    label: 'Tarifs',
-    icon: Euro,
-    href: (s: string, v: string) => `/services/${s}/${v}`,
-  },
+  // Onglets 'devis' et 'tarifs' retirés : depuis le 301 des thin-pages
+  // /devis/[s]/[v] et /tarifs/[s]/[v] vers /services/[s]/[v], ils pointaient
+  // vers la MÊME URL que 'Artisans' (tabs morts + doublon CTA « Devis »).
   {
     intent: 'urgence' as const,
     label: 'Urgence',

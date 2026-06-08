@@ -202,11 +202,11 @@ export default function CookieConsent() {
           aria-labelledby={titleId}
           aria-modal="false"
         >
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100">
+                <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary-100">
                   <svg
                     className="h-5 w-5 text-primary-500"
                     fill="none"
@@ -226,18 +226,18 @@ export default function CookieConsent() {
                     ref={headingRef}
                     id={titleId}
                     tabIndex={-1}
-                    className="text-lg font-semibold text-charcoal-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg"
+                    className="text-base sm:text-lg font-semibold text-charcoal-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 rounded-lg"
                   >
                     Nous respectons votre vie privée
                   </h3>
-                  <p className="text-sm text-charcoal-500">Conformité RGPD</p>
+                  <p className="text-xs sm:text-sm text-charcoal-500">Conformité RGPD</p>
                 </div>
               </div>
             </div>
 
             {/* Main content */}
-            <div className="mt-4">
-              <p className="text-charcoal-600 text-sm">
+            <div className="mt-2 sm:mt-4">
+              <p className="text-charcoal-600 text-xs sm:text-sm line-clamp-3 sm:line-clamp-none">
                 Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic et
                 personnaliser le contenu. Vous pouvez choisir les cookies que vous acceptez.
               </p>
@@ -353,16 +353,16 @@ export default function CookieConsent() {
             </AnimatePresence>
 
             {/* Actions */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-4 sm:mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
               <button
                 onClick={acceptAll}
-                className="rounded-lg bg-primary-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-primary-600 transition-colors"
+                className="flex-1 sm:flex-none rounded-lg bg-primary-500 px-4 sm:px-6 py-2.5 text-sm font-medium text-white hover:bg-primary-600 transition-colors"
               >
                 Tout accepter
               </button>
               <button
                 onClick={acceptNecessaryOnly}
-                className="rounded-lg border border-sand-400 bg-white px-6 py-2.5 text-sm font-medium text-charcoal-700 hover:bg-sand-50 transition-colors"
+                className="flex-1 sm:flex-none rounded-lg border border-sand-400 bg-white px-4 sm:px-6 py-2.5 text-sm font-medium text-charcoal-700 hover:bg-sand-50 transition-colors"
               >
                 Refuser tout
               </button>

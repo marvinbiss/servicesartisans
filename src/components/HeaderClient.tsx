@@ -494,7 +494,7 @@ export default function HeaderClient({
                 onClick={() => trackEvent('header_devis_click', { source: 'header', pathname })}
                 className="ml-2 px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
-                Trouver un artisan
+                Devis gratuit
               </Link>
             </nav>
 

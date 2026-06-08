@@ -59,6 +59,24 @@ function StatItem({
   )
 }
 
+// Seuil d'avis sous lequel on masque la note agrégée : une note « parfaite »
+// sur 1-2 avis lit faux (E-E-A-T). Au-dessus, le signal est crédible.
+const MIN_REVIEWS_FOR_RATING = 5
+
+/** Réduit la phrase `averageResponseTime` à une valeur courte pour le slot
+ *  « chiffre » de la carte (sinon une phrase casse la grille). Le détail
+ *  complet reste exposé dans le corps de page (FAQ, bloc délais). */
+function shortResponseTime(full: string): string {
+  const firstSeg = full.split(';')[0].trim()
+  if (/variable/i.test(firstSeg)) return 'Variable'
+  const m = firstSeg.match(/sous\s+[^,;.]+/i)
+  if (m) {
+    const s = m[0].trim()
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }
+  return firstSeg.length > 18 ? `${firstSeg.slice(0, 16)}…` : firstSeg
+}
+
 // ---------------------------------------------------------------------------
 // Main component (Server Component — accepts data as props)
 // ---------------------------------------------------------------------------
@@ -79,7 +97,8 @@ export default function ImmediateAnswerBlock({
   const effectiveMax = maxPrice ?? trade?.priceRange.max
   const unit = trade?.priceRange.unit ?? '€/h'
   const hasPricing = effectiveMin != null && effectiveMax != null && effectiveMin > 0
-  const hasRating = averageRating != null && averageRating > 0
+  const hasRating =
+    averageRating != null && averageRating > 0 && (totalReviews ?? 0) >= MIN_REVIEWS_FOR_RATING
   const hasProviders = providerCount > 0
   const hasResponseTime = !!trade?.averageResponseTime
 
@@ -111,13 +130,11 @@ export default function ImmediateAnswerBlock({
   }
 
   if (hasResponseTime && trade?.averageResponseTime) {
-    // Extract short delay from averageResponseTime (first part before semicolon)
-    const shortDelay = trade.averageResponseTime.split(';')[0].trim()
     stats.push({
       key: 'delay',
       icon: <Clock className="w-4 h-4 text-secondary-600" />,
       label: variant === 'tarifs' ? 'Délai intervention' : 'Délai moyen',
-      value: shortDelay,
+      value: shortResponseTime(trade.averageResponseTime),
     })
   }
 

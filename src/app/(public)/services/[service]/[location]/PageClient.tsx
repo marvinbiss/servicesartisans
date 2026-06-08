@@ -86,7 +86,9 @@ export default function ServiceLocationPageClient({
   }, [initialProviders, totalCount, rgeOnly])
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
-  const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
+  // List-first : la liste d'artisans (le produit) doit dominer le fold, pas la
+  // carte. La vue « Les deux » / « Carte » reste à un clic via le toggle.
+  const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('list')
   const [_isMobile, setIsMobile] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [mapHoveredProviderId, setMapHoveredProviderId] = useState<string | null>(null)
