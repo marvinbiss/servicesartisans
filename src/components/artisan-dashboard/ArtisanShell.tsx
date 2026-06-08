@@ -178,6 +178,7 @@ export default function ArtisanShell({ userId, publicUrl, children }: ArtisanShe
         {publicUrl && (
           <Link
             href="/espace-artisan/voir-fiche"
+            prefetch={false}
             target="_blank"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg border-l-[3px] border-transparent text-charcoal-700 hover:bg-sand-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
           >

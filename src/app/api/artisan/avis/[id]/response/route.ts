@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
 import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { isValidUUID } from '@/lib/validation/uuid'
 import { z } from 'zod'
 import { sanitizeUserInput } from '@/lib/sanitize'
-import { slugify } from '@/lib/utils'
+import { revalidateArtisanProfile } from '@/lib/revalidate-artisan'
 import {
   getActiveProviderIdByUserId,
   getReviewByIdForProvider,
   updateReviewReply,
-  getProviderForRevalidation,
 } from '@/lib/services/artisan-profile-service'
 
 // POST request schema
@@ -91,23 +89,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     if (updateError) throw updateError
 
-    // Revalidate public artisan page (ISR cache bust)
-    try {
-      const { data: provider } = await getProviderForRevalidation(supabase, user.id)
-
-      if (provider) {
-        // 2026-06-07 : slugify accent-safe + slug || stable_id (cf. provider/route.ts)
-        const serviceSlug = slugify(provider.specialty || '')
-        const locationSlug = slugify(provider.address_city || '')
-        const publicId = provider.slug || provider.stable_id
-        if (serviceSlug && locationSlug && publicId) {
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-          revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-        }
-      }
-    } catch (revalidateError) {
-      logger.error('Revalidation error after review response:', revalidateError)
-    }
+    // Revalidate public artisan page (ISR cache bust) — helper central
+    // INSEE-aware, best-effort et non bloquant.
+    await revalidateArtisanProfile(supabase, user.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -369,20 +369,6 @@ export async function getProviderIdMaybeSingle(
   return { data, error }
 }
 
-/** Fetch provider for revalidation (slug, specialty, city) */
-export async function getProviderForRevalidation(
-  supabase: SupabaseClientType,
-  userId: string
-): Promise<{ data: ProviderRevalidationRow | null; error: unknown }> {
-  const { data, error } = await supabase
-    .from('providers')
-    .select('specialty, address_city, slug, stable_id')
-    .eq('user_id', userId)
-    .single()
-
-  return { data, error }
-}
-
 /** Fetch provider for the provider PUT route (id + revalidation fields) */
 export async function getProviderForUpdate(
   supabase: SupabaseClientType,
