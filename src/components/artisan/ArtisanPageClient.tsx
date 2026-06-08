@@ -314,13 +314,6 @@ export default function ArtisanPageClient({
             <ArtisanBreadcrumb artisan={artisan} />
           </nav>
 
-          {/* Photo Grid - Airbnb style (full width, only if portfolio exists) */}
-          {artisan.portfolio && artisan.portfolio.length > 0 && (
-            <section className="mb-8" aria-label="Galerie photos">
-              <ArtisanPhotoGrid artisan={artisan} />
-            </section>
-          )}
-
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content.
@@ -333,6 +326,14 @@ export default function ArtisanPageClient({
               <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} isClaimed={isClaimed} />
               </section>
+              {/* 1b. Réalisations — galerie sous l'identité (cohérence : la photo
+                  de profil vient d'abord). Largeur colonne (2/3) au lieu de
+                  full-width pour ne pas écraser la page sur desktop. */}
+              {artisan.portfolio && artisan.portfolio.length > 0 && (
+                <section aria-label="Galerie photos">
+                  <ArtisanPhotoGrid artisan={artisan} />
+                </section>
+              )}
               {/* 2. RGE enrichi — cross-links vers guides qualifications + CEE
                      débloquées. No-op pour les fiches non-RGE. */}
               <ArtisanRgeEnrichedSection

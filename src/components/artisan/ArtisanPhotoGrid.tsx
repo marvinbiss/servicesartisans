@@ -61,8 +61,8 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   return (
     <>
       {/* Airbnb-style Photo Grid */}
-      <div className="animate-fade-in-up rounded-2xl overflow-hidden cursor-pointer group">
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-60 md:h-80 lg:h-96">
+      <div className="animate-fade-in-up relative rounded-2xl overflow-hidden cursor-pointer group">
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-56 md:h-72 lg:h-80">
           {/* Main hero image (left half) */}
           <div
             className="col-span-2 row-span-2 relative overflow-hidden"
