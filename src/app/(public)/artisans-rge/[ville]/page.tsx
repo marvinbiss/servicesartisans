@@ -251,19 +251,6 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
 
       <Breadcrumb items={breadcrumbItems} />
 
-      {/* En bref — capture FS Position 0 sur "artisans RGE [ville]" */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
-        <EnBrefBox
-          summary={`${totalCount.toLocaleString('fr-FR')} artisan${totalCount > 1 ? 's' : ''} certifié${totalCount > 1 ? 's' : ''} RGE actif${totalCount > 1 ? 's' : ''} à ${ville.name} — toutes spécialités énergétiques confondues. Éligibles MaPrimeRénov', CEE et TVA 5,5 %. Données officielles ADEME, mises à jour hebdomadaires.`}
-          keyPoints={[
-            'Label délivré par Qualibat, Qualit’EnR, Qualifelec, Certibat',
-            "Condition obligatoire pour MaPrimeRénov' + CEE + Éco-PTZ",
-            'Données ADEME / France Rénov’ — Licence Etalab 2.0',
-            'Cumul des aides possible jusqu’à 11 000 € + 50 000 € à taux zéro',
-          ]}
-        />
-      </div>
-
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-accent-700 via-accent-800 to-charcoal-900 text-white py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -316,6 +303,50 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
           </p>
         </div>
       </section>
+
+      {/* Providers listing — lifted above the fold (cards first) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-2">
+          Annuaire des artisans RGE à {ville.name}
+        </h2>
+        <p className="text-charcoal-900 mb-6">
+          {providers.length > 0
+            ? `${providers.length} résultat${providers.length > 1 ? 's' : ''} affiché${providers.length > 1 ? 's' : ''} sur ${totalCount.toLocaleString('fr-FR')} au total.`
+            : 'Aucun artisan RGE actif actuellement référencé dans cette ville.'}
+        </p>
+
+        {providers.length > 0 ? (
+          <ProviderList providers={providers as Provider[]} totalCount={totalCount} />
+        ) : (
+          <div className="text-center py-16 bg-sand-50 rounded-2xl">
+            <ShieldCheck className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
+            <p className="text-lg text-charcoal-600 font-medium">
+              Aucun artisan RGE trouvé à {ville.name}
+            </p>
+            <p className="text-charcoal-400 mt-2 max-w-md mx-auto">
+              Notre base est synchronisée chaque semaine depuis l&apos;ADEME. Essayez une ville
+              voisine ou consultez le{' '}
+              <Link href="/verifier-artisan" className="text-accent-700 underline">
+                vérificateur officiel
+              </Link>
+              .
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* En bref — capture FS Position 0 sur "artisans RGE [ville]" */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-2">
+        <EnBrefBox
+          summary={`${totalCount.toLocaleString('fr-FR')} artisan${totalCount > 1 ? 's' : ''} certifié${totalCount > 1 ? 's' : ''} RGE actif${totalCount > 1 ? 's' : ''} à ${ville.name} — toutes spécialités énergétiques confondues. Éligibles MaPrimeRénov', CEE et TVA 5,5 %. Données officielles ADEME, mises à jour hebdomadaires.`}
+          keyPoints={[
+            'Label délivré par Qualibat, Qualit’EnR, Qualifelec, Certibat',
+            "Condition obligatoire pour MaPrimeRénov' + CEE + Éco-PTZ",
+            'Données ADEME / France Rénov’ — Licence Etalab 2.0',
+            'Cumul des aides possible jusqu’à 11 000 € + 50 000 € à taux zéro',
+          ]}
+        />
+      </div>
 
       {/* Counter strip */}
       <section className="bg-white border-b">
@@ -382,37 +413,6 @@ export default async function ArtisansRgeVillePage({ params }: PageProps) {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Providers listing */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <h2 className="text-2xl md:text-3xl font-bold text-charcoal-900 mb-2">
-          Annuaire des artisans RGE à {ville.name}
-        </h2>
-        <p className="text-charcoal-900 mb-6">
-          {providers.length > 0
-            ? `${providers.length} résultat${providers.length > 1 ? 's' : ''} affiché${providers.length > 1 ? 's' : ''} sur ${totalCount.toLocaleString('fr-FR')} au total.`
-            : 'Aucun artisan RGE actif actuellement référencé dans cette ville.'}
-        </p>
-
-        {providers.length > 0 ? (
-          <ProviderList providers={providers as Provider[]} totalCount={totalCount} />
-        ) : (
-          <div className="text-center py-16 bg-sand-50 rounded-2xl">
-            <ShieldCheck className="w-12 h-12 text-charcoal-300 mx-auto mb-4" />
-            <p className="text-lg text-charcoal-600 font-medium">
-              Aucun artisan RGE trouvé à {ville.name}
-            </p>
-            <p className="text-charcoal-400 mt-2 max-w-md mx-auto">
-              Notre base est synchronisée chaque semaine depuis l&apos;ADEME. Essayez une ville
-              voisine ou consultez le{' '}
-              <Link href="/verifier-artisan" className="text-accent-700 underline">
-                vérificateur officiel
-              </Link>
-              .
-            </p>
-          </div>
-        )}
       </section>
 
       {/* Sprint 4 chantier #4 — AEO answer block (LLM-citable) */}
