@@ -250,7 +250,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             </p>
 
             <div className="max-w-xl mb-4">
-              <ClayHeroSearch stacked ctaLabel="Trouver mon artisan" />
+              <ClayHeroSearch stacked ctaLabel="Trouver un artisan" />
             </div>
 
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-8 text-sm">

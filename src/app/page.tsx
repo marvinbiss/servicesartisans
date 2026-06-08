@@ -130,10 +130,12 @@ export default async function HomePage() {
     <div className="min-h-screen bg-sand-50">
       <JsonLd data={[webPageSchema, faqSchema, itemListSchema, aggregateRatingSchema]} />
 
-      {/* H1 visible above-fold — brand-first pour ranking exact match */}
+      {/* H1 visible above-fold — brand-first pour ranking exact match.
+          Slim sur mobile (bande marque) pour ne pas dupliquer le hero
+          « Trouvez un artisan RGE certifié » juste en dessous. */}
       <header className="bg-white border-b border-sand-200">
-        <div className="max-w-6xl mx-auto px-4 py-5 md:py-6">
-          <h1 className="font-heading text-xl md:text-2xl font-extrabold text-charcoal-900 tracking-tight text-center md:text-left">
+        <div className="max-w-6xl mx-auto px-4 py-3 md:py-6">
+          <h1 className="font-heading text-base md:text-2xl font-bold md:font-extrabold text-charcoal-700 md:text-charcoal-900 tracking-tight text-center md:text-left">
             ServicesArtisans — le 1<sup>er</sup> annuaire 100% artisans RGE certifiés
           </h1>
         </div>
@@ -434,7 +436,7 @@ export default async function HomePage() {
                 href="/devis"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-primary-700 font-bold shadow-cta hover:bg-sand-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-white"
               >
-                Demander un devis
+                Devis gratuit
                 <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
               <Link
