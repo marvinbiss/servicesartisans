@@ -3,9 +3,8 @@
  * Framework-agnostic: no NextRequest/NextResponse
  */
 
-import { revalidatePath } from 'next/cache'
 import { logger } from '@/lib/logger'
-import { slugify } from '@/lib/utils'
+import { revalidateArtisanProfile } from '@/lib/revalidate-artisan'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 // ---------------------------------------------------------------------------
@@ -71,27 +70,11 @@ type ServiceResult<T> =
 // Helpers
 // ---------------------------------------------------------------------------
 
+// Délègue au helper central (chemin construit via getArtisanUrl + résolution
+// INSEE) pour matcher l'URL publique réelle. Conserve le nom local pour ne pas
+// toucher aux call sites (create/update/delete/reorder).
 async function revalidateArtisanPages(supabase: SupabaseClient, userId: string): Promise<void> {
-  try {
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('specialty, address_city, slug, stable_id')
-      .eq('user_id', userId)
-      .single()
-
-    if (provider) {
-      // 2026-06-07 : slugify accent-safe + slug || stable_id (cf. provider/route.ts)
-      const serviceSlug = slugify(provider.specialty || '')
-      const locationSlug = slugify(provider.address_city || '')
-      const publicId = provider.slug || provider.stable_id
-      if (serviceSlug && locationSlug && publicId) {
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}/${publicId}`, 'page')
-        revalidatePath(`/services/${serviceSlug}/${locationSlug}`, 'page')
-      }
-    }
-  } catch (revalidateError) {
-    logger.error('Revalidation error for artisan pages:', revalidateError)
-  }
+  await revalidateArtisanProfile(supabase, userId)
 }
 
 // ---------------------------------------------------------------------------
@@ -325,6 +308,9 @@ export async function reorderPortfolioItems(
     logger.error('Errors reordering portfolio items:', errors)
     return { success: false, error: 'Erreur lors du réordonnancement', status: 500 }
   }
+
+  // Revalidate public artisan page (ISR cache bust)
+  await revalidateArtisanPages(supabase, artisanId)
 
   return { success: true, data: { message: 'Ordre mis à jour' } }
 }
