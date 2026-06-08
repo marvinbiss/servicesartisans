@@ -32,7 +32,7 @@ export default function Breadcrumb({ items, className = '', variant = 'light' }:
   return (
     <nav aria-label="Fil d'Ariane" className={`flex items-center gap-2 text-sm ${className}`}>
       <ol
-        className="flex items-center gap-2"
+        className="flex flex-wrap items-center gap-y-1 gap-2 min-w-0"
         itemScope
         itemType="https://schema.org/BreadcrumbList"
       >

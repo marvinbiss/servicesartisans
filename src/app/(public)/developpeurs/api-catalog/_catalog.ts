@@ -51,7 +51,7 @@ export const API_CATALOG: ReadonlyArray<ApiEntry> = [
     methods: ['POST', 'GET'],
     status: 'beta',
     ralphRef: 'Ralph 19',
-    docsPath: '/docs/API-V1-ASK.md',
+    docsPath: '/docs/api-v1-ask.md',
   },
   {
     id: 'ask-stream',
@@ -63,7 +63,7 @@ export const API_CATALOG: ReadonlyArray<ApiEntry> = [
     methods: ['POST', 'GET'],
     status: 'beta',
     ralphRef: 'Ralph 28',
-    docsPath: '/docs/API-V1-ASK-STREAM.md',
+    docsPath: '/docs/api-v1-ask-stream.md',
   },
 
   // Aides
@@ -219,7 +219,7 @@ export const API_CATALOG: ReadonlyArray<ApiEntry> = [
     methods: ['GET'],
     status: 'stable',
     ralphRef: 'Ralph 27',
-    docsPath: '/docs/API-V1-OPENAPI.md',
+    docsPath: '/docs/api-v1-openapi.md',
   },
   {
     id: 'openapi-yaml',
@@ -240,7 +240,7 @@ export const API_CATALOG: ReadonlyArray<ApiEntry> = [
     methods: ['GET'],
     status: 'stable',
     ralphRef: 'Ralph 30',
-    docsPath: '/docs/API-V1-ASYNCAPI.md',
+    docsPath: '/docs/api-v1-asyncapi.md',
   },
   {
     id: 'asyncapi-yaml',

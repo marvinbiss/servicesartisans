@@ -307,9 +307,9 @@ export default async function CarteArtisansRgeRegionPage({
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
-            <p className="mt-6 text-sm text-accent-100">
+            <div className="mt-6 text-sm text-accent-100">
               <LastUpdated date={MODIFIED} label="Page mise à jour le" />
-            </p>
+            </div>
           </div>
         </section>
 

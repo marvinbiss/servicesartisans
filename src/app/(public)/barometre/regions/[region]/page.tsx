@@ -312,51 +312,54 @@ export default async function BarometreRegionPage({ params }: PageProps) {
               Top métiers RGE {getRegionPreposition(region.name)}
             </h2>
             <div className="space-y-3">
-              {stats.slice(0, 15).map((row, idx) => {
-                const metier = getBarometreMetierBySlug(row.metier_slug)
-                const pct = maxCount > 0 ? (row.nb_artisans / maxCount) * 100 : 0
-                return (
-                  <Link
-                    key={row.metier_slug}
-                    href={`/barometre/tarifs/${row.metier_slug}`}
-                    className="group flex items-center gap-4 bg-white rounded-xl border border-sand-300 p-4 hover:shadow-md transition-shadow"
-                  >
-                    <span
-                      className="text-xl w-8 text-center flex-shrink-0"
-                      role="img"
-                      aria-hidden="true"
+              {stats
+                .filter((row) => getBarometreMetierBySlug(row.metier_slug))
+                .slice(0, 15)
+                .map((row, idx) => {
+                  const metier = getBarometreMetierBySlug(row.metier_slug)
+                  const pct = maxCount > 0 ? (row.nb_artisans / maxCount) * 100 : 0
+                  return (
+                    <Link
+                      key={row.metier_slug}
+                      href={`/barometre/tarifs/${row.metier_slug}`}
+                      className="group flex items-center gap-4 bg-white rounded-xl border border-sand-300 p-4 hover:shadow-md transition-shadow"
                     >
-                      {metier?.icon || '🔧'}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
-                          {idx + 1}. {row.metier}
-                        </span>
-                        <span className="text-sm font-medium text-charcoal-600">
-                          {row.nb_artisans.toLocaleString('fr-FR')}
-                        </span>
-                      </div>
-                      <div className="w-full bg-sand-100 rounded-full h-1.5">
-                        <div
-                          className="bg-accent-500 rounded-full h-1.5"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                      <div className="flex items-center gap-4 mt-1 text-xs text-charcoal-500">
-                        {row.note_moyenne !== null && (
-                          <span className="flex items-center gap-1">
-                            <Star className="w-3 h-3 text-amber-500" />
-                            {row.note_moyenne.toFixed(1)}/5
+                      <span
+                        className="text-xl w-8 text-center flex-shrink-0"
+                        role="img"
+                        aria-hidden="true"
+                      >
+                        {metier?.icon || '🔧'}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">
+                            {idx + 1}. {row.metier}
                           </span>
-                        )}
-                        <span>{row.nb_avis.toLocaleString('fr-FR')} avis</span>
+                          <span className="text-sm font-medium text-charcoal-600">
+                            {row.nb_artisans.toLocaleString('fr-FR')}
+                          </span>
+                        </div>
+                        <div className="w-full bg-sand-100 rounded-full h-1.5">
+                          <div
+                            className="bg-accent-500 rounded-full h-1.5"
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <div className="flex items-center gap-4 mt-1 text-xs text-charcoal-500">
+                          {row.note_moyenne !== null && (
+                            <span className="flex items-center gap-1">
+                              <Star className="w-3 h-3 text-amber-500" />
+                              {row.note_moyenne.toFixed(1)}/5
+                            </span>
+                          )}
+                          <span>{row.nb_avis.toLocaleString('fr-FR')} avis</span>
+                        </div>
                       </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-sand-500 group-hover:text-primary-400 flex-shrink-0" />
-                  </Link>
-                )
-              })}
+                      <ArrowRight className="w-4 h-4 text-sand-500 group-hover:text-primary-400 flex-shrink-0" />
+                    </Link>
+                  )
+                })}
             </div>
           </section>
         )}

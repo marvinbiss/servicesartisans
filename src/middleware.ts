@@ -82,8 +82,20 @@ const STATIC_CSP =
   "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
 
 // CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
-function addCspHeaders(response: NextResponse, _request: NextRequest): NextResponse {
+function addCspHeaders(response: NextResponse, request: NextRequest): NextResponse {
   if (process.env.NODE_ENV === 'development') {
+    return response
+  }
+
+  // Le widget de prix (/api/prix-widget) est destiné à être embarqué en iframe
+  // sur des sites tiers : il doit autoriser le framing. On remplace donc
+  // `frame-ancestors 'none'` par `frame-ancestors *` UNIQUEMENT pour lui.
+  // Tout le reste du site conserve frame-ancestors 'none' (anti-clickjacking).
+  if (request.nextUrl.pathname.startsWith('/api/prix-widget')) {
+    response.headers.set(
+      'Content-Security-Policy',
+      STATIC_CSP.replace("frame-ancestors 'none'", 'frame-ancestors *')
+    )
     return response
   }
 

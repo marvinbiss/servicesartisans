@@ -221,9 +221,9 @@ export default function NewsletterAidesRenovationPage() {
               />
             </div>
 
-            <p className="mt-6 text-sm text-primary-100">
+            <div className="mt-6 text-sm text-primary-100">
               <LastUpdated date={MODIFIED} label="Page mise à jour le" />
-            </p>
+            </div>
           </div>
         </section>
 

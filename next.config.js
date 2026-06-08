@@ -41,7 +41,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        // Exclut /api/prix-widget : ce widget est conçu pour être embarqué
+        // sur des sites tiers (iframe) → ne doit PAS recevoir X-Frame-Options:
+        // DENY ni frame-ancestors 'none'. Voir règle dédiée ci-dessous + branche
+        // middleware addCspHeaders. Le reste du site garde la protection complète.
+        source: '/((?!api/prix-widget).*)',
         headers: [
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -71,6 +75,21 @@ const nextConfig = {
               "upgrade-insecure-requests",
             ].join('; '),
           }] : []),
+        ],
+      },
+      {
+        // Widget de prix embeddable : mêmes en-têtes de sécurité que le site
+        // SAUF le blocage de framing. Pas de X-Frame-Options (sinon DENY) ;
+        // la CSP frame-ancestors permissive est posée par le middleware
+        // (addCspHeaders) pour rester cohérente avec les autres directives.
+        source: '/api/prix-widget',
+        headers: [
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self), payment=(self)' },
         ],
       },
       {

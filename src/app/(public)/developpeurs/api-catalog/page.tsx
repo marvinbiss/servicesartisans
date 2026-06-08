@@ -150,9 +150,16 @@ export default function ApiCatalogPage() {
                           <span className="font-mono">{entry.path}</span>
                         )}
                         {entry.docsPath ? (
-                          <Link href={entry.docsPath} className="text-accent-700 underline">
+                          // Fichier statique (public/docs/*.md), pas une route App —
+                          // <a> natif évite le prefetch RSC (404 + fallback console).
+                          <a
+                            href={entry.docsPath}
+                            className="text-accent-700 underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             Docs
-                          </Link>
+                          </a>
                         ) : null}
                       </div>
                     </li>

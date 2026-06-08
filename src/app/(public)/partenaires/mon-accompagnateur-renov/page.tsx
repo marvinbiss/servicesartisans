@@ -219,9 +219,9 @@ export default function PartenairesMarPage() {
               Devenir partenaire — {PARTNER_EMAIL}
               <ArrowRight className="w-5 h-5" />
             </a>
-            <p className="mt-6 text-sm text-charcoal-300">
+            <div className="mt-6 text-sm text-charcoal-300">
               <LastUpdated date={MODIFIED} label="Page mise à jour le" />
-            </p>
+            </div>
           </div>
         </section>
 

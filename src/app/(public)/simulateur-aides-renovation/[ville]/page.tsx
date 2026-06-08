@@ -330,9 +330,9 @@ export default async function SimulateurAidesVillePage({
               Lancer le simulateur
               <ArrowRight className="w-5 h-5" />
             </Link>
-            <p className="mt-6 text-sm text-primary-100">
+            <div className="mt-6 text-sm text-primary-100">
               <LastUpdated date={MODIFIED} label="Page mise à jour le" />
-            </p>
+            </div>
           </div>
         </section>
 

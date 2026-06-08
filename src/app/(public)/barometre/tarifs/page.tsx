@@ -42,7 +42,13 @@ export const revalidate = 86400
 // ---------------------------------------------------------------------------
 
 export default async function BarometreTarifsPage() {
-  const metiers = await getTopMetiers(50) // All available
+  // Only métiers présents dans le catalogue ont une page dédiée
+  // (`[metier]` fait `notFound()` sinon). On filtre la liste DB pour ne
+  // jamais lier vers une page qui 404 (ex. carreleur/serrurier/terrassier/
+  // paysagiste présents en stats DB mais hors BAROMETRE_METIERS).
+  const metiers = (await getTopMetiers(50)).filter((row) =>
+    getBarometreMetierBySlug(row.metier_slug)
+  )
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
