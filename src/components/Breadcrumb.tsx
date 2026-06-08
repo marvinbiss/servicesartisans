@@ -11,6 +11,9 @@ interface BreadcrumbProps {
   className?: string
   /** `dark` : variante lisible sur fond charcoal-950 (hero immersif). */
   variant?: 'light' | 'dark'
+  /** Mobile : scroll horizontal au lieu de wrapper sur plusieurs lignes
+   *  (fils longs région > département > ville mangent le fold). */
+  scrollable?: boolean
 }
 
 const VARIANT_LINK: Record<'light' | 'dark', string> = {
@@ -28,11 +31,19 @@ const VARIANT_CHEVRON: Record<'light' | 'dark', string> = {
   dark: 'text-charcoal-300',
 }
 
-export default function Breadcrumb({ items, className = '', variant = 'light' }: BreadcrumbProps) {
+export default function Breadcrumb({
+  items,
+  className = '',
+  variant = 'light',
+  scrollable = false,
+}: BreadcrumbProps) {
   return (
-    <nav aria-label="Fil d'Ariane" className={`flex items-center gap-2 text-sm ${className}`}>
+    <nav
+      aria-label="Fil d'Ariane"
+      className={`flex items-center gap-2 text-sm ${scrollable ? 'overflow-x-auto scrollbar-hide' : ''} ${className}`}
+    >
       <ol
-        className="flex flex-wrap items-center gap-y-1 gap-2 min-w-0"
+        className={`flex items-center gap-2 ${scrollable ? 'flex-nowrap min-w-max [&_span]:whitespace-nowrap' : 'flex-wrap gap-y-1 min-w-0'}`}
         itemScope
         itemType="https://schema.org/BreadcrumbList"
       >

@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { isNotFoundError } from 'next/dist/client/components/not-found'
 import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
-import { MapPin, Users, Building2, ArrowRight, HelpCircle, Leaf } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, HelpCircle, Leaf, Star } from 'lucide-react'
 
 const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 import Breadcrumb from '@/components/Breadcrumb'
@@ -34,8 +34,9 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import { getRgeProviderCountByCity } from '@/lib/rge/city-listings'
 import RgePseoCtaLink from '@/components/rge/RgePseoCtaLink'
-import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
+import ProviderCard from '@/components/ProviderCard'
+import type { Provider } from '@/types'
 import { buildVilleTldrBullets } from './sprint-helpers'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
@@ -307,16 +308,6 @@ async function renderVillePage({ params }: PageProps) {
       }
     : null
 
-  // En bref bullets — adaptés à la ville
-  const enBrefPoints: string[] = [
-    `${services.length} corps de métier RGE disponibles à ${ville.name}`,
-    'Devis gratuits, réponse 24h',
-    'Artisans RGE certifiés (Qualibat, Qualifelec, QualiPAC, Qualit’EnR)',
-  ]
-  if (rgeCount > 0) {
-    enBrefPoints.push(`${rgeCount} artisan${rgeCount > 1 ? 's' : ''} RGE pour MaPrimeRénov’`)
-  }
-
   // H1 keyword-first
   const h1Hash = Math.abs(hashCode(`h1-ville-${ville.slug}`))
   const h1Templates = [
@@ -345,6 +336,7 @@ async function renderVillePage({ params }: PageProps) {
       <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb
+            scrollable
             items={[
               ...(regionSlug ? [{ label: ville.region, href: `/regions/${regionSlug}` }] : []),
               ...(deptSlug
@@ -400,6 +392,15 @@ async function renderVillePage({ params }: PageProps) {
               <Users className="w-4 h-4 text-primary-400" aria-hidden="true" />
               {ville.population} habitants
             </span>
+            {aggregateRating && (
+              <span className="inline-flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-amber-400 fill-amber-400" aria-hidden="true" />
+                <strong className="text-white font-semibold">
+                  {aggregateRating.ratingValue}/5
+                </strong>
+                <span className="text-charcoal-400">· {aggregateRating.reviewCount} avis</span>
+              </span>
+            )}
           </div>
 
           <div className="mt-8 max-w-2xl">
@@ -445,14 +446,28 @@ async function renderVillePage({ params }: PageProps) {
         </div>
       )}
 
-      {/* En bref — Featured Snippets */}
-      {upgradeV2 && villeProviders.length > 0 && (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <EnBrefBox
-            summary={`Trouvez des artisans RGE certifiés à ${ville.name} (${ville.departementCode}) : ${services.length} corps de métier RGE, devis gratuits sous 24h, qualifications synchronisées avec la base ADEME. ${rgeCount > 0 ? `${rgeCount} artisan${rgeCount > 1 ? 's' : ''} RGE éligibles MaPrimeRénov’.` : ''}`.trim()}
-            keyPoints={enBrefPoints}
-          />
-        </div>
+      {/* Artisans RGE — vrais profils. La donnée est déjà fetchée (alimente
+          aggregateRating + title) : on la rend au lieu de seulement la compter.
+          Remplace l'ancien bloc « En bref » redondant avec le TL;DR ci-dessus. */}
+      {villeProviders.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+          <div className="flex items-end justify-between gap-4 mb-5">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
+              Artisans RGE à {ville.name}
+            </h2>
+            <Link
+              href={`/artisans-rge/${villeSlug}`}
+              className="text-sm text-primary-500 hover:text-primary-700 hover:underline flex-shrink-0"
+            >
+              Voir les {rgeCount > 0 ? rgeCount : villeProviders.length} artisans →
+            </Link>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {villeProviders.slice(0, 6).map((p) => (
+              <ProviderCard key={p.id} provider={p as unknown as Provider} />
+            ))}
+          </div>
+        </section>
       )}
 
       {/* RGE local signal — bandeau visible si au moins 1 artisan RGE */}
