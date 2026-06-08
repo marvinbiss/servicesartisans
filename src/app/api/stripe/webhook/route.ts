@@ -65,7 +65,13 @@ async function findProfileByCustomerId(customerId: string) {
 }
 
 export async function POST(request: Request) {
-  const body = await request.text()
+  let body: string
+  try {
+    body = await request.text()
+  } catch (error) {
+    logger.error('Stripe webhook: failed to read body', error)
+    return NextResponse.json({ error: 'Corps de requête illisible' }, { status: 500 })
+  }
   const headersList = await headers()
   const signature = headersList.get('stripe-signature')
 
@@ -94,9 +100,14 @@ export async function POST(request: Request) {
     )
   }
 
-  const shouldSkip = await checkWebhookIdempotency(event.id, 'stripe')
-  if (shouldSkip) {
-    return NextResponse.json({ received: true, status: 'already_processed' })
+  try {
+    const shouldSkip = await checkWebhookIdempotency(event.id, 'stripe')
+    if (shouldSkip) {
+      return NextResponse.json({ received: true, status: 'already_processed' })
+    }
+  } catch (error) {
+    logger.error('Stripe webhook: idempotency check failed', error)
+    return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
   }
 
   try {

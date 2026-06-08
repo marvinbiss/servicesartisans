@@ -35,7 +35,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Secret webhook non configuré' }, { status: 500 })
   }
 
-  const rawBody = await request.text()
+  let rawBody: string
+  try {
+    rawBody = await request.text()
+  } catch (error) {
+    logger.error('Vapi webhook: failed to read body', { error })
+    return NextResponse.json({ error: 'Corps de requête illisible' }, { status: 500 })
+  }
 
   const signature = request.headers.get('x-vapi-signature') || ''
   if (!verifyVapiSignature(rawBody, signature)) {
@@ -60,9 +66,14 @@ export async function POST(request: NextRequest) {
     const statusSuffix =
       eventType === 'status-update' ? `:${event.message.status?.status || 'unknown'}` : ''
     idempotencyKey = `vapi:${callId}:${eventType}${statusSuffix}`
-    const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'vapi')
-    if (shouldSkip) {
-      return NextResponse.json({ received: true, status: 'already_processed' })
+    try {
+      const shouldSkip = await checkWebhookIdempotency(idempotencyKey, 'vapi')
+      if (shouldSkip) {
+        return NextResponse.json({ received: true, status: 'already_processed' })
+      }
+    } catch (error) {
+      logger.error('Vapi webhook: idempotency check failed', { error, idempotencyKey })
+      return NextResponse.json({ error: 'Erreur interne' }, { status: 500 })
     }
   }
 

@@ -227,6 +227,7 @@ export async function fetchAllAdemeRows(
 
     const res = await fetch(url.toString(), {
       headers: { 'User-Agent': ADEME_USER_AGENT, Accept: 'application/json' },
+      signal: AbortSignal.timeout(30_000),
     })
 
     if (!res.ok) {

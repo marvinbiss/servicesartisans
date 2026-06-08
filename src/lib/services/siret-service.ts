@@ -209,6 +209,7 @@ export async function lookupSiren(siren: string): Promise<SiretResult> {
           Accept: 'application/json',
         },
         next: { revalidate: 86400 },
+        signal: AbortSignal.timeout(10_000),
       })
 
       if (inseeRes.ok) {
@@ -224,6 +225,7 @@ export async function lookupSiren(siren: string): Promise<SiretResult> {
                 Accept: 'application/json',
               },
               next: { revalidate: 86400 },
+              signal: AbortSignal.timeout(10_000),
             }
           )
           if (siegeRes.ok) {
@@ -243,6 +245,7 @@ export async function lookupSiren(siren: string): Promise<SiretResult> {
   // Fallback: data.gouv.fr
   const res = await fetch(`https://entreprise.data.gouv.fr/api/sirene/v3/unites_legales/${siren}`, {
     next: { revalidate: 86400 },
+    signal: AbortSignal.timeout(10_000),
   })
 
   if (!res.ok) {
@@ -286,6 +289,7 @@ export async function lookupSiret(siret: string): Promise<SiretResult> {
           Accept: 'application/json',
         },
         next: { revalidate: 86400 },
+        signal: AbortSignal.timeout(10_000),
       })
 
       if (inseeRes.ok) {
@@ -303,6 +307,7 @@ export async function lookupSiret(siret: string): Promise<SiretResult> {
   // Fallback: data.gouv.fr
   const res = await fetch(`https://entreprise.data.gouv.fr/api/sirene/v3/etablissements/${siret}`, {
     next: { revalidate: 86400 },
+    signal: AbortSignal.timeout(10_000),
   })
 
   if (!res.ok) {

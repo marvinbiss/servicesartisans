@@ -82,6 +82,7 @@ export async function getToken(): Promise<string> {
       client_id: consumerKey,
       client_secret: consumerSecret,
     }).toString(),
+    signal: AbortSignal.timeout(10_000),
   })
 
   if (!response.ok) {
@@ -145,6 +146,7 @@ export async function searchEtablissements(
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',
         },
+        signal: AbortSignal.timeout(10_000),
       })
 
       if (response.status === 429) {

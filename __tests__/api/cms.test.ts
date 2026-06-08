@@ -47,11 +47,9 @@ vi.mock('@/lib/logger', () => ({
   },
 }))
 
-// --- DOMPurify mock ---
-vi.mock('isomorphic-dompurify', () => ({
-  default: {
-    sanitize: vi.fn((input: string) => input),
-  },
+// --- HTML sanitizer mock (migré de isomorphic-dompurify vers sanitize-html) ---
+vi.mock('@/lib/sanitize-html-content', () => ({
+  sanitizeRichHtml: vi.fn((input: string) => input),
 }))
 
 // --- Cache mock ---
@@ -298,8 +296,8 @@ describe('POST /api/admin/cms (Create)', () => {
     expect(res.status).toBe(401)
   })
 
-  it('sanitizes content_html via DOMPurify', async () => {
-    const DOMPurify = (await import('isomorphic-dompurify')).default
+  it('sanitizes content_html via sanitizeRichHtml', async () => {
+    const { sanitizeRichHtml } = await import('@/lib/sanitize-html-content')
 
     const created = { ...validPageData, content_html: '<p>clean</p>' }
     mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ insertData: created }))
@@ -311,7 +309,7 @@ describe('POST /api/admin/cms (Create)', () => {
     )
     await POST(req)
 
-    expect(DOMPurify.sanitize).toHaveBeenCalledWith('<script>alert("xss")</script><p>clean</p>')
+    expect(sanitizeRichHtml).toHaveBeenCalledWith('<script>alert("xss")</script><p>clean</p>')
   })
 
   it('strips HTML from text fields (title, meta_title, etc.)', async () => {
@@ -647,7 +645,7 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
   })
 
   it('sanitizes content_html', async () => {
-    const DOMPurify = (await import('isomorphic-dompurify')).default
+    const { sanitizeRichHtml } = await import('@/lib/sanitize-html-content')
     const updated = { ...validPageData, content_html: '<p>safe</p>' }
     mockSupabaseFrom = vi.fn(() => createMockQueryBuilder({ updateData: updated }))
 
@@ -655,7 +653,7 @@ describe('PUT /api/admin/cms/[id] (Update)', () => {
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}`, { content_html: '<p>safe</p>' }, 'PUT')
     await PUT(req, { params: Promise.resolve({ id: PAGE_ID }) })
 
-    expect(DOMPurify.sanitize).toHaveBeenCalledWith('<p>safe</p>')
+    expect(sanitizeRichHtml).toHaveBeenCalledWith('<p>safe</p>')
   })
 
   it('strips HTML from text fields', async () => {
@@ -1112,7 +1110,7 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
   })
 
   it('sanitizes restored content_html', async () => {
-    const DOMPurify = (await import('isomorphic-dompurify')).default
+    const { sanitizeRichHtml } = await import('@/lib/sanitize-html-content')
     const version = {
       id: VERSION_ID,
       page_id: PAGE_ID,
@@ -1142,7 +1140,7 @@ describe('POST /api/admin/cms/[id]/restore (Restore version)', () => {
     const req = makeJsonRequest(`/api/admin/cms/${PAGE_ID}/restore`, { version_id: VERSION_ID })
     await POST(req, { params: Promise.resolve({ id: PAGE_ID }) })
 
-    expect(DOMPurify.sanitize).toHaveBeenCalledWith('<script>bad</script><p>Good</p>')
+    expect(sanitizeRichHtml).toHaveBeenCalledWith('<script>bad</script><p>Good</p>')
   })
 
   it('invalidates cache after restore', async () => {
@@ -1508,7 +1506,7 @@ describe('CMS API — Files existence & structure', () => {
     }
   })
 
-  it('HTML content routes use DOMPurify sanitize', () => {
+  it('HTML content routes use sanitizeRichHtml (server-side, no jsdom)', () => {
     const htmlRoutes = [
       'src/app/api/admin/cms/route.ts',
       'src/app/api/admin/cms/[id]/route.ts',
@@ -1516,7 +1514,9 @@ describe('CMS API — Files existence & structure', () => {
     ]
     for (const route of htmlRoutes) {
       const content = readFileSync(resolve(BASE, route), 'utf-8')
-      expect(content).toContain('DOMPurify.sanitize')
+      expect(content).toContain('sanitizeRichHtml')
+      // Anti-régression : plus aucun import jsdom serveur (crash cold-start).
+      expect(content).not.toContain('isomorphic-dompurify')
     }
   })
 })

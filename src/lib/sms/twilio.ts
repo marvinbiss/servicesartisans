@@ -34,6 +34,7 @@ export async function sendSMS(
         To: to,
         Body: truncated,
       }),
+      signal: AbortSignal.timeout(8_000),
     })
 
     if (!res.ok) {

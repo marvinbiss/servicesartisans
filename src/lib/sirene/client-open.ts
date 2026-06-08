@@ -62,6 +62,7 @@ export async function searchEntreprisesOpen(
         headers: {
           Accept: 'application/json',
         },
+        signal: AbortSignal.timeout(10_000),
       })
 
       if (response.status === 429) {
@@ -127,6 +128,7 @@ export async function searchByTermOpen(
   try {
     const response = await fetch(url, {
       headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(10_000),
     })
 
     logger.debug('API Response status', { status: response.status })
