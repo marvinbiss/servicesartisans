@@ -16,7 +16,6 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
-import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
@@ -47,7 +46,7 @@ import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
 import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
-import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star, Euro } from 'lucide-react'
+import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star } from 'lucide-react'
 
 export function generateStaticParams() {
   return departements.map((dept) => ({ departement: dept.slug }))
@@ -230,13 +229,6 @@ export default async function DepartementPage({ params }: PageProps) {
     `Chef-lieu : ${dept.chefLieu} · Région ${dept.region}`,
     `${dept.population} habitants · ${villesDuDepartement.length || dept.villes.length} villes couvertes`,
     `Profil : ${content.profile.climateLabel}, ${content.profile.economyLabel.toLowerCase()}`,
-  ]
-
-  const tldrBullets: string[] = [
-    `Annuaire d'artisans RGE ${getDeptArticle(dept.name)} (${dept.code}) — ${services.length} corps de métier, ${formatProviderCount(deptArtisanCount || 0)} pros RGE certifiés.`,
-    `Profil départemental : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.housingLabel.toLowerCase()}, ${content.profile.economyLabel.toLowerCase()}.`,
-    `Maillage : ${villesDuDepartement.length || dept.villes.length} villes du ${dept.code} couvertes, du chef-lieu ${dept.chefLieu} aux communes périphériques.`,
-    `Notre rôle : mise en relation gratuite avec un artisan vérifié SIREN, devis sous 24 h, sans engagement.`,
   ]
 
   return (
@@ -611,46 +603,6 @@ export default async function DepartementPage({ params }: PageProps) {
           )}
         </section>
 
-        {/* ─── SERVICES PAR VILLE ───────────────────────────── */}
-        {villesDuDepartement.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-primary-600" />
-              </div>
-              <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
-                Services par ville dans le {dept.name}
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-5">
-              {villesDuDepartement.slice(0, 2).map((ville) => (
-                <div key={ville.slug} className="bg-white rounded-2xl border border-sand-300 p-6">
-                  <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
-                    Artisans à {ville.name}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {orderedServices.slice(0, 5).map((service) => (
-                      <Link
-                        key={`${service.slug}-${ville.slug}`}
-                        href={`/services/${service.slug}/${ville.slug}`}
-                        className="text-sm text-charcoal-600 hover:text-primary-400 hover:bg-primary-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-primary-100"
-                      >
-                        {service.name}
-                      </Link>
-                    ))}
-                  </div>
-                  <Link
-                    href={`/villes/${ville.slug}`}
-                    className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-4"
-                  >
-                    Tous les artisans <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* ─── PARENT REGION ────────────────────────────────── */}
         {regionSlug && (
           <section className="mb-16">
@@ -787,12 +739,15 @@ export default async function DepartementPage({ params }: PageProps) {
                   <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">
                     {svc.name} à {villesDuDepartement[0].name}
                   </h3>
+                  {/* 3 destinations distinctes : /services (devis), /avis,
+                      /urgence. Les anciens libellés « Tarifs » et « Artisans »
+                      pointaient vers la même URL /services que « Devis ». */}
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href={`/services/${svc.slug}/${villesDuDepartement[0].slug}`}
                       className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
-                      <Euro className="w-3.5 h-3.5" /> Tarifs
+                      Devis
                     </Link>
                     <Link
                       href={`/avis/${svc.slug}/${villesDuDepartement[0].slug}`}
@@ -801,22 +756,10 @@ export default async function DepartementPage({ params }: PageProps) {
                       <Star className="w-3.5 h-3.5" /> Avis
                     </Link>
                     <Link
-                      href={`/services/${svc.slug}/${villesDuDepartement[0].slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
-                    >
-                      Devis
-                    </Link>
-                    <Link
                       href={`/urgence/${svc.slug}/${villesDuDepartement[0].slug}`}
                       className="inline-flex items-center gap-1.5 text-sm text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Urgence
-                    </Link>
-                    <Link
-                      href={`/services/${svc.slug}/${villesDuDepartement[0].slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm text-primary-500 hover:text-primary-800 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
-                    >
-                      Artisans
                     </Link>
                   </div>
                 </div>
@@ -824,11 +767,6 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </section>
         )}
-
-        {/* ─── TL;DR pré-FAQ — capture FS Position 0 / AI Overviews ──── */}
-        <section className="mb-10 max-w-4xl">
-          <TldrBlock bullets={tldrBullets} />
-        </section>
 
         {/* ─── FAQ ───────────────────────────────────────────── */}
         <section className="mb-16">

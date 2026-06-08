@@ -5,7 +5,6 @@ import { MapPin, Users, ArrowRight, Building2, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import EnBrefBox from '@/components/seo/EnBrefBox'
-import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import {
   getBreadcrumbSchema,
@@ -133,8 +132,9 @@ export default async function RegionPage({ params }: PageProps) {
   // Top 12 villes (population) — focal point keyword × city
   const topCities = allCities.slice(0, 12)
 
-  // Voisines : 3-4 régions limitrophes (filtre simple : autre que celle-ci)
-  const otherRegions = regions.filter((r) => r.slug !== regionSlug).slice(0, 6)
+  // Toutes les autres régions (12) — pas de troncature à 6 qui paraissait
+  // arbitraire/incomplète.
+  const otherRegions = regions.filter((r) => r.slug !== regionSlug)
 
   // ── JSON-LD structured data — preserved in full ───────────────────────
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -208,12 +208,6 @@ export default async function RegionPage({ params }: PageProps) {
     `${deptCount} département${deptCount > 1 ? 's' : ''} · ${cityCount} ville${cityCount > 1 ? 's' : ''} couvertes`,
     `Profil : ${content.profile.climateLabel}, ${content.profile.geoLabel.toLowerCase()}`,
     `Devis gratuit en 24 h, sans engagement`,
-  ]
-
-  const tldrBullets: string[] = [
-    `Annuaire d'artisans RGE ${getRegionArticle(region.name)} — ${deptCount} départements, ${cityCount} villes.`,
-    `Profil régional : ${content.profile.climateLabel.toLowerCase()}, ${content.profile.geoLabel.toLowerCase()}.`,
-    `Notre rôle : mise en relation gratuite avec un artisan RGE certifié, devis sous 24 h, sans engagement.`,
   ]
 
   // H1 keyword-first
@@ -344,11 +338,6 @@ export default async function RegionPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
-        </section>
-
-        {/* TL;DR pré-FAQ */}
-        <section className="max-w-3xl">
-          <TldrBlock bullets={tldrBullets} />
         </section>
 
         {/* FAQ — 4-5 questions max (Schema FAQPage déjà émis) */}
