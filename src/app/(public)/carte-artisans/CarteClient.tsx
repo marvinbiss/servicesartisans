@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import {
@@ -58,6 +58,25 @@ const CircleMarker = dynamic(() => import('react-leaflet').then((mod) => mod.Cir
 })
 const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
 const Tooltip = dynamic(() => import('react-leaflet').then((mod) => mod.Tooltip), { ssr: false })
+
+// Capture l'instance Leaflet Map. next/dynamic n'est pas forwardRef, donc
+// ref={mapRef} sur <MapContainer> restait null → setView/fitBounds (reset vue
+// + zoom région) étaient des no-op silencieux. useMap() lit l'instance depuis
+// le contexte react-leaflet, monté en enfant du MapContainer.
+const MapRefBridge = dynamic(
+  () =>
+    import('react-leaflet').then((mod) => {
+      const Bridge = ({ onReady }: { onReady: (m: import('leaflet').Map) => void }) => {
+        const map = mod.useMap()
+        useEffect(() => {
+          onReady(map)
+        }, [map, onReady])
+        return null
+      }
+      return Bridge
+    }),
+  { ssr: false }
+)
 
 // France metropolitan center
 const FRANCE_CENTER: [number, number] = [46.603354, 1.888334]
@@ -150,6 +169,9 @@ export default function CarteClient() {
   const [showFilters, setShowFilters] = useState(false)
   const mapRef = useRef<import('leaflet').Map | null>(null)
   const leafletRef = useRef<typeof import('leaflet') | null>(null)
+  const handleMapReady = useCallback((m: import('leaflet').Map) => {
+    mapRef.current = m
+  }, [])
 
   // Load CSS asynchronously after mount to avoid blocking render
   useEffect(() => {
@@ -388,7 +410,6 @@ export default function CarteClient() {
             style={{ height: '600px' }}
           >
             <MapContainer
-              ref={mapRef}
               center={FRANCE_CENTER}
               zoom={FRANCE_ZOOM}
               style={{ height: '100%', width: '100%' }}
@@ -396,6 +417,7 @@ export default function CarteClient() {
               minZoom={5}
               maxZoom={13}
             >
+              <MapRefBridge onReady={handleMapReady} />
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
