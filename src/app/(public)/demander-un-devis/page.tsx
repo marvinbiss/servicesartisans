@@ -51,9 +51,13 @@ export default function DemanderDevisPage({ searchParams }: DemanderDevisPagePro
   const prefilledCity = firstParam(searchParams?.ville)
 
   return (
+    // NB : SiteChrome (branche chrome masqué) enveloppe déjà `children` dans
+    // <main id="main-content">. On n'ajoute donc PAS de second <main>/<header>/
+    // <footer> ici (sinon landmarks dupliqués + <main> imbriqué = HTML invalide
+    // / violation WCAG « one main per page »). Tout est en <div> neutres.
     <div className="min-h-screen bg-sand-50 flex flex-col">
       {/* Barre fine : logo + sortie explicite (pattern wizard travaux.com) */}
-      <header className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-sand-200">
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-sand-200">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <Link
             href="/"
@@ -71,10 +75,12 @@ export default function DemanderDevisPage({ searchParams }: DemanderDevisPagePro
             <span className="hidden sm:inline">Quitter</span>
           </Link>
         </div>
-      </header>
+      </div>
 
-      <main className="flex-1 w-full">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+      <div className="flex-1 w-full">
+        {/* pb généreux : le bandeau cookie (fixe, bottom) ne doit pas recouvrir
+            le CTA du wizard au premier affichage (form court → CTA bas). */}
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12 pb-44 md:pb-32">
           <div className="text-center mb-8">
             <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 tracking-tight">
               Recevez vos devis gratuits
@@ -90,10 +96,10 @@ export default function DemanderDevisPage({ searchParams }: DemanderDevisPagePro
             prefilledCity={prefilledCity}
           />
         </div>
-      </main>
+      </div>
 
       {/* Réassurance pied de tunnel — remplace la sidebar absente */}
-      <footer className="border-t border-sand-200 bg-white">
+      <div className="border-t border-sand-200 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-charcoal-500">
           <span className="inline-flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-accent-600" /> Données issues du registre RGE ADEME
@@ -105,7 +111,7 @@ export default function DemanderDevisPage({ searchParams }: DemanderDevisPagePro
             <Clock className="w-4 h-4 text-accent-600" /> Réponse rapide
           </span>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

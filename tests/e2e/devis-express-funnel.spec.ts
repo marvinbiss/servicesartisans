@@ -42,6 +42,16 @@ test.describe('Tunnel devis immersif', () => {
     await expect(page.locator('header a[href="/demander-un-devis"]')).toHaveCount(0)
   })
 
+  test('route immersive : un seul landmark <main> (pas de main imbriqué)', async ({ page }) => {
+    // Garde-fou : SiteChrome (chrome masqué) enveloppe déjà children dans
+    // <main id="main-content">. La page ne doit PAS rajouter un second <main>
+    // (HTML invalide + double landmark WCAG).
+    await page.goto('/demander-un-devis')
+    await expect(page.locator('main')).toHaveCount(1)
+    await expect(page.locator('main#main-content')).toHaveCount(1)
+    await expect(page.locator('main main')).toHaveCount(0)
+  })
+
   test('route immersive : noindex (canonical → /devis porte le SEO)', async ({ page }) => {
     await page.goto('/demander-un-devis')
     const robots = page.locator('meta[name="robots"]')
