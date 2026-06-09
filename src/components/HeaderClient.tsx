@@ -490,7 +490,7 @@ export default function HeaderClient({
               </Link>
 
               <Link
-                href="/devis"
+                href="/demander-un-devis"
                 onClick={() => trackEvent('header_devis_click', { source: 'header', pathname })}
                 className="ml-2 px-5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
               >
@@ -508,7 +508,7 @@ export default function HeaderClient({
                 <Phone className="w-5 h-5" />
               </a>
               <Link
-                href="/devis"
+                href="/demander-un-devis"
                 className="px-3.5 py-2 bg-primary-500 hover:bg-primary-600 text-white font-heading font-semibold text-xs rounded-lg shadow-cta transition-all duration-200"
               >
                 Devis gratuit

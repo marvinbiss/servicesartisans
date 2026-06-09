@@ -566,7 +566,7 @@ export default function MobileMenu({
                 Espace artisan
               </Link>
               <Link
-                href="/devis"
+                href="/demander-un-devis"
                 className="flex-1 py-3 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white rounded-xl font-semibold text-center shadow-md shadow-clay-400/20 transition-all duration-200"
                 onClick={closeMobileMenu}
               >

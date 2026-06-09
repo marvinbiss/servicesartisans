@@ -433,7 +433,7 @@ export default async function HomePage() {
             </div>
             <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-3 lg:items-end">
               <Link
-                href="/devis"
+                href="/demander-un-devis"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-primary-700 font-bold shadow-cta hover:bg-sand-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary-500 focus-visible:ring-white"
               >
                 Devis gratuit

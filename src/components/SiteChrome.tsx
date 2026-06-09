@@ -17,7 +17,14 @@ import { usePathname } from 'next/navigation'
  * restent rendus server-side dans le root layout et arrivent ici en props
  * ReactNode — le SSR Googlebot du Header public est préservé.
  */
-const HIDDEN_PREFIXES = ['/espace-artisan', '/espace-client', '/admin']
+const HIDDEN_PREFIXES = [
+  '/espace-artisan',
+  '/espace-client',
+  '/admin',
+  // Tunnel devis immersif (plein écran, sans header/footer) — pattern
+  // travaux.com : wizard dédié sans distraction pour maximiser la conversion.
+  '/demander-un-devis',
+]
 
 interface SiteChromeProps {
   header: ReactNode
