@@ -114,7 +114,7 @@ export function ArtisanHero({ artisan, isClaimed = false }: ArtisanHeroProps) {
               {/* Name - font-heading text-2xl font-bold */}
               <h1
                 data-speakable="true"
-                className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-1 tracking-tight"
+                className="text-xl md:text-3xl font-bold text-charcoal-900 font-heading mb-1 tracking-tight break-words [overflow-wrap:anywhere]"
               >
                 {displayName}
                 <span className="sr-only">

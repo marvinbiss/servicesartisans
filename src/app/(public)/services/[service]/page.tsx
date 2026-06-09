@@ -598,7 +598,7 @@ export default async function ServicePage({ params }: PageProps) {
                       : `${service.name} à ${city.name}`
                   }
                 >
-                  <span className="font-medium truncate">
+                  <span className="font-medium leading-tight min-w-0">
                     {service.name} {city.name}
                   </span>
                   {typeof city.rgeCount === 'number' && city.rgeCount > 0 && (

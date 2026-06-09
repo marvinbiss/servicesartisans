@@ -86,8 +86,9 @@ export default function ServiceLocationPageClient({
   }, [initialProviders, totalCount, rgeOnly])
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
-  // List-first : la liste d'artisans (le produit) doit dominer le fold, pas la
-  // carte. La vue « Les deux » / « Carte » reste à un clic via le toggle.
+  // SSR-safe default : 'list' (le mobile reste en liste — pas de bouton « Les
+  // deux » sur mobile). Sur desktop on bascule en 'split' (« Les deux ») au
+  // montage via l'effet ci-dessous, sans casser l'hydratation.
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('list')
   const [_isMobile, setIsMobile] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
@@ -212,6 +213,13 @@ export default function ServiceLocationPageClient({
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Desktop atterrit sur « Les deux » (liste + carte) ; mobile reste en liste
+  // (le toggle mobile n'expose que liste/carte). Mount-only : ne réécrase pas
+  // un choix utilisateur ultérieur ni un resize.
+  useEffect(() => {
+    if (window.innerWidth >= 768) setViewMode('split')
   }, [])
 
   // Read URL filters + derive filtered list (client-side over `allProviders`).

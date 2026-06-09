@@ -175,6 +175,17 @@ export default function ArtisanPageClient({
     }
   }, [artisan, artisanId])
 
+  // Land at the top of the fiche, not mid-page. Clicking a card deep in the
+  // listing triggers a server canonical redirect (307) ; after a client-nav
+  // redirect Next.js doesn't reset scroll, so the page keeps the listing's
+  // scroll-Y and the visitor lands mid-page instead of on the company name.
+  // Skip when an explicit #hash target is present (e.g. #devis CTA).
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.location.hash) {
+      window.scrollTo(0, 0)
+    }
+  }, [artisanId])
+
   // Not found state
   if (!artisan) {
     return (
