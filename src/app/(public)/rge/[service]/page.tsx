@@ -570,7 +570,7 @@ export default async function RgeServiceHubPage({ params }: PageProps) {
                       className="w-3.5 h-3.5 text-accent-600 flex-shrink-0"
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
+                    <span className="text-sm font-semibold text-charcoal-900 group-hover:text-accent-700 transition leading-tight">
                       {city.name}
                     </span>
                   </div>

@@ -305,7 +305,7 @@ export default async function VillesIndexPage() {
                     <Building2 className="w-5 h-5 text-accent-600" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-heading text-base font-bold text-charcoal-900 tracking-tight truncate">
+                    <h3 className="font-heading text-base font-bold text-charcoal-900 tracking-tight leading-tight">
                       {region}
                     </h3>
                     <p className="text-xs text-charcoal-500">{regionVilles.length} villes</p>

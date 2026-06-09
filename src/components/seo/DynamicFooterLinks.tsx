@@ -56,7 +56,7 @@ export default function DynamicFooterLinks() {
             <Link
               key={`${page.serviceSlug}-${page.villeSlug}`}
               href={`/services/${page.serviceSlug}/${page.villeSlug}`}
-              className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5 truncate"
+              className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5 leading-tight"
             >
               {page.serviceName} {page.villeName}
             </Link>

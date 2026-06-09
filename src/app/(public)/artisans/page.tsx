@@ -387,7 +387,7 @@ export default async function ArtisansPage() {
                 className="flex items-center gap-2 px-4 py-3 bg-white rounded-xl border border-sand-200 hover:border-amber-200 hover:shadow-md transition-all duration-200 group"
               >
                 <Building2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                <span className="text-sm font-medium text-charcoal-700 group-hover:text-amber-700 truncate">
+                <span className="text-sm font-medium text-charcoal-700 group-hover:text-amber-700 leading-tight">
                   {s.name}
                 </span>
               </Link>

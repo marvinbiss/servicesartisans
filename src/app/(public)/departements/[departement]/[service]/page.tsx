@@ -607,7 +607,7 @@ export default async function DeptServicePage({ params }: PageProps) {
                       <MapPin className="w-5 h-5 text-accent-600" />
                     </div>
                     <div className="min-w-0">
-                      <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">
+                      <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm leading-tight">
                         {trade.name} à {ville.name}
                       </div>
                       <div className="text-xs text-charcoal-400">{ville.population} hab.</div>

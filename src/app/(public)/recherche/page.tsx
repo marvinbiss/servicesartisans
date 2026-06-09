@@ -128,7 +128,7 @@ export default function RecherchePage() {
                 className="flex items-center gap-2 bg-white rounded-lg border border-sand-300 p-3 hover:border-primary-300 hover:shadow-sm transition-all group"
               >
                 <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500 flex-shrink-0" />
-                <span className="text-sm font-medium text-charcoal-900 group-hover:text-primary-500 truncate">
+                <span className="text-sm font-medium text-charcoal-900 group-hover:text-primary-500 leading-tight">
                   {ville.name}
                 </span>
               </Link>

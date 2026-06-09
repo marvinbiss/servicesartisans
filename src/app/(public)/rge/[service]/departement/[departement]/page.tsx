@@ -304,7 +304,7 @@ export default async function RgeServiceDepartementPage({ params }: PageProps) {
                   href={`/rge/${serviceSlug}/${v.slug}`}
                   className="flex items-center justify-between px-3 py-2 bg-white rounded-lg border border-sand-300 hover:border-accent-400 hover:bg-accent-50 transition text-sm text-charcoal-700 hover:text-accent-700"
                 >
-                  <span className="truncate font-medium">{v.name}</span>
+                  <span className="leading-tight font-medium">{v.name}</span>
                 </Link>
               ))}
             </div>

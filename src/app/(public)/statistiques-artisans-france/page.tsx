@@ -709,7 +709,7 @@ export default function StatistiquesArtisansFrancePage() {
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-charcoal-900 truncate">
+                            <span className="text-sm font-medium text-charcoal-900 leading-tight">
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-primary-600 ml-2">
@@ -750,7 +750,7 @@ export default function StatistiquesArtisansFrancePage() {
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm font-medium text-charcoal-900 truncate">
+                            <span className="text-sm font-medium text-charcoal-900 leading-tight">
                               {dept.name} ({dept.code})
                             </span>
                             <span className="text-sm font-bold text-green-700 ml-2">

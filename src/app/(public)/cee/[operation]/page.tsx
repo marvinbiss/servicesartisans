@@ -665,7 +665,7 @@ export default async function CeeOperationHubPage({ params }: PageProps) {
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <MapPin className="w-4 h-4 text-accent-600 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
+                    <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition leading-tight">
                       {city.name}
                     </span>
                   </div>

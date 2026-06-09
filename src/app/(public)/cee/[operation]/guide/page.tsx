@@ -413,7 +413,7 @@ export default async function CeeOperationGuidePage({ params }: PageProps) {
                 href={`/cee/${urlCode}/${city.slug}`}
                 className="group flex items-center justify-between p-4 bg-white rounded-xl border border-charcoal-200 hover:border-accent-400 hover:shadow-sm transition"
               >
-                <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition truncate">
+                <span className="font-semibold text-charcoal-900 group-hover:text-accent-700 transition leading-tight">
                   {city.name}
                 </span>
                 <span className="text-sm font-semibold text-charcoal-900 tabular-nums ml-2">

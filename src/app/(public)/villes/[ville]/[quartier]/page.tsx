@@ -676,7 +676,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 >
                   <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-400 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
-                    <span className="block text-sm font-medium text-charcoal-800 group-hover:text-primary-400 truncate transition-colors">
+                    <span className="block text-sm font-medium text-charcoal-800 group-hover:text-primary-400 leading-tight transition-colors">
                       {v.name}
                     </span>
                     <span className="text-xs text-charcoal-400">{v.population} hab.</span>

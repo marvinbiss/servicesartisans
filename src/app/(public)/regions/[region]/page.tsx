@@ -294,7 +294,7 @@ export default async function RegionPage({ params }: PageProps) {
                   href={`/villes/${city.slug}`}
                   className="block bg-white rounded-xl border border-sand-200 hover:border-primary-200 hover:shadow-card-hover px-4 py-3 transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-400 focus-visible:outline-none"
                 >
-                  <span className="block font-semibold text-charcoal-900 text-sm truncate">
+                  <span className="block font-semibold text-charcoal-900 text-sm leading-tight">
                     Artisans {city.name}
                   </span>
                   <span className="block text-xs text-charcoal-500 mt-0.5">
@@ -322,7 +322,7 @@ export default async function RegionPage({ params }: PageProps) {
                     {dept.code}
                   </span>
                   <span className="flex-1 min-w-0">
-                    <span className="block font-semibold text-charcoal-900 text-sm truncate">
+                    <span className="block font-semibold text-charcoal-900 text-sm leading-tight">
                       {dept.name}
                     </span>
                     <span className="block text-xs text-charcoal-500">

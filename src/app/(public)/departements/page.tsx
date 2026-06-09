@@ -330,7 +330,7 @@ export default async function DepartementsIndexPage() {
                     {dept.code}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-sm font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors block truncate">
+                    <span className="text-sm font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors block leading-tight">
                       {dept.name}
                     </span>
                     <span className="text-xs text-charcoal-500">{dept.population} hab.</span>
