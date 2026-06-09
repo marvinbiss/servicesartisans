@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import {
   Droplets,
   Zap,
@@ -31,7 +30,6 @@ import {
   type HomepageReview,
 } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
-import { BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 interface Props {
   stats: SiteStats
@@ -251,6 +249,13 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
   const bigReviews = recentReviews.length >= 3 ? recentReviews.slice(0, 3) : FALLBACK_REVIEWS
   const carouselReviews = recentReviews.length >= 6 ? recentReviews.slice(3) : undefined
 
+  // Aperçu « live » du registre pour le hero — vrais compteurs RGE par métier.
+  // Remplace l'ancienne photo stock générique : preuve de vie honnête,
+  // on-brand, sans faux visage ni CTA artisan spécifique.
+  const heroServices = SERVICE_ITEMS.filter((s) => (serviceCounts[s.slug] ?? 0) > 0)
+    .sort((a, b) => (serviceCounts[b.slug] ?? 0) - (serviceCounts[a.slug] ?? 0))
+    .slice(0, 4)
+
   return (
     <>
       {/* ─── HERO — asymétrique : pitch + recherche / photo chantier ── */}
@@ -306,33 +311,65 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             </div>
           </div>
 
-          {/* Colonne droite — photo chantier + badge vérification */}
-          <div className="relative hidden lg:block">
-            <div className="relative h-[520px] rounded-3xl overflow-hidden border border-sand-200">
-              <Image
-                src="https://images.unsplash.com/photo-1672748341520-6a839e6c05bb?w=900&h=1100&fit=crop&q=80"
-                alt="Artisan RGE certifié souriant sur un chantier de rénovation énergétique"
-                fill
-                priority
-                sizes="(max-width: 1024px) 0px, 440px"
-                placeholder="blur"
-                blurDataURL={BLUR_PLACEHOLDER}
-                className="object-cover"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-charcoal-950/35 via-transparent to-transparent"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 bg-white rounded-2xl border border-sand-200 shadow-soft px-5 py-4">
-              <div className="w-10 h-10 rounded-xl bg-accent-50 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5 text-accent-600" aria-hidden="true" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-charcoal-900">
-                  Certification RGE vérifiée
+          {/* Colonne droite — aperçu « live » du registre RGE.
+              Plus de photo stock générique : un panneau de preuve de vie
+              (vrais compteurs RGE par métier, source ADEME) — honnête,
+              cohérent design system, premium. Décoratif (aria-hidden) :
+              les vrais parcours sont dans la recherche / les sections. */}
+          <div className="relative hidden lg:block" aria-hidden="true">
+            {/* Carte offset en arrière-plan — profondeur premium */}
+            <div className="absolute inset-0 translate-x-4 translate-y-5 rounded-3xl bg-white/55 border border-sand-200" />
+
+            <div className="relative rounded-3xl bg-white border border-sand-200 shadow-soft-lg p-7">
+              {/* En-tête source officielle */}
+              <div className="flex items-center gap-3 pb-5 mb-5 border-b border-sand-100">
+                <div className="w-11 h-11 rounded-2xl bg-accent-50 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-[22px] h-[22px] text-accent-600" />
                 </div>
-                <div className="text-xs text-charcoal-500">Source&nbsp;: Registre RGE ADEME</div>
+                <div className="min-w-0">
+                  <div className="text-sm font-bold text-charcoal-900 leading-tight">
+                    Registre RGE ADEME
+                  </div>
+                  <div className="text-xs text-charcoal-500">Source officielle · data.gouv.fr</div>
+                </div>
+                <span className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold text-accent-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-500" />À jour
+                </span>
+              </div>
+
+              {/* Lignes métier — vrais compteurs RGE */}
+              <div className="space-y-2.5">
+                {heroServices.map(({ Icon: HeroSvcIcon, name, slug }) => (
+                  <div
+                    key={slug}
+                    className="flex items-center gap-3 rounded-2xl bg-sand-50 px-3.5 py-3"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center shrink-0">
+                      <HeroSvcIcon className="w-5 h-5 text-primary-500" />
+                    </div>
+                    <span className="text-sm font-semibold text-charcoal-800 truncate">{name}</span>
+                    <span className="ml-auto inline-flex items-center gap-1 text-xs font-bold text-accent-700 bg-accent-50 px-2.5 py-1 rounded-full shrink-0">
+                      <ShieldCheck className="w-3 h-3" />
+                      {formatProviderCount(serviceCounts[slug])} RGE
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pied — agrégat national */}
+              <div className="flex items-center justify-between gap-3 pt-5 mt-5 border-t border-sand-100">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-heading text-2xl font-black text-charcoal-900 tabular-nums">
+                    {countStr}
+                  </span>
+                  <span className="text-xs text-charcoal-500">artisans certifiés</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-sm text-charcoal-500">
+                  <MapPin className="w-4 h-4 text-primary-400" />
+                  <span>
+                    <strong className="text-charcoal-800">{deptCount}</strong> départements
+                  </span>
+                </div>
               </div>
             </div>
           </div>
