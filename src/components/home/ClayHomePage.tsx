@@ -193,7 +193,7 @@ function ClayFAQSection() {
     .flatMap((c) => c.questions)
 
   return (
-    <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
+    <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-16 md:py-20">
       <h2
         className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900 text-center mb-12"
         style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}
@@ -458,19 +458,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative max-w-4xl mx-auto">
-              {/* Connector line (desktop) */}
-              <div
-                className="hidden md:block absolute top-[48px] h-0.5 opacity-20"
-                style={{
-                  left: '20%',
-                  right: '20%',
-                  background:
-                    'repeating-linear-gradient(90deg,#E86B4B 0,#E86B4B 8px,transparent 8px,transparent 18px)',
-                }}
-                aria-hidden="true"
-              />
-
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
               {[
                 {
                   n: '1',
@@ -494,25 +482,21 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 const StepIcon = step.icon
                 return (
                   <ScrollReveal key={step.n} delay={i * 0.12}>
-                    <div className="text-center relative z-10">
-                      {/* Big step number */}
-                      <div className="relative mx-auto mb-5 w-24 h-24 flex items-center justify-center">
-                        <span
-                          className="absolute inset-0 flex items-center justify-center font-heading text-7xl font-black text-primary-100 select-none"
-                          aria-hidden="true"
-                        >
-                          {step.n}
-                        </span>
-                        <div className="relative w-14 h-14 rounded-2xl bg-white shadow-soft flex items-center justify-center border border-sand-200">
-                          <StepIcon className="w-7 h-7 text-primary-400" />
-                        </div>
+                    <div className="relative h-full bg-white rounded-2xl border border-sand-200 shadow-soft px-7 py-8 transition-shadow hover:shadow-soft-lg">
+                      {/* Numéro fantôme en filigrane (coin haut-droit) */}
+                      <span
+                        className="absolute top-3 right-5 font-heading text-6xl font-black text-primary-100 select-none leading-none"
+                        aria-hidden="true"
+                      >
+                        {step.n}
+                      </span>
+                      <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center mb-5">
+                        <StepIcon className="w-7 h-7 text-primary-500" />
                       </div>
                       <div className="font-heading text-lg font-bold text-charcoal-900 mb-2">
                         {step.title}
                       </div>
-                      <p className="text-sm text-charcoal-500 leading-relaxed max-w-xs mx-auto">
-                        {step.desc}
-                      </p>
+                      <p className="text-sm text-charcoal-500 leading-relaxed">{step.desc}</p>
                     </div>
                   </ScrollReveal>
                 )
@@ -525,7 +509,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
       {/* ─── REGISTRE RGE — signature data : constellation France ── */}
       <ScrollReveal as="section">
         <div className="bg-white border-y border-sand-200">
-          <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-20 md:py-24 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-16 md:py-20 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
               <p className="text-sm font-medium text-charcoal-500 mb-4">
                 Source&nbsp;: registre RGE ADEME — data.gouv.fr
