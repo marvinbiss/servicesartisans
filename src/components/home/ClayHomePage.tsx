@@ -297,6 +297,29 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               </Link>
             </div>
 
+            {/* Aperçu registre — mobile/tablette uniquement (le panneau de
+                preuve desktop est caché < lg). Pills métier scrollables avec
+                vrais compteurs RGE → preuve de vie avant le scroll. */}
+            {heroServices.length > 0 && (
+              <div className="lg:hidden -mx-5 px-5 mb-8 flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                {heroServices.map(({ Icon: HeroPillIcon, name, slug }) => (
+                  <Link
+                    key={slug}
+                    href={`/services/${slug}`}
+                    className="shrink-0 inline-flex items-center gap-2 bg-white border border-sand-200 rounded-full pl-2 pr-3.5 py-1.5 shadow-soft"
+                  >
+                    <span className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center">
+                      <HeroPillIcon className="w-4 h-4 text-primary-500" aria-hidden="true" />
+                    </span>
+                    <span className="text-sm font-semibold text-charcoal-800">{name}</span>
+                    <span className="text-xs font-bold text-accent-700">
+                      {formatProviderCount(serviceCounts[slug])}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+
             {/* Trust line — sources officielles + note */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-charcoal-500">
               <span className="font-medium">Source&nbsp;: registre RGE ADEME</span>
@@ -632,7 +655,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                   value: `${ratingStr}/5`,
                   label: 'note moyenne',
                   icon: Star,
-                  color: 'text-amber-500',
+                  color: 'text-amber-400 fill-amber-400',
                 },
                 {
                   value: 'Gratuit',
