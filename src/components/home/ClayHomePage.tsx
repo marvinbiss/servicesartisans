@@ -108,7 +108,50 @@ function formatName(raw: string): string {
   return raw.replace(/\s*\(.*$/, '')
 }
 
-// Fallback : témoignages représentatifs (prénom + ville, pas de nom de famille)
+// ── Avatars monogramme ───────────────────────────────────────────
+// On n'utilise PLUS de photos stock (Unsplash) ni de faux visages : ça
+// sonnait « template ». Un monogramme (initiales sur fond de marque,
+// couleur déterministe d'après le nom) est honnête, cohérent avec le
+// design system, et lisible. Les vrais avatar_url, s'ils existent un jour,
+// pourront remplacer le monogramme au cas par cas.
+const MONO_BG = [
+  'bg-primary-100 text-primary-600',
+  'bg-accent-100 text-accent-700',
+  'bg-sand-200 text-charcoal-700',
+]
+
+function initials(name: string): string {
+  const parts = formatName(name)
+    .replace(/[^A-Za-zÀ-ÿ ]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+  if (parts.length === 0) return '?'
+  return (parts[0][0] + (parts[1]?.[0] ?? '')).toUpperCase()
+}
+
+function monoClass(seed: string): string {
+  let h = 0
+  for (const c of seed) h = (h + c.charCodeAt(0)) % MONO_BG.length
+  return MONO_BG[h]
+}
+
+/** Icône métier d'après la spécialité (carte artisan). */
+function tradeIcon(specialty: string | null | undefined) {
+  const s = (specialty ?? '').toLowerCase()
+  if (s.includes('plomb')) return Droplets
+  if (s.includes('électric') || s.includes('electric')) return Zap
+  if (s.includes('chauff')) return Flame
+  if (s.includes('peintre') || s.includes('peinture')) return PaintBucket
+  if (s.includes('menuis')) return Hammer
+  if (s.includes('maçon') || s.includes('macon')) return HardHat
+  if (s.includes('pompe') || s.includes('isol') || s.includes('thermi')) return Thermometer
+  return ShieldCheck
+}
+
+// Fallback : témoignages représentatifs (prénom + ville, pas de nom de famille).
+// Pas d'avatar : on rend un monogramme (cf. initials/monoClass) — pas de faux
+// visage stock.
 const FALLBACK_REVIEWS = [
   {
     author_name: 'Sophie · Lyon',
@@ -116,8 +159,6 @@ const FALLBACK_REVIEWS = [
     content:
       "Fuite d'eau un dimanche soir, j'ai trouvé un plombier en 20 minutes via le site. Intervention rapide, tarif annoncé respecté. Je recommande sans hésiter.",
     created_at: '',
-    avatar:
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
   },
   {
     author_name: 'Marc · Bordeaux',
@@ -125,8 +166,6 @@ const FALLBACK_REVIEWS = [
     content:
       "3 devis reçus en 48h pour ma rénovation de salle de bain. J'ai pu comparer les prix et choisir sereinement. L'artisan a respecté les délais et le budget.",
     created_at: '',
-    avatar:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
   },
   {
     author_name: 'Nathalie · Toulouse',
@@ -134,24 +173,7 @@ const FALLBACK_REVIEWS = [
     content:
       "Ce qui m'a convaincue c'est la vérification SIREN des artisans. On sait à qui on a affaire. Mise en relation simple, travaux réalisés dans la foulée.",
     created_at: '',
-    avatar:
-      'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
   },
-]
-
-const CARD_BG_IMAGES = [
-  'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=250&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&h=250&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
-]
-
-const REVIEW_AVATARS = [
-  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80',
 ]
 
 function renderStars(rating: number) {
@@ -377,18 +399,37 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 <ScrollReveal key={slug} delay={i * 0.06}>
                   <Link
                     href={`/services/${slug}`}
-                    className="group snap-start flex-shrink-0 w-[160px] md:w-auto bg-white rounded-2xl p-5 text-center transition-all duration-300 border border-sand-200 hover:border-primary-200 hover:-translate-y-1 hover:shadow-card-hover block"
+                    className="group relative snap-start flex-shrink-0 w-[170px] md:w-auto bg-white rounded-2xl p-5 transition-all duration-300 border border-sand-200 hover:border-primary-300 hover:-translate-y-1 hover:shadow-card-hover block overflow-hidden"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-100 transition-colors">
-                      <SvcIcon className="w-6 h-6 text-primary-400" />
+                    {/* halo d'accent au hover */}
+                    <div
+                      className="absolute -top-10 -right-10 w-24 h-24 rounded-full bg-primary-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      aria-hidden="true"
+                    />
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                        <SvcIcon className="w-6 h-6 text-primary-500" />
+                      </div>
+                      <div className="text-[15px] font-bold text-charcoal-900 mb-2 leading-tight">
+                        {name}
+                      </div>
+                      <div className="flex items-center justify-between gap-2">
+                        {serviceCounts[slug] > 0 ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-accent-700 bg-accent-50 px-2.5 py-1 rounded-full">
+                            <ShieldCheck className="w-3 h-3" aria-hidden="true" />
+                            {formatProviderCount(serviceCounts[slug])} RGE
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center text-xs font-medium text-charcoal-500 bg-sand-100 px-2.5 py-1 rounded-full">
+                            dès {price}€
+                          </span>
+                        )}
+                        <ArrowRight
+                          className="w-4 h-4 text-charcoal-300 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all duration-300 shrink-0"
+                          aria-hidden="true"
+                        />
+                      </div>
                     </div>
-                    <div className="text-sm font-bold text-charcoal-900 mb-1">{name}</div>
-                    <div className="text-xs text-charcoal-400">
-                      {serviceCounts[slug] > 0
-                        ? `${formatProviderCount(serviceCounts[slug])} artisans`
-                        : `À partir de ${price}€`}
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-charcoal-200 group-hover:text-primary-400 mx-auto mt-2 transition-colors" />
                   </Link>
                 </ScrollReveal>
               ))}
@@ -617,10 +658,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             {/* Big review cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
               {bigReviews.map((rv, i) => {
-                const avatar =
-                  'avatar' in rv && rv.avatar
-                    ? (rv.avatar as string)
-                    : REVIEW_AVATARS[i % REVIEW_AVATARS.length]
+                const author = rv.author_name || 'Client vérifié'
                 return (
                   <ScrollReveal key={rv.author_name || i} delay={i * 0.1}>
                     <div className="bg-sand-50 rounded-2xl p-6 border border-sand-200 hover:shadow-card-hover transition-all duration-300">
@@ -631,20 +669,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         {rv.content}
                       </p>
                       <div className="flex items-center gap-2.5">
-                        <Image
-                          src={avatar}
-                          alt={rv.author_name || 'Client vérifié'}
-                          width={40}
-                          height={40}
-                          sizes="40px"
-                          placeholder="blur"
-                          blurDataURL={BLUR_PLACEHOLDER}
-                          className="rounded-full object-cover border-2 border-sand-200"
-                        />
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${monoClass(author)}`}
+                          aria-hidden="true"
+                        >
+                          {initials(author)}
+                        </div>
                         <div>
-                          <div className="text-sm font-bold text-charcoal-900">
-                            {rv.author_name || 'Client vérifié'}
-                          </div>
+                          <div className="text-sm font-bold text-charcoal-900">{author}</div>
                           <div className="text-xs text-charcoal-400">Client vérifié</div>
                         </div>
                         <div className="ml-auto text-xs">{renderStars(rv.rating)}</div>
@@ -692,28 +724,29 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 const profileHref = a.stable_id
                   ? `/services/${a.slug}/${a.profileCity}/${a.stable_id}`
                   : `/services/${a.slug}`
-                const bgImage = CARD_BG_IMAGES[i % CARD_BG_IMAGES.length]
+                const TradeIcon = tradeIcon(a.specialty)
 
                 return (
                   <ScrollReveal key={a.name} delay={i * 0.1}>
                     <div className="rounded-3xl overflow-hidden transition-all duration-300 bg-white border border-sand-200 hover:shadow-card-hover hover:-translate-y-1">
-                      <div className="relative overflow-hidden h-[200px]">
-                        <Image
-                          src={bgImage}
-                          alt={`${a.name} — services artisans en France`}
-                          fill
-                          {...(i < 3 ? { priority: true } : { loading: 'lazy' as const })}
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                          placeholder="blur"
-                          blurDataURL={BLUR_PLACEHOLDER}
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-                        <div className="absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 border border-accent-200">
-                          {a.is_verified ? '✓ Vérifié SIREN' : '✓ Référencé'}
+                      {/* Header marque : monogramme + icône métier (plus de photo
+                          stock générique — authentique & cohérent design system). */}
+                      <div className="relative h-[132px] bg-gradient-to-br from-sand-100 to-sand-200 flex items-center justify-center">
+                        <div
+                          className={`w-[68px] h-[68px] rounded-2xl flex items-center justify-center text-2xl font-black shadow-soft ${monoClass(a.name)}`}
+                          aria-hidden="true"
+                        >
+                          {initials(a.name)}
+                        </div>
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 translate-y-1/2 w-9 h-9 rounded-xl bg-white shadow-soft border border-sand-200 flex items-center justify-center">
+                          <TradeIcon className="w-5 h-5 text-primary-500" aria-hidden="true" />
+                        </div>
+                        <div className="absolute top-3 right-3 inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-full bg-white/90 text-accent-700 border border-accent-200">
+                          <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                          {a.is_verified ? 'Vérifié SIREN' : 'Référencé'}
                         </div>
                       </div>
-                      <div className="px-5 pb-5 pt-4">
+                      <div className="px-5 pb-5 pt-6">
                         <div className="text-base font-black text-charcoal-900 mb-0.5 line-clamp-1">
                           {formatName(a.name)}
                         </div>
