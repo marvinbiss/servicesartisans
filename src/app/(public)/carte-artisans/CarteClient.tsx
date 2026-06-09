@@ -136,7 +136,7 @@ function CityListFallback({
                 style={{ backgroundColor: getMarkerColor(city.providerCount) }}
               />
               <div className="min-w-0">
-                <p className="font-medium text-charcoal-900 group-hover:text-primary-600 truncate">
+                <p className="font-medium text-charcoal-900 group-hover:text-primary-600 leading-tight">
                   {city.name}
                 </p>
                 <p className="text-xs text-charcoal-500">

@@ -402,7 +402,7 @@ export default function ServiceLocationPageClient({
               <button
                 onClick={() => setViewMode('list')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'list'
+                  viewMode !== 'map'
                     ? 'bg-white text-charcoal-900 shadow-soft'
                     : 'text-charcoal-500'
                 }`}

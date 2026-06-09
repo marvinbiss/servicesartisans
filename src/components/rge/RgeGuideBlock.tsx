@@ -167,7 +167,7 @@ export default async function RgeGuideBlock({
                     surface="guide"
                     className="group flex items-center justify-between rounded-lg border border-accent-200 bg-white px-3 py-2.5 hover:border-accent-400 hover:bg-accent-50 transition-colors"
                   >
-                    <span className="text-sm font-medium text-charcoal-900 truncate">
+                    <span className="text-sm font-medium text-charcoal-900 leading-tight">
                       {city.name}
                     </span>
                     <span className="text-xs font-semibold text-accent-700 bg-accent-100 rounded-full px-2 py-0.5 ml-2">

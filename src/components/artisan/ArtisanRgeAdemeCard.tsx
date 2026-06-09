@@ -22,8 +22,8 @@ export function ArtisanRgeAdemeCard({
     >
       <div className="flex items-start gap-3">
         <ShieldCheck className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
-        <div>
-          <p className="text-sm font-semibold text-charcoal-900">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-charcoal-900 break-words [overflow-wrap:anywhere]">
             Coordonnées officielles {displayName}
           </p>
           <p className="text-xs text-charcoal-500 mt-0.5">

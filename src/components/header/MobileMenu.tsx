@@ -324,7 +324,7 @@ export default function MobileMenu({
                     >
                       <Map className="w-3.5 h-3.5 text-charcoal-400" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-charcoal-700 truncate">
+                        <div className="text-sm font-medium text-charcoal-700 leading-tight">
                           {region.name}
                         </div>
                         <div className="text-2xs text-charcoal-400">

@@ -262,7 +262,7 @@ export default function DesktopMegaMenus({
                         <Map className="w-5 h-5 text-charcoal-400 group-hover/region:text-primary-500 transition-colors" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-charcoal-800 group-hover/region:text-primary-600 transition-colors truncate">
+                        <div className="text-sm font-semibold text-charcoal-800 group-hover/region:text-primary-600 transition-colors leading-tight">
                           {region.name}
                         </div>
                         <div className="text-xs text-charcoal-400 mt-0.5">
@@ -293,7 +293,7 @@ export default function DesktopMegaMenus({
                       >
                         <Globe className="w-4 h-4 text-accent-400 group-hover/region:text-accent-600 transition-colors flex-shrink-0" />
                         <div className="min-w-0">
-                          <div className="text-sm font-medium text-charcoal-700 group-hover/region:text-accent-700 transition-colors truncate">
+                          <div className="text-sm font-medium text-charcoal-700 group-hover/region:text-accent-700 transition-colors leading-tight">
                             {region.name}
                           </div>
                         </div>
