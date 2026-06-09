@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import { FileText, Phone } from 'lucide-react'
+import { FileText, Phone, User } from 'lucide-react'
 import { PHONE_TEL } from '@/lib/seo/config'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { buildDevisHref } from '@/lib/utils'
-import { getClientPortrait } from '@/lib/data/images-faces'
 import DevisBottomSheet from './DevisBottomSheet'
 import ScrollNudge from './ScrollNudge'
 
@@ -210,17 +209,18 @@ export default function StickyMobileCTA({
             {/* Social proof line with avatar stack */}
             {providerCount && providerCount > 0 && (
               <div className="flex items-center justify-center gap-2 mb-1.5">
-                <div className="flex -space-x-1.5">
-                  {[0, 1, 2].map((i) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                <div className="flex -space-x-1.5" aria-hidden="true">
+                  {[
+                    'bg-primary-100 text-primary-600',
+                    'bg-accent-100 text-accent-700',
+                    'bg-secondary-100 text-secondary-700',
+                  ].map((c, i) => (
+                    <span
                       key={i}
-                      src={getClientPortrait(i).src}
-                      alt=""
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 rounded-full border border-white object-cover"
-                    />
+                      className={`w-5 h-5 rounded-full border border-white flex items-center justify-center ${c}`}
+                    >
+                      <User className="w-2.5 h-2.5" />
+                    </span>
                   ))}
                 </div>
                 <p className="text-2xs text-charcoal-500">

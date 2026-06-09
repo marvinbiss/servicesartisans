@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
-import { getClientPortrait } from '@/lib/data/images-faces'
+import { initials, monoClass } from '@/lib/ui/monogram'
 
 interface Testimonial {
   name: string
@@ -176,16 +175,13 @@ export default function InlineTestimonial({
             className="rounded-xl border border-sand-300 bg-white p-4 shadow-soft transition-shadow hover:shadow-soft-lg"
           >
             <div className="flex items-center gap-3 mb-2.5">
-              {/* Avatar */}
-              <Image
-                src={getClientPortrait(t.portraitIndex).src}
-                alt={t.name}
-                width={36}
-                height={36}
-                sizes="36px"
-                loading="lazy"
-                className="h-9 w-9 shrink-0 rounded-full object-cover border border-sand-200"
-              />
+              {/* Monogramme (plus de faux visage stock) */}
+              <div
+                className={`h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${monoClass(t.name)}`}
+                aria-hidden="true"
+              >
+                {initials(t.name)}
+              </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-charcoal-900 truncate">{t.name}</p>
                 <p className="text-2xs text-charcoal-500">

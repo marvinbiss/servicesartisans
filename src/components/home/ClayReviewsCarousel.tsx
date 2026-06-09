@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import type { HomepageReview } from '@/lib/data/stats'
-import { getClientPortrait } from '@/lib/data/images-faces'
+import { initials, monoClass } from '@/lib/ui/monogram'
 
 const FALLBACK_REVIEWS = [
   {
@@ -112,15 +111,12 @@ export function ClayReviewsCarousel({ reviews }: Props) {
               “{review.content}”
             </p>
             <div className="flex items-center gap-2.5">
-              <Image
-                src={getClientPortrait(idx).src}
-                alt={review.author_name || 'Client vérifié'}
-                width={40}
-                height={40}
-                sizes="40px"
-                loading="lazy"
-                className="rounded-full object-cover shrink-0 border-2 border-sand-200"
-              />
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${monoClass(review.author_name || 'Client')}`}
+                aria-hidden="true"
+              >
+                {initials(review.author_name || 'Client vérifié')}
+              </div>
               <div>
                 <p className="text-charcoal-900 text-sm font-semibold">
                   {review.author_name || 'Client vérifié'}

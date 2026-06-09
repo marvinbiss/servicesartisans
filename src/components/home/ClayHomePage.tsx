@@ -30,6 +30,7 @@ import {
   type HomepageReview,
 } from '@/lib/data/stats'
 import { faqCategories } from '@/lib/data/faq-data'
+import { initials, monoClass } from '@/lib/ui/monogram'
 
 interface Props {
   stats: SiteStats
@@ -104,34 +105,6 @@ function formatName(raw: string): string {
       .replace(/\s*\(.*$/, '')
   }
   return raw.replace(/\s*\(.*$/, '')
-}
-
-// ── Avatars monogramme ───────────────────────────────────────────
-// On n'utilise PLUS de photos stock (Unsplash) ni de faux visages : ça
-// sonnait « template ». Un monogramme (initiales sur fond de marque,
-// couleur déterministe d'après le nom) est honnête, cohérent avec le
-// design system, et lisible. Les vrais avatar_url, s'ils existent un jour,
-// pourront remplacer le monogramme au cas par cas.
-const MONO_BG = [
-  'bg-primary-100 text-primary-600',
-  'bg-accent-100 text-accent-700',
-  'bg-sand-200 text-charcoal-700',
-]
-
-function initials(name: string): string {
-  const parts = formatName(name)
-    .replace(/[^A-Za-zÀ-ÿ ]/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-  if (parts.length === 0) return '?'
-  return (parts[0][0] + (parts[1]?.[0] ?? '')).toUpperCase()
-}
-
-function monoClass(seed: string): string {
-  let h = 0
-  for (const c of seed) h = (h + c.charCodeAt(0)) % MONO_BG.length
-  return MONO_BG[h]
 }
 
 /** Icône métier d'après la spécialité (carte artisan). */

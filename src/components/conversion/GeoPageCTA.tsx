@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import { Phone } from 'lucide-react'
+import { Phone, User } from 'lucide-react'
 import { PHONE_TEL, PHONE_NUMBER } from '@/lib/seo/config'
 import { buildDevisHref } from '@/lib/utils'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import { trackEvent } from '@/lib/analytics/tracking'
-import { getClientPortrait } from '@/lib/data/images-faces'
 
 const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
   ssr: false,
@@ -89,17 +88,19 @@ export default function GeoPageCTA({
           </div>
           {(ville || service) && (
             <div className="mt-4 flex items-center gap-3">
-              <div className="flex -space-x-2 flex-shrink-0">
-                {[0, 1, 2, 3].map((i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+              <div className="flex -space-x-2 flex-shrink-0" aria-hidden="true">
+                {[
+                  'bg-primary-100 text-primary-600',
+                  'bg-accent-100 text-accent-700',
+                  'bg-secondary-100 text-secondary-700',
+                  'bg-sand-200 text-charcoal-700',
+                ].map((c, i) => (
+                  <span
                     key={i}
-                    src={getClientPortrait(i).src}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="w-7 h-7 rounded-full border-2 border-white object-cover"
-                  />
+                    className={`w-7 h-7 rounded-full border-2 border-white flex items-center justify-center ${c}`}
+                  >
+                    <User className="w-3.5 h-3.5" />
+                  </span>
                 ))}
               </div>
               <SocialProofBanner
