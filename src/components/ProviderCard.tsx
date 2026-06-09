@@ -17,7 +17,7 @@ import {
 import { hasActiveRgeQualification } from '@/lib/rge/has-active-qualification'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
-import { getDiceBearAvatar } from '@/lib/data/images-faces'
+import { initials, monoClass } from '@/lib/ui/monogram'
 import { CompareButton } from '@/components/ui/CompareButton'
 import { trackEvent } from '@/lib/analytics/tracking'
 import RgeBadge from '@/components/artisan/RgeBadge'
@@ -84,8 +84,9 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
 
       {/* Avatar, Nom et verification */}
       <div className="flex items-start gap-4 mb-3">
-        {/* Avatar duplicate-link hidden from AT to avoid double-announce
-            with the name link. Img alt stays for image-search SEO. */}
+        {/* Monogramme (initiales sur fond de marque) — cohérent avec la
+            social proof site-wide. Plus de dépendance réseau DiceBear ni de
+            faux visage. Lien dupliqué masqué aux AT (le nom porte la nav). */}
         <Link
           href={providerUrl}
           rel={linkRel}
@@ -100,33 +101,10 @@ export default function ProviderCard({ provider, isHovered = false }: ProviderCa
             })
           }
         >
-          <div className="w-12 h-12 rounded-full overflow-hidden shadow-soft flex-shrink-0 bg-sand-100">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={getDiceBearAvatar(provider.siret || provider.slug || provider.name, 96)}
-              alt={`${provider.name} — artisan à ${provider.address_city || 'France'}`}
-              width={48}
-              height={48}
-              loading="lazy"
-              decoding="async"
-              onError={(e) => {
-                // DiceBear hiccup → swap to a CSS-only initial bubble so
-                // the layout reserves its 48 × 48 footprint and we don't
-                // leave a broken-image icon.
-                const img = e.currentTarget
-                img.style.display = 'none'
-                const parent = img.parentElement
-                if (parent && !parent.querySelector('[data-avatar-fallback]')) {
-                  const fallback = document.createElement('div')
-                  fallback.setAttribute('data-avatar-fallback', '')
-                  fallback.className =
-                    'w-full h-full flex items-center justify-center bg-primary-100 text-primary-700 font-semibold text-base'
-                  fallback.textContent = (provider.name || 'A').charAt(0).toUpperCase()
-                  parent.appendChild(fallback)
-                }
-              }}
-              className="w-full h-full"
-            />
+          <div
+            className={`w-12 h-12 rounded-full flex items-center justify-center text-base font-bold shadow-soft flex-shrink-0 ${monoClass(provider.siret || provider.slug || provider.name)}`}
+          >
+            {initials(provider.name)}
           </div>
         </Link>
 

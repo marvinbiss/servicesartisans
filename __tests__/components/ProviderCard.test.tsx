@@ -37,11 +37,6 @@ vi.mock('@/lib/analytics/tracking', () => ({
   trackEvent: vi.fn(),
 }))
 
-// Stub images-faces (évite dépendance DiceBear)
-vi.mock('@/lib/data/images-faces', () => ({
-  getDiceBearAvatar: () => 'data:image/svg+xml;utf8,<svg/>',
-}))
-
 const baseProvider: Partial<Provider> & Pick<Provider, 'id' | 'name'> = {
   id: 'uuid-1',
   stable_id: 'abc123',

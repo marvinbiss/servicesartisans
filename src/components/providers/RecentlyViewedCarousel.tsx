@@ -14,7 +14,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { History, Trash2, ArrowRight, MapPin } from 'lucide-react'
-import { getDiceBearAvatar } from '@/lib/data/images-faces'
+import { initials, monoClass } from '@/lib/ui/monogram'
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed'
 
 interface RecentlyViewedCarouselProps {
@@ -93,16 +93,11 @@ export function RecentlyViewedCarousel({
               className="group/recent flex-shrink-0 w-[220px] md:w-auto snap-start bg-white border border-sand-300 rounded-2xl p-4 transition-all duration-200 hover:border-primary-200 hover:shadow-card-hover hover:-translate-y-0.5"
             >
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 shadow-soft">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={getDiceBearAvatar(item.id, 80)}
-                    alt=""
-                    width={40}
-                    height={40}
-                    loading="lazy"
-                    className="w-full h-full"
-                  />
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-soft ${monoClass(item.id || item.name)}`}
+                  aria-hidden="true"
+                >
+                  {initials(item.name)}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-charcoal-900 text-sm truncate group-hover/recent:text-primary-500 transition-colors">
