@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-05-21",
-  "routes_count": 344,
+  "routes_count": 347,
   "routes": [
     "/connexion",
     "/embed/rge",
@@ -14,6 +14,9 @@
     "/donner-avis/[bookingId]",
     "/mes-recherches",
     "/espace-artisan/abonnement",
+    "/espace-artisan/devis",
+    "/espace-artisan/devis/nouveau",
+    "/espace-artisan/devis/[id]",
     "/espace-artisan/avis",
     "/espace-artisan/avis-recus",
     "/espace-artisan/calendrier",

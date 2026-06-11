@@ -4,7 +4,16 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
-import { LayoutDashboard, Inbox, Contact, Settings, ExternalLink, Menu, X } from 'lucide-react'
+import {
+  LayoutDashboard,
+  Inbox,
+  FileText,
+  Contact,
+  Settings,
+  ExternalLink,
+  Menu,
+  X,
+} from 'lucide-react'
 import LogoutButton from '@/components/LogoutButton'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
 
@@ -57,6 +66,11 @@ const NAV: NavEntry[] = [
     icon: Inbox,
     match: ['/espace-artisan/demandes-recues', '/espace-artisan/leads'],
     badge: true,
+  },
+  {
+    href: '/espace-artisan/devis',
+    label: 'Mes devis',
+    icon: FileText,
   },
   {
     href: '/espace-artisan/profil',
