@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-06-12",
+  "source": "Supabase Database Linter (dashboard > Advisors > Security). Run manuel.",
+  "note": "ERRORs/WARNs structurellement acceptés, chacun justifié. Toute clé ABSENTE d'ici = nouvelle régression à traiter, pas à ajouter sans revue sécurité. Identité = champ `cache_key` du linter.",
+  "accepted": [
+    {
+      "cache_key": "security_definer_view_public_artisans_public",
+      "level": "ERROR",
+      "lint": "security_definer_view",
+      "object": "public.artisans_public",
+      "migration": "532_profiles_rls_reenable_p0.sql",
+      "reason": "SECURITY DEFINER VOULU. Projection publique safe des profils artisans pendant que profiles.RLS est ON (mig 532). En security_invoker la vue appliquerait la RLS de profiles et bloquerait anon -> casserait toutes les pages publiques. La vue n'expose qu'un sous-ensemble whitelisté de colonnes non-PII.",
+      "do_not_flip": true
+    },
+    {
+      "cache_key": "security_definer_view_public_providers_public",
+      "level": "ERROR",
+      "lint": "security_definer_view",
+      "object": "public.providers_public",
+      "migration": "534_providers_public_view_gate_pii.sql (recreee 546_add_artisan_quote.sql)",
+      "reason": "SECURITY DEFINER VOULU. Projection publique safe de providers qui gate la PII (téléphone) selon la règle RGE (tel ADEME affiché seulement si qualif RGE active). En security_invoker, anon serait bloqué par la RLS de providers -> pages publiques cassées. Le gating PII est fait DANS la définition de la vue.",
+      "do_not_flip": true
+    },
+    {
+      "cache_key": "rls_disabled_in_public_public_spatial_ref_sys",
+      "level": "ERROR",
+      "lint": "rls_disabled_in_public",
+      "object": "public.spatial_ref_sys",
+      "migration": "n/a (table système PostGIS)",
+      "reason": "Table de référence système possédée par l'extension PostGIS. Non-altérable (on n'est pas owner) -> ALTER TABLE ... ENABLE RLS échoue. Données publiques non sensibles (référentiels de projection spatiale). Plancher irréductible du linter, déjà documenté baseline 2026-04-25 (mig 473).",
+      "do_not_flip": true
+    }
+  ],
+  "resolved": [
+    {
+      "cache_key": "security_definer_view_public_lead_exclusivity_audit",
+      "level": "ERROR",
+      "lint": "security_definer_view",
+      "object": "public.lead_exclusivity_audit",
+      "resolved_by": "549_reharden_lead_exclusivity_audit_view.sql",
+      "reason": "FUITE RÉELLE corrigée. Drift: replay de mig 455 (CREATE OR REPLACE VIEW sans clause WITH) annulait le security_invoker=true posé par mig 472 §F. Mig 549 le repose. NE PAS ajouter à `accepted`."
+    }
+  ]
+}
