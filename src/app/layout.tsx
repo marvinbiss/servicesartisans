@@ -183,7 +183,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const artisanCount = await getProviderCount()
   return (
-    <html lang="fr" className={`scroll-smooth ${dmSans.variable} ${sora.variable}`}>
+    <html lang="fr" className={`scroll-smooth overflow-x-clip ${dmSans.variable} ${sora.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
         <meta name="msapplication-TileColor" content="#E86B4B" />
@@ -251,7 +251,7 @@ gtag('config','${process.env.NEXT_PUBLIC_GA_ID || 'G-K4XLTK72TB'}',{'send_page_v
           </>
         ) : null}
       </head>
-      <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
+      <body className="font-sans bg-sand-50 antialiased text-charcoal-900 overflow-x-clip">
         {/* Google Tag Manager — afterInteractive: loads after hydration, before idle (captures early interactions) */}
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

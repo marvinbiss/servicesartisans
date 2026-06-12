@@ -172,7 +172,29 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="rounded-3xl bg-sand-50 border border-sand-200 p-4 md:p-6 overflow-x-auto">
+          {/* Mobile : liste métier → villes. Le tableau 7 colonnes est
+              illisible < md (cellules sur 3 lignes, villes cachées en scroll
+              horizontal non découvrable). Mêmes liens, tous crawlables. */}
+          <div className="md:hidden space-y-3">
+            {TOP_SERVICES.map((service) => (
+              <div key={service.slug} className="rounded-2xl bg-sand-50 border border-sand-200 p-4">
+                <div className="font-semibold text-charcoal-900 mb-3">{service.name}</div>
+                <div className="flex flex-wrap gap-2">
+                  {TOP_CITIES.slice(0, 6).map((city) => (
+                    <Link
+                      key={city.slug}
+                      href={`/services/${service.slug}/${city.slug}`}
+                      className="inline-flex items-center px-3.5 py-2 text-sm font-medium text-primary-600 bg-white border border-sand-200 rounded-full hover:bg-primary-50 hover:text-primary-700 hover:border-primary-200 transition-colors"
+                    >
+                      {city.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:block rounded-3xl bg-sand-50 border border-sand-200 p-4 md:p-6 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr>

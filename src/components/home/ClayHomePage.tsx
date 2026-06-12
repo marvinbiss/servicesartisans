@@ -234,8 +234,11 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
       {/* ─── HERO — asymétrique : pitch + recherche / photo chantier ── */}
       <section className="relative bg-gradient-sand overflow-hidden">
         <div className="max-w-[1320px] mx-auto px-5 md:px-10 pt-10 pb-12 md:pt-16 md:pb-20 grid lg:grid-cols-[1fr_minmax(0,440px)] gap-10 lg:gap-16 items-center">
-          {/* Colonne gauche — pitch + recherche */}
-          <div>
+          {/* Colonne gauche — pitch + recherche.
+              min-w-0 : sans ça le grid item garde min-width:auto et déborde à
+              ~686px sur mobile (clippé par overflow-hidden du hero → search +
+              fin de titre coupés). */}
+          <div className="min-w-0">
             <h2
               className="font-heading font-black tracking-[-0.04em] leading-[1.05] text-charcoal-900 text-balance mb-5"
               style={{ fontSize: 'clamp(2.25rem, 4.5vw, 3.6rem)' }}

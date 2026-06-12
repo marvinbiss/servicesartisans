@@ -97,7 +97,7 @@ export default function Footer() {
               <div className="w-12 h-12 bg-accent-500/10 group-hover:bg-accent-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                 <Shield className="w-6 h-6 text-accent-400" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-white font-semibold text-sm">Artisans RGE certifiés</p>
                 <p className="text-sand-500 text-xs mt-0.5">Qualibat, Qualifelec, QualiPAC</p>
               </div>
@@ -106,7 +106,7 @@ export default function Footer() {
               <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                 <Building2 className="w-6 h-6 text-primary-400" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-white font-semibold text-sm">101 départements</p>
                 <p className="text-sand-500 text-xs mt-0.5">Couverture nationale</p>
               </div>
@@ -115,7 +115,7 @@ export default function Footer() {
               <div className="w-12 h-12 bg-secondary-500/10 group-hover:bg-secondary-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                 <Award className="w-6 h-6 text-secondary-400" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-white font-semibold text-sm">100% gratuit</p>
                 <p className="text-sand-500 text-xs mt-0.5">Sans engagement</p>
               </div>
@@ -124,7 +124,7 @@ export default function Footer() {
               <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                 <CreditCard className="w-6 h-6 text-primary-400" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-white font-semibold text-sm">Devis gratuit</p>
                 <p className="text-sand-500 text-xs mt-0.5">Comparez jusqu'à 3 offres</p>
               </div>

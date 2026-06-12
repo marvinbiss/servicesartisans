@@ -75,7 +75,7 @@ export default function MobileBottomNav() {
               href={href}
               prefetch={prefetch}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
+              className={`flex flex-col items-center justify-center gap-0.5 flex-1 min-w-0 h-full transition-colors touch-manipulation active:scale-95 ${
                 isActive ? 'text-primary-400' : 'text-charcoal-400'
               }`}
             >
