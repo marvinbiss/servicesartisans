@@ -101,6 +101,7 @@ const ORPHAN_DROP_WHITELIST = new Set([
   '417_reviews_rls_hardening_fix.sql', // clean sweep INSERT policies — admin FOR ALL couvre
   '532_profiles_rls_reenable_p0.sql', // drop policy soup permissive (fuite) ; couverture = own-row + is_admin() + service_role BYPASSRLS
   '536_storage_drop_dead_write_policies.sql', // drop délibéré de policies INSERT mortes storage (acceptaient tout authentifié) ; uploads = service_role uniquement
+  '550_supabase_linter_security_hardening.sql', // drop des policies SELECT "Anyone can view {avatars,portfolio,reviews}" storage.objects (listing over-exposure) ; buckets publics servent via getPublicUrl sans policy SELECT
 ])
 
 let droppedPoliciesSample = []
