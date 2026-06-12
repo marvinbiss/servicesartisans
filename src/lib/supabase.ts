@@ -3,6 +3,7 @@ import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
+import { isRetryableError } from '@/lib/utils/errors'
 
 // React.cache() request-scope dedup — best-effort. Sous Next.js RSC il agrège
 // les appels duplicate au sein du même render (generateMetadata + page render).
@@ -37,12 +38,55 @@ export const IS_BUILD =
 // constant). On bascule sur le fetch natif : ISR + revalidate=3600 reste
 // piloté par le `export const revalidate` des pages ; Supabase utilise
 // son propre keep-alive pool.
+// Resilient fetch for the Supabase client. The Supabase pooler closes idle
+// keep-alive TLS connections; undici then reuses a stale socket and the next
+// request fails with `TypeError: fetch failed` / `UND_ERR_SOCKET: other side
+// closed` (prod 2026-06-12). A fresh fetch almost always succeeds, so we retry
+// transient transport failures transparently for EVERY query through this
+// client — single point, covers all callers (CEE listings, commune-data,
+// valid-combos, stats…).
+//
+// SAFETY: retry ONLY idempotent methods (GET/HEAD). PostgREST reads are GET,
+// `head:true` counts are HEAD. Writes/RPC (POST/PATCH/DELETE) are NEVER
+// retried — a dropped response socket on a write that already committed
+// server-side would otherwise double-apply.
+const RESILIENT_FETCH_ATTEMPTS = 3
+const RESILIENT_FETCH_BASE_DELAY_MS = 150
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function resilientFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const method = (init?.method ?? 'GET').toUpperCase()
+  const idempotent = method === 'GET' || method === 'HEAD'
+
+  let lastError: unknown
+  for (let attempt = 1; attempt <= RESILIENT_FETCH_ATTEMPTS; attempt++) {
+    try {
+      return await fetch(input, init)
+    } catch (err) {
+      lastError = err
+      const canRetry =
+        idempotent &&
+        attempt < RESILIENT_FETCH_ATTEMPTS &&
+        !init?.signal?.aborted &&
+        isRetryableError(err)
+      if (!canRetry) throw err
+      const delay = RESILIENT_FETCH_BASE_DELAY_MS * attempt * (1 + Math.random() * 0.25)
+      await sleepMs(delay)
+    }
+  }
+  throw lastError
+}
+
 export const supabase =
   IS_BUILD || !process.env.NEXT_PUBLIC_SUPABASE_URL
     ? (null as unknown as ReturnType<typeof createClient>)
     : createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+        { global: { fetch: resilientFetch } }
       )
 
 /**

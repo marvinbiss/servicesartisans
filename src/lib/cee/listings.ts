@@ -34,6 +34,11 @@ import { logger } from '@/lib/logger'
 import type { Provider } from '@/types'
 import { getCeeOperationByCode } from '@/lib/cee/catalogue'
 
+// Note résilience socket : les drops de socket Supabase (UND_ERR_SOCKET) sont
+// gérés en amont par le `resilientFetch` global du client (@/lib/supabase) qui
+// retry les transports GET/HEAD transitoires. Pas de retry par-requête ici —
+// le catch fail-open ci-dessous prend le relais si le retry global échoue.
+
 const CACHE_TTL_6H = 6 * 60 * 60
 
 /**

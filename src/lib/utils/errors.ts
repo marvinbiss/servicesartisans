@@ -246,6 +246,48 @@ export class PermissionError extends AppError {
 }
 
 /**
+ * Transient infrastructure failures worth retrying. Covers Node/undici socket
+ * drops (`UND_ERR_SOCKET` "other side closed", `ECONNRESET`), DNS hiccups
+ * (`EAI_AGAIN`, `ENOTFOUND`), connection refusals and the generic
+ * `TypeError: fetch failed` wrapper supabase-js surfaces when its underlying
+ * fetch is killed mid-flight by the Supabase pooler closing an idle keep-alive
+ * connection.
+ */
+const RETRYABLE_ERROR_MARKERS = [
+  'timeout',
+  'network',
+  'econnreset',
+  'econnrefused',
+  'etimedout',
+  'enotfound',
+  'eai_again',
+  'socket hang up',
+  'other side closed',
+  'und_err',
+  'fetch failed',
+]
+
+/**
+ * Best-effort flat text of any thrown value: native Error message, supabase
+ * PostgrestError-shaped plain objects (`{ message, details }`) and nested
+ * `cause` chains (undici puts the socket error under `cause`).
+ */
+function extractErrorText(error: unknown): string {
+  if (error instanceof Error) {
+    return `${error.message} ${extractErrorText((error as { cause?: unknown }).cause)}`
+  }
+  if (error && typeof error === 'object') {
+    const e = error as { message?: unknown; details?: unknown; cause?: unknown }
+    const parts: string[] = []
+    if (typeof e.message === 'string') parts.push(e.message)
+    if (typeof e.details === 'string') parts.push(e.details)
+    if (e.cause) parts.push(extractErrorText(e.cause))
+    return parts.join(' ')
+  }
+  return ''
+}
+
+/**
  * Check if error is retryable
  */
 export function isRetryableError(error: unknown): boolean {
@@ -253,18 +295,10 @@ export function isRetryableError(error: unknown): boolean {
     return error.retryable
   }
 
-  if (error instanceof Error) {
-    const message = error.message.toLowerCase()
-    return (
-      message.includes('timeout') ||
-      message.includes('network') ||
-      message.includes('econnreset') ||
-      message.includes('econnrefused') ||
-      message.includes('socket hang up')
-    )
-  }
+  const text = extractErrorText(error).toLowerCase()
+  if (!text) return false
 
-  return false
+  return RETRYABLE_ERROR_MARKERS.some((marker) => text.includes(marker))
 }
 
 /**
