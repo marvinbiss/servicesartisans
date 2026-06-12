@@ -103,6 +103,12 @@ export default tseslint.config(
       'src/assets/debug/**',
       // Root-level analysis scripts (one-shot, not part of the app)
       '_*.mjs',
+      // One-shot design/QA capture scripts (browser globals, not app code)
+      'design-shots/**',
+      // Eval runner scripts (Node globals, not part of the app build)
+      'evals/**',
+      // Published package build output (vendored, already linted at source)
+      'packages/**/dist/**',
     ],
   }
 )

@@ -61,6 +61,12 @@ scripts/output/
 # Debug/temp files — never commit
 scripts/debug-*
 tmp_audit_*
+# Root-level one-shot analysis/QA scratch (scripts, screenshots, reports)
+/_*.mjs
+/_*.json
+/_*.png
+/_*.txt
+scripts/_*
 audit-prompt.txt
 force-deploy-fix.txt
 test-webhook.txt
