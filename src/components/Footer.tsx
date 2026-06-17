@@ -4,8 +4,6 @@ import {
   Phone,
   Mail,
   Facebook,
-  Twitter,
-  Linkedin,
   Instagram,
   Shield,
   CreditCard,
@@ -149,30 +147,26 @@ export default function Footer() {
                 className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
               >
                 <defs>
-                  <linearGradient
-                    id="footerBg"
-                    x1="0"
-                    y1="0"
-                    x2="48"
-                    y2="48"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#E86B4B" />
-                    <stop offset="1" stopColor="#C24B2A" />
+                  <linearGradient id="footerShine" x1="0" y1="0" x2="0.7" y2="0.7">
+                    <stop stopColor="#fff" stopOpacity="0.18" />
+                    <stop offset="0.46" stopColor="#fff" stopOpacity="0" />
                   </linearGradient>
-                  <radialGradient id="footerShine" cx=".32" cy=".26" r=".65">
-                    <stop stopColor="#fff" stopOpacity=".16" />
-                    <stop offset="1" stopColor="#fff" stopOpacity="0" />
-                  </radialGradient>
                 </defs>
-                <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerBg)" />
-                <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerShine)" />
-                <path
-                  fillRule="evenodd"
+                <rect width="48" height="48" rx="14.4" fill="#C8492A" />
+                <rect width="48" height="48" rx="14.4" fill="url(#footerShine)" />
+                <text
+                  x="24"
+                  y="25"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontFamily="var(--font-heading), 'Schibsted Grotesk', sans-serif"
+                  fontWeight="800"
+                  fontSize="22.08"
+                  letterSpacing="-0.99"
                   fill="#fff"
-                  fillOpacity="0.95"
-                  d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z"
-                />
+                >
+                  SA
+                </text>
               </svg>
               <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-sand-200 transition-colors duration-200">
                 Services<span className="text-primary-400">Artisans</span>
@@ -186,7 +180,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-2.5">
               <a
-                href="https://facebook.com/servicesartisans"
+                href="https://www.facebook.com/profile.php?id=61552412492819"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
@@ -195,25 +189,7 @@ export default function Footer() {
                 <Facebook className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
               <a
-                href="https://x.com/servicesartisans"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
-                aria-label="X"
-              >
-                <Twitter className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
-              </a>
-              <a
-                href="https://linkedin.com/company/servicesartisans"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
-              </a>
-              <a
-                href="https://instagram.com/servicesartisans"
+                href="https://www.instagram.com/servicesartisans/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group"

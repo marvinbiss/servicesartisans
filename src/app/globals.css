@@ -507,7 +507,7 @@ img {
 
 /* Smooth focus rings — terracotta brand accent */
 :focus-visible {
-  outline: 2px solid #e86b4b;
+  outline: 2px solid #e0723f;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -519,7 +519,7 @@ img {
 
 /* Custom selection color */
 ::selection {
-  background-color: rgba(232, 107, 75, 0.2);
+  background-color: rgba(200, 73, 42, 0.2);
   color: inherit;
 }
 

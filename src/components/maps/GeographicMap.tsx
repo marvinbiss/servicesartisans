@@ -137,7 +137,7 @@ export default function GeographicMap({
       const color = isHighlighted
         ? '#C4533A' // clay-600
         : isVerified
-          ? '#E86B4B' // clay-400
+          ? '#E0723F' // clay-400
           : '#78716c' // sand-500
 
       return _L.divIcon({
@@ -235,7 +235,7 @@ export default function GeographicMap({
         return _L.divIcon({
           html: `<div style="
             width:${size}px;height:${size}px;
-            background:#E86B4B;color:white;
+            background:#E0723F;color:white;
             border-radius:50%;border:3px solid white;
             display:flex;align-items:center;justify-content:center;
             font-weight:bold;font-size:${fontSize}px;
@@ -291,13 +291,13 @@ export default function GeographicMap({
         <div style="padding:16px">
           <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px">
             <h3 style="font-weight:700;color:#111827;font-size:16px;line-height:1.3;margin:0">${provider.name}</h3>
-            ${isVerified ? `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E86B4B;flex-shrink:0" title="Artisan référencé"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span>` : ''}
+            ${isVerified ? `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E0723F;flex-shrink:0" title="Artisan référencé"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span>` : ''}
           </div>
-          ${provider.specialty ? `<p style="font-size:14px;color:#E86B4B;font-weight:500;margin:0 0 8px">${provider.specialty}</p>` : ''}
+          ${provider.specialty ? `<p style="font-size:14px;color:#E0723F;font-weight:500;margin:0 0 8px">${provider.specialty}</p>` : ''}
           ${ratingHtml}
           ${addressText ? `<p style="font-size:14px;color:#4b5563;margin:0 0 12px;display:flex;align-items:start;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${addressText}</span></p>` : ''}
           <div style="display:flex;gap:8px">
-            <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E86B4B,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Voir le profil</a>
+            <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E0723F,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Voir le profil</a>
           </div>
         </div>
       `

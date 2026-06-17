@@ -1,13 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32" fill="none">
-  <defs>
-    <linearGradient id="b" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E86B4B"/>
-      <stop offset="1" stop-color="#C24B2A"/>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#b)"/>
-  <text x="24" y="24" text-anchor="middle" dominant-baseline="central"
-        font-family="'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif"
-        font-weight="800" font-size="22" letter-spacing="-0.5"
-        fill="#fff" fill-opacity=".97">SA</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs><linearGradient id="sh" x1="0" y1="0" x2="0.7" y2="0.7"><stop offset="0" stop-color="#fff" stop-opacity="0.18"/><stop offset="0.46" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+<rect width="48" height="48" rx="14.4" fill="#C8492A"/>
+<rect width="48" height="48" rx="14.4" fill="url(#sh)"/>
+<text x="24" y="25" text-anchor="middle" dominant-baseline="central" font-family="'Schibsted Grotesk','Segoe UI',sans-serif" font-weight="800" font-size="22.08" letter-spacing="-0.99" fill="#fff">SA</text>
 </svg>

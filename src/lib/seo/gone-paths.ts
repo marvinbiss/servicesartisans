@@ -576,7 +576,7 @@ export const GONE_RESPONSE_BODY = `<!DOCTYPE html>
 <meta name="robots" content="noindex, nofollow">
 <title>Page introuvable — ServicesArtisans</title>
 <style>
-:root{--t:#C24B2A;--ink:#1f2937;--muted:#6b7280;--bg:#fdf1ec}
+:root{--t:#A23A1F;--ink:#1f2937;--muted:#6b7280;--bg:#FDF2EE}
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;line-height:1.5}
 .card{max-width:560px;width:100%;background:#fff;border-radius:16px;padding:40px 32px;box-shadow:0 10px 40px rgba(0,0,0,.06);text-align:center}

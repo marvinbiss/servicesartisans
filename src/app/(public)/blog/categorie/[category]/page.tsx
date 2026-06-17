@@ -202,7 +202,7 @@ export default async function BlogCategoryPage({ params }: PageProps) {
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%)',
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200, 73, 42,0.18) 0%, transparent 60%)',
               }}
             />
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />

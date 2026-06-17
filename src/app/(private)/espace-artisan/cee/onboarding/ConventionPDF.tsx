@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 24,
-    borderBottom: '2pt solid #D4553A',
+    borderBottom: '2pt solid #C8492A',
     paddingBottom: 12,
   },
   logo: {
     fontSize: 14,
     fontFamily: 'Helvetica-Bold',
-    color: '#D4553A',
+    color: '#C8492A',
     marginBottom: 4,
   },
   subtitle: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 11,
     fontFamily: 'Helvetica-Bold',
-    color: '#D4553A',
+    color: '#C8492A',
     marginTop: 18,
     marginBottom: 6,
     borderBottom: '1pt solid #EDE8E1',

@@ -147,10 +147,8 @@ export const companyIdentity = {
 
   // Social (real profiles)
   social: {
-    facebook: 'https://facebook.com/servicesartisans',
-    instagram: 'https://instagram.com/servicesartisans',
-    linkedin: 'https://linkedin.com/company/servicesartisans',
-    twitter: 'https://x.com/servicesartisans',
+    facebook: 'https://www.facebook.com/profile.php?id=61552412492819',
+    instagram: 'https://www.instagram.com/servicesartisans/',
   },
 
   // Hosting (Level 1 — verifiable)

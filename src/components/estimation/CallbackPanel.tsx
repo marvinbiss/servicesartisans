@@ -19,7 +19,7 @@ async function fireConfetti() {
       particleCount: 80,
       spread: 70,
       origin: { x: 0.5, y: 0.9 },
-      colors: ['#E86B4B', '#f2b523', '#3D8B68', '#C24B2A', '#f2b523'],
+      colors: ['#E0723F', '#f2b523', '#3D8B68', '#A23A1F', '#f2b523'],
       startVelocity: 30,
       gravity: 1.2,
       ticks: 120,

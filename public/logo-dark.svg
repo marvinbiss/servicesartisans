@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="299" height="72" viewBox="0 0 299 72">
+<defs>
+<linearGradient id="sh" x1="0" y1="0" x2="0.7" y2="0.7"><stop offset="0" stop-color="#fff" stop-opacity="0.18"></stop><stop offset="0.46" stop-color="#fff" stop-opacity="0"></stop></linearGradient></defs>
+<rect x="6" y="12" width="48" height="48" rx="14.399999999999999" fill="#C8492A"></rect><rect x="6" y="12" width="48" height="48" rx="14.399999999999999" fill="url(#sh)"></rect>
+<text x="31" y="38.400000000000006" text-anchor="middle" dominant-baseline="central" font-family="&#39;Schibsted Grotesk&#39;,sans-serif" font-weight="800" font-size="22.080000000000002" letter-spacing="-0.9936" fill="#fff">SA</text>
+<text x="67" y="36" dominant-baseline="central" font-family="&#39;Schibsted Grotesk&#39;,sans-serif" font-size="27" letter-spacing="-0.675"><tspan font-weight="700" fill="#FCFAF7">Services</tspan><tspan font-weight="800" fill="#E0723F">Artisans</tspan></text></svg>

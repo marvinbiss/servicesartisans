@@ -162,7 +162,7 @@ export default function OutilsPage() {
               className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200, 73, 42,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(200, 73, 42,0.1) 0%, transparent 50%)',
               }}
             />
             <div

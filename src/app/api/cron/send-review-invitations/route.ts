@@ -95,7 +95,7 @@ function buildReviewEmail(input: {
         <head><meta charset="utf-8"></head>
         <body style="font-family: 'Segoe UI', Tahoma, sans-serif; margin:0; padding:0; background:#f5f5f5;">
           <div style="max-width:600px; margin:0 auto; padding:20px;">
-            <div style="background:linear-gradient(135deg,#E86B4B 0%,#C24B2A 100%); padding:30px; border-radius:12px 12px 0 0; text-align:center;">
+            <div style="background:linear-gradient(135deg,#E0723F 0%,#A23A1F 100%); padding:30px; border-radius:12px 12px 0 0; text-align:center;">
               <h1 style="color:white; margin:0; font-size:24px;">Votre avis compte</h1>
             </div>
             <div style="background:white; padding:30px; border-radius:0 0 12px 12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -108,7 +108,7 @@ function buildReviewEmail(input: {
                 Votre retour aide d'autres particuliers à choisir le bon artisan, et nos pros à progresser.
               </p>
               <div style="text-align:center; margin:30px 0;">
-                <a href="${input.reviewUrl}" style="display:inline-block; background:#E86B4B; color:white; padding:14px 28px; border-radius:8px; text-decoration:none; font-weight:600; font-size:16px;">
+                <a href="${input.reviewUrl}" style="display:inline-block; background:#E0723F; color:white; padding:14px 28px; border-radius:8px; text-decoration:none; font-weight:600; font-size:16px;">
                   Laisser un avis en 30 secondes
                 </a>
               </div>

@@ -204,7 +204,7 @@ export default async function DepartementsIndexPage() {
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.12) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61,139,104,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(200, 73, 42,0.12) 0%, transparent 50%)',
             }}
           />
           <div
@@ -355,7 +355,7 @@ export default async function DepartementsIndexPage() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(232,107,75,0.12) 0%, transparent 60%)',
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(200, 73, 42,0.12) 0%, transparent 60%)',
           }}
         />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">

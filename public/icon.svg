@@ -1,24 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E86B4B"/>
-      <stop offset="1" stop-color="#C24B2A"/>
-    </linearGradient>
-    <radialGradient id="gl" cx=".32" cy=".26" r=".65">
-      <stop stop-color="#fff" stop-opacity=".16"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </radialGradient>
-    <filter id="sh">
-      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#7c2d12" flood-opacity=".16"/>
-    </filter>
-  </defs>
-  <rect x="21" y="21" width="470" height="470" rx="110" fill="url(#bg)"/>
-  <rect x="21" y="21" width="470" height="470" rx="110" fill="url(#gl)"/>
-  <rect x="21" y="21" width="470" height="470" rx="110" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="2"/>
-  <g filter="url(#sh)">
-    <text x="256" y="256" text-anchor="middle" dominant-baseline="central"
-          font-family="'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif"
-          font-weight="800" font-size="240" letter-spacing="-8"
-          fill="#fff" fill-opacity=".97">SA</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+<defs><linearGradient id="sh" x1="0" y1="0" x2="0.7" y2="0.7"><stop offset="0" stop-color="#fff" stop-opacity="0.18"/><stop offset="0.46" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+<rect width="48" height="48" rx="14.4" fill="#C8492A"/>
+<rect width="48" height="48" rx="14.4" fill="url(#sh)"/>
+<text x="24" y="25" text-anchor="middle" dominant-baseline="central" font-family="'Schibsted Grotesk','Segoe UI',sans-serif" font-weight="800" font-size="22.08" letter-spacing="-0.99" fill="#fff">SA</text>
 </svg>

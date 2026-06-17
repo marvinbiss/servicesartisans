@@ -21,8 +21,8 @@ interface LeadsTrendChartProps {
   data: MonthlyData[]
 }
 
-const CHART_COLOR = '#E86B4B' // primary-400
-const CHART_COLOR_CURRENT = '#C24B2A' // primary-600
+const CHART_COLOR = '#E0723F' // primary-400
+const CHART_COLOR_CURRENT = '#A23A1F' // primary-600
 
 function CustomTooltip({
   active,
@@ -68,7 +68,7 @@ export const LeadsTrendChart = memo(function LeadsTrendChart({ data }: LeadsTren
             allowDecimals={false}
             domain={[0, Math.ceil(maxCount * 1.15)]}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(232, 107, 75, 0.06)' }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(200, 73, 42, 0.06)' }} />
           <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={48}>
             {data.map((_, index) => (
               <Cell

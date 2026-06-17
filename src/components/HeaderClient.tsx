@@ -399,34 +399,30 @@ export default function HeaderClient({
                   className="flex-shrink-0"
                 >
                   <defs>
-                    <linearGradient
-                      id="headerBg"
-                      x1="0"
-                      y1="0"
-                      x2="48"
-                      y2="48"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stopColor="#E86B4B" />
-                      <stop offset="1" stopColor="#C24B2A" />
+                    <linearGradient id="headerShine" x1="0" y1="0" x2="0.7" y2="0.7">
+                      <stop stopColor="#fff" stopOpacity="0.18" />
+                      <stop offset="0.46" stopColor="#fff" stopOpacity="0" />
                     </linearGradient>
-                    <radialGradient id="headerShine" cx=".32" cy=".26" r=".65">
-                      <stop stopColor="#fff" stopOpacity=".16" />
-                      <stop offset="1" stopColor="#fff" stopOpacity="0" />
-                    </radialGradient>
                   </defs>
-                  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#headerBg)" />
-                  <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#headerShine)" />
-                  <path
-                    fillRule="evenodd"
+                  <rect width="48" height="48" rx="14.4" fill="#C8492A" />
+                  <rect width="48" height="48" rx="14.4" fill="url(#headerShine)" />
+                  <text
+                    x="24"
+                    y="25"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontFamily="var(--font-heading), 'Schibsted Grotesk', sans-serif"
+                    fontWeight="800"
+                    fontSize="22.08"
+                    letterSpacing="-0.99"
                     fill="#fff"
-                    fillOpacity="0.95"
-                    d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z"
-                  />
+                  >
+                    SA
+                  </text>
                 </svg>
                 <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-charcoal-900 group-hover/logo:text-charcoal-700 transition-colors duration-200">
                   Services
-                  <span className="text-primary-400 group-hover/logo:text-primary-300 transition-colors duration-200">
+                  <span className="text-primary-500 group-hover/logo:text-primary-400 transition-colors duration-200">
                     Artisans
                   </span>
                 </span>

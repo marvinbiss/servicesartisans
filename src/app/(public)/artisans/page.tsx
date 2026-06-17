@@ -149,7 +149,7 @@ export default async function ArtisansPage() {
             className="absolute inset-0"
             style={{
               backgroundImage:
-                'radial-gradient(circle at 25% 25%, rgba(251,191,36,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(232,107,75,0.2) 0%, transparent 50%)',
+                'radial-gradient(circle at 25% 25%, rgba(251,191,36,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(200, 73, 42,0.2) 0%, transparent 50%)',
             }}
           />
         </div>

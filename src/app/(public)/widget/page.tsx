@@ -78,7 +78,7 @@ export default function WidgetPage() {
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(232,107,75,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200, 73, 42,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(200, 73, 42,0.1) 0%, transparent 50%)',
             }}
           />
           <div
@@ -156,8 +156,8 @@ export default function WidgetPage() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path d="M20 4L4 18h5v14h8v-8h6v8h8V18h5L20 4z" fill="#E86B4B" />
-                    <path d="M28 12l-4-4v4h4z" fill="#C24B2A" />
+                    <path d="M20 4L4 18h5v14h8v-8h6v8h8V18h5L20 4z" fill="#E0723F" />
+                    <path d="M28 12l-4-4v4h4z" fill="#A23A1F" />
                     <circle cx="30" cy="30" r="8" fill="#3D8B68" />
                     <path
                       d="M27 30l2 2 4-4"
@@ -182,7 +182,7 @@ export default function WidgetPage() {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 6,
-                    background: '#E86B4B',
+                    background: '#E0723F',
                     color: '#fff',
                     padding: '8px 16px',
                     borderRadius: 8,
@@ -195,7 +195,7 @@ export default function WidgetPage() {
                   <ArrowRight className="w-3.5 h-3.5" />
                 </span>
                 <div style={{ marginTop: 10, fontSize: 10, color: '#a09a92' }}>
-                  Artisan RGE certifié sur <span style={{ color: '#E86B4B' }}>{SITE_NAME}</span>
+                  Artisan RGE certifié sur <span style={{ color: '#E0723F' }}>{SITE_NAME}</span>
                 </div>
               </div>
             </div>

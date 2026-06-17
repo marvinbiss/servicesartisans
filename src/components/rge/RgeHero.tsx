@@ -53,7 +53,7 @@ export default function RgeHero({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.16) 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200, 73, 42,0.16) 0%, transparent 60%)',
         }}
       />
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">

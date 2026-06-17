@@ -32,7 +32,7 @@ export default async function Image() {
           right: 0,
           bottom: 0,
           background:
-            'radial-gradient(ellipse at 30% 20%, rgba(232, 107, 75, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%)',
+            'radial-gradient(ellipse at 30% 20%, rgba(200, 73, 42, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%)',
           display: 'flex',
         }}
       />
@@ -62,18 +62,24 @@ export default async function Image() {
               width: 72,
               height: 72,
               borderRadius: 16,
-              background: 'linear-gradient(135deg, #E86B4B, #C24B2A)',
+              background: 'linear-gradient(135deg, #E0723F, #A23A1F)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <svg width="44" height="44" viewBox="0 0 48 48" fill="white">
-              <path
-                fillRule="evenodd"
-                d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24 Z M21 37 V29 A3 3 0 0 1 27 29 V37 Z"
-              />
-            </svg>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: 40,
+                fontWeight: 800,
+                color: 'white',
+                letterSpacing: -1.8,
+                lineHeight: 1,
+              }}
+            >
+              SA
+            </div>
           </div>
           <span
             style={{
@@ -84,7 +90,7 @@ export default async function Image() {
             }}
           >
             Services
-            <span style={{ color: '#f59e0b' }}>Artisans</span>
+            <span style={{ color: '#E0723F' }}>Artisans</span>
           </span>
         </div>
 
@@ -119,7 +125,7 @@ export default async function Image() {
             width: 120,
             height: 4,
             borderRadius: 2,
-            background: 'linear-gradient(90deg, #E86B4B, #f59e0b)',
+            background: 'linear-gradient(90deg, #E0723F, #E0723F)',
             marginTop: 40,
             display: 'flex',
           }}

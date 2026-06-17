@@ -54,7 +54,7 @@ export default async function Image({
           left: 0,
           right: 0,
           height: 6,
-          background: 'linear-gradient(90deg, #3b82f6, #f59e0b, #3b82f6)',
+          background: 'linear-gradient(90deg, #3b82f6, #E0723F, #3b82f6)',
           display: 'flex',
         }}
       />
@@ -151,12 +151,18 @@ export default async function Image({
               justifyContent: 'center',
             }}
           >
-            <svg width="26" height="26" viewBox="0 0 48 48" fill="white">
-              <path
-                fillRule="evenodd"
-                d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24 Z M21 37 V29 A3 3 0 0 1 27 29 V37 Z"
-              />
-            </svg>
+            <div
+              style={{
+                display: 'flex',
+                fontSize: 24,
+                fontWeight: 800,
+                color: 'white',
+                letterSpacing: -1.1,
+                lineHeight: 1,
+              }}
+            >
+              SA
+            </div>
           </div>
           <span
             style={{

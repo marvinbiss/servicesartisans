@@ -95,7 +95,7 @@ function buildEmailHtml(rows: DeadLetterRow[], totalCount: number): string {
   return `
     <!DOCTYPE html>
     <html><body style="font-family:Arial,sans-serif;font-size:14px;color:#222">
-      <h2 style="color:#C24B2A">Pipedrive dead-letter — revue hebdo</h2>
+      <h2 style="color:#A23A1F">Pipedrive dead-letter — revue hebdo</h2>
       <p><strong>${totalCount} leads</strong> ont atteint le seuil max de tentatives Pipedrive et n'ont jamais été synchronisés.</p>
       <p>Action : vérifier ci-dessous, corriger manuellement (Pipedrive ou DB), puis reset <code>pipedrive_dead_letter_at = NULL</code> + <code>pipedrive_sync_attempts = 0</code> pour réessayer.</p>
 

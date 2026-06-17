@@ -98,8 +98,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#E86B4B' },
-    { media: '(prefers-color-scheme: dark)', color: '#C24B2A' },
+    { media: '(prefers-color-scheme: light)', color: '#C8492A' },
+    { media: '(prefers-color-scheme: dark)', color: '#A23A1F' },
   ],
   colorScheme: 'light',
 }
@@ -186,7 +186,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="fr" className={`scroll-smooth overflow-x-clip ${dmSans.variable} ${sora.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
-        <meta name="msapplication-TileColor" content="#E86B4B" />
+        <meta name="msapplication-TileColor" content="#C8492A" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}

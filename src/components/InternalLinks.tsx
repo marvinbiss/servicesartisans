@@ -142,7 +142,7 @@ export function PopularServicesLinks({
             <Link
               key={service.slug}
               href={`/services/${service.slug}`}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF1EC] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF2EE] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
             >
               <Icon className="w-3.5 h-3.5" />
               {service.name}
@@ -183,7 +183,7 @@ export function PopularCitiesLinks({
           <Link
             key={city.slug}
             href={`/villes/${city.slug}`}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF1EC] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF2EE] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
           >
             {city.name}
           </Link>
@@ -207,7 +207,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         href="/regions"
         className="flex items-center gap-3 p-4 bg-white border border-sand-300 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
       >
-        <div className="w-10 h-10 bg-[#FDF1EC] rounded-lg flex items-center justify-center group-hover:bg-clay-100 transition-colors">
+        <div className="w-10 h-10 bg-[#FDF2EE] rounded-lg flex items-center justify-center group-hover:bg-clay-100 transition-colors">
           <Building2 className="w-5 h-5 text-clay-400" />
         </div>
         <div>
@@ -285,7 +285,7 @@ export function PopularServiceCityLinks({
           <Link
             key={combo.href}
             href={combo.href}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF1EC] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-100 hover:bg-[#FDF2EE] text-charcoal-700 hover:text-clay-400 rounded-full text-sm transition-colors"
           >
             {combo.label}
           </Link>
@@ -316,7 +316,7 @@ export function ServiceCityMatrix({
           <Link
             key={city.slug}
             href={`/services/${service}/${city.slug}`}
-            className="px-3 py-2 bg-sand-50 hover:bg-[#FDF1EC] text-charcoal-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
+            className="px-3 py-2 bg-sand-50 hover:bg-[#FDF2EE] text-charcoal-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
           >
             {getAnchorText({
               serviceSlug: service,
