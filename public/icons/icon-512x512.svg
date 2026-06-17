@@ -1,18 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="512" height="512" fill="none">
   <defs>
     <linearGradient id="b" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E86B4B"/>
-      <stop offset="1" stop-color="#C24B2A"/>
+      <stop stop-color="#C8492A"/>
+      <stop offset="1" stop-color="#A23A1F"/>
     </linearGradient>
     <radialGradient id="s" cx=".32" cy=".26" r=".65">
       <stop stop-color="#fff" stop-opacity=".16"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
-    <filter id="d"><feDropShadow dx="0" dy=".5" stdDeviation=".8" flood-color="#7c2d12" flood-opacity=".16"/></filter>
   </defs>
   <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#b)"/>
   <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#s)"/>
-  <g filter="url(#d)">
-    <path fill-rule="evenodd" fill="#fff" fill-opacity=".95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z"/>
-  </g>
+  <text x="24" y="25" text-anchor="middle" dominant-baseline="central" font-family="'Schibsted Grotesk','Segoe UI',system-ui,sans-serif" font-weight="800" font-size="22.08" letter-spacing="-0.99" fill="#fff">SA</text>
 </svg>
