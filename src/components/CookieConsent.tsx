@@ -27,7 +27,7 @@ function enableClarity() {
         t.async = true
         t.src = 'https://www.clarity.ms/tag/' + i
         const y = l.getElementsByTagName(r)[0]
-        y.parentNode?.insertBefore(t, y)
+        y?.parentNode?.insertBefore(t, y)
       })(window as unknown as Window & Record<string, unknown>, document, 'clarity', 'script', clarityId)
     }
   }
@@ -138,6 +138,8 @@ export default function CookieConsent() {
         ad_user_data: 'granted',
         ad_personalization: 'granted',
       })
+      // Déclenche le chargement différé du Meta Pixel (RGPD)
+      window.dispatchEvent(new Event('cookie-consent-marketing'))
     }
   }
 

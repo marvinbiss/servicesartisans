@@ -25,12 +25,18 @@ interface ArtisanLeadFormProps {
   initialMetier?: string
   initialVille?: string
   initialCodePostal?: string
+  /** Libellé du bouton (A/B test) */
+  ctaLabel?: string
+  /** Variante A/B, propagée à l'analytics */
+  variant?: string
 }
 
 export function ArtisanLeadForm({
   initialMetier = '',
   initialVille = '',
   initialCodePostal = '',
+  ctaLabel = 'Je veux des clients',
+  variant,
 }: ArtisanLeadFormProps = {}) {
   const router = useRouter()
   const [metier, setMetier] = useState(initialMetier)
@@ -62,7 +68,7 @@ export function ArtisanLeadForm({
       }).catch(() => null)
 
       // Conversion Meta Pixel + Google
-      trackLead({ content_name: metier, content_category: ville })
+      trackLead({ content_name: metier, content_category: ville, variant })
 
       const query = new URLSearchParams({
         metier,
@@ -71,6 +77,7 @@ export function ArtisanLeadForm({
         tel: telephone,
         email,
         ...utm,
+        ...(variant ? { v: variant } : {}),
       })
       router.push(`/inscription-artisan?${query.toString()}`)
     } catch {
@@ -179,7 +186,7 @@ export function ArtisanLeadForm({
           </>
         ) : (
           <>
-            Je veux des clients
+            {ctaLabel}
             <ArrowRight className="w-5 h-5" />
           </>
         )}

@@ -8,7 +8,11 @@ import { ArrowRight } from 'lucide-react'
  * Apparaît après le 1er scroll, ramène au formulaire (#lead-form).
  * Masquée quand le formulaire est déjà visible (évite la redondance).
  */
-export function LandingStickyCTA() {
+interface LandingStickyCTAProps {
+  ctaLabel?: string
+}
+
+export function LandingStickyCTA({ ctaLabel = 'Je veux des clients' }: LandingStickyCTAProps = {}) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export function LandingStickyCTA() {
           onClick={scrollToForm}
           className="ml-auto flex items-center gap-1.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors"
         >
-          Je veux des clients
+          {ctaLabel}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

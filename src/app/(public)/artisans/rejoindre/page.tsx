@@ -12,6 +12,7 @@ import { ArtisanFaq } from '@/components/conversion/ArtisanFaq'
 import { LandingStickyCTA } from '@/components/conversion/LandingStickyCTA'
 import AnimatedCounter from '@/components/conversion/AnimatedCounter'
 import { getProviderCount } from '@/lib/data/stats'
+import { getVariant } from '@/lib/landing/variants'
 
 export const metadata: Metadata = {
   title: 'Devenez artisan partenaire — recevez des demandes de devis | ServicesArtisans',
@@ -68,6 +69,7 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
   const metier = cap(firstParam(searchParams.metier))
   const ville = cap(firstParam(searchParams.ville))
   const codePostal = firstParam(searchParams.codePostal)
+  const v = getVariant(firstParam(searchParams.v))
 
   // Vrai nombre d'artisans actifs (0 si DB indisponible → fallback qualitatif)
   const artisanCount = await getProviderCount()
@@ -98,7 +100,16 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 py-12 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        {/* Décor brand (purement visuel) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary-100/60 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-secondary-100/50 blur-3xl"
+        />
+        <div className="relative max-w-6xl mx-auto px-4 py-12 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-accent-100 text-accent-800 px-3 py-1 text-sm font-medium">
               <CheckCircle2 className="w-4 h-4" />
@@ -109,8 +120,8 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
               {eyebrow && (
                 <span className="block text-primary-600">{eyebrow} :</span>
               )}
-              Plus de chantiers,{' '}
-              <span className="text-primary-600">moins de prospection.</span>
+              {v.headlineLead}{' '}
+              <span className="text-primary-600">{v.headlineAccent}</span>
             </h1>
 
             <p className="mt-5 text-lg text-charcoal-600 max-w-xl">
@@ -180,6 +191,8 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
               initialMetier={metier}
               initialVille={ville}
               initialCodePostal={codePostal}
+              ctaLabel={v.ctaLabel}
+              variant={v.variant}
             />
           </div>
         </div>
@@ -264,7 +277,7 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
       </footer>
 
       {/* CTA fixe mobile */}
-      <LandingStickyCTA />
+      <LandingStickyCTA ctaLabel={v.ctaLabel} />
     </div>
   )
 }
