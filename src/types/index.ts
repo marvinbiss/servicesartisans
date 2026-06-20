@@ -194,6 +194,8 @@ declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void
     dataLayer?: unknown[]
+    /** Meta (Facebook) Pixel — chargé conditionnellement dans le root layout */
+    fbq?: (...args: unknown[]) => void
   }
 }
 

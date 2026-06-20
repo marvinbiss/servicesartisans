@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   Mail, Phone, MapPin, Building,
@@ -8,6 +9,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { trackCompleteRegistration } from '@/lib/analytics/track'
 import { SiretAutocomplete } from '@/components/ui/SiretAutocomplete'
 import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
@@ -18,23 +20,24 @@ const benefits = [
   { icon: TrendingUp, title: 'Croissance', description: 'Développez votre activité' },
 ]
 
-export default function InscriptionArtisanPage() {
+function InscriptionArtisanForm() {
+  const searchParams = useSearchParams()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     // Etape 1 - Entreprise
     entreprise: '',
     siret: '',
-    metier: '',
+    metier: searchParams.get('metier') ?? '',
     autreMetier: '',
     // Etape 2 - Contact
     nom: '',
     prenom: '',
-    email: '',
-    telephone: '',
+    email: searchParams.get('email') ?? '',
+    telephone: searchParams.get('tel') ?? '',
     // Etape 3 - Localisation
     adresse: '',
-    codePostal: '',
-    ville: '',
+    codePostal: searchParams.get('codePostal') ?? '',
+    ville: searchParams.get('ville') ?? '',
     rayonIntervention: '30',
     // Etape 4 - Description
     description: '',
@@ -102,6 +105,7 @@ export default function InscriptionArtisanPage() {
         throw new Error(data.error || 'Erreur lors de l\'inscription')
       }
 
+      trackCompleteRegistration({ content_category: formData.metier })
       setIsSubmitted(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
@@ -572,5 +576,13 @@ export default function InscriptionArtisanPage() {
 
       {/* Footer links */}
     </div>
+  )
+}
+
+export default function InscriptionArtisanPage() {
+  return (
+    <Suspense fallback={null}>
+      <InscriptionArtisanForm />
+    </Suspense>
   )
 }

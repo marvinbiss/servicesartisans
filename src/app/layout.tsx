@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
+import { headers } from 'next/headers'
 import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { SiteChrome } from '@/components/SiteChrome'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -143,6 +145,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const artisanCount = await getProviderCount()
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   return (
     <html lang="fr" className={`scroll-smooth ${dmSans.variable} ${sora.variable}`}>
       <head>
@@ -159,6 +162,7 @@ export default async function RootLayout({
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
+          nonce={nonce}
           type="application/ld+json"
                    dangerouslySetInnerHTML={{
             __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
@@ -186,7 +190,7 @@ export default async function RootLayout({
       </head>
       <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="afterInteractive">
+        <Script id="gtm" strategy="afterInteractive" nonce={nonce}>
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -204,7 +208,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* Meta Pixel — chargé après consentement analytics (RGPD) */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
-          <Script id="meta-pixel" strategy="lazyOnload">
+          <Script id="meta-pixel" strategy="lazyOnload" nonce={nonce}>
             {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -218,7 +222,7 @@ fbq('track', 'PageView');`}
           </Script>
         )}
         {/* Contentsquare UX Analytics — deferred until idle or 5s fallback */}
-        <Script id="contentsquare-deferred" strategy="lazyOnload">
+        <Script id="contentsquare-deferred" strategy="lazyOnload" nonce={nonce}>
           {`(function(){function l(){if(l.d)return;l.d=1;var s=document.createElement('script');s.src='https://t.contentsquare.net/uxa/8da7eeef2dab8.js';s.async=true;document.head.appendChild(s)}if(typeof requestIdleCallback==='function'){requestIdleCallback(l,{timeout:5000})}else{setTimeout(l,5000)}})();`}
         </Script>
         {/* GA4 removed — GTM (GTM-THV3KZ8N) already includes GA4 tracking, standalone gtag.js was duplicate */}
@@ -233,10 +237,14 @@ fbq('track', 'PageView');`}
           >
             Aller au contenu principal
           </a>
-          <Header artisanCount={artisanCount} />
+          <SiteChrome>
+            <Header artisanCount={artisanCount} />
+          </SiteChrome>
           <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
-          <Footer />
-          <MobileBottomNav />
+          <SiteChrome>
+            <Footer />
+            <MobileBottomNav />
+          </SiteChrome>
           <ServiceWorkerRegistration />
           <CapacitorInit />
           <CookieConsent />
