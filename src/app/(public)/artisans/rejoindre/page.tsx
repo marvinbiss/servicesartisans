@@ -7,6 +7,8 @@ import {
 } from 'lucide-react'
 import { ArtisanLeadForm } from '@/components/conversion/ArtisanLeadForm'
 import { ArtisanTestimonials } from '@/components/conversion/ArtisanTestimonials'
+import { LandingGuarantees } from '@/components/conversion/LandingGuarantees'
+import { ArtisanFaq } from '@/components/conversion/ArtisanFaq'
 import { LandingStickyCTA } from '@/components/conversion/LandingStickyCTA'
 import AnimatedCounter from '@/components/conversion/AnimatedCounter'
 import { getProviderCount } from '@/lib/data/stats'
@@ -183,6 +185,9 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
         </div>
       </section>
 
+      {/* Réassurance / garanties */}
+      <LandingGuarantees />
+
       {/* Bénéfices */}
       <section className="bg-white border-y border-sand-200">
         <div className="max-w-6xl mx-auto px-4 py-14">
@@ -223,6 +228,9 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
           ))}
         </div>
       </section>
+
+      {/* FAQ objections */}
+      <ArtisanFaq />
 
       {/* Bandeau final */}
       <section className="bg-gradient-primary">
