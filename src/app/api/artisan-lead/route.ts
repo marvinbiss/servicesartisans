@@ -22,6 +22,7 @@ function escapeHtml(str: string): string {
 }
 
 const leadSchema = z.object({
+  prenom: z.string().min(2, 'Le prénom est requis'),
   metier: z.string().min(1, 'Le métier est requis'),
   ville: z.string().min(2, 'La ville est requise'),
   codePostal: z.string().optional().default(''),
@@ -73,6 +74,7 @@ export async function POST(request: Request) {
         html: `
           <h2>Nouveau lead artisan (landing publicitaire)</h2>
           <ul>
+            <li><strong>Prénom :</strong> ${escapeHtml(data.prenom)}</li>
             <li><strong>Métier :</strong> ${escapeHtml(data.metier)}</li>
             <li><strong>Ville :</strong> ${escapeHtml(data.codePostal)} ${escapeHtml(data.ville)}</li>
             <li><strong>Téléphone :</strong> ${escapeHtml(telephone)}</li>
@@ -94,7 +96,7 @@ export async function POST(request: Request) {
           to: data.email,
           subject: 'ServicesArtisans — finalisez votre inscription',
           html: `
-            <h2>Bonjour,</h2>
+            <h2>Bonjour ${escapeHtml(data.prenom)},</h2>
             <p>Merci pour votre intérêt ! Pour recevoir des demandes de devis qualifiées
             dans votre zone, il ne reste qu'une étape : finaliser votre inscription.</p>
             <p><a href="https://servicesartisans.fr/inscription-artisan"

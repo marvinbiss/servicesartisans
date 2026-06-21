@@ -31,7 +31,7 @@ function InscriptionArtisanForm() {
     autreMetier: '',
     // Etape 2 - Contact
     nom: '',
-    prenom: '',
+    prenom: searchParams.get('prenom') ?? '',
     email: searchParams.get('email') ?? '',
     telephone: searchParams.get('tel') ?? '',
     // Etape 3 - Localisation

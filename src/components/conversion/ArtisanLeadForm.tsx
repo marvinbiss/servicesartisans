@@ -39,6 +39,7 @@ export function ArtisanLeadForm({
   variant,
 }: ArtisanLeadFormProps = {}) {
   const router = useRouter()
+  const [prenom, setPrenom] = useState('')
   const [metier, setMetier] = useState(initialMetier)
   const [ville, setVille] = useState(initialVille)
   const [codePostal, setCodePostal] = useState(initialCodePostal)
@@ -51,8 +52,8 @@ export function ArtisanLeadForm({
     e.preventDefault()
     setError('')
 
-    if (!metier.trim() || !ville.trim() || !telephone.trim()) {
-      setError('Merci de renseigner votre métier, votre zone et votre téléphone.')
+    if (!prenom.trim() || !metier.trim() || !ville.trim() || !telephone.trim()) {
+      setError('Merci de renseigner votre prénom, votre métier, votre zone et votre téléphone.')
       return
     }
 
@@ -64,13 +65,14 @@ export function ArtisanLeadForm({
       await fetch('/api/artisan-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ metier, ville, codePostal, telephone, email, ...utm }),
+        body: JSON.stringify({ prenom, metier, ville, codePostal, telephone, email, ...utm }),
       }).catch(() => null)
 
       // Conversion Meta Pixel + Google
       trackLead({ content_name: metier, content_category: ville, variant })
 
       const query = new URLSearchParams({
+        prenom,
         metier,
         ville,
         codePostal,
@@ -102,6 +104,21 @@ export function ArtisanLeadForm({
       </div>
 
       <div className="space-y-3">
+        <div>
+          <label htmlFor="lead-prenom" className="block text-sm font-medium text-charcoal-700 mb-1">
+            Votre prénom
+          </label>
+          <input
+            id="lead-prenom"
+            type="text"
+            autoComplete="given-name"
+            value={prenom}
+            onChange={(e) => setPrenom(e.target.value)}
+            placeholder="Karim"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
+          />
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-charcoal-700 mb-1">
             Votre métier
