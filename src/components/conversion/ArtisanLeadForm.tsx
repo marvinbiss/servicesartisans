@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Loader2, ArrowRight, AlertCircle } from 'lucide-react'
+import { Loader2, ArrowRight, AlertCircle, CheckCircle2, PhoneCall } from 'lucide-react'
 import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 import { trackLead } from '@/lib/analytics/track'
@@ -38,7 +37,6 @@ export function ArtisanLeadForm({
   ctaLabel = 'Je veux des clients',
   variant,
 }: ArtisanLeadFormProps = {}) {
-  const router = useRouter()
   const [prenom, setPrenom] = useState('')
   const [metier, setMetier] = useState(initialMetier)
   const [ville, setVille] = useState(initialVille)
@@ -46,6 +44,7 @@ export function ArtisanLeadForm({
   const [telephone, setTelephone] = useState('')
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,7 +60,7 @@ export function ArtisanLeadForm({
     const utm = readUtm()
 
     try {
-      // Best-effort : on capture le lead, mais on n'empêche jamais la redirection
+      // Capture du lead (notif équipe + confirmation). Best-effort.
       await fetch('/api/artisan-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,21 +70,40 @@ export function ArtisanLeadForm({
       // Conversion Meta Pixel + Google
       trackLead({ content_name: metier, content_category: ville, variant })
 
-      const query = new URLSearchParams({
-        prenom,
-        metier,
-        ville,
-        codePostal,
-        tel: telephone,
-        email,
-        ...utm,
-        ...(variant ? { v: variant } : {}),
-      })
-      router.push(`/inscription-artisan?${query.toString()}`)
+      setIsSubmitted(true)
     } catch {
       setError("Une erreur est survenue. Réessayez ou appelez-nous.")
+    } finally {
       setIsLoading(false)
     }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div
+        id="lead-form"
+        className="scroll-mt-24 bg-white rounded-2xl shadow-xl ring-1 ring-charcoal-100 p-6 sm:p-8 text-center"
+      >
+        <div className="mx-auto w-14 h-14 rounded-full bg-accent-100 flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8 text-accent-600" />
+        </div>
+        <h2 className="mt-5 font-heading text-xl font-bold text-charcoal-900">
+          Merci{prenom ? ` ${prenom}` : ''} ! Demande bien reçue.
+        </h2>
+        <p className="mt-3 text-charcoal-600">
+          Un conseiller vous rappelle très vite
+          {telephone ? ` au ${telephone}` : ''} pour activer votre profil et vous
+          envoyer vos premières demandes.
+        </p>
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-sand-100 text-charcoal-600 px-4 py-2 text-sm">
+          <PhoneCall className="w-4 h-4 text-primary-600" />
+          Gardez votre téléphone à portée de main
+        </div>
+        <p className="mt-4 text-xs text-charcoal-400">
+          Inscription gratuite · sans engagement
+        </p>
+      </div>
+    )
   }
 
   return (

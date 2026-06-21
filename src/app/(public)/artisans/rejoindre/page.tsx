@@ -255,12 +255,12 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
           <p className="mt-3 text-white/90 max-w-xl mx-auto">
             Rejoignez le réseau gratuitement et recevez votre première demande dès cette semaine.
           </p>
-          <Link
-            href="/inscription-artisan"
+          <a
+            href="#lead-form"
             className="mt-7 inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-7 py-3.5 rounded-xl hover:bg-sand-50 transition-colors"
           >
             Je m&apos;inscris gratuitement
-          </Link>
+          </a>
         </div>
       </section>
 
