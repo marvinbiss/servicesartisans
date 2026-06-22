@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 import { pushLeadToPipedrive } from '@/lib/pipedrive/lead'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,7 +30,10 @@ const leadSchema = z.object({
   codePostal: z.string().optional().default(''),
   telephone: z.string().min(10, 'Téléphone invalide'),
   // Email facultatif (perso ou pro) — l'artisan est rappelé au téléphone
-  email: z.union([z.string().email('Email invalide'), z.literal('')]).optional().default(''),
+  email: z
+    .union([z.string().email('Email invalide'), z.literal('')])
+    .optional()
+    .default(''),
   // Attribution publicitaire (best-effort)
   utm_source: z.string().optional().default(''),
   utm_medium: z.string().optional().default(''),
@@ -40,6 +44,20 @@ const leadSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting — endpoint public déclenchant l'envoi d'emails (Resend)
+    // vers une adresse fournie par l'utilisateur : limiter l'abus / spam.
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`artisan-lead:${ip}`, { window: 60_000, max: 5 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes, veuillez réessayer plus tard' },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) },
+        }
+      )
+    }
+
     const body = await request.json()
 
     const validation = leadSchema.safeParse(body)

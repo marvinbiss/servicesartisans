@@ -16,6 +16,8 @@ interface MetierAutocompleteProps {
   placeholder?: string
   onSelect: (service: ServiceItem) => void
   onClear?: () => void
+  /** Texte libre saisi (avant toute sélection) — permet de capturer une valeur non listée */
+  onQueryChange?: (query: string) => void
   showIcon?: boolean
   showAllOnFocus?: boolean
   className?: string
@@ -84,19 +86,26 @@ function fuzzyMatch(query: string, target: string): number {
 }
 
 // Popular services for quick access
-const popularServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment']
+const popularServices = [
+  'plombier',
+  'electricien',
+  'serrurier',
+  'chauffagiste',
+  'peintre-en-batiment',
+]
 
 export function MetierAutocomplete({
   value = '',
-  placeholder = 'Quel type d\'artisan cherchez-vous ?',
+  placeholder = "Quel type d'artisan cherchez-vous ?",
   onSelect,
   onClear,
+  onQueryChange,
   showIcon = true,
   showAllOnFocus = true,
   className = '',
   inputClassName = '',
   disabled = false,
-  maxSuggestions = 8
+  maxSuggestions = 8,
 }: MetierAutocompleteProps) {
   const [query, setQuery] = useState(value)
   const [isOpen, setIsOpen] = useState(false)
@@ -109,7 +118,7 @@ export function MetierAutocomplete({
   useEffect(() => {
     setQuery(value)
     if (value) {
-      const found = services.find(s => s.name === value || s.slug === value)
+      const found = services.find((s) => s.name === value || s.slug === value)
       if (found) setSelectedService(found)
     }
   }, [value])
@@ -130,8 +139,8 @@ export function MetierAutocomplete({
     if (!query.trim()) {
       // Show popular services when empty
       if (showAllOnFocus) {
-        const popular = services.filter(s => popularServices.includes(s.slug))
-        const others = services.filter(s => !popularServices.includes(s.slug))
+        const popular = services.filter((s) => popularServices.includes(s.slug))
+        const others = services.filter((s) => !popularServices.includes(s.slug))
         return [...popular, ...others].slice(0, maxSuggestions)
       }
       return []
@@ -139,28 +148,28 @@ export function MetierAutocomplete({
 
     // Score and sort by relevance
     const scored = services
-      .map(service => ({
+      .map((service) => ({
         service,
-        score: Math.max(
-          fuzzyMatch(query, service.name),
-          fuzzyMatch(query, service.slug)
-        )
+        score: Math.max(fuzzyMatch(query, service.name), fuzzyMatch(query, service.slug)),
       }))
-      .filter(item => item.score > 0)
+      .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, maxSuggestions)
 
-    return scored.map(item => item.service)
+    return scored.map((item) => item.service)
   }, [query, maxSuggestions, showAllOnFocus])
 
   // Handle selection
-  const handleSelect = useCallback((service: ServiceItem) => {
-    setQuery(service.name)
-    setSelectedService(service)
-    setIsOpen(false)
-    setHighlightedIndex(-1)
-    onSelect(service)
-  }, [onSelect])
+  const handleSelect = useCallback(
+    (service: ServiceItem) => {
+      setQuery(service.name)
+      setSelectedService(service)
+      setIsOpen(false)
+      setHighlightedIndex(-1)
+      onSelect(service)
+    },
+    [onSelect]
+  )
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -174,15 +183,11 @@ export function MetierAutocomplete({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev < filteredServices.length - 1 ? prev + 1 : 0
-        )
+        setHighlightedIndex((prev) => (prev < filteredServices.length - 1 ? prev + 1 : 0))
         break
       case 'ArrowUp':
         e.preventDefault()
-        setHighlightedIndex(prev =>
-          prev > 0 ? prev - 1 : filteredServices.length - 1
-        )
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : filteredServices.length - 1))
         break
       case 'Enter':
         e.preventDefault()
@@ -216,6 +221,7 @@ export function MetierAutocomplete({
     setSelectedService(null)
     setIsOpen(true)
     setHighlightedIndex(-1)
+    onQueryChange?.(newValue)
   }
 
   // Handle focus
@@ -239,16 +245,7 @@ export function MetierAutocomplete({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className={`
-            w-full pl-10 pr-12 py-3.5
-            bg-white border-2 border-gray-200 rounded-xl
-            focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20
-            placeholder:text-gray-400 text-gray-900
-            disabled:bg-gray-100 disabled:cursor-not-allowed
-            transition-all
-            ${selectedService ? 'border-green-500' : ''}
-            ${inputClassName}
-          `}
+          className={`w-full rounded-xl border-2 border-gray-200 bg-white py-3.5 pl-10 pr-12 text-gray-900 transition-all placeholder:text-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-gray-100 ${selectedService ? 'border-green-500' : ''} ${inputClassName} `}
           autoComplete="off"
           role="combobox"
           aria-expanded={isOpen}
@@ -260,31 +257,29 @@ export function MetierAutocomplete({
         {showIcon && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
             {selectedService ? (
-              <div className={`
-                p-1 rounded-lg bg-gradient-to-br ${selectedService.color}
-              `}>
+              <div className={`rounded-lg bg-gradient-to-br p-1 ${selectedService.color} `}>
                 {(() => {
                   const IconComponent = getIcon(selectedService.icon)
-                  return <IconComponent className="w-4 h-4 text-white" />
+                  return <IconComponent className="h-4 w-4 text-white" />
                 })()}
               </div>
             ) : (
-              <Search className="w-5 h-5 text-gray-400" />
+              <Search className="h-5 w-5 text-gray-400" />
             )}
           </div>
         )}
 
         {/* Right Actions */}
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1">
           {/* Clear Button */}
           {query && (
             <button
               type="button"
               onClick={handleClear}
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              className="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
               aria-label="Effacer"
             >
-              <X className="w-4 h-4 text-gray-400" />
+              <X className="h-4 w-4 text-gray-400" />
             </button>
           )}
         </div>
@@ -293,17 +288,12 @@ export function MetierAutocomplete({
       {/* Dropdown */}
       {isOpen && filteredServices.length > 0 && (
         <ul
-          className="
-            absolute z-50 w-full mt-2
-            bg-white border border-gray-200 rounded-xl
-            shadow-xl max-h-80 overflow-y-auto
-            animate-in fade-in slide-in-from-top-2 duration-200
-          "
+          className="animate-in fade-in slide-in-from-top-2 absolute z-50 mt-2 max-h-80 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-xl duration-200"
           role="listbox"
         >
           {/* Header when showing all */}
           {!query && showAllOnFocus && (
-            <li className="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50 border-b">
+            <li className="border-b bg-gray-50 px-4 py-2 text-xs font-medium uppercase tracking-wider text-gray-500">
               Services populaires
             </li>
           )}
@@ -317,39 +307,27 @@ export function MetierAutocomplete({
                 key={service.slug}
                 onClick={() => handleSelect(service)}
                 onMouseEnter={() => setHighlightedIndex(index)}
-                className={`
-                  px-4 py-3 cursor-pointer
-                  flex items-center gap-3
-                  transition-colors
-                  ${index === highlightedIndex
-                    ? 'bg-blue-50'
-                    : 'hover:bg-gray-50'
-                  }
-                  ${index === 0 && query ? 'rounded-t-xl' : ''}
-                  ${index === filteredServices.length - 1 ? 'rounded-b-xl' : ''}
-                `}
+                className={`flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors ${
+                  index === highlightedIndex ? 'bg-blue-50' : 'hover:bg-gray-50'
+                } ${index === 0 && query ? 'rounded-t-xl' : ''} ${index === filteredServices.length - 1 ? 'rounded-b-xl' : ''} `}
                 role="option"
                 aria-selected={index === highlightedIndex}
               >
                 {/* Icon with gradient background */}
-                <div className={`
-                  p-2 rounded-lg bg-gradient-to-br ${service.color}
-                  shadow-sm
-                `}>
-                  <IconComponent className="w-5 h-5 text-white" />
+                <div className={`rounded-lg bg-gradient-to-br p-2 ${service.color} shadow-sm`}>
+                  <IconComponent className="h-5 w-5 text-white" />
                 </div>
 
                 {/* Service info */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className={`
-                      font-medium
-                      ${index === highlightedIndex ? 'text-blue-900' : 'text-gray-900'}
-                    `}>
+                    <span
+                      className={`font-medium ${index === highlightedIndex ? 'text-blue-900' : 'text-gray-900'} `}
+                    >
                       {service.name}
                     </span>
                     {isPopular && !query && (
-                      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded-full">
+                      <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
                         Populaire
                       </span>
                     )}
@@ -358,9 +336,7 @@ export function MetierAutocomplete({
 
                 {/* Keyboard hint on highlighted */}
                 {index === highlightedIndex && (
-                  <span className="text-xs text-gray-400 hidden sm:block">
-                    Entrée ↵
-                  </span>
+                  <span className="hidden text-xs text-gray-400 sm:block">Entrée ↵</span>
                 )}
               </li>
             )
@@ -370,14 +346,8 @@ export function MetierAutocomplete({
 
       {/* No results message */}
       {isOpen && query && filteredServices.length === 0 && (
-        <div className="
-          absolute z-50 w-full mt-2
-          bg-white border border-gray-200 rounded-xl
-          shadow-lg p-4 text-center
-        ">
-          <div className="text-gray-500">
-            Aucun métier trouvé pour "{query}"
-          </div>
+        <div className="absolute z-50 mt-2 w-full rounded-xl border border-gray-200 bg-white p-4 text-center shadow-lg">
+          <div className="text-gray-500">Aucun métier trouvé pour "{query}"</div>
           <div className="mt-2 text-sm text-gray-400">
             Essayez : plombier, électricien, serrurier...
           </div>

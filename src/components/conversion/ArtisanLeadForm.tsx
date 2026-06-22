@@ -72,7 +72,7 @@ export function ArtisanLeadForm({
 
       setIsSubmitted(true)
     } catch {
-      setError("Une erreur est survenue. Réessayez ou appelez-nous.")
+      setError('Une erreur est survenue. Réessayez ou appelez-nous.')
     } finally {
       setIsLoading(false)
     }
@@ -82,26 +82,24 @@ export function ArtisanLeadForm({
     return (
       <div
         id="lead-form"
-        className="scroll-mt-24 bg-white rounded-2xl shadow-xl ring-1 ring-charcoal-100 p-6 sm:p-8 text-center"
+        className="scroll-mt-24 rounded-2xl bg-white p-6 text-center shadow-xl ring-1 ring-charcoal-100 sm:p-8"
       >
-        <div className="mx-auto w-14 h-14 rounded-full bg-accent-100 flex items-center justify-center">
-          <CheckCircle2 className="w-8 h-8 text-accent-600" />
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-100">
+          <CheckCircle2 className="h-8 w-8 text-accent-600" />
         </div>
         <h2 className="mt-5 font-heading text-xl font-bold text-charcoal-900">
           Merci{prenom ? ` ${prenom}` : ''} ! Demande bien reçue.
         </h2>
         <p className="mt-3 text-charcoal-600">
           Un conseiller vous rappelle très vite
-          {telephone ? ` au ${telephone}` : ''} pour activer votre profil et vous
-          envoyer vos premières demandes.
+          {telephone ? ` au ${telephone}` : ''} pour activer votre profil et vous envoyer vos
+          premières demandes.
         </p>
-        <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-sand-100 text-charcoal-600 px-4 py-2 text-sm">
-          <PhoneCall className="w-4 h-4 text-primary-600" />
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-sand-100 px-4 py-2 text-sm text-charcoal-600">
+          <PhoneCall className="h-4 w-4 text-primary-600" />
           Gardez votre téléphone à portée de main
         </div>
-        <p className="mt-4 text-xs text-charcoal-400">
-          Inscription gratuite · sans engagement
-        </p>
+        <p className="mt-4 text-xs text-charcoal-400">Inscription gratuite · sans engagement</p>
       </div>
     )
   }
@@ -110,7 +108,7 @@ export function ArtisanLeadForm({
     <form
       id="lead-form"
       onSubmit={handleSubmit}
-      className="scroll-mt-24 bg-white rounded-2xl shadow-xl ring-1 ring-charcoal-100 p-6 sm:p-8 space-y-4"
+      className="scroll-mt-24 space-y-4 rounded-2xl bg-white p-6 shadow-xl ring-1 ring-charcoal-100 sm:p-8"
     >
       <div>
         <h2 className="font-heading text-xl font-bold text-charcoal-900">
@@ -123,7 +121,7 @@ export function ArtisanLeadForm({
 
       <div className="space-y-3">
         <div>
-          <label htmlFor="lead-prenom" className="block text-sm font-medium text-charcoal-700 mb-1">
+          <label htmlFor="lead-prenom" className="mb-1 block text-sm font-medium text-charcoal-700">
             Votre prénom
           </label>
           <input
@@ -133,25 +131,24 @@ export function ArtisanLeadForm({
             value={prenom}
             onChange={(e) => setPrenom(e.target.value)}
             placeholder="Karim"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
+            className="w-full rounded-xl border border-charcoal-200 px-4 py-3 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-charcoal-700 mb-1">
-            Votre métier
-          </label>
+          <label className="mb-1 block text-sm font-medium text-charcoal-700">Votre métier</label>
           <MetierAutocomplete
             value={metier}
             placeholder="Plombier, électricien, maçon…"
             onSelect={(service) => setMetier(service.name)}
+            onQueryChange={setMetier}
             onClear={() => setMetier('')}
             inputClassName="w-full px-4 py-3 rounded-xl border border-charcoal-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-charcoal-700 mb-1">
+          <label className="mb-1 block text-sm font-medium text-charcoal-700">
             Votre zone d&apos;intervention
           </label>
           <VilleAutocomplete
@@ -160,6 +157,10 @@ export function ArtisanLeadForm({
             onSelect={(v, cp) => {
               setVille(v)
               setCodePostal(cp)
+            }}
+            onQueryChange={(q) => {
+              setVille(q)
+              setCodePostal('')
             }}
             onClear={() => {
               setVille('')
@@ -170,7 +171,7 @@ export function ArtisanLeadForm({
         </div>
 
         <div>
-          <label htmlFor="lead-tel" className="block text-sm font-medium text-charcoal-700 mb-1">
+          <label htmlFor="lead-tel" className="mb-1 block text-sm font-medium text-charcoal-700">
             Téléphone
           </label>
           <input
@@ -181,12 +182,12 @@ export function ArtisanLeadForm({
             value={telephone}
             onChange={(e) => setTelephone(e.target.value)}
             placeholder="06 12 34 56 78"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
+            className="w-full rounded-xl border border-charcoal-200 px-4 py-3 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
         </div>
 
         <div>
-          <label htmlFor="lead-email" className="block text-sm font-medium text-charcoal-700 mb-1">
+          <label htmlFor="lead-email" className="mb-1 block text-sm font-medium text-charcoal-700">
             Email <span className="font-normal text-charcoal-400">(facultatif)</span>
           </label>
           <input
@@ -196,15 +197,17 @@ export function ArtisanLeadForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="vous@email.fr"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none"
+            className="w-full rounded-xl border border-charcoal-200 px-4 py-3 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
           />
-          <p className="mt-1 text-xs text-charcoal-400">Perso ou pro, peu importe — facultatif. On vous rappelle au téléphone.</p>
+          <p className="mt-1 text-xs text-charcoal-400">
+            Perso ou pro, peu importe — facultatif. On vous rappelle au téléphone.
+          </p>
         </div>
       </div>
 
       {error && (
-        <div className="flex items-start gap-2 text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">
-          <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+        <div className="flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -212,22 +215,22 @@ export function ArtisanLeadForm({
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 rounded-xl transition-colors disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3.5 font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-60"
       >
         {isLoading ? (
           <>
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className="h-5 w-5 animate-spin" />
             Un instant…
           </>
         ) : (
           <>
             {ctaLabel}
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="h-5 w-5" />
           </>
         )}
       </button>
 
-      <p className="text-xs text-charcoal-400 text-center">
+      <p className="text-center text-xs text-charcoal-400">
         En continuant, vous acceptez notre{' '}
         <a href="/confidentialite" className="underline hover:text-charcoal-600">
           politique de confidentialité

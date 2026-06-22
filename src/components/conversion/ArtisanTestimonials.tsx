@@ -17,35 +17,10 @@ interface ArtisanQuote {
   avatarBg: string
 }
 
-const QUOTES: ArtisanQuote[] = [
-  {
-    name: 'Karim B.',
-    trade: 'Plombier',
-    city: 'Lyon',
-    rating: 5,
-    text: "J'ai reçu ma première demande la semaine de mon inscription. Aujourd'hui je remplis mon planning sans démarcher.",
-    initials: 'KB',
-    avatarBg: 'bg-primary-100 text-primary-700',
-  },
-  {
-    name: 'Sandrine M.',
-    trade: 'Électricienne',
-    city: 'Nantes',
-    rating: 5,
-    text: 'Des demandes locales, sérieuses, avec le budget annoncé. Je choisis les chantiers qui me conviennent.',
-    initials: 'SM',
-    avatarBg: 'bg-accent-100 text-accent-700',
-  },
-  {
-    name: 'José F.',
-    trade: 'Maçon',
-    city: 'Toulouse',
-    rating: 5,
-    text: "Gratuit pour commencer, et je ne paie que quand ça m'intéresse. Rien à voir avec les annuaires payants.",
-    initials: 'JF',
-    avatarBg: 'bg-secondary-100 text-secondary-700',
-  },
-]
+// Vrais témoignages d'artisans inscrits uniquement (avec accord écrit).
+// Tant que ce tableau est vide, la section ne s'affiche pas — on ne shippe
+// JAMAIS de faux avis nominatifs (risque DGCCRF + perte de crédibilité).
+const QUOTES: ArtisanQuote[] = []
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -62,23 +37,30 @@ function Stars({ rating }: { rating: number }) {
 }
 
 export function ArtisanTestimonials() {
+  if (QUOTES.length === 0) return null
+
   return (
-    <section aria-label="Témoignages d'artisans" className="bg-sand-50 border-y border-sand-200">
-      <div className="max-w-6xl mx-auto px-4 py-14">
-        <h2 className="font-heading text-2xl lg:text-3xl font-bold text-charcoal-900 text-center">
+    <section aria-label="Témoignages d'artisans" className="border-y border-sand-200 bg-sand-50">
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <h2 className="text-center font-heading text-2xl font-bold text-charcoal-900 lg:text-3xl">
           Ils ont arrêté de courir après les clients
         </h2>
-        <div className="mt-10 grid md:grid-cols-3 gap-6">
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
           {QUOTES.map((q) => (
-            <figure key={q.name} className="rounded-2xl bg-white p-6 ring-1 ring-sand-200 flex flex-col">
-              <Quote className="w-7 h-7 text-primary-200" aria-hidden="true" />
-              <blockquote className="mt-3 text-charcoal-700 flex-1">{q.text}</blockquote>
+            <figure
+              key={q.name}
+              className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-sand-200"
+            >
+              <Quote className="h-7 w-7 text-primary-200" aria-hidden="true" />
+              <blockquote className="mt-3 flex-1 text-charcoal-700">{q.text}</blockquote>
               <figcaption className="mt-5 flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${q.avatarBg}`}>
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${q.avatarBg}`}
+                >
                   {q.initials}
                 </div>
                 <div className="leading-tight">
-                  <div className="font-semibold text-charcoal-900 text-sm">{q.name}</div>
+                  <div className="text-sm font-semibold text-charcoal-900">{q.name}</div>
                   <div className="text-xs text-charcoal-500">
                     {q.trade} · {q.city}
                   </div>

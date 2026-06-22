@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
-import { headers } from 'next/headers'
 import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
@@ -31,26 +30,28 @@ const sora = Sora({
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
   ssr: false,
 })
-const ServiceWorkerRegistration = dynamic(
-  () => import('@/components/ServiceWorkerRegistration'),
-  { ssr: false }
-)
+const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
+  ssr: false,
+})
 const CapacitorInit = dynamic(
-  () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
+  () => import('@/components/CapacitorInit').then((mod) => ({ default: mod.CapacitorInit })),
   { ssr: false }
 )
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
 const WebVitals = dynamic(
-  () => import('@/components/WebVitals').then(mod => ({ default: mod.WebVitals })),
+  () => import('@/components/WebVitals').then((mod) => ({ default: mod.WebVitals })),
   { ssr: false }
 )
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
 const CompareProviderWrapper = dynamic(
-  () => import('@/components/compare/CompareProvider').then(mod => ({ default: mod.CompareProviderWrapper })),
+  () =>
+    import('@/components/compare/CompareProvider').then((mod) => ({
+      default: mod.CompareProviderWrapper,
+    })),
   { ssr: false }
 )
 
@@ -69,11 +70,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ServicesArtisans — Annuaire d\'artisans en France',
+    default: "ServicesArtisans — Annuaire d'artisans en France",
     template: '%s | ServicesArtisans',
   },
   description:
-    'Annuaire d\'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.',
+    "Annuaire d'artisans en France, données SIREN officielles. Plombiers, électriciens, menuisiers et plus dans 101 départements. Devis gratuits.",
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -93,14 +94,20 @@ export const metadata: Metadata = {
     siteName: 'ServicesArtisans',
     title: 'ServicesArtisans — Annuaire des artisans référencés en France',
     description:
-      'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans référencés en France' }],
+      "Annuaire d'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.",
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'ServicesArtisans — Annuaire des artisans référencés en France',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ServicesArtisans — Annuaire des artisans référencés en France',
-    description:
-      'Annuaire d\'artisans de France. Devis gratuits, données gouvernementales SIREN.',
+    description: "Annuaire d'artisans de France. Devis gratuits, données gouvernementales SIREN.",
   },
   robots: {
     index: true,
@@ -125,12 +132,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180' },
-    ],
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   other: {
     'mobile-web-app-capable': 'yes',
@@ -139,13 +142,8 @@ export const metadata: Metadata = {
 
 // revalidate removed — each page sets its own (86400 for pSEO pages)
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const artisanCount = await getProviderCount()
-  const nonce = (await headers()).get('x-nonce') ?? undefined
   return (
     <html lang="fr" className={`scroll-smooth ${dmSans.variable} ${sora.variable}`}>
       <head>
@@ -158,13 +156,17 @@ export default async function RootLayout({
 
         {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM access guidelines" />
-        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM detailed content" />
+        <link
+          rel="alternate"
+          type="text/plain"
+          href="/llms-full.txt"
+          title="LLM detailed content"
+        />
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
-          nonce={nonce}
           type="application/ld+json"
-                   dangerouslySetInnerHTML={{
+          dangerouslySetInnerHTML={{
             __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
               .replace(/</g, '\\u003c')
               .replace(/>/g, '\\u003e')
@@ -188,9 +190,9 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
+      <body className="bg-sand-50 font-sans text-charcoal-900 antialiased">
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="afterInteractive" nonce={nonce}>
+        <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -208,7 +210,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* Meta Pixel — différé jusqu'au consentement marketing (RGPD) */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
-          <Script id="meta-pixel" strategy="lazyOnload" nonce={nonce}>
+          <Script id="meta-pixel" strategy="lazyOnload">
             {`(function(){
 var ID='${process.env.NEXT_PUBLIC_META_PIXEL_ID}';
 function load(){
@@ -230,7 +232,7 @@ else window.addEventListener('cookie-consent-marketing',load,{once:true});
           </Script>
         )}
         {/* Contentsquare UX Analytics — deferred until idle or 5s fallback */}
-        <Script id="contentsquare-deferred" strategy="lazyOnload" nonce={nonce}>
+        <Script id="contentsquare-deferred" strategy="lazyOnload">
           {`(function(){function l(){if(l.d)return;l.d=1;var s=document.createElement('script');s.src='https://t.contentsquare.net/uxa/8da7eeef2dab8.js';s.async=true;document.head.appendChild(s)}if(typeof requestIdleCallback==='function'){requestIdleCallback(l,{timeout:5000})}else{setTimeout(l,5000)}})();`}
         </Script>
         {/* GA4 removed — GTM (GTM-THV3KZ8N) already includes GA4 tracking, standalone gtag.js was duplicate */}
@@ -238,24 +240,26 @@ else window.addEventListener('cookie-consent-marketing',load,{once:true});
         <PageViewTracker />
         <MobileMenuProvider>
           <CompareProviderWrapper>
-          {/* Skip to main content for accessibility */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-          >
-            Aller au contenu principal
-          </a>
-          <SiteChrome>
-            <Header artisanCount={artisanCount} />
-          </SiteChrome>
-          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
-          <SiteChrome>
-            <Footer />
-            <MobileBottomNav />
-          </SiteChrome>
-          <ServiceWorkerRegistration />
-          <CapacitorInit />
-          <CookieConsent />
+            {/* Skip to main content for accessibility */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            >
+              Aller au contenu principal
+            </a>
+            <SiteChrome>
+              <Header artisanCount={artisanCount} />
+            </SiteChrome>
+            <main id="main-content" tabIndex={-1} className="pb-16 outline-none md:pb-0">
+              {children}
+            </main>
+            <SiteChrome>
+              <Footer />
+              <MobileBottomNav />
+            </SiteChrome>
+            <ServiceWorkerRegistration />
+            <CapacitorInit />
+            <CookieConsent />
           </CompareProviderWrapper>
         </MobileMenuProvider>
       </body>

@@ -2,8 +2,16 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
-  CheckCircle2, Phone, Star, ShieldCheck, Wallet, Users,
-  MapPin, Clock, BadgeCheck, TrendingUp,
+  CheckCircle2,
+  Phone,
+  Star,
+  ShieldCheck,
+  Wallet,
+  Users,
+  MapPin,
+  Clock,
+  BadgeCheck,
+  TrendingUp,
 } from 'lucide-react'
 import { ArtisanLeadForm } from '@/components/conversion/ArtisanLeadForm'
 import { ArtisanTestimonials } from '@/components/conversion/ArtisanTestimonials'
@@ -57,8 +65,16 @@ const benefits = [
 
 const steps = [
   { n: '1', title: 'Inscrivez-vous', text: 'Métier, zone, SIRET. 2 minutes, gratuit.' },
-  { n: '2', title: 'Recevez des demandes', text: 'Notification dès qu’un client cherche votre métier près de chez vous.' },
-  { n: '3', title: 'Décrochez le chantier', text: 'Vous répondez, vous signez. Vous gardez 100 % de votre marge.' },
+  {
+    n: '2',
+    title: 'Recevez des demandes',
+    text: 'Notification dès qu’un client cherche votre métier près de chez vous.',
+  },
+  {
+    n: '3',
+    title: 'Décrochez le chantier',
+    text: 'Vous répondez, vous signez. Vous gardez 100 % de votre marge.',
+  },
 ]
 
 interface PageProps {
@@ -76,25 +92,24 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
   const hasCount = artisanCount > 0
 
   // Message-match avec l'ad : le H1 reprend le métier (+ la ville) ciblé
-  const eyebrow =
-    metier && ville ? `${metier} à ${ville}` : metier ? metier : ''
+  const eyebrow = metier && ville ? `${metier} à ${ville}` : metier ? metier : ''
 
   return (
     <div className="min-h-screen bg-sand-50">
       {/* Barre minimale — logo + téléphone, sans navigation */}
       <header className="border-b border-sand-200 bg-white/80 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/icon.svg" alt="ServicesArtisans" width={32} height={32} />
             <span className="font-heading font-bold text-charcoal-900">ServicesArtisans</span>
           </Link>
-          <a
-            href="tel:+33000000000"
-            className="hidden sm:flex items-center gap-2 text-sm font-medium text-charcoal-700 hover:text-primary-600"
+          <Link
+            href="/contact"
+            className="hidden items-center gap-2 text-sm font-medium text-charcoal-700 hover:text-primary-600 sm:flex"
           >
-            <Phone className="w-4 h-4" />
+            <Phone className="h-4 w-4" />
             Besoin d&apos;aide&nbsp;?
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -103,44 +118,36 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
         {/* Décor brand (purement visuel) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary-100/60 blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-primary-100/60 blur-3xl"
         />
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-secondary-100/50 blur-3xl"
         />
-        <div className="relative max-w-6xl mx-auto px-4 py-12 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 lg:grid-cols-2 lg:gap-16 lg:py-20">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-accent-100 text-accent-800 px-3 py-1 text-sm font-medium">
-              <CheckCircle2 className="w-4 h-4" />
+            <span className="inline-flex items-center gap-2 rounded-full bg-accent-100 px-3 py-1 text-sm font-medium text-accent-800">
+              <CheckCircle2 className="h-4 w-4" />
               Inscription gratuite · sans engagement
             </span>
 
-            <h1 className="mt-5 font-heading text-4xl lg:text-5xl font-extrabold leading-tight text-charcoal-900">
-              {eyebrow && (
-                <span className="block text-primary-600">{eyebrow} :</span>
-              )}
-              {v.headlineLead}{' '}
-              <span className="text-primary-600">{v.headlineAccent}</span>
+            <h1 className="mt-5 font-heading text-4xl font-extrabold leading-tight text-charcoal-900 lg:text-5xl">
+              {eyebrow && <span className="block text-primary-600">{eyebrow} :</span>}
+              {v.headlineLead} <span className="text-primary-600">{v.headlineAccent}</span>
             </h1>
 
-            <p className="mt-5 text-lg text-charcoal-600 max-w-xl">
+            <p className="mt-5 max-w-xl text-lg text-charcoal-600">
               {hasCount ? (
                 <>
                   Rejoignez les{' '}
-                  <AnimatedCounter
-                    end={artisanCount}
-                    className="font-bold text-charcoal-900"
-                  />{' '}
+                  <AnimatedCounter end={artisanCount} className="font-bold text-charcoal-900" />{' '}
                   artisans qui reçoivent des demandes de devis qualifiées près de chez eux.
                 </>
               ) : (
-                <>
-                  Recevez des demandes de devis qualifiées de clients près de chez vous.
-                </>
+                <>Recevez des demandes de devis qualifiées de clients près de chez vous.</>
               )}{' '}
-              Vous choisissez les projets, vous gardez votre marge. Pas d&apos;abonnement,
-              vous payez seulement au résultat.
+              Vous choisissez les projets, vous gardez votre marge. Pas d&apos;abonnement, vous
+              payez seulement au résultat.
             </p>
 
             <ul className="mt-6 space-y-3">
@@ -150,7 +157,7 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
                 'Profil vérifié qui inspire confiance',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-charcoal-700">
-                  <CheckCircle2 className="w-5 h-5 text-accent-600 mt-0.5 flex-shrink-0" />
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-accent-600" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -159,7 +166,7 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
             <div className="mt-8 flex flex-wrap items-center gap-6">
               {hasCount && (
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-secondary-500" />
+                  <Users className="h-5 w-5 text-secondary-500" />
                   <div className="leading-tight">
                     <div className="text-sm font-semibold text-charcoal-900">
                       <AnimatedCounter end={artisanCount} />
@@ -169,14 +176,14 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-secondary-500" />
+                <Clock className="h-5 w-5 text-secondary-500" />
                 <div className="leading-tight">
                   <div className="text-sm font-semibold text-charcoal-900">Temps réel</div>
                   <div className="text-xs text-charcoal-500">Réponse aux demandes</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-secondary-500" />
+                <Star className="h-5 w-5 text-secondary-500" />
                 <div className="leading-tight">
                   <div className="text-sm font-semibold text-charcoal-900">Vérifiés</div>
                   <div className="text-xs text-charcoal-500">Avis clients</div>
@@ -202,16 +209,16 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
       <LandingGuarantees />
 
       {/* Bénéfices */}
-      <section className="bg-white border-y border-sand-200">
-        <div className="max-w-6xl mx-auto px-4 py-14">
-          <h2 className="font-heading text-2xl lg:text-3xl font-bold text-charcoal-900 text-center">
+      <section className="border-y border-sand-200 bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <h2 className="text-center font-heading text-2xl font-bold text-charcoal-900 lg:text-3xl">
             Pourquoi les artisans choisissent ServicesArtisans
           </h2>
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {benefits.map(({ icon: Icon, title, text }) => (
               <div key={title} className="rounded-2xl bg-sand-50 p-6 ring-1 ring-sand-200">
-                <div className="w-11 h-11 rounded-xl bg-primary-100 flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-primary-600" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100">
+                  <Icon className="h-6 w-6 text-primary-600" />
                 </div>
                 <h3 className="mt-4 font-semibold text-charcoal-900">{title}</h3>
                 <p className="mt-2 text-sm text-charcoal-600">{text}</p>
@@ -225,14 +232,14 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
       <ArtisanTestimonials />
 
       {/* Comment ça marche */}
-      <section className="max-w-6xl mx-auto px-4 py-14">
-        <h2 className="font-heading text-2xl lg:text-3xl font-bold text-charcoal-900 text-center">
+      <section className="mx-auto max-w-6xl px-4 py-14">
+        <h2 className="text-center font-heading text-2xl font-bold text-charcoal-900 lg:text-3xl">
           Comment ça marche
         </h2>
-        <div className="mt-10 grid md:grid-cols-3 gap-6">
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
           {steps.map(({ n, title, text }) => (
             <div key={n} className="relative rounded-2xl bg-white p-6 ring-1 ring-sand-200">
-              <div className="w-10 h-10 rounded-full bg-primary-600 text-white font-bold flex items-center justify-center">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 font-bold text-white">
                 {n}
               </div>
               <h3 className="mt-4 font-semibold text-charcoal-900">{title}</h3>
@@ -247,17 +254,17 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
 
       {/* Bandeau final */}
       <section className="bg-gradient-primary">
-        <div className="max-w-6xl mx-auto px-4 py-14 text-center">
-          <TrendingUp className="w-10 h-10 text-white/90 mx-auto" />
-          <h2 className="mt-4 font-heading text-2xl lg:text-3xl font-bold text-white">
+        <div className="mx-auto max-w-6xl px-4 py-14 text-center">
+          <TrendingUp className="mx-auto h-10 w-10 text-white/90" />
+          <h2 className="mt-4 font-heading text-2xl font-bold text-white lg:text-3xl">
             Prêt à développer votre activité&nbsp;?
           </h2>
-          <p className="mt-3 text-white/90 max-w-xl mx-auto">
+          <p className="mx-auto mt-3 max-w-xl text-white/90">
             Rejoignez le réseau gratuitement et recevez votre première demande dès cette semaine.
           </p>
           <a
             href="#lead-form"
-            className="mt-7 inline-flex items-center gap-2 bg-white text-primary-700 font-semibold px-7 py-3.5 rounded-xl hover:bg-sand-50 transition-colors"
+            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 font-semibold text-primary-700 transition-colors hover:bg-sand-50"
           >
             Je m&apos;inscris gratuitement
           </a>
@@ -265,13 +272,19 @@ export default async function RejoindreArtisanPage({ searchParams }: PageProps) 
       </section>
 
       {/* Pied minimal */}
-      <footer className="bg-white border-t border-sand-200">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-charcoal-500">
+      <footer className="border-t border-sand-200 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-charcoal-500 sm:flex-row">
           <span>© ServicesArtisans</span>
           <div className="flex items-center gap-5">
-            <Link href="/mentions-legales" className="hover:text-charcoal-700">Mentions légales</Link>
-            <Link href="/confidentialite" className="hover:text-charcoal-700">Confidentialité</Link>
-            <Link href="/contact" className="hover:text-charcoal-700">Contact</Link>
+            <Link href="/mentions-legales" className="hover:text-charcoal-700">
+              Mentions légales
+            </Link>
+            <Link href="/confidentialite" className="hover:text-charcoal-700">
+              Confidentialité
+            </Link>
+            <Link href="/contact" className="hover:text-charcoal-700">
+              Contact
+            </Link>
           </div>
         </div>
       </footer>
