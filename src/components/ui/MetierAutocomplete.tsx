@@ -15,6 +15,8 @@ interface MetierAutocompleteProps {
   value?: string
   placeholder?: string
   onSelect: (service: ServiceItem) => void
+  /** Texte libre saisi (sans sélection de suggestion) — utilisé par les landings payantes */
+  onQueryChange?: (query: string) => void
   onClear?: () => void
   showIcon?: boolean
   showAllOnFocus?: boolean
@@ -98,6 +100,7 @@ export function MetierAutocomplete({
   value = '',
   placeholder = "Quel type d'artisan cherchez-vous ?",
   onSelect,
+  onQueryChange,
   onClear,
   showIcon = true,
   showAllOnFocus = true,
@@ -217,6 +220,7 @@ export function MetierAutocomplete({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     setQuery(newValue)
+    onQueryChange?.(newValue)
     setSelectedService(null)
     setIsOpen(true)
     setHighlightedIndex(-1)
