@@ -96,7 +96,7 @@ export async function POST(request: Request) {
     // Notif équipe — lead à rappeler
     tasks.push(
       sendEmail({
-        to: 'artisans@servicesartisans.fr',
+        to: 'contact@servicesartisans.fr',
         subject: `[Lead Ads] ${escapeHtml(data.metier)} - ${escapeHtml(data.ville)}`,
         html: `
           <h2>Nouveau lead artisan à rappeler (landing publicitaire)</h2>
