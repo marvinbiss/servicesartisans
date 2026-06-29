@@ -121,6 +121,7 @@ export function getOrganizationSchema() {
       },
       telephone: companyIdentity.phone,
       foundingDate: companyIdentity.foundingDate,
+      ...(companyIdentity.siret && { taxID: companyIdentity.siret }),
       ...(companyIdentity.tvaIntracom && { vatID: companyIdentity.tvaIntracom }),
     }),
     /**

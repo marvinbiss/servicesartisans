@@ -356,7 +356,7 @@ export default function CeeRegionalAidsDatasetPage() {
   author       = {{ServicesArtisans}},
   title        = {Aides CEE régionales France 2026},
   year         = {${lastReviewedAt.slice(0, 4)}},
-  publisher    = {ServicesArtisans SAS},
+  publisher    = {${SITE_NAME}},
   url          = {${canonicalUrl}},
   license      = {CC-BY-4.0},
   version      = {${lastReviewedAt}}

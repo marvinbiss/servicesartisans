@@ -536,7 +536,7 @@ de France [Dataset]. Licence CC-BY-4.0. Récupéré sur ${canonicalUrl}`}
   title        = {Annuaire des artisans RGE de France},
   year         = {${meta.yearmonth.split('-')[0]}},
   month        = {${meta.yearmonth.split('-')[1]}},
-  publisher    = {ServicesArtisans SAS},
+  publisher    = {${SITE_NAME}},
   url          = {${canonicalUrl}},
   license      = {CC-BY-4.0},
   version      = {${meta.yearmonth}}

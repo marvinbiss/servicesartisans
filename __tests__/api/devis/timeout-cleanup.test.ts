@@ -119,6 +119,12 @@ vi.mock('@/lib/api/resend-client', () => ({
   getResendClient: vi.fn(() => ({
     emails: { send: vi.fn().mockResolvedValue({ id: 'email-stub' }) },
   })),
+  sendEmail: vi.fn().mockResolvedValue({
+    id: 'email-stub',
+    from: 'noreply@servicesartisans.fr',
+    to: ['stub@test.fr'],
+    createdAt: new Date(),
+  }),
 }))
 
 vi.mock('@/app/actions/dispatch', () => ({

@@ -154,9 +154,13 @@ describe('company-identity — isCompanyRegistered', () => {
     vi.restoreAllMocks()
   })
 
-  it('returns false when SIRET / legalName / address are null', async () => {
+  it('returns true with the baked provisional editor (GROUPE MARGUERITE) when env is empty', async () => {
+    // Depuis 2026-06-29 l'éditeur provisoire GROUPE MARGUERITE SAS est baké en
+    // fallback dans company-identity → l'entité est immatriculée même sans env.
     const mod = await importFresh()
-    expect(mod.isCompanyRegistered()).toBe(false)
+    expect(mod.isCompanyRegistered()).toBe(true)
+    expect(mod.companyIdentity.legalName).toBe('GROUPE MARGUERITE')
+    expect(mod.companyIdentity.siret.replace(/\s+/g, '')).toBe('10464462000015')
   })
 
   it('returns true when all 3 are set and valid', async () => {

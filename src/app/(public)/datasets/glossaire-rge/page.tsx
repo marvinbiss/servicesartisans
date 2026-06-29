@@ -328,7 +328,7 @@ ${canonicalUrl}`}
   author       = {{ServicesArtisans}},
   title        = {Glossaire RGE — Définitions canoniques des qualifications},
   year         = {${LAST_REVIEWED_AT.slice(0, 4)}},
-  publisher    = {ServicesArtisans SAS},
+  publisher    = {${SITE_NAME}},
   url          = {${canonicalUrl}},
   license      = {CC-BY-4.0},
   version      = {${LAST_REVIEWED_AT}}

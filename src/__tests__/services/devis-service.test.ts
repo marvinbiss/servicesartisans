@@ -26,6 +26,12 @@ vi.mock('@/lib/api/resend-client', () => ({
       send: vi.fn().mockResolvedValue({ id: 'email-123' }),
     },
   })),
+  sendEmail: vi.fn().mockResolvedValue({
+    id: 'email-123',
+    from: 'noreply@servicesartisans.fr',
+    to: ['client@test.fr'],
+    createdAt: new Date(),
+  }),
 }))
 
 vi.mock('@/app/actions/dispatch', () => ({
@@ -65,7 +71,7 @@ import { qualifyDevisForCee } from '@/lib/cee/qualify'
 import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { runCeeDispatchFireAndForget } from '@/lib/cee/dispatcher-integration'
-import { getResendClient } from '@/lib/api/resend-client'
+import { sendEmail } from '@/lib/api/resend-client'
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -786,25 +792,23 @@ describe('processDevis', () => {
   })
 
   it('sends emails via Resend on success with email provided', async () => {
-    // Track that getResendClient is called during processDevis
+    // Track that sendEmail is called during processDevis
     setupHappyPathMocks()
     const input = makeDevisInput({ email: 'client@test.fr' })
     await processDevis(input, null)
 
-    // getResendClient is called inside sendDevisEmails
-    expect(getResendClient).toHaveBeenCalled()
+    // sendEmail is called inside sendDevisEmails (client confirmation + admin notif)
+    expect(sendEmail).toHaveBeenCalled()
   })
 
-  it('handles Resend not configured (skips emails)', async () => {
-    vi.mocked(getResendClient).mockImplementationOnce(() => {
-      throw new Error('Resend not configured')
-    })
+  it('handles Resend send failure (still succeeds, error swallowed by allSettled)', async () => {
+    vi.mocked(sendEmail).mockRejectedValue(new Error('Resend not configured'))
 
     setupHappyPathMocks()
     const input = makeDevisInput()
     const result = await processDevis(input, null)
 
-    // Should still succeed
+    // Should still succeed — email failures are logged, not fatal to the lead
     expect(result.success).toBe(true)
   })
 
