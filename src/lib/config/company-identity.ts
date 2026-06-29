@@ -125,17 +125,27 @@ export const companyIdentity = {
   // canonical apex if the env is unusable.
   url: sanitizeUrl(process.env.NEXT_PUBLIC_SITE_URL),
 
-  // Legal identity (Level 1 — from env vars, null until company registration)
-  legalName: process.env.COMPANY_LEGAL_NAME || null,
-  formeJuridique: process.env.COMPANY_FORME_JURIDIQUE || null,
-  capitalSocial: process.env.COMPANY_CAPITAL_SOCIAL || null,
-  siret: process.env.COMPANY_SIRET || null,
-  rcs: process.env.COMPANY_RCS || null,
+  // Legal identity (Level 1)
+  //
+  // 2026-06-29 : entité légale = GROUPE MARGUERITE SAS (holding, SIREN
+  // 104 644 620), utilisée à titre PROVISOIRE comme éditeur du site en attendant
+  // la constitution de la filiale « ServicesArtisans France » SAS qui exploitera
+  // la plateforme. Données publiques (annuaire-entreprises.data.gouv.fr).
+  // Source : https://annuaire-entreprises.data.gouv.fr/entreprise/groupe-marguerite-104644620
+  // Les env vars restent prioritaires : poser COMPANY_* en prod bascule
+  // automatiquement vers ServicesArtisans France dès son immatriculation.
+  legalName: process.env.COMPANY_LEGAL_NAME || 'GROUPE MARGUERITE',
+  formeJuridique: process.env.COMPANY_FORME_JURIDIQUE || 'SAS (Société par Actions Simplifiée)',
+  capitalSocial: process.env.COMPANY_CAPITAL_SOCIAL || '1 000 €',
+  siret: process.env.COMPANY_SIRET || '104 644 620 00015',
+  rcs: process.env.COMPANY_RCS || 'RCS Paris 104 644 620',
+  // Pas de TVA intracommunautaire valide à ce jour (unité non employeuse,
+  // holding récente) → champ masqué tant que null.
   tvaIntracom: process.env.COMPANY_TVA || null,
-  address: process.env.COMPANY_ADDRESS || null,
+  address: process.env.COMPANY_ADDRESS || '16 rue du Buisson Saint-Louis, 75010 Paris',
   phone: process.env.COMPANY_PHONE || '07 56 87 27 87',
-  directeurPublication: process.env.COMPANY_DIRECTEUR_PUBLICATION || null,
-  foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
+  directeurPublication: process.env.COMPANY_DIRECTEUR_PUBLICATION || 'Marvin Bissohong',
+  foundingDate: process.env.COMPANY_FOUNDING_DATE || '2026-04-27',
 
   // Contact (real and functional)
   email: 'contact@servicesartisans.fr',

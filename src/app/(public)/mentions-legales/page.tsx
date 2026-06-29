@@ -4,7 +4,7 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { companyIdentity } from '@/lib/config/company-identity'
+import { companyIdentity, isCompanyRegistered } from '@/lib/config/company-identity'
 import { formatPhoneForTel } from '@/lib/validation/phone'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -75,8 +75,11 @@ export default async function MentionsLegalesPage() {
     )
   }
 
-  // Fallback to hardcoded content
-  const isPreLaunch = companyIdentity.status === 'pre-launch'
+  // Fallback to hardcoded content.
+  // Affiche le bandeau « en cours d'immatriculation » uniquement tant que
+  // l'entité éditrice n'est pas immatriculée. Depuis 2026-06-29 l'éditeur est
+  // GROUPE MARGUERITE SAS (provisoire) → registered=true → bandeau masqué.
+  const showRegistrationNotice = !isCompanyRegistered()
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -92,7 +95,7 @@ export default async function MentionsLegalesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <Breadcrumb items={[{ label: 'Mentions légales' }]} className="mb-4" />
           <PageHeroH1 size="article">Mentions légales</PageHeroH1>
-          <p className="text-charcoal-600 mt-2">Dernière mise à jour : avril 2026</p>
+          <p className="text-charcoal-600 mt-2">Dernière mise à jour : juin 2026</p>
         </div>
       </section>
 
@@ -101,7 +104,7 @@ export default async function MentionsLegalesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
             <h2>Éditeur du site</h2>
-            {isPreLaunch && (
+            {showRegistrationNotice && (
               <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 not-prose mb-4">
                 <p className="text-primary-800 text-sm">
                   Le site {companyIdentity.name} est en cours de développement. Les informations
