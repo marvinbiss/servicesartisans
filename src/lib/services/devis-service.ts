@@ -5,7 +5,7 @@
 
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getResendClient } from '@/lib/api/resend-client'
+import { sendEmail } from '@/lib/api/resend-client'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { syncDevisRequestToPipedrive } from '@/lib/integrations/pipedrive'
@@ -433,22 +433,17 @@ async function sendDevisEmails(
   serviceName: string,
   leadId: string
 ): Promise<void> {
-  let resend: ReturnType<typeof getResendClient> | null = null
-  try {
-    resend = getResendClient()
-  } catch (emailInitError) {
-    logger.error('Resend not configured, skipping emails', emailInitError)
-    return
-  }
-
-  const fromEmail = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
+  // Emails via le wrapper `sendEmail` (from = RESEND_FROM_EMAIL vérifié,
+  // check response.error + retry). Avant : `resend.emails.send()` brut avec
+  // `FROM_EMAIL` (env malformée "...\n" → header From invalide → Resend 422)
+  // SANS lire `.error` → échec avalé (mail jamais envoyé, aucun log). Les
+  // échecs rejettent désormais et remontent dans le Promise.allSettled.
   const emailPromises: Promise<unknown>[] = []
 
   // Confirmation to client
   if (data.email) {
     emailPromises.push(
-      resend.emails.send({
-        from: fromEmail,
+      sendEmail({
         to: data.email,
         subject: 'Votre demande de devis - ServicesArtisans',
         html: `
@@ -473,8 +468,7 @@ async function sendDevisEmails(
 
   // Notification to admin
   emailPromises.push(
-    resend.emails.send({
-      from: fromEmail,
+    sendEmail({
       to: 'contact@servicesartisans.fr',
       subject: `[Nouveau Devis] ${serviceName} - ${data.ville || 'France'}`,
       html: `
