@@ -66,6 +66,8 @@ interface VilleAutocompleteProps {
   value?: string
   placeholder?: string
   onSelect: (ville: string, codePostal: string, coords?: [number, number]) => void
+  /** Texte libre saisi (sans sélection de suggestion) — utilisé par les landings payantes */
+  onQueryChange?: (query: string) => void
   onClear?: () => void
   showGeolocation?: boolean
   className?: string
@@ -77,6 +79,7 @@ export function VilleAutocomplete({
   value = '',
   placeholder = 'Ville ou code postal...',
   onSelect,
+  onQueryChange,
   onClear,
   showGeolocation = true,
   className = '',
@@ -228,6 +231,7 @@ export function VilleAutocomplete({
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
+            onQueryChange?.(e.target.value)
             if (e.target.value.length >= 2) setIsOpen(true)
           }}
           onFocus={() => setIsOpen(true)}
