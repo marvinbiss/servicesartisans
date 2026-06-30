@@ -101,7 +101,7 @@ export default function LpProForm({ campaignSlug, serviceSlug, trade, ctaLabel }
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Jean Dupont"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 text-charcoal-900 placeholder:text-charcoal-400 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
           autoComplete="name"
           required
           minLength={2}
@@ -121,7 +121,7 @@ export default function LpProForm({ campaignSlug, serviceSlug, trade, ctaLabel }
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
           placeholder="06 12 34 56 78"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 text-charcoal-900 placeholder:text-charcoal-400 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
           autoComplete="tel"
           required
           inputMode="tel"
@@ -142,7 +142,7 @@ export default function LpProForm({ campaignSlug, serviceSlug, trade, ctaLabel }
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="vous@exemple.fr"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 text-charcoal-900 placeholder:text-charcoal-400 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
             autoComplete="email"
             required
           />
@@ -160,7 +160,7 @@ export default function LpProForm({ campaignSlug, serviceSlug, trade, ctaLabel }
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
             placeholder="75015"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 text-charcoal-900 placeholder:text-charcoal-400 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
             autoComplete="postal-code"
             inputMode="numeric"
             pattern="[0-9]{5}"
