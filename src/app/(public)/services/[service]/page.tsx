@@ -290,12 +290,15 @@ export default async function ServicePage({ params }: PageProps) {
 
   // H1 variation for SEO — keyword-first
   const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))
+  // Transactional/annuaire framing only — the /rge/[service] hub owns the
+  // "certification & aides RGE" (informational) intent, so this hub leads with
+  // annuaire / devis / comparateur / prix to kill the keyword cannibalisation.
   const h1Templates = [
-    `${service.name} RGE en France`,
-    `${service.name} RGE en France : annuaire et devis`,
-    `${service.name} RGE — Annuaire national`,
-    `Artisans ${service.name.toLowerCase()} RGE en France`,
-    `${service.name} RGE : comparez les artisans certifiés`,
+    `${service.name} RGE : annuaire & devis gratuit`,
+    `${service.name} RGE en France : comparez et demandez un devis`,
+    `${service.name} RGE — annuaire national & devis`,
+    `Comparez les ${service.name.toLowerCase()}s RGE : prix & devis`,
+    `${service.name} RGE : trouvez un artisan & obtenez un devis`,
   ]
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
