@@ -81,7 +81,7 @@ function validSessionRow() {
     public_key: PUBLIC_KEY,
     created_at: '2026-05-20T00:00:00Z',
     last_activity_at: '2026-05-20T01:00:00Z',
-    expires_at: '2026-06-19T00:00:00Z',
+    expires_at: new Date(Date.now() + 86_400_000).toISOString(),
     message_count: 4,
     deleted_at: null,
   }
