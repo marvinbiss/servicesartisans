@@ -15,6 +15,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import * as Sentry from '@sentry/nextjs'
 import { logger } from '@/lib/logger'
 import { pingHeartbeat } from '@/lib/monitoring/heartbeat'
@@ -34,7 +35,7 @@ export const GET = withCronCheckIn('cron-healthcheck-deep', async (request: Requ
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const baseUrl = SITE_URL
   const url = `${baseUrl}/api/health/deep`
   const startedAt = Date.now()
 

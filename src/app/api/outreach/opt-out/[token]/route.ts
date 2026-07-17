@@ -30,13 +30,12 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 // SLA-99.9 : timeout strict côté app — si Supabase RPC dépasse 5s, on
 // redirige le user vers la page d'erreur plutôt que de laisser hang.

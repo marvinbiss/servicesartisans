@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
@@ -164,8 +165,6 @@ export async function POST(request: Request) {
 // ============================================================
 // Admin notification
 // ============================================================
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 async function notifyAdminNewEstimationLead(
   data: z.infer<typeof estimationLeadSchema>,

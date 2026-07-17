@@ -15,6 +15,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import crypto from 'crypto'
 import { newsletterSubscribeSchema } from '@/lib/validations/schemas'
 import { logger } from '@/lib/logger'
@@ -127,7 +128,7 @@ export async function POST(request: Request) {
         .createHmac('sha256', unsubscribeSecret)
         .update(normalizedEmail)
         .digest('hex')
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+      const siteUrl = SITE_URL
       unsubscribeLink = `${siteUrl}/api/newsletter/unsubscribe?email=${encodeURIComponent(
         normalizedEmail
       )}&token=${unsubscribeToken}`
@@ -165,7 +166,7 @@ export async function POST(request: Request) {
   <p>À bientôt sur ServicesArtisans !</p>
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
   <p style="color: #666; font-size: 12px; text-align: center;">
-    ${unsubscribeLink ? `<a href="${unsubscribeLink}" style="color: #666;">Se désinscrire</a> | ` : ''}<a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #666;">servicesartisans.fr</a>
+    ${unsubscribeLink ? `<a href="${unsubscribeLink}" style="color: #666;">Se désinscrire</a> | ` : ''}<a href="${SITE_URL}" style="color: #666;">servicesartisans.fr</a>
   </p>
 </body>
 </html>

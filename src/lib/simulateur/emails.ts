@@ -14,8 +14,8 @@
  */
 
 import { sendEmail } from '@/lib/api/resend-client'
+import { SITE_URL } from '@/lib/seo/config'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const ADMIN_FALLBACK = 'contact@servicesartisans.fr'
 
 function adminRecipients(): string[] {

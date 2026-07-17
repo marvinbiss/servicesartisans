@@ -23,12 +23,11 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 function redirect(path: string): NextResponse {
   return NextResponse.redirect(new URL(path, SITE_URL), { status: 303 })

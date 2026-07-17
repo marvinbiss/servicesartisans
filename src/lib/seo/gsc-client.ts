@@ -9,6 +9,7 @@
  */
 
 import { google, type searchconsole_v1 } from 'googleapis'
+import { SITE_URL } from '@/lib/seo/config'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -50,7 +51,7 @@ export interface GSCSearchPerformance {
 
 // ── Client ───────────────────────────────────────────────────────────────────
 
-const SITE_PROPERTY = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+const SITE_PROPERTY = SITE_URL
 
 function getCredentials(): Record<string, unknown> | null {
   const raw = process.env.GSC_CREDENTIALS || process.env.GOOGLE_SERVICE_ACCOUNT_KEY

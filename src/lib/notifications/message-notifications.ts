@@ -6,10 +6,9 @@
  */
 
 import { sendEmail } from '@/lib/email/resend'
+import { SITE_URL } from '@/lib/seo/config'
 import { getNewMessageAlertEmail } from '@/lib/email/templates/new-message-alert'
 import { logger } from '@/lib/logger'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 interface MessageNotificationParams {
   /** Email of the recipient (artisan or client) */

@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import crypto from 'crypto'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -130,7 +131,7 @@ export async function GET(request: NextRequest) {
 }
 
 function htmlPage(title: string, message: string): string {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const siteUrl = SITE_URL
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>

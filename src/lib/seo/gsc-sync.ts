@@ -9,6 +9,7 @@
  */
 
 import { google, type searchconsole_v1 } from 'googleapis'
+import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
@@ -76,7 +77,7 @@ function createGSCClient(): searchconsole_v1.Searchconsole {
 function getSiteUrl(): string {
   const siteUrl = process.env.GSC_SITE_URL
   if (siteUrl) return siteUrl
-  const publicUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const publicUrl = SITE_URL
   return publicUrl.replace(/\/+$/, '') + '/'
 }
 

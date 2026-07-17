@@ -4,6 +4,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { SITE_URL } from '@/lib/seo/config'
 import { sendEmail } from '@/lib/email/resend'
 import { getNewLeadAlertEmail } from '@/lib/email/templates/new-lead-alert'
 import { sendSMS } from '@/lib/sms/twilio'
@@ -57,7 +58,6 @@ type ServiceResult<T> =
 // Constants
 // ---------------------------------------------------------------------------
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.servicesartisans.fr'
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 // ---------------------------------------------------------------------------

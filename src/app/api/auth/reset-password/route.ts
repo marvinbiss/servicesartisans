@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { createClient } from '@supabase/supabase-js'
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
     }
 
     const { email } = validation.data
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = SITE_URL
 
     // Espace particulier fermé (2026-06-05) : ne jamais envoyer de lien de
     // reset à un compte client — réponse identique pour ne pas révéler
