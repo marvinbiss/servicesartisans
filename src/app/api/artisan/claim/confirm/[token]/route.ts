@@ -35,8 +35,9 @@ function redirect(path: string): NextResponse {
 
 export async function GET(
   _request: Request,
-  { params }: { params: { token: string } }
+  props: { params: Promise<{ token: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params
   try {
     const token = params.token?.trim()
 

@@ -5,7 +5,8 @@ import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Audit 2026-06-06 : seule route leads/[id] qui contournait le guard
     // centralise (role artisan + gate 2FA) — alignee sur les autres.

@@ -13,7 +13,8 @@ const refundSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Traiter un remboursement
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with payments:refund permission
     const authResult = await requirePermission('payments', 'refund')

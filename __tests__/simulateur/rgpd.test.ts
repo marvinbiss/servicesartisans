@@ -277,7 +277,7 @@ describe('POST /api/rgpd/delete/[publicId]', () => {
     })
     // Next.js NextRequest-like wrapper accepts plain Request in tests
     const res = await mod.POST(req as unknown as Parameters<typeof mod.POST>[0], {
-      params: { publicId: 'EST-2026-04-14-abc123' },
+      params: Promise.resolve({ publicId: 'EST-2026-04-14-abc123' }),
     })
     expect(res.status).toBe(400)
   })
@@ -293,7 +293,7 @@ describe('POST /api/rgpd/delete/[publicId]', () => {
       headers: { 'content-type': 'application/json' },
     })
     const res = await mod.POST(req as unknown as Parameters<typeof mod.POST>[0], {
-      params: { publicId: 'notvalid' },
+      params: Promise.resolve({ publicId: 'notvalid' }),
     })
     expect(res.status).toBe(400)
   })
@@ -310,7 +310,7 @@ describe('POST /api/rgpd/delete/[publicId]', () => {
       headers: { 'content-type': 'application/json' },
     })
     const res = await mod.POST(req as unknown as Parameters<typeof mod.POST>[0], {
-      params: { publicId: 'EST-2026-04-14-abc123' },
+      params: Promise.resolve({ publicId: 'EST-2026-04-14-abc123' }),
     })
     expect(res.status).toBe(403)
   })
@@ -326,7 +326,7 @@ describe('POST /api/rgpd/delete/[publicId]', () => {
       headers: { 'content-type': 'application/json' },
     })
     const res = await mod.POST(req as unknown as Parameters<typeof mod.POST>[0], {
-      params: { publicId: 'EST-2026-04-14-abc123' },
+      params: Promise.resolve({ publicId: 'EST-2026-04-14-abc123' }),
     })
     expect(res.status).toBe(404)
   })
@@ -347,7 +347,7 @@ describe('POST /api/rgpd/delete/[publicId]', () => {
       headers: { 'content-type': 'application/json' },
     })
     const res = await mod.POST(req as unknown as Parameters<typeof mod.POST>[0], {
-      params: { publicId: 'EST-2026-04-14-abc123' },
+      params: Promise.resolve({ publicId: 'EST-2026-04-14-abc123' }),
     })
     expect(res.status).toBe(200)
     const body = await res.json()

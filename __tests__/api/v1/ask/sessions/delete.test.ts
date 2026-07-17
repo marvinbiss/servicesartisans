@@ -102,7 +102,7 @@ beforeEach(() => {
 describe('DELETE /api/v1/ask/sessions/:id — body validation', () => {
   it('returns 400 on invalid JSON', async () => {
     const res = await DELETE(buildDelete('__INVALID_JSON__') as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
@@ -110,7 +110,9 @@ describe('DELETE /api/v1/ask/sessions/:id — body validation', () => {
   })
 
   it('returns 400 when public_key is missing', async () => {
-    const res = await DELETE(buildDelete({}) as never, { params: { id: SESSION_ID } })
+    const res = await DELETE(buildDelete({}) as never, {
+      params: Promise.resolve({ id: SESSION_ID }),
+    })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
     expect(body.error.code).toBe('missing_public_key')
@@ -121,7 +123,7 @@ describe('DELETE /api/v1/ask/sessions/:id — auth state machine', () => {
   it('returns 404 when session does not exist', async () => {
     mocks.sessionRow = null
     const res = await DELETE(buildDelete({ public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(404)
     expect(mocks.updateCall).not.toHaveBeenCalled()
@@ -132,7 +134,7 @@ describe('DELETE /api/v1/ask/sessions/:id — auth state machine', () => {
     const res = await DELETE(
       buildDelete({ public_key: 'wrong-key-of-similar-length-43+chars-x' }) as never,
       {
-        params: { id: SESSION_ID },
+        params: Promise.resolve({ id: SESSION_ID }),
       }
     )
     expect(res.status).toBe(403)
@@ -144,7 +146,7 @@ describe('DELETE /api/v1/ask/sessions/:id — happy path', () => {
   it('returns 200 and stamps deleted_at via update', async () => {
     mocks.sessionRow = validSessionRow()
     const res = await DELETE(buildDelete({ public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(200)
     const body = (await res.json()) as { ok: boolean; deleted_at: string }

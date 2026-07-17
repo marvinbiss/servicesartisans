@@ -1,8 +1,5 @@
 import { Metadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { notFound, redirect, unstable_rethrow } from 'next/navigation'
 import Link from 'next/link'
 import {
   getProviderByStableId,
@@ -911,7 +908,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     // est avalé et la page renvoie 200 avec title "Artisan non trouvé"
     // (soft 404 indexable, cf. GSC : 1 854 imp pos 5.9 CTR 0% sur fiches
     // supprimées).
-    if (isRedirectError(err) || isNotFoundError(err)) throw err
+    unstable_rethrow(err)
     // Vraies erreurs DB transitoires : noindex défensif. Le commentaire
     // initial postulait qu'ISR retenterait ; en pratique le cache fige
     // un title cassé pour 24h et Google indexe entre-temps. Mieux vaut
@@ -934,7 +931,7 @@ export default async function ProviderPage(props: PageProps) {
     return await renderProviderPage(props)
   } catch (err) {
     // Re-throw Next.js control-flow signals (redirect / notFound / dynamic-render bailout).
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     // Any other unhandled throw on cold ISR render → surface 404 instead
     // of 500. Next.js retries ISR on subsequent hits; the user's manual
     // reload ("ça marche au 2e essai") works without seeing a Vercel 500.

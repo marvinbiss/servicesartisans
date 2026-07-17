@@ -20,7 +20,8 @@ const moderateReviewSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // PATCH - Moderate review
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit mutation 30/min — bride une session admin compromise
     const ip = getClientIp(request.headers)

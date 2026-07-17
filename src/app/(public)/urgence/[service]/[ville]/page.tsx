@@ -1,9 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound, permanentRedirect } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation'
 import { isUrgenceIndexable } from '@/lib/seo/urgence-whitelist'
 import { isUrgenceRgeCompatible } from '@/lib/seo/pivot-rge-removed-services'
 import { logger } from '@/lib/logger'
@@ -85,17 +82,14 @@ import {
 import { getReviewStatsByDept, getTopReviewsByDept } from '@/lib/supabase'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import { getRegionPreposition } from '@/lib/geo-strings'
-import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
 
-const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
+import MicroConversions from '@/components/MicroConversions.client'
 
-const UrgencyCountdown = dynamic(() => import('@/components/UrgencyCountdown'), { ssr: false })
+import UrgencyCountdown from '@/components/UrgencyCountdown.client'
 
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 // ---------------------------------------------------------------------------
 // Emergency-specific display data
@@ -604,7 +598,7 @@ export default async function UrgenceServiceVillePage(props: {
   try {
     return await renderUrgenceServiceVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     const params = await props.params.catch(() => null)
     logger.error('urgence_service_ville.unhandled_render_error', err as Error, {
       route: 'urgence/[service]/[ville]',

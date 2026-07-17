@@ -13,8 +13,7 @@ import { getPageContent } from '@/lib/cms'
 import { teamMembers, getAllAuthors } from '@/lib/data/team'
 import { CmsContent } from '@/components/CmsContent'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
-import dynamic from 'next/dynamic'
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
 
 export const metadata: Metadata = {
   title: "À propos — Annuaire d'artisans RGE certifiés",

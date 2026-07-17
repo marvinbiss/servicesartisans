@@ -8,7 +8,8 @@ import { adminExportUserData } from '@/lib/services/gdpr-service'
 export const dynamic = 'force-dynamic'
 
 // POST - Exporter les données d'un utilisateur (RGPD)
-export async function POST(_request: NextRequest, { params }: { params: { userId: string } }) {
+export async function POST(_request: NextRequest, props: { params: Promise<{ userId: string }> }) {
+  const params = await props.params
   try {
     // Validate userId parameter
     if (!isValidUuid(params.userId)) {

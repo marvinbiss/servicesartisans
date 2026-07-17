@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import {
   MapPin,
@@ -40,7 +39,7 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import StickyMobileCTA from '@/components/conversion/StickyMobileCTA'
 import VilleHeroCTA from '@/components/conversion/VilleHeroCTA'
 
-const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
+import ExitIntentPopup from '@/components/ExitIntentPopup.client'
 
 // Pre-render top 5 cities × their quartiers — rest via ISR
 const TOP_CITIES = 3

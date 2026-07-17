@@ -138,7 +138,7 @@ beforeEach(() => {
 describe('POST /api/v1/ask/sessions/:id/messages — body validation', () => {
   it('returns 400 on invalid JSON', async () => {
     const res = await POST(buildPost('__INVALID_JSON__') as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
@@ -147,7 +147,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — body validation', () => {
 
   it('returns 400 when query is missing', async () => {
     const res = await POST(buildPost({ public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
@@ -156,7 +156,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — body validation', () => {
 
   it('returns 400 when public_key is missing', async () => {
     const res = await POST(buildPost({ query: 'Hello' }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
@@ -166,7 +166,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — body validation', () => {
   it('returns 400 when query exceeds 4000 chars', async () => {
     const res = await POST(
       buildPost({ query: 'a'.repeat(4001), public_key: PUBLIC_KEY }) as never,
-      { params: { id: SESSION_ID } }
+      { params: Promise.resolve({ id: SESSION_ID }) }
     )
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string; message: string } }
@@ -179,7 +179,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — auth path', () => {
   it('returns 404 when session is not found', async () => {
     mocks.sessionRow = null
     const res = await POST(buildPost({ query: 'q', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(404)
     expect(mocks.answer).not.toHaveBeenCalled()
@@ -191,7 +191,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — auth path', () => {
       expires_at: new Date(Date.now() - 1000).toISOString(),
     }
     const res = await POST(buildPost({ query: 'q', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(410)
     expect(mocks.answer).not.toHaveBeenCalled()
@@ -201,7 +201,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — auth path', () => {
     mocks.sessionRow = validSessionRow()
     const res = await POST(
       buildPost({ query: 'q', public_key: 'wrong-key-of-similar-length-43+chars-x' }) as never,
-      { params: { id: SESSION_ID } }
+      { params: Promise.resolve({ id: SESSION_ID }) }
     )
     expect(res.status).toBe(403)
     expect(mocks.answer).not.toHaveBeenCalled()
@@ -214,7 +214,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — answer engine dispatch', ()
     mocks.answer.mockResolvedValue(okAnswer("La PAC air/eau bénéficie de MaPrimeRénov'."))
     const res = await POST(
       buildPost({ query: 'Quel bareme PAC ?', public_key: PUBLIC_KEY }) as never,
-      { params: { id: SESSION_ID } }
+      { params: Promise.resolve({ id: SESSION_ID }) }
     )
     expect(res.status).toBe(200)
     const body = (await res.json()) as {
@@ -241,7 +241,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — answer engine dispatch', ()
       trace: { traceId: SESSION_ID },
     })
     const res = await POST(buildPost({ query: 'YMYL question', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(422)
     // No persistence on failed turns
@@ -257,7 +257,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — answer engine dispatch', ()
       trace: {},
     })
     const res = await POST(buildPost({ query: 'q', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(503)
   })
@@ -266,7 +266,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — answer engine dispatch', ()
     mocks.sessionRow = validSessionRow(0)
     mocks.answer.mockRejectedValue(new Error('boom'))
     const res = await POST(buildPost({ query: 'q', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(500)
     expect(mocks.captureError).toHaveBeenCalledTimes(1)
@@ -282,7 +282,7 @@ describe('POST /api/v1/ask/sessions/:id/messages — rate limit', () => {
       resetTime: Date.now() + 30_000,
     })
     const res = await POST(buildPost({ query: 'q', public_key: PUBLIC_KEY }) as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(429)
     expect(mocks.answer).not.toHaveBeenCalled()

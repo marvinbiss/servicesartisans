@@ -9,8 +9,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
-import dynamic from 'next/dynamic'
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
 
 const faqTitle = 'FAQ — Questions Artisans RGE et Travaux | ServicesArtisans'
 const faqTitleRoot = 'FAQ — Questions Artisans RGE et Travaux'

@@ -7,12 +7,13 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import { getTradesSlugs, getTradeContent } from '@/lib/data/trade-content'
-import { REVALIDATE } from '@/lib/cache'
 
 // Page éditoriale statique (widget embed + docs) — contenu TradeContent
 // change rarement. ISR 24h suffit et évite le static par défaut qui resterait
 // figé jusqu'au prochain deploy.
-export const revalidate = REVALIDATE.staticPages
+// Inlined literal (= REVALIDATE.staticPages, 24h): Next 16 requires segment
+// config exports to be static literals, not member access on an import.
+export const revalidate = 86400
 
 // ---------------------------------------------------------------------------
 // Metadata

@@ -59,20 +59,20 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
   })
 
   it('rejects token shorter than 32 chars', async () => {
-    const res = await GET(makeReq(), { params: { token: 'abc' } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'abc' }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
   })
 
   it('rejects token longer than 96 chars', async () => {
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(200) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(200) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
   })
 
   it('redirects to lien-invalide when claim not found', async () => {
     claimResponse = { data: null, error: null }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
   })
@@ -87,7 +87,7 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
       },
       error: null,
     }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/confirme')
     expect(updateMock).not.toHaveBeenCalled()
@@ -103,7 +103,7 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
       },
       error: null,
     }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
     expect(updateMock).not.toHaveBeenCalled()
@@ -119,7 +119,7 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
       },
       error: null,
     }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
     expect(updateMock).not.toHaveBeenCalled()
@@ -135,7 +135,7 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
       },
       error: null,
     }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/confirme')
     expect(updateMock).toHaveBeenCalledWith(
@@ -157,7 +157,7 @@ describe('GET /api/artisan/claim/confirm/[token]', () => {
       error: null,
     }
     updateError = { code: '500', message: 'db down' }
-    const res = await GET(makeReq(), { params: { token: 'a'.repeat(43) } })
+    const res = await GET(makeReq(), { params: Promise.resolve({ token: 'a'.repeat(43) }) })
     expect(res.status).toBe(303)
     expect(res.headers.get('location')).toContain('/artisan/claim/lien-invalide')
   })

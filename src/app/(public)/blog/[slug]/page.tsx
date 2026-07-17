@@ -38,16 +38,11 @@ import BlogServiceCityLinks from '@/components/seo/BlogServiceCityLinks'
 import EnBrefBox from '@/components/seo/EnBrefBox'
 import TldrBlock from '@/components/flagship/TldrBlock'
 import { autoLinkRgeTerms } from '@/lib/seo/glossary-autolink'
-import dynamic from 'next/dynamic'
 import BlogInlineCTA from '@/components/blog/BlogInlineCTA'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 export const revalidate = 86400
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useEffect, memo } from 'react'
+import { useRef, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Loader2 } from 'lucide-react'
 import { renderMarkdown } from './utils'

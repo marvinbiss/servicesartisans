@@ -1,9 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { notFound, unstable_rethrow } from 'next/navigation'
 import {
   getServiceBySlug,
   getLocationBySlug,
@@ -539,7 +536,7 @@ export default async function ServiceLocationPage(props: PageProps) {
   try {
     return await renderServiceLocationPage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     // logger.error forwarde à Sentry (commit 341c32162) avec context structuré.
     // console.error précédent était capturé par onRequestError mais sans tags
     // métier (route, service, location) → drill-down GSC 5xx impossible.

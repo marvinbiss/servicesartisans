@@ -38,7 +38,6 @@ import {
   getFAQSchema,
 } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { REVALIDATE } from '@/lib/cache'
 import GeoPageCTA from '@/components/conversion/GeoPageCTA'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks, GeographicNavigation } from '@/components/InternalLinks'
@@ -49,7 +48,9 @@ import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 
 const validServiceSlugs = new Set(staticServicesList.map((s) => s.slug))
 
-export const revalidate = REVALIDATE.services
+// Inlined literal (= REVALIDATE.services, 24h): Next 16 requires segment config
+// exports to be statically-analyzable literals, not member access on an import.
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Tous les Métiers RGE Artisans 2026',

@@ -1,11 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { notFound, unstable_rethrow } from 'next/navigation'
 import { logger } from '@/lib/logger'
 import { buildDevisHref } from '@/lib/utils'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import {
   ArrowRight,
   CheckCircle,
@@ -80,7 +77,6 @@ import { shouldNoindex } from '@/lib/seo/pruning'
 import { hasDeptProviderFallback } from '@/lib/seo/dept-fallback'
 import { getDynamicLastModified } from '@/lib/seo/dynamic-lastmod'
 import { getRegionPreposition } from '@/lib/geo-strings'
-import dynamic from 'next/dynamic'
 
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
@@ -93,13 +89,9 @@ function getClimatLabel(zone: string | null): string {
   return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
-const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
-  ssr: false,
-})
+import ExitIntentPopup from '@/components/ExitIntentPopup.client'
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import TarifsDevisCTA from '@/components/conversion/TarifsDevisCTA.client'
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -411,7 +403,7 @@ export default async function AvisServiceVillePage(props: {
   try {
     return await renderAvisServiceVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     const params = await props.params.catch(() => null)
     logger.error('avis_service_ville.unhandled_render_error', err as Error, {
       route: 'avis/[service]/[ville]',

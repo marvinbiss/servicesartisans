@@ -56,7 +56,7 @@ function getSupabaseAdmin() {
 }
 
 function getSupabaseSsr(
-  cookieStore: Awaited<ReturnType<typeof cookies>>
+  cookieStore: Awaited<Awaited<ReturnType<typeof cookies>>>
 ): ReturnType<typeof createServerClient> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

@@ -224,7 +224,14 @@ export async function generateSitemaps() {
   return sitemaps
 }
 
-export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap({
+  id: idParam,
+}: {
+  id: string | Promise<string>
+}): Promise<MetadataRoute.Sitemap> {
+  // Next.js 16 delivers `id` as a Promise (async metadata route params).
+  // `await` also passes strings through unchanged for backward compat.
+  const id = await idParam
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
     // Homepage — STATIC_DATE: content changes rarely (hero, sections are stable)

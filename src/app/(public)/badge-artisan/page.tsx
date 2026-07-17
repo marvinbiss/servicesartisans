@@ -5,8 +5,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import BadgeClient from './BadgeClient'
 import RelatedHubs from '@/components/seo/RelatedHubs'
-import dynamic from 'next/dynamic'
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
 
 const canonicalUrl = `${SITE_URL}/badge-artisan`
 

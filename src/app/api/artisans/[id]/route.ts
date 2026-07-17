@@ -105,7 +105,8 @@ function generateDescription(name: string, specialty: string, city: string): str
 
 // REMOVED: generateSyntheticReviews function (illegal fake review generation)
 
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Validate artisan ID parameter
     const idValidation = artisanIdSchema.safeParse(params.id)

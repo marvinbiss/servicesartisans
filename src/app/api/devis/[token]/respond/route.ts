@@ -17,7 +17,8 @@ const respondSchema = z.object({
   action: z.enum(['accepte', 'refuse']),
 })
 
-export async function POST(request: Request, { params }: { params: { token: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ token: string }> }) {
+  const params = await props.params
   const token = params.token?.trim()
   if (!token || token.length < 16) {
     return NextResponse.json({ error: 'Lien invalide' }, { status: 400 })

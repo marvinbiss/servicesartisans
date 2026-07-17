@@ -26,7 +26,8 @@ const updateServiceSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un service
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit lecture 60/min/IP
     const ip = getClientIp(request.headers)
@@ -84,7 +85,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PATCH - Mettre à jour un service
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit mutation 20/min — tolerance basse
     const ip = getClientIp(request.headers)
@@ -170,7 +172,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Supprimer/désactiver un service
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit destructif 20/min — anti-mass-delete
     const ip = getClientIp(request.headers)

@@ -33,13 +33,13 @@ const errorStatus = (code: string): number => {
   }
 }
 
-async function resolve(idPromise: Promise<{ id: string }>) {
-  const { id } = await idPromise
+async function resolve({ id }: { id: string }) {
   const guard = await requireArtisan()
   return { id, ...guard }
 }
 
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_req: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const { id, error: guardError, user, supabase } = await resolve(params)
     if (guardError) return guardError
@@ -76,7 +76,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(req: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const { id, error: guardError, user, supabase } = await resolve(params)
     if (guardError) return guardError
@@ -125,7 +126,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_req: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const { id, error: guardError, user, supabase } = await resolve(params)
     if (guardError) return guardError

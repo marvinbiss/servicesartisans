@@ -16,7 +16,8 @@ const changeSubscriptionSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un abonnement
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with payments:read permission
     const authResult = await requirePermission('payments', 'read')
@@ -63,7 +64,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 // PATCH - Modifier un abonnement (changer de plan)
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 / RBAC fix : payments.write n'existe PAS dans AdminPermissions schema
     // (valides : read | refund | cancel). Le cast `Record<string, boolean>` retournait

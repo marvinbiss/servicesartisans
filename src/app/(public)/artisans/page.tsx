@@ -9,8 +9,7 @@ import { SITE_URL, PHONE_TEL, getAlternates } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
 import { resolveProviderCities } from '@/lib/insee-resolver'
-import dynamic from 'next/dynamic'
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
 
 export const revalidate = 3600 // ISR - revalidate every hour
 

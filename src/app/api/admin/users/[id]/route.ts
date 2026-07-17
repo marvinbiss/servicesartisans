@@ -23,7 +23,8 @@ const updateUserSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un utilisateur
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const authResult = await requirePermission('users', 'read')
     if (!authResult.success || !authResult.admin) {
@@ -58,7 +59,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 // PATCH - Mettre à jour un utilisateur
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const authResult = await requirePermission('users', 'write')
     if (!authResult.success || !authResult.admin) {
@@ -107,7 +109,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Supprimer un utilisateur
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const authResult = await requirePermission('users', 'delete')
     if (!authResult.success || !authResult.admin) {

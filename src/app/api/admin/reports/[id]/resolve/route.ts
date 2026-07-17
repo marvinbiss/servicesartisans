@@ -19,7 +19,8 @@ const resolveReportSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Résoudre ou rejeter un signalement
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit mutation 20/min — modération sensible
     const ip = getClientIp(request.headers)

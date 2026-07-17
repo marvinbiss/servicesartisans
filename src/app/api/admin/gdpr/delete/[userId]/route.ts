@@ -8,7 +8,8 @@ import { adminGdprDeleteSchema, adminDeleteUserData } from '@/lib/services/gdpr-
 export const dynamic = 'force-dynamic'
 
 // POST - Supprimer/Anonymiser les données d'un utilisateur (RGPD)
-export async function POST(request: NextRequest, { params }: { params: { userId: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ userId: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with users:delete permission (GDPR deletion is critical)
     const authResult = await requirePermission('users', 'delete')

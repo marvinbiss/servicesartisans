@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound, permanentRedirect } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation'
 import { logger } from '@/lib/logger'
 import {
   AlertTriangle,
@@ -47,17 +44,10 @@ import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/com
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getRegionPreposition } from '@/lib/geo-strings'
 import { getReviewStatsByDept } from '@/lib/supabase'
-import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
-const TarifsDevisCTA = dynamic(() => import('@/components/conversion/TarifsDevisCTA'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
+import TarifsDevisCTA from '@/components/conversion/TarifsDevisCTA.client'
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -529,7 +519,7 @@ export default async function ProblemeVillePage(props: {
   try {
     return await renderProblemeVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     const params = await props.params.catch(() => null)
     logger.error('probleme_ville.unhandled_render_error', err as Error, {
       route: 'problemes/[probleme]/[ville]',

@@ -22,7 +22,8 @@ const rescheduleBookingSchema = z.object({
 // POST /api/bookings/[id]/reschedule - Reschedule a booking to a new slot
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const supabase = await createClient()
 

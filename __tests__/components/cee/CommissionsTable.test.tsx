@@ -13,7 +13,6 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import React from 'react'
 
 import CommissionsTable from '@/components/cee-artisan/CommissionsTable'
 import type { CeeCommissionRow } from '@/app/(private)/espace-artisan/cee/commissions/page'

@@ -15,7 +15,8 @@ const banUserSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Bannir ou débannir un utilisateur
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const authResult = await requirePermission('users', 'write')
     if (!authResult.success || !authResult.admin) {

@@ -29,14 +29,9 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { BAROMETRE_METIERS } from '@/lib/barometre/constants'
 import { departements } from '@/lib/data/france'
-import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 export const revalidate = 86400 // 24h
 

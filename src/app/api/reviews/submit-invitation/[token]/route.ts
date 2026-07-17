@@ -19,7 +19,8 @@ const submitSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: Request, { params }: { params: { token: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ token: string }> }) {
+  const params = await props.params
   const token = params.token?.trim()
   if (!token || token.length < 10) {
     return NextResponse.json({ error: 'Token invalide' }, { status: 400 })

@@ -17,15 +17,10 @@ import TldrBlock from '@/components/flagship/TldrBlock'
 import { ArticleMeta } from '@/components/ArticleMeta'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
-import dynamic from 'next/dynamic'
 import { getPublishedDate } from '@/lib/seo/published-dates'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 export const revalidate = 86400
 

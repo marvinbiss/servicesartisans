@@ -100,8 +100,9 @@ function buildStoreDeps(): SessionStoreDeps {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params
   try {
     const ip = getClientIp(req.headers)
     const rl = await checkRateLimit(`v1-ask-sessions-get:${ip}`, {
@@ -168,8 +169,9 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params
   try {
     const ip = getClientIp(req.headers)
     const rl = await checkRateLimit(`v1-ask-sessions-del:${ip}`, {

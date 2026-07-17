@@ -23,7 +23,11 @@ const patchSchema = z.object({
   rejection_reason: z.string().max(1000).optional(),
 })
 
-export async function PATCH(request: NextRequest, { params }: { params: { providerId: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ providerId: string }> }
+) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate-limit mutation 20/min — descriptions = E-E-A-T critique
     const ip = getClientIp(request.headers)

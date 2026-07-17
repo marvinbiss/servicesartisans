@@ -4,8 +4,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, getAlternates } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import VerifierClient from './VerifierClient'
-import dynamic from 'next/dynamic'
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
 
 export const revalidate = 86400
 

@@ -34,11 +34,14 @@ export function createApiHandler<T = unknown>(
   handler: HandlerFunction<T>,
   options: HandlerOptions<T> = {}
 ) {
-  return async (request: NextRequest, routeContext?: { params?: Record<string, string> }) => {
+  return async (
+    request: NextRequest,
+    routeContext?: { params?: Promise<Record<string, string>> }
+  ) => {
     try {
       const context: HandlerContext = {
         request,
-        params: routeContext?.params,
+        params: routeContext?.params ? await routeContext.params : undefined,
       }
 
       // Parse body if needed

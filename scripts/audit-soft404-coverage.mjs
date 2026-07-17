@@ -86,9 +86,14 @@ const providerOuterCatch =
     src
   )
 
-// 6. Re-throws des control-flow
-const reRedirect = /isRedirectError\(err\)\s*\|\|\s*isNotFoundError\(err\)/.test(src)
-const reDynamic = /isDynamicServerError\(err\)/.test(src)
+// 6. Re-throws des control-flow.
+//    Next 16 : `unstable_rethrow(err)` remplace les helpers
+//    isRedirectError/isNotFoundError/isDynamicServerError (retirés de
+//    next/navigation) et re-throw les trois familles en un seul appel.
+const hasUnstableRethrow = /unstable_rethrow\(err\)/.test(src)
+const reRedirect =
+  hasUnstableRethrow || /isRedirectError\(err\)\s*\|\|\s*isNotFoundError\(err\)/.test(src)
+const reDynamic = hasUnstableRethrow || /isDynamicServerError\(err\)/.test(src)
 
 // 7. logger.error sur chaque .catch() — heuristique : compter les `.catch((err)` qui retournent
 //    null ET vérifier qu'au moins autant de logger.error sont déclarés dans le fichier que de catches.
@@ -144,12 +149,12 @@ const checks = [
   },
   {
     id: 'rethrow_redirect_notfound',
-    label: 'Re-throw isRedirectError + isNotFoundError',
+    label: 'Re-throw redirect + notFound (isRedirectError/isNotFoundError ou unstable_rethrow)',
     ok: reRedirect,
   },
   {
     id: 'rethrow_dynamic_server_error',
-    label: 'Re-throw isDynamicServerError',
+    label: 'Re-throw dynamic-server-error (isDynamicServerError ou unstable_rethrow)',
     ok: reDynamic,
   },
   {

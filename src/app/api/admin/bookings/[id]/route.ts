@@ -20,7 +20,8 @@ const updateBookingSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'une réservation
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with services:read permission
     const authResult = await requirePermission('services', 'read')
@@ -61,7 +62,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 // PATCH - Mettre à jour une réservation
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with services:write permission
     const authResult = await requirePermission('services', 'write')
@@ -120,7 +122,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Annuler une réservation
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with services:delete permission
     const authResult = await requirePermission('services', 'delete')

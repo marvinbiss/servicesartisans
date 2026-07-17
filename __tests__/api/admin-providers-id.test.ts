@@ -124,7 +124,7 @@ vi.mock('@/lib/monitoring/sentry', () => ({
 // ============================================
 
 function makeParams(id: string) {
-  return { params: { id } }
+  return { params: Promise.resolve({ id }) }
 }
 
 function sampleProviderRow(overrides: Record<string, unknown> = {}) {

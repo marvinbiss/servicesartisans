@@ -1,14 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-import { notFound } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
+import { notFound, unstable_rethrow } from 'next/navigation'
 import { MapPin, Users, Building2, ArrowRight, HelpCircle, Leaf, Star } from 'lucide-react'
 
-const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
+import ExitIntentPopup from '@/components/ExitIntentPopup.client'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import {
@@ -166,7 +162,7 @@ export default async function VillePage(props: PageProps) {
   try {
     return await renderVillePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     logger.error('[VillePage] unhandled error on render', { error: err })
     notFound()
   }

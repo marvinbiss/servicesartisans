@@ -9,14 +9,9 @@ import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/con
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from '@/lib/data/questions'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 import { resolveCitationsFromText } from '@/lib/seo/authoritative-citations'
-import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 // ---------------------------------------------------------------------------
 // Static params

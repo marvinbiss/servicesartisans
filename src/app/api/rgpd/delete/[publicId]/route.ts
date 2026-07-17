@@ -28,7 +28,8 @@ function normalizeEmail(s: string): string {
   return s.trim().toLowerCase()
 }
 
-export async function POST(req: NextRequest, { params }: { params: { publicId: string } }) {
+export async function POST(req: NextRequest, props: { params: Promise<{ publicId: string }> }) {
+  const params = await props.params
   try {
     const { publicId } = params
 

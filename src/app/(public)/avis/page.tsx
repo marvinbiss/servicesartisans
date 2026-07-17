@@ -10,14 +10,9 @@ import { CmsContent } from '@/components/CmsContent'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
 import { tradeContent } from '@/lib/data/trade-content'
 import { services } from '@/lib/data/france'
-import dynamic from 'next/dynamic'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
 export const revalidate = 86400 // 24h
 

@@ -60,9 +60,10 @@ function sanitizeCode(raw: string): string | null {
   return DEPT_CODE_RE.test(upper) ? upper : null
 }
 
-type Params = { params: { code: string } }
+type Params = { params: Promise<{ code: string }> }
 
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, props: Params) {
+  const params = await props.params
   try {
     const ip = getClientIp(request.headers)
     const rl = await checkRateLimit(`v1-stats-dept:${ip}`, {

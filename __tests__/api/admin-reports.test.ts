@@ -377,7 +377,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = await POST(req as never, { params: { id: REPORT_ID } })
+    const result = await POST(req as never, { params: Promise.resolve({ id: REPORT_ID }) })
 
     expect(result).toEqual(expect.objectContaining({ status: 401 }))
   })
@@ -385,7 +385,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('resolves report successfully (action=resolve)', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: REPORT_ID }),
+    })) as unknown as {
       body: { success: boolean; report: unknown; message: string }
       status: number
     }
@@ -410,7 +412,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'dismiss' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: REPORT_ID }),
+    })) as unknown as {
       body: { success: boolean; message: string }
       status: number
     }
@@ -429,7 +433,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: 'not-a-uuid' } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: 'not-a-uuid' }),
+    })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -442,7 +448,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('returns 400 on invalid body (missing action)', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ resolution_notes: 'some notes' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: REPORT_ID }),
+    })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -456,7 +464,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: REPORT_ID }),
+    })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -470,7 +480,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('logs admin action on success', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve', resolution: 'Confirmed spam' })
-    await POST(req as never, { params: { id: REPORT_ID } })
+    await POST(req as never, { params: Promise.resolve({ id: REPORT_ID }) })
 
     expect(mockLogAdminAction).toHaveBeenCalledWith(
       ADMIN_ID,
@@ -484,7 +494,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('includes resolution_notes in update payload', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'dismiss', resolution: 'Not a valid report' })
-    await POST(req as never, { params: { id: REPORT_ID } })
+    await POST(req as never, { params: Promise.resolve({ id: REPORT_ID }) })
 
     const updateCalls = builderCalls.filter((c) => c.method === 'update')
     expect(updateCalls.length).toBe(1)
@@ -495,7 +505,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('sets reviewed_by to admin ID', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    await POST(req as never, { params: { id: REPORT_ID } })
+    await POST(req as never, { params: Promise.resolve({ id: REPORT_ID }) })
 
     const updateCalls = builderCalls.filter((c) => c.method === 'update')
     const updateArg = updateCalls[0].args[0] as Record<string, unknown>
@@ -510,7 +520,9 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
+    const result = (await POST(req as never, {
+      params: Promise.resolve({ id: REPORT_ID }),
+    })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }

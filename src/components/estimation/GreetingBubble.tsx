@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { X, Sparkles } from 'lucide-react'
 

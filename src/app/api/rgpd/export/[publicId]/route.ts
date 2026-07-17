@@ -14,7 +14,8 @@ import { verifyToken } from '@/lib/simulateur/rgpd/signed-token'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
 
-export async function GET(req: NextRequest, { params }: { params: { publicId: string } }) {
+export async function GET(req: NextRequest, props: { params: Promise<{ publicId: string }> }) {
+  const params = await props.params
   try {
     const { publicId } = params
     const token = req.nextUrl.searchParams.get('token') ?? ''

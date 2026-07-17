@@ -13,7 +13,8 @@ const cancelSubscriptionSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // POST - Annuler ou réactiver un abonnement
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // Verify admin with payments:cancel permission
     const authResult = await requirePermission('payments', 'cancel')

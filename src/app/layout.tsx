@@ -1,6 +1,5 @@
 import type { ComponentType, ReactNode } from 'react'
 import type { Metadata, Viewport } from 'next'
-import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { DM_Sans, Sora } from 'next/font/google'
@@ -33,46 +32,22 @@ const sora = Sora({
   adjustFontFallback: true,
 })
 
-// Dynamic imports for performance
-const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
-  ssr: false,
-})
-const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
-  ssr: false,
-})
-const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
-  ssr: false,
-})
-const ScrollToTop = dynamic(() => import('@/components/ui/ScrollToTop'), {
-  ssr: false,
-})
-const WebVitals = dynamic(
-  () => import('@/components/WebVitals').then((mod) => ({ default: mod.WebVitals })),
-  { ssr: false }
-)
-const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
-  ssr: false,
-})
-const PostHogProvider = dynamic(() => import('@/components/PostHogProvider'), {
-  ssr: false,
-})
-const AuthTracker = dynamic(() => import('@/components/AuthTracker'), {
-  ssr: false,
-})
-const ConsentGatedScripts = dynamic(() => import('@/components/ConsentGatedScripts'), {
-  ssr: false,
-})
-const CompareBar = dynamic(
-  () => import('@/components/compare/CompareBar').then((mod) => ({ default: mod.CompareBar })),
-  { ssr: false }
-)
-const CommandPaletteMount = dynamic(
-  () =>
-    import('@/components/command-palette/CommandPaletteMount').then((mod) => ({
-      default: mod.CommandPaletteMount,
-    })),
-  { ssr: false }
-)
+// Dynamic imports for performance — extracted to a Client Component module
+// because Next 16 forbids `ssr: false` in a Server Component (this layout).
+import {
+  MobileBottomNav,
+  ServiceWorkerRegistration,
+  CookieConsent,
+  ScrollToTop,
+  WebVitals,
+  PageViewTracker,
+  PostHogProvider,
+  AuthTracker,
+  ConsentGatedScripts,
+  CompareBar,
+  CommandPaletteMount,
+  CompareProviderWrapperDynamic,
+} from './layout-client'
 // Kill switch: NEXT_PUBLIC_DISABLE_COMPARE_SSR must be UNSET in normal production.
 // Set it to 'true' on Vercel ONLY to trigger an emergency rollback to CSR-only
 // (~60-90s via env var + redeploy). Build-time inlined, so it requires a redeploy
@@ -80,13 +55,7 @@ const CommandPaletteMount = dynamic(
 // (main bundle + dynamic chunk ~3KB) to keep rollback path instant.
 // CompareProvider is SSR-safe (useState([]) initial, no window/document access),
 // but wraps Header + main + Footer — previous ssr:false hid the entire tree from Googlebot.
-const CompareProviderWrapperDynamic = dynamic(
-  () =>
-    import('@/components/compare/CompareProvider').then((mod) => ({
-      default: mod.CompareProviderWrapper,
-    })),
-  { ssr: false }
-)
+// (CompareProviderWrapperDynamic is imported from ./layout-client above.)
 const CompareProviderWrapper: ComponentType<{ children: ReactNode }> =
   process.env.NEXT_PUBLIC_DISABLE_COMPARE_SSR === 'true'
     ? CompareProviderWrapperDynamic

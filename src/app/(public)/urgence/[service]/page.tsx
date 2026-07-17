@@ -29,17 +29,12 @@ import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { PageHeroH1 } from '@/components/ui/PageHeroH1'
-import dynamic from 'next/dynamic'
 
-const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntentModal'), {
-  ssr: false,
-})
+import ExitIntentPopup from '@/components/conversion/ExitIntentModal.client'
 
-const StickyMobileCTA = dynamic(() => import('@/components/conversion/StickyMobileCTA'), {
-  ssr: false,
-})
+import StickyMobileCTA from '@/components/conversion/StickyMobileCTA.client'
 
-const UrgencyCountdown = dynamic(() => import('@/components/UrgencyCountdown'), { ssr: false })
+import UrgencyCountdown from '@/components/UrgencyCountdown.client'
 
 export const revalidate = 86400 // ISR 24h
 

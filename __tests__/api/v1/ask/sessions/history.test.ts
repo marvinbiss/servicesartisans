@@ -101,7 +101,7 @@ beforeEach(() => {
 
 describe('GET /api/v1/ask/sessions/:id — validation', () => {
   it('returns 400 when public_key is missing', async () => {
-    const res = await GET(buildGet() as never, { params: { id: SESSION_ID } })
+    const res = await GET(buildGet() as never, { params: Promise.resolve({ id: SESSION_ID }) })
     expect(res.status).toBe(400)
     const body = (await res.json()) as { error: { code: string } }
     expect(body.error.code).toBe('missing_public_key')
@@ -111,7 +111,9 @@ describe('GET /api/v1/ask/sessions/:id — validation', () => {
 describe('GET /api/v1/ask/sessions/:id — auth state machine', () => {
   it('returns 404 when session is not found', async () => {
     mocks.sessionRow = null
-    const res = await GET(buildGet(PUBLIC_KEY) as never, { params: { id: SESSION_ID } })
+    const res = await GET(buildGet(PUBLIC_KEY) as never, {
+      params: Promise.resolve({ id: SESSION_ID }),
+    })
     expect(res.status).toBe(404)
     const body = (await res.json()) as { error: { code: string } }
     expect(body.error.code).toBe('session_not_found')
@@ -127,7 +129,9 @@ describe('GET /api/v1/ask/sessions/:id — auth state machine', () => {
       message_count: 4,
       deleted_at: null,
     }
-    const res = await GET(buildGet(PUBLIC_KEY) as never, { params: { id: SESSION_ID } })
+    const res = await GET(buildGet(PUBLIC_KEY) as never, {
+      params: Promise.resolve({ id: SESSION_ID }),
+    })
     expect(res.status).toBe(410)
   })
 
@@ -142,7 +146,7 @@ describe('GET /api/v1/ask/sessions/:id — auth state machine', () => {
       deleted_at: null,
     }
     const res = await GET(buildGet('PK-WRONG-WRONG-WRONG-WRONG-WRONG-WRONG-XXX') as never, {
-      params: { id: SESSION_ID },
+      params: Promise.resolve({ id: SESSION_ID }),
     })
     expect(res.status).toBe(403)
   })
@@ -179,7 +183,9 @@ describe('GET /api/v1/ask/sessions/:id — happy path', () => {
         created_at: '2026-05-20T00:30:05Z',
       },
     ]
-    const res = await GET(buildGet(PUBLIC_KEY) as never, { params: { id: SESSION_ID } })
+    const res = await GET(buildGet(PUBLIC_KEY) as never, {
+      params: Promise.resolve({ id: SESSION_ID }),
+    })
     expect(res.status).toBe(200)
     const body = (await res.json()) as {
       session: { id: string; message_count: number }
@@ -200,7 +206,9 @@ describe('GET /api/v1/ask/sessions/:id — rate limit', () => {
       remaining: 0,
       resetTime: Date.now() + 30_000,
     })
-    const res = await GET(buildGet(PUBLIC_KEY) as never, { params: { id: SESSION_ID } })
+    const res = await GET(buildGet(PUBLIC_KEY) as never, {
+      params: Promise.resolve({ id: SESSION_ID }),
+    })
     expect(res.status).toBe(429)
   })
 })

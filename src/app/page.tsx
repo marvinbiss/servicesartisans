@@ -13,10 +13,9 @@ import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
 import { TOP_SERVICES, TOP_CITIES } from '@/lib/seo/top-pages'
-import dynamic from 'next/dynamic'
 
-const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
-const RecentSearches = dynamic(() => import('@/components/RecentSearches'), { ssr: false })
+import SocialProofBanner from '@/components/SocialProofBanner.client'
+import RecentSearches from '@/components/RecentSearches.client'
 
 export const revalidate = 86400
 

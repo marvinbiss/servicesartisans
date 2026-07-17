@@ -1,30 +1,13 @@
 import { Metadata } from 'next'
-import dynamic from 'next/dynamic'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getOrganizationSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, getAlternates } from '@/lib/seo/config'
-import { Loader2 } from 'lucide-react'
 import { services } from '@/lib/data/france'
 import RelatedHubs from '@/components/seo/RelatedHubs'
 
-const GeoPageCTA = dynamic(() => import('@/components/conversion/GeoPageCTA'), { ssr: false })
-
-// Dynamic import of the map client component (Leaflet is SSR-incompatible)
-const CarteClient = dynamic(() => import('./CarteClient'), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="bg-sand-100 rounded-xl flex items-center justify-center"
-      style={{ height: '600px' }}
-    >
-      <div className="text-center text-charcoal-500">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2" />
-        <p>Chargement de la carte...</p>
-      </div>
-    </div>
-  ),
-})
+import GeoPageCTA from '@/components/conversion/GeoPageCTA.client'
+import CarteClient from './CarteClient.dynamic'
 
 export const metadata: Metadata = {
   title: 'Carte des artisans RGE certifiés en France',

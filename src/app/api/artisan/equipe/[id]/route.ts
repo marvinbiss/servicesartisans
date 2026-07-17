@@ -29,7 +29,8 @@ const memberUpdateSchema = z.object({
   is_active: z.boolean().optional(),
 })
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError
@@ -96,7 +97,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const { error: guardError, user, supabase } = await requireArtisan()
     if (guardError) return guardError

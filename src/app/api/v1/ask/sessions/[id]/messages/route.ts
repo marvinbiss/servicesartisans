@@ -134,8 +134,9 @@ function buildAssistantTurn(result: AnswerOk): AssistantTurn {
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params
   try {
     const ip = getClientIp(req.headers)
     const rl = await checkRateLimit(`v1-ask-sessions-msg:${ip}`, {

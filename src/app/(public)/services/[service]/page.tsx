@@ -48,9 +48,8 @@ import ServiceQuestions from '@/components/seo/ServiceQuestions'
 import { isRgeAllowedService } from '@/lib/rge/service-city-listings'
 import { getDeepSections } from '@/lib/seo/trade-deep-sections'
 import { getTradeContent } from '@/lib/data/trade-content'
-import dynamic from 'next/dynamic'
 
-const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
+import MicroConversions from '@/components/MicroConversions.client'
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {

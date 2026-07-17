@@ -52,8 +52,9 @@ function redirect(path: string): NextResponse {
 
 export async function GET(
   request: Request,
-  { params }: { params: { token: string } }
+  props: { params: Promise<{ token: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params
   // SLA-99.9 : RL 30/min/IP, fail-open (un crawler ne doit jamais bloquer
   // un user légitime qui clique 2x sur le même mail).
   const ip = getClientIp(request.headers)

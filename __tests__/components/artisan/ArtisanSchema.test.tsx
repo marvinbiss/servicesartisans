@@ -16,7 +16,6 @@
 
 import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/react'
-import React from 'react'
 import { ArtisanSchema } from '@/components/artisan/ArtisanSchema'
 import type { LegacyArtisan } from '@/types/legacy'
 

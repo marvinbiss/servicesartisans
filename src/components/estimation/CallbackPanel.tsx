@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { Phone, Check, Loader2, Clock, ShieldCheck } from 'lucide-react'
 import type { EstimationContext } from './utils'
 import type { UseLeadSubmitReturn } from './hooks/useLeadSubmit'

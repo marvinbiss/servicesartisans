@@ -23,7 +23,8 @@ const bookingPatchSchema = z.object({
 // GET /api/bookings/[id] - Get booking details
 export const dynamic = 'force-dynamic'
 
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const bookingId = params.id
 
@@ -154,7 +155,8 @@ export async function GET(_request: Request, { params }: { params: { id: string 
 }
 
 // PATCH /api/bookings/[id] - Update booking status
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const bookingId = params.id
 

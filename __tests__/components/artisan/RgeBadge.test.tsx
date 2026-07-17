@@ -6,7 +6,6 @@
 
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 import RgeBadge, { type RgeQualificationProp } from '@/components/artisan/RgeBadge'
 
 const validQualification: RgeQualificationProp = {

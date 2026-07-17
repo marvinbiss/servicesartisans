@@ -67,7 +67,8 @@ function withSupabaseTimeout<T>(p: PromiseLike<T>): Promise<T> {
 }
 
 // GET - Récupérer un provider complet
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     // SLA-99.9 : rate limit lecture 60/min/IP fail-open.
     const ip = getClientIp(request.headers)
@@ -122,7 +123,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PATCH - Mise à jour complète du provider
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   const providerId = params.id
 
   try {
@@ -229,7 +231,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE - Hard delete (suppression définitive)
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   const providerId = params.id
 
   try {

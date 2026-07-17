@@ -6,7 +6,8 @@ import { quoteUpdateActionSchema, getQuoteById, updateQuote } from '@/lib/servic
 export const dynamic = 'force-dynamic'
 
 // GET - Get single quote
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const supabase = await createClient()
     const {
@@ -62,7 +63,8 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 }
 
 // PATCH - Update quote status
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params
   try {
     const supabase = await createClient()
     const {

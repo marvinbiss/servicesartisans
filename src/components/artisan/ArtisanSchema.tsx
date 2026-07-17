@@ -1,4 +1,3 @@
-import React from 'react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { slugify, getArtisanUrl } from '@/lib/utils'

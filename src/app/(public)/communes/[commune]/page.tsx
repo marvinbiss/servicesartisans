@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound, permanentRedirect } from 'next/navigation'
-import { isRedirectError } from 'next/dist/client/components/redirect'
-import { isNotFoundError } from 'next/dist/client/components/not-found'
+import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation'
 import { logger } from '@/lib/logger'
-import { isDynamicServerError } from 'next/dist/client/components/hooks-server-context'
 import { Users, Thermometer, AlertTriangle, TrendingUp, Leaf, Building2 } from 'lucide-react'
 
 import Breadcrumb from '@/components/Breadcrumb'
@@ -156,7 +153,7 @@ export default async function CommunePage(props: PageProps) {
   try {
     return await renderCommunePage(props)
   } catch (err) {
-    if (isRedirectError(err) || isNotFoundError(err) || isDynamicServerError(err)) throw err
+    unstable_rethrow(err)
     const params = await props.params.catch(() => null)
     logger.error('commune.unhandled_render_error', err as Error, {
       route: 'communes/[commune]',
