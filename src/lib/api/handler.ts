@@ -36,7 +36,11 @@ export function createApiHandler<T = unknown>(
 ) {
   return async (
     request: NextRequest,
-    routeContext?: { params?: Promise<Record<string, string>> }
+    // Next 16 always supplies the route context with an (async) params Promise;
+    // the shape must match the generated `RouteContext = { params: Promise<…> }`
+    // exactly (required, not optional) or the webpack build's strict PageProps/
+    // RouteContext check rejects it. Turbopack skips this validation.
+    routeContext: { params: Promise<Record<string, string>> }
   ) => {
     try {
       const context: HandlerContext = {

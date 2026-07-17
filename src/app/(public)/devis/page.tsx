@@ -92,14 +92,15 @@ const faqItems = [
 ]
 
 interface DevisPageProps {
-  searchParams: {
+  searchParams: Promise<{
     service?: string | string[]
     operation?: string | string[]
     ville?: string | string[]
-  }
+  }>
 }
 
-export default async function DevisPage({ searchParams }: DevisPageProps) {
+export default async function DevisPage(props: DevisPageProps) {
+  const searchParams = await props.searchParams
   const cmsPage = await getPageContent('devis', 'static')
 
   // Query params : pré-remplissage depuis un CTA contextualisé (ex: fiche

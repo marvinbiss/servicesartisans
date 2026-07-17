@@ -28,8 +28,13 @@ export const revalidate = 86400
 // Metadata
 // ---------------------------------------------------------------------------
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const question = getQuestionBySlug(params.slug)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const question = getQuestionBySlug(slug)
   if (!question) return {}
 
   const title = `${question.question} | ${SITE_NAME}`
@@ -58,8 +63,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 // Page
 // ---------------------------------------------------------------------------
 
-export default function QuestionPage({ params }: { params: { slug: string } }) {
-  const question = getQuestionBySlug(params.slug)
+export default async function QuestionPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const question = getQuestionBySlug(slug)
   if (!question) notFound()
 
   // Curated cross-category links when defined (concentrates internal link

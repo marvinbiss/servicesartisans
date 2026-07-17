@@ -15,10 +15,11 @@ export const metadata = {
 }
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
-export default async function ArtisanRedirectPage({ params }: Props) {
+export default async function ArtisanRedirectPage(props: Props) {
+  const params = await props.params
   const slug = decodeURIComponent(params.slug || '').trim()
   if (!slug) notFound()
 

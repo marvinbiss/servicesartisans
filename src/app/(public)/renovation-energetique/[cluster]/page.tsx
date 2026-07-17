@@ -69,9 +69,10 @@ export async function generateStaticParams(): Promise<Array<{ cluster: string }>
 
 export const dynamicParams = true
 
-type PageProps = { params: { cluster: string } }
+type PageProps = { params: Promise<{ cluster: string }> }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params
   const row = await loadCluster(params.cluster)
   if (!row || !row.content_jsonb) {
     return { title: 'Page introuvable — ServicesArtisans', robots: { index: false } }
@@ -93,7 +94,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ClusterPage({ params }: PageProps) {
+export default async function ClusterPage(props: PageProps) {
+  const params = await props.params
   const row = await loadCluster(params.cluster)
   if (!row || !row.content_jsonb) notFound()
 

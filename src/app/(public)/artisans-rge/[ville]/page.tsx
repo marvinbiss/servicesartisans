@@ -62,10 +62,11 @@ export function generateStaticParams() {
 }
 
 type PageProps = {
-  params: { ville: string }
+  params: Promise<{ ville: string }>
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params
   const ville = getVilleBySlug(params.ville)
   if (!ville) {
     return {
@@ -103,7 +104,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ArtisansRgeVillePage({ params }: PageProps) {
+export default async function ArtisansRgeVillePage(props: PageProps) {
+  const params = await props.params
   const ville = getVilleBySlug(params.ville)
   if (!ville) notFound()
 

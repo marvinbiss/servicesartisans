@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-type PageProps = { params: { token: string } }
+type PageProps = { params: Promise<{ token: string }> }
 
 type Provider = { name: string | null; slug: string | null; address_city: string | null }
 type Line = {
@@ -70,7 +70,8 @@ function formatDate(iso: string): string {
 
 const card = 'bg-white rounded-2xl shadow-sm border border-sand-200'
 
-export default async function DevisClientPage({ params }: PageProps) {
+export default async function DevisClientPage(props: PageProps) {
+  const params = await props.params
   const token = params.token?.trim()
   if (!token || token.length < 16) notFound()
 

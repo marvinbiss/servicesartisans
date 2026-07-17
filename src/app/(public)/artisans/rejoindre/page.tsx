@@ -78,10 +78,11 @@ const steps = [
 ]
 
 interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function RejoindreArtisanPage({ searchParams }: PageProps) {
+export default async function RejoindreArtisanPage(props: PageProps) {
+  const searchParams = await props.searchParams
   const metier = cap(firstParam(searchParams.metier))
   const ville = cap(firstParam(searchParams.ville))
   const codePostal = firstParam(searchParams.codePostal)

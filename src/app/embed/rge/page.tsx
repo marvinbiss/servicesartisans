@@ -34,7 +34,7 @@ const VALID_METIERS = new Set([
 const MAX_VILLE_LEN = 50
 
 type EmbedRgePageProps = {
-  searchParams: { metier?: string; theme?: string; ville?: string }
+  searchParams: Promise<{ metier?: string; theme?: string; ville?: string }>
 }
 
 export const metadata: Metadata = {
@@ -66,7 +66,8 @@ function pickVille(raw: string | undefined): string {
   return value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]/g, '')
 }
 
-export default function EmbedRgePage({ searchParams }: EmbedRgePageProps) {
+export default async function EmbedRgePage(props: EmbedRgePageProps) {
+  const searchParams = await props.searchParams
   const metier = pickMetier(searchParams.metier)
   const theme = pickTheme(searchParams.theme)
   const ville = pickVille(searchParams.ville)

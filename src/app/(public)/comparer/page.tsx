@@ -55,11 +55,10 @@ async function fetchProviders(ids: string[]): Promise<Provider[]> {
   return results.filter((p): p is Provider => p !== null)
 }
 
-export default async function ComparerPage({
-  searchParams,
-}: {
-  searchParams: { ids?: string | string[] }
+export default async function ComparerPage(props: {
+  searchParams: Promise<{ ids?: string | string[] }>
 }) {
+  const searchParams = await props.searchParams
   const ids = parseIds(searchParams.ids)
   const providers = ids.length > 0 ? await fetchProviders(ids) : []
 

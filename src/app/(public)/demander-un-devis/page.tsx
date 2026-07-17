@@ -33,11 +33,11 @@ export const metadata: Metadata = {
 }
 
 interface DemanderDevisPageProps {
-  searchParams: {
+  searchParams: Promise<{
     service?: string | string[]
     operation?: string | string[]
     ville?: string | string[]
-  }
+  }>
 }
 
 function firstParam(value?: string | string[]) {
@@ -45,7 +45,8 @@ function firstParam(value?: string | string[]) {
   return raw?.trim() || undefined
 }
 
-export default function DemanderDevisPage({ searchParams }: DemanderDevisPageProps) {
+export default async function DemanderDevisPage(props: DemanderDevisPageProps) {
+  const searchParams = await props.searchParams
   const prefilledService = firstParam(searchParams?.service)
   const prefilledOperation = firstParam(searchParams?.operation)
   const prefilledCity = firstParam(searchParams?.ville)

@@ -12,10 +12,11 @@ export const metadata: Metadata = {
 }
 
 type PageProps = {
-  params: { token: string }
+  params: Promise<{ token: string }>
 }
 
-export default async function DonnerAvisPage({ params }: PageProps) {
+export default async function DonnerAvisPage(props: PageProps) {
+  const params = await props.params
   const invitation = await findInvitationByPlaintextToken(params.token)
 
   if (!invitation) {
