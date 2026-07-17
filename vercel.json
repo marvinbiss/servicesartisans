@@ -40,6 +40,10 @@
   },
   "crons": [
     {
+      "path": "/api/cron/llm-spend-alert",
+      "schedule": "0 6 * * *"
+    },
+    {
       "path": "/api/cron/healthcheck",
       "schedule": "*/5 * * * *"
     },
