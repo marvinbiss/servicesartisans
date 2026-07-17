@@ -83,15 +83,9 @@ export default function PrixComparatif({
             '@type': 'Product',
             name: row.model ? `${row.brand} ${row.model}` : row.brand,
             brand: { '@type': 'Brand', name: row.brand },
-            ...(row.rating !== undefined && {
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: row.rating,
-                bestRating: 5,
-                worstRating: 0,
-                ratingCount: 1,
-              },
-            }),
+            // No aggregateRating: editorial scores are not user reviews — emitting
+            // them as Schema.org AggregateRating is review-snippet spam (manual action).
+            // The visible star UI stays as editorial content; it just isn't structured data.
             offers: {
               '@type': 'AggregateOffer',
               priceCurrency: 'EUR',
