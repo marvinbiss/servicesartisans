@@ -80,6 +80,7 @@ const authenticator = {
 }
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 const APP_NAME = 'ServicesArtisans'
 
@@ -112,7 +113,15 @@ export class TwoFactorChangeCooldownError extends Error {
 }
 
 export class TwoFactorAuthService {
-  private supabase = createAdminClient()
+  // Lazy: `createAdminClient()` throws when SUPABASE_SERVICE_ROLE_KEY is
+  // absent. Instantiating it in a field initializer ran at import time, so the
+  // module-level singleton below threw during build page-data collection on
+  // any env without the service_role key (Vercel Preview) — deferring to first
+  // use keeps the build green and only requires the key at request time.
+  private _supabase: SupabaseClient | null = null
+  private get supabase(): SupabaseClient {
+    return (this._supabase ??= createAdminClient())
+  }
 
   /**
    * Plan C — C-3 : check cooldown 24h avant toute transition enable/disable.
