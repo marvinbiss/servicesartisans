@@ -2412,7 +2412,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       .filter((v): v is NonNullable<typeof v> => v != null)
     const mergedCities = [...phase1Cities, ...gscExtras]
 
-    const { byDeptServiceSlug, qualifiedCombos, deptServiceFallbackCombos } = await getLastmodData()
+    const { byDeptServiceSlug, rgeQualifiedServiceCity, rgeQualifiedServiceDept } =
+      await getLastmodData()
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
@@ -2428,18 +2429,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         // If no data → omitted (honest).
         const deptKey = `${normalizeName(ville.departement)}::${service.slug}`
         const lastmod = byDeptServiceSlug.get(deptKey)
-        // Sprint A #6 PhB (2026-05-03) — drift sitemap↔noindex aligné. La page
-        // applique `robots:noindex` quand `providerCount === 0 && !hasFallbackDept`
-        // (cf. services/[s]/[location]/page.tsx). Le sitemap doit appliquer la
-        // même règle pour ne pas exposer d'URL noindex à Google (gaspille budget
-        // crawl). Seuils alignés avec la page :
-        //   - `qualifiedCombos.has(...)` = ≥1 provider local (specialty + city match)
-        //   - `deptServiceFallbackCombos.has(...)` = ≥3 providers dept (cf. DEPT_FALLBACK_INDEX_THRESHOLD)
-        // Fail-open : si une des deux sources est `null` (DB blip), on inclut
-        // l'URL — identique au comportement page (providerCount default = 1).
-        if (qualifiedCombos !== null && deptServiceFallbackCombos !== null) {
-          const hasLocalProviders = qualifiedCombos.has(`${service.slug}::${ville.slug}`)
-          const hasDeptFallback = deptServiceFallbackCombos.has(deptKey)
+        // Sprint A #6 PhB (2026-05-03) — drift sitemap↔noindex aligné.
+        // 2026-07-17 FIX : la page est passée RGE-only (pivot 2026-05-05,
+        // `rgeOnly` default dans services/[s]/[location]/page.tsx + supabase.ts),
+        // mais ce gate utilisait encore les sets NON-RGE (qualifiedCombos /
+        // deptServiceFallbackCombos = tout provider actif) → le sitemap annonçait
+        // des dizaines de milliers d'URLs que la page renvoie en `noindex`
+        // (providers non-RGE only) = gaspillage crawl budget + signaux contradictoires.
+        // Aligné sur les mêmes sets RGE que la page et que les shards /rge/* :
+        //   - `rgeQualifiedServiceCity.has('service::ville')`     = ≥1 provider RGE local
+        //   - `rgeQualifiedServiceDept.has('service::deptSlug')`  = ≥3 providers RGE dept
+        //     (NB : clé RGE = `service::dept`, inverse de l'ancien `dept::service`).
+        // Fail-open : si une des deux sources est `null` (DB blip), on inclut l'URL.
+        if (rgeQualifiedServiceCity !== null && rgeQualifiedServiceDept !== null) {
+          const hasLocalProviders = rgeQualifiedServiceCity.has(`${service.slug}::${ville.slug}`)
+          const deptSlug = normalizeName(ville.departement)
+          const hasDeptFallback = rgeQualifiedServiceDept.has(`${service.slug}::${deptSlug}`)
           if (!hasLocalProviders && !hasDeptFallback) continue
         }
         allUrls.push({
