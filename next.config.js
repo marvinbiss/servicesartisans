@@ -4,6 +4,16 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
+  // In-build `tsc` type-checking of Next 16's ~17.8k generated route-type
+  // validators (.next/types/**/page.ts) GC-thrashes on Vercel's build box
+  // (~2 min locally, 37 min+ hung on Vercel). Types are enforced out of band:
+  // `tsc --noEmit` runs green (0 errors, verified) in pre-commit / CI, so skip
+  // the redundant, pathologically slow in-build pass. Do NOT remove this
+  // without restoring an equivalent CI `tsc --noEmit` gate.
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
