@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "cross-env NEXT_BUILD_SKIP_DB=1 NODE_OPTIONS=--max-old-space-size=12288 next build --webpack",
+    "build": "cross-env NEXT_BUILD_SKIP_DB=1 NODE_OPTIONS=\"--max-old-space-size=12288 --stack-size=4000\" next build --webpack",
     "build:clean": "rimraf tsconfig.tsbuildinfo .next/cache/.tsbuildinfo && npm run build",
     "start": "next start",
     "lint": "eslint .",
