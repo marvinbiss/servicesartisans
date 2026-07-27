@@ -32,8 +32,14 @@ const PROVIDER_COUNT_FALLBACK = 45_000
 async function _getProviderCount(): Promise<number> {
   try {
     const supabase = createAdminClient()
+    // 2026-07 — `.abortSignal(AbortSignal.timeout)` en plus du `withTimeout` :
+    // le race seul ne coupait PAS la requête Supabase sous-jacente (cf.
+    // `src/lib/api/timeout.ts`), chaque timeout laissait une connexion ouverte
+    // → épuisement du pool → socket drops (`UND_ERR_SOCKET`) → spirale de
+    // timeouts observée à partir du 16/06. AbortSignal annule réellement le
+    // fetch PostgREST et libère la connexion au budget expiré.
     const { data, error } = await withTimeout(
-      supabase.rpc('get_active_rge_count'),
+      supabase.rpc('get_active_rge_count').abortSignal(AbortSignal.timeout(3_000)),
       3_000,
       'site_stats_provider_count'
     )
