@@ -42,18 +42,30 @@ type ClusterRow = {
   updated_at: string
 }
 
-async function loadCluster(slug: string): Promise<ClusterRow | null> {
-  const admin = createAdminClient()
-  const { data } = await admin
-    .from('renovation_clusters')
-    .select(
-      'slug, primary_kw, cluster_type, parent_cluster_slug, service_slug, content_jsonb, published_at, noindex, updated_at'
-    )
-    .eq('slug', slug)
-    .not('published_at', 'is', null)
-    .eq('noindex', false)
-    .maybeSingle<ClusterRow>()
-  return data ?? null
+// { ok: true, row: X } = found · { ok: true, row: null } = genuine 0-row ·
+// { ok: false, row: null } = DB error. WHY: the old body ignored `error`, so a
+// timeout returned `data: null` = indistinguishable from "not published" → the
+// page's `if (!row) notFound()` soft-404'd (200 to Googlebot, Next #69103) on
+// transient DB blips. Callers MUST NOT notFound() on ok:false.
+type ClusterLookup = { ok: boolean; row: ClusterRow | null }
+
+async function loadCluster(slug: string): Promise<ClusterLookup> {
+  try {
+    const admin = createAdminClient()
+    const { data, error } = await admin
+      .from('renovation_clusters')
+      .select(
+        'slug, primary_kw, cluster_type, parent_cluster_slug, service_slug, content_jsonb, published_at, noindex, updated_at'
+      )
+      .eq('slug', slug)
+      .not('published_at', 'is', null)
+      .eq('noindex', false)
+      .maybeSingle<ClusterRow>()
+    if (error) throw new Error(`cluster_db_error:${error.code ?? 'unknown'}`)
+    return { ok: true, row: data ?? null }
+  } catch {
+    return { ok: false, row: null }
+  }
 }
 
 export async function generateStaticParams(): Promise<Array<{ cluster: string }>> {
@@ -72,8 +84,10 @@ export const dynamicParams = true
 type PageProps = { params: { cluster: string } }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const row = await loadCluster(params.cluster)
+  const { row } = await loadCluster(params.cluster)
   if (!row || !row.content_jsonb) {
+    // Metadata never notFound()s here (safe), so ok:false and genuine-empty
+    // both yield noindex — the render decides the real status.
     return { title: 'Page introuvable — ServicesArtisans', robots: { index: false } }
   }
   const c = row.content_jsonb
@@ -94,8 +108,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ClusterPage({ params }: PageProps) {
-  const row = await loadCluster(params.cluster)
-  if (!row || !row.content_jsonb) notFound()
+  const { ok, row } = await loadCluster(params.cluster)
+  if (!row || !row.content_jsonb) {
+    // DB error → throw (→ 500, retryable, no catch here). Genuine 0-row → notFound().
+    if (!ok) throw new Error('cluster_db_unavailable')
+    notFound()
+  }
 
   const c = row.content_jsonb
   const pageUrl = `${SITE_URL}/renovation-energetique/${row.slug}`

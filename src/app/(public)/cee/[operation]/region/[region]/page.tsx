@@ -102,9 +102,23 @@ export default async function CeeOperationRegionPage({ params }: PageProps) {
   if (!VALID_OP.test(operation) || !isCeeRegionalSlug(region)) notFound()
 
   const opCode = operation.toUpperCase()
-  const op = await getCeeOperationByCode(opCode).catch(() => null)
-  const reg = getCeeRegionalSpecifics(region)
-  if (!op || !reg) notFound()
+  // Distinguish an unknown CEE op code (genuine notFound) from a DB error. The
+  // old `.catch(() => null)` collapsed a timeout into null → `notFound()` →
+  // soft-404 (200 to Googlebot, Next #69103) on a transient blip.
+  let op: Awaited<ReturnType<typeof getCeeOperationByCode>> = null
+  let opDbError = false
+  try {
+    op = await getCeeOperationByCode(opCode)
+  } catch {
+    opDbError = true
+  }
+  const reg = getCeeRegionalSpecifics(region) // static — genuine lookup
+  if (!reg) notFound()
+  if (!op) {
+    // DB error → throw (→ 500, retryable) instead of soft-404. Unknown op → notFound().
+    if (opDbError) throw new Error('cee_op_db_unavailable')
+    notFound()
+  }
 
   const [topCities, totalProviders] = await Promise.all([
     getCeeRegionalTopCities(opCode, region).catch((err: unknown) => {
