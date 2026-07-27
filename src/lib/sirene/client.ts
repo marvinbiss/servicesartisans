@@ -5,6 +5,7 @@
 
 import { SIRENE_CONFIG, TRANCHES_EFFECTIFS } from './config'
 import { logger } from '@/lib/logger'
+import { getDeptCodeFromPostal } from '@/lib/geography'
 
 interface SireneToken {
   access_token: string
@@ -251,7 +252,8 @@ export function transformToProvider(etab: SireneEtablissement): {
     address_street: streetParts.length > 0 ? streetParts.join(' ') : null,
     address_city: addr.libelleCommuneEtablissement || null,
     address_postal_code: addr.codePostalEtablissement || null,
-    address_department: addr.codePostalEtablissement?.substring(0, 2) || null,
+    // Canonique (gère Corse 2A/2B + DOM 97x) vs substring(0,2) naïf.
+    address_department: getDeptCodeFromPostal(addr.codePostalEtablissement || null),
     legal_form: ul.categorieJuridiqueUniteLegale || null,
     creation_date: ul.dateCreationUniteLegale || null,
     employee_count: effectif,
