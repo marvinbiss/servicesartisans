@@ -57,6 +57,11 @@ export const metadata: Metadata = {
 
 const PAGE_URL = `${SITE_URL}${PATH}`
 
+// Réciproque du backlink data.gouv.fr (DR 92) : lier notre hub → la page
+// data.gouv crée un chemin de crawl bidirectionnel (Googlebot suit SA →
+// data.gouv → découvre le lien retour) + co-citation entité (sameAs).
+const DATAGOUV_DATASET_URL = 'https://www.data.gouv.fr/datasets/services-artisans'
+
 function buildCatalogSchema() {
   return {
     '@context': 'https://schema.org',
@@ -65,6 +70,7 @@ function buildCatalogSchema() {
     description:
       'Datasets publics ServicesArtisans : annuaire RGE + statistiques locales agrégées par commune × métier.',
     url: PAGE_URL,
+    sameAs: DATAGOUV_DATASET_URL,
     publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     inLanguage: 'fr',
     license: 'https://www.etalab.gouv.fr/licence-ouverte-open-licence/',
@@ -188,6 +194,18 @@ export default function OpenDataPage() {
           <p className="text-lg text-charcoal-200 max-w-3xl">
             Datasets publics réutilisables sous licence Etalab 2.0 : annuaire des artisans RGE
             certifiés (sourcé ADEME) et statistiques locales agrégées par commune et métier.
+          </p>
+          <p className="mt-4 text-sm text-charcoal-300">
+            Également publié sur{' '}
+            <a
+              href={DATAGOUV_DATASET_URL}
+              className="font-semibold text-amber-400 underline underline-offset-2 hover:text-amber-300"
+              target="_blank"
+              rel="noopener"
+            >
+              data.gouv.fr — la plateforme ouverte des données publiques
+            </a>
+            .
           </p>
         </div>
       </header>

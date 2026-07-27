@@ -257,6 +257,9 @@ export default async function DatasetRgePage() {
     isAccessibleForFree: true,
     creativeWorkStatus: 'Published',
     inLanguage: 'fr-FR',
+    // Réciproque du backlink data.gouv.fr (DR 92) — lie l'entité Dataset à sa
+    // publication officielle sur la plateforme ouverte (co-citation + crawl).
+    sameAs: 'https://www.data.gouv.fr/datasets/services-artisans',
     distribution: [
       {
         '@type': 'DataDownload',
@@ -353,6 +356,18 @@ export default async function DatasetRgePage() {
             <p className="mt-2 inline-flex items-center gap-2 text-sm text-charcoal-500">
               <Calendar className="h-4 w-4" aria-hidden="true" />
               Dernière mise à jour : {generatedAtLong} ({monthLabel})
+            </p>
+            <p className="mt-3 text-sm text-charcoal-600">
+              Jeu de données également publié sur{' '}
+              <a
+                href="https://www.data.gouv.fr/datasets/services-artisans"
+                className="font-semibold text-clay-600 underline underline-offset-2 hover:text-clay-700"
+                target="_blank"
+                rel="noopener"
+              >
+                data.gouv.fr — la plateforme ouverte des données publiques
+              </a>
+              .
             </p>
           </header>
 
