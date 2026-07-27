@@ -75,7 +75,7 @@
     "recharts": "^3.7.0",
     "resend": "^2.1.0",
     "sanitize-html": "^2.17.4",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "sonner": "^2.0.7",
     "stripe": "^14.25.0",
     "swr": "^2.4.0",
@@ -118,7 +118,7 @@
     "vitest": "^4.0.18"
   },
   "overrides": {
-    "axios": ">=1.15.2",
+    "axios": ">=1.18.0",
     "@xmldom/xmldom": ">=0.8.12"
   }
 }
