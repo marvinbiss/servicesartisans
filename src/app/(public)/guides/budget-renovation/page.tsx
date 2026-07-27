@@ -188,7 +188,7 @@ const aides = [
     description:
       "Aide de l'ANAH pour les travaux de rénovation énergétique (isolation, chauffage, ventilation). Montant variable selon les revenus du foyer et le gain énergétique. Cumulable avec les CEE. Accessible à tous les propriétaires (occupants et bailleurs) pour les logements de plus de 15 ans.",
     montant:
-      "Jusqu'à 90 % du montant des travaux pour les ménages très modestes (MaPrimeRénov' Sérénité)",
+      "Jusqu'à 90 % du montant des travaux pour les ménages très modestes (MaPrimeRénov' parcours accompagné)",
     condition: 'Artisan RGE obligatoire, logement de plus de 15 ans, résidence principale',
   },
   {

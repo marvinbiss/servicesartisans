@@ -46,7 +46,7 @@ const tldr = [
   'Propriétaire doit maintenir façade en bon état permanent. Arrêté mairie peut sommer travaux sous 6-12 mois.',
   'Non-respect = amende 3 750 € (art. L152-11 CCH) + travaux exécutés d’office aux frais du propriétaire.',
   'Prix 2026 TTC/m² : nettoyage + peinture 30-60 €, ITE + enduit 140-240 €, pierre ravalée 80-150 €.',
-  'Aides possibles si ITE couplé : MaPrimeRénov 15-75 €/m², CEE 10-25 €/m², éco-PTZ jusqu’à 30 000 €, TVA 5,5 %.',
+  'Aides possibles si ITE couplé : CEE 10-25 €/m², éco-PTZ jusqu’à 30 000 €, TVA 5,5 % — MaPrimeRénov’ pour les murs uniquement en parcours d’ampleur (plus de forfait au geste depuis 2026).',
 ]
 
 const faqs = [
@@ -63,12 +63,12 @@ const faqs = [
   {
     question: 'Quel est le prix d’un ravalement de façade en 2026 ?',
     answer:
-      'Prix 2026 TTC/m² selon technique + état : (1) Nettoyage haute pression + traitement anti-mousse : 15-30 €/m² — maintenance simple ; (2) Nettoyage + peinture acrylique ou siloxane : 30-60 €/m² — rafraîchissement esthétique ; (3) Hydrogommage + peinture minérale : 50-80 €/m² — façades pierre ou enduit ancien ; (4) Peeling enduit dégradé + réfection + peinture : 60-100 €/m² ; (5) Enduit monocouche neuf (grattage + primaire + 2 passes) : 80-120 €/m² ; (6) Ravalement complet pierre de taille (dégraissage + rejointoiement + hydrofugation) : 80-150 €/m² ; (7) ITE (isolation thermique extérieure) + enduit finition : 140-240 €/m² — éligible MaPrimeRénov + CEE. Coûts annexes : échafaudage 15-25 €/m²/mois, permis copro 500-1 500 €, enlèvement déchets 200-800 €. Maison 100 m² façade 120 m² repeinte : 3 600-7 200 € ; en ITE : 16 800-28 800 €.',
+      'Prix 2026 TTC/m² selon technique + état : (1) Nettoyage haute pression + traitement anti-mousse : 15-30 €/m² — maintenance simple ; (2) Nettoyage + peinture acrylique ou siloxane : 30-60 €/m² — rafraîchissement esthétique ; (3) Hydrogommage + peinture minérale : 50-80 €/m² — façades pierre ou enduit ancien ; (4) Peeling enduit dégradé + réfection + peinture : 60-100 €/m² ; (5) Enduit monocouche neuf (grattage + primaire + 2 passes) : 80-120 €/m² ; (6) Ravalement complet pierre de taille (dégraissage + rejointoiement + hydrofugation) : 80-150 €/m² ; (7) ITE (isolation thermique extérieure) + enduit finition : 140-240 €/m² — éligible CEE (Coup de pouce), TVA 5,5 % et éco-PTZ ; MaPrimeRénov’ uniquement en parcours d’ampleur (l’ITE des murs n’est plus financée par geste depuis le 1er janvier 2026). Coûts annexes : échafaudage 15-25 €/m²/mois, permis copro 500-1 500 €, enlèvement déchets 200-800 €. Maison 100 m² façade 120 m² repeinte : 3 600-7 200 € ; en ITE : 16 800-28 800 €.',
   },
   {
     question: 'Quelles aides financières pour un ravalement-isolation en 2026 ?',
     answer:
-      'Ravalement seul : PAS d’aide (sauf TVA 10 % résidence principale >2 ans). Couplé ITE = aides cumulables : (1) MaPrimeRénov Sérénité : 15-75 €/m² selon ressources (bleu très modestes 75 €/m², jaune 60 €/m², violet 40 €/m², rose 15 €/m²), plafond 100 m² ; (2) CEE Coup de pouce isolation murs : 10-25 €/m² pour tous ménages ; (3) TVA 5,5 % art. 278-0 bis A CGI (au lieu 10 %) résidence principale >2 ans ; (4) Éco-PTZ : jusqu’à 30 000 € bouquet 3+ travaux ; (5) Aides locales régionales : Occitanie 800-2 000 €, IDF 500-1 500 € ; (6) Copropriétés : MaPrimeRénov Copro 25 % plafonné 25 000 €/logement + CEE collective. Total ménage bleu ITE 120 m² maison : 9 000 MPR + 3 000 CEE + TVA avantage 1 500 € = ~13 500 € sur 20 000 € = reste à charge 6 500 €. Contrainte : ENTREPRISE RGE Qualibat 7131 ou 7135 obligatoire.',
+      'Ravalement seul : PAS d’aide (sauf TVA 10 % résidence principale >2 ans). Couplé ITE = aides cumulables : (1) MaPrimeRénov’ parcours accompagné : depuis 2026, l’ITE des murs n’est plus financée par geste — uniquement en rénovation d’ampleur (parcours accompagné) ; au geste, l’ITE reste aidée via CEE (Coup de pouce), TVA 5,5 % et éco-PTZ ; (2) CEE Coup de pouce isolation murs : 10-25 €/m² pour tous ménages ; (3) TVA 5,5 % art. 278-0 bis A CGI (au lieu 10 %) résidence principale >2 ans ; (4) Éco-PTZ : jusqu’à 30 000 € bouquet 3+ travaux ; (5) Aides locales régionales : Occitanie 800-2 000 €, IDF 500-1 500 € ; (6) Copropriétés : MaPrimeRénov Copro 25 % plafonné 25 000 €/logement + CEE collective. Total ménage bleu ITE 120 m² maison, au geste (murs hors MaPrimeRénov’) : 3 000 CEE + TVA avantage 1 500 € = ~4 500 € sur 20 000 € = reste à charge 15 500 €. En rénovation d’ampleur (parcours accompagné), MaPrimeRénov’ s’ajoute et réduit fortement ce reste à charge. Contrainte : ENTREPRISE RGE Qualibat 7131 ou 7135 obligatoire.',
   },
   {
     question: 'Qui paie le ravalement en copropriété ?',

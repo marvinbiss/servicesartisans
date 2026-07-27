@@ -172,7 +172,12 @@ export default function Page() {
                     ['CEE / Coup de pouce', 'Oui', 'Oui', 'Oui (avec accord bailleur)'],
                     ['Éco-PTZ', 'Oui', 'Oui', 'Non'],
                     ['TVA 5,5 %', 'Oui', 'Oui', 'Oui'],
-                    ['Aide ANAH « Habiter Mieux »', 'Oui (sous conditions)', 'Oui', 'Non'],
+                    [
+                      'Aide ANAH « MaPrimeRénov’ parcours accompagné »',
+                      'Oui (sous conditions)',
+                      'Oui',
+                      'Non',
+                    ],
                   ].map(([a, po, pb, l]) => (
                     <tr key={a} className="border-b border-sand-100 last:border-0">
                       <td className="p-3 font-semibold">{a}</td>

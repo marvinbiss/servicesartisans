@@ -81,7 +81,7 @@ Pour 1 m² avec R = 5 m².K/W (isolation murs) : la laine de verre nécessite 17
 
       `## Comment choisir : notre recommandation
 
-Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur compromis performance/prix/confort d'été. Pour les **murs par l'intérieur**, la laine de verre en panneaux semi-rigides reste imbattable sur le prix. Pour l'**ITE**, la laine de roche ou la fibre de bois en panneaux rigides garantissent durabilité et performance. Pour les **sols**, le polyuréthane ou le XPS optimisent l'épaisseur. Faites appel à un artisan RGE pour bénéficier des aides MaPrimeRénov' et CEE — consultez notre annuaire sur ServicesArtisans.`,
+Pour les **combles perdus**, la ouate de cellulose soufflée offre le meilleur compromis performance/prix/confort d'été. Pour les **murs par l'intérieur**, la laine de verre en panneaux semi-rigides reste imbattable sur le prix. Pour l'**ITE**, la laine de roche ou la fibre de bois en panneaux rigides garantissent durabilité et performance. Pour les **sols**, le polyuréthane ou le XPS optimisent l'épaisseur. Faites appel à un artisan RGE pour bénéficier des aides à la rénovation : MaPrimeRénov' par geste pour l'isolation des combles et planchers, CEE (Coup de pouce), TVA à 5,5 % et éco-PTZ pour l'isolation des murs par l'extérieur ou l'intérieur (plus financée par MaPrimeRénov' par geste depuis le 1er janvier 2026), ou MaPrimeRénov' en parcours d'ampleur — consultez notre annuaire sur ServicesArtisans.`,
     ],
   },
 

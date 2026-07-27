@@ -255,7 +255,7 @@ export const prixTechArticles: Record<string, BlogArticle> = {
       'Le DPE coûte 120 à 250 € et est valable 10 ans, opposable juridiquement depuis 2021.',
       'Un pack diagnostics complet pour la vente revient entre 300 et 700 €.',
       "L'audit énergétique est obligatoire pour vendre un logement classé F ou G (500-1 200 €).",
-      'Les logements classés G sont interdits à la location depuis 2025, les F depuis 2028.',
+      'Les logements classés G sont interdits à la location depuis 2025, les F le seront à partir de 2028.',
     ],
   },
 }

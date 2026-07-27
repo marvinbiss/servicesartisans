@@ -182,7 +182,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       '### MaPrimeRénov 2026',
       "MaPrimeRénov est la principale aide de l'État pour l'isolation. Les montants dépendent du profil de revenus du ménage (4 barèmes) :",
 
-      ":::budget\n| Poste d'isolation | Bleu (très modestes) | Jaune (modestes) | Violet (intermédiaires) | Rose (aisés) |\n| ITE (murs) | 75 €/m² | 60 €/m² | 40 €/m² | 15 €/m² |\n| ITI (murs) | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Combles / rampants | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Toiture-terrasse | 75 €/m² | 60 €/m² | 40 €/m² | 15 €/m² |\n:::",
+      ":::budget\n| Poste d'isolation | Bleu (très modestes) | Jaune (modestes) | Violet (intermédiaires) | Rose (aisés) |\n| Combles / rampants | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Toiture-terrasse | 75 €/m² | 60 €/m² | 40 €/m² | 15 €/m² |\n:::\n\nDepuis le 1er janvier 2026, l'isolation des murs (ITE/ITI) n'est plus financée par MaPrimeRénov' par geste : elle reste aidée via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur.",
 
       ":::warning Attention\nDepuis 2024, MaPrimeRénov privilégie les **rénovations globales** (parcours accompagné) plutôt que les gestes isolés. Pour un geste d'isolation seul, le montant est plafonné et l'aide peut être réduite. Le parcours accompagné (audit + bouquet de travaux) donne accès à des bonifications significatives.\n:::",
 
@@ -197,7 +197,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       "Les travaux d'isolation thermique bénéficient du taux de **TVA réduit à 5,5 %** (au lieu de 20 %) pour les logements de plus de 2 ans, qu'ils soient occupés comme résidence principale ou secondaire. Cette réduction s'applique à la fourniture et à la main-d'œuvre.",
 
       "### Exemple chiffré : ITE d'une maison",
-      'Pour une ITE de 100 m² de murs (budget **15 000 €**) pour un ménage aux revenus modestes (profil Jaune) :\n- MaPrimeRénov : 60 €/m² × 100 = **6 000 €**\n- CEE coup de pouce : 20 €/m² × 100 = **2 000 €**\n- TVA 5,5 % (au lieu de 20 %) : économie de ~**1 900 €**\n- **Reste à charge : environ 5 100 €** (finançable par éco-PTZ sans intérêts)',
+      "Pour une ITE de 100 m² de murs (budget **15 000 €**) pour un ménage aux revenus modestes (profil Jaune) :\n- MaPrimeRénov' par geste : **non applicable aux murs depuis le 1er janvier 2026** (aide possible uniquement en parcours d'ampleur)\n- CEE coup de pouce : 20 €/m² × 100 = **2 000 €**\n- TVA 5,5 % (au lieu de 20 %) : économie de ~**1 900 €**\n- Reste à charge finançable par l'éco-PTZ sans intérêts — ou aide MaPrimeRénov' en parcours d'ampleur",
 
       '## Trouver un professionnel près de chez vous',
 
@@ -233,7 +233,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       {
         question: "Quelles aides pour l'isolation thermique en 2026 ?",
         answer:
-          "Les aides cumulables en 2026 : MaPrimeRénov (7 à 75 €/m² selon revenus et poste), CEE (5 à 25 €/m²), TVA réduite à 5,5 %, éco-PTZ (jusqu'à 50 000 € à taux zéro). Au total, ces aides peuvent couvrir jusqu'à 70 % du coût des travaux pour les ménages modestes.",
+          "Les aides cumulables en 2026 : MaPrimeRénov (7 à 75 €/m² selon revenus et poste, hors murs), CEE (5 à 25 €/m²), TVA réduite à 5,5 %, éco-PTZ (jusqu'à 50 000 € à taux zéro). Depuis le 1er janvier 2026, l'isolation des murs (ITE/ITI) n'est plus financée par MaPrimeRénov' par geste : elle reste aidée via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur. Au total, ces aides peuvent couvrir jusqu'à 70 % du coût des travaux pour les ménages modestes.",
       },
       {
         question: "L'isolation par l'extérieur est-elle rentable ?",
@@ -317,7 +317,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
 
       '### MaPrimeRénov — Gestes isolés',
       'Pour les travaux ciblés (un seul poste), les montants sont inférieurs mais restent significatifs :',
-      '- **PAC air-eau** : 3 000 € (Bleu) à 1 000 € (Rose)\n- **PAC géothermique** : 10 000 € (Bleu) à 4 000 € (Rose)\n- **Chaudière bois** : 7 000 € (Bleu) à 2 000 € (Rose)\n- **Poêle à granulés** : 2 500 € (Bleu) à 500 € (Rose)\n- **Ballon thermodynamique** : 1 200 € (Bleu) à 400 € (Rose)\n- **VMC double flux** : 2 500 € (Bleu) à 0 € (Rose)',
+      "- **PAC air-eau** : 3 000 € (Bleu) à 1 000 € (Rose)\n- **PAC géothermique** : 10 000 € (Bleu) à 4 000 € (Rose)\n- **Poêle à granulés** : 2 500 € (Bleu) à 500 € (Rose)\n- **Ballon thermodynamique** : 1 200 € (Bleu) à 400 € (Rose)\n- **VMC double flux** : 2 500 € (Bleu) à 0 € (Rose)\n\n_Depuis le 1er janvier 2026, la chaudière biomasse (granulés/bûches) n'est plus financée par MaPrimeRénov' par geste : elle reste aidée via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur._",
 
       "### Certificats d'Économies d'Énergie (CEE)",
       "Cumulables avec MaPrimeRénov. Les fournisseurs d'énergie (EDF, TotalEnergies, Engie) versent des primes pour chaque geste de rénovation :",
@@ -332,7 +332,7 @@ export const prixServicesArticles: Record<string, BlogArticle> = {
       '### Exemple chiffré complet',
       "Rénovation globale d'une maison 100 m², DPE F → C, ménage Jaune (revenus modestes) :\n- **Budget total** : 35 000 € HT\n- MaPrimeRénov parcours accompagné (3 classes, 60 %) : **21 000 €**\n- CEE (isolation + PAC) : **4 500 €**\n- TVA 5,5 % (au lieu de 20 %) : **économie de 4 500 €**\n- **Reste à charge : 9 500 €** → finançable par éco-PTZ (0 % d'intérêts sur 20 ans = 40 €/mois)\n- **Économie énergie** : 1 500 à 2 000 €/an → retour sur investissement en 5 à 7 ans",
 
-      ":::warning Attention\nDepuis 2025, l'accompagnement par un **Mon Accompagnateur Rénov'** (MAR) est obligatoire pour le parcours accompagné MaPrimeRénov. Cet accompagnateur certifié vous guide de l'audit jusqu'à la fin des travaux. Son coût (1 000-2 000 €) est subventionné à 100 % pour les ménages très modestes et à 80 % pour les modestes. Ne commencez pas les travaux sans cet accompagnement sous peine de perdre les aides.\n:::",
+      ":::warning Attention\nDepuis 2024, l'accompagnement par un **Mon Accompagnateur Rénov'** (MAR) est obligatoire pour le parcours accompagné MaPrimeRénov. Cet accompagnateur certifié vous guide de l'audit jusqu'à la fin des travaux. Son coût (1 000-2 000 €) est subventionné à 100 % pour les ménages très modestes et à 80 % pour les modestes. Ne commencez pas les travaux sans cet accompagnement sous peine de perdre les aides.\n:::",
 
       '## Trouver un professionnel près de chez vous',
 

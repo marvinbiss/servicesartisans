@@ -85,7 +85,7 @@ const faqs = [
   {
     question: 'Puis-je garder mon stock de fioul après changement ?',
     answer:
-      "Oui, pas de contrainte sur le stock résiduel. Procédure de transition : (1) Vider la cuve en consommant le fioul jusqu'au remplacement chaudière (ne pas commander de ravitaillement sauf nécessité d'hivernage court) ; (2) Démantèlement cuve fioul : obligatoire si neutralisation définitive, 500-1 500 € TTC pour cuve <1 500 L, 2 000-5 000 € >1 500 L. Coût cumulable avec aides Anah « Habiter mieux sérénité » ; (3) Stockage fioul résiduel dans la cuve au-delà 1 an : risques corrosion, développement bactéries, dégradation cuve. Prévoir pompage + évacuation par professionnel agréé (200-500 €). Vente du fioul résiduel possible auprès de voisins équipés fioul (circuit informel), ou évacuation en déchetterie agréée hydrocarbures.",
+      "Oui, pas de contrainte sur le stock résiduel. Procédure de transition : (1) Vider la cuve en consommant le fioul jusqu'au remplacement chaudière (ne pas commander de ravitaillement sauf nécessité d'hivernage court) ; (2) Démantèlement cuve fioul : obligatoire si neutralisation définitive, 500-1 500 € TTC pour cuve <1 500 L, 2 000-5 000 € >1 500 L. Coût cumulable avec aides Anah « MaPrimeRénov' parcours accompagné » ; (3) Stockage fioul résiduel dans la cuve au-delà 1 an : risques corrosion, développement bactéries, dégradation cuve. Prévoir pompage + évacuation par professionnel agréé (200-500 €). Vente du fioul résiduel possible auprès de voisins équipés fioul (circuit informel), ou évacuation en déchetterie agréée hydrocarbures.",
   },
   {
     question: 'L’interdiction s’applique-t-elle aux chaudières à gaz ?',

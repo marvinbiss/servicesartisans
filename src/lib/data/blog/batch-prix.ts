@@ -348,7 +348,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       {
         question: 'Le chauffage au granulés de bois est-il rentable ?',
         answer:
-          "Oui, le chauffage au granulés est très rentable. Le prix du granulé se situe entre 350 et 500 €/tonne en 2026. Pour une maison de 100 m², la consommation annuelle est de 2 à 4 tonnes, soit 700 à 2 000 € par an. C'est comparable au gaz et 2 à 3 fois moins cher que l'électricité. L'installation (8 000-18 000 €) est fortement aidée par MaPrimeRénov' (jusqu'à 7 000 €) et les CEE.",
+          "Oui, le chauffage au granulés est très rentable. Le prix du granulé se situe entre 350 et 500 €/tonne en 2026. Pour une maison de 100 m², la consommation annuelle est de 2 à 4 tonnes, soit 700 à 2 000 € par an. C'est comparable au gaz et 2 à 3 fois moins cher que l'électricité. L'installation (8 000-18 000 €) est fortement aidée par les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — la chaudière biomasse n'étant plus financée par MaPrimeRénov' par geste depuis le 1er janvier 2026 (MaPrimeRénov' reste mobilisable en parcours d'ampleur).",
       },
       {
         question: "Qu'est-ce qu'un thermostat connecté et combien ça coûte ?",
@@ -717,7 +717,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Aides et réglementations',
 
       '### Aides financières',
-      "Les travaux de maçonnerie liés à l'amélioration énergétique (isolation par l'extérieur avec ravalement) peuvent bénéficier de MaPrimeRénov'. L'éco-PTZ est également mobilisable. La TVA à 10 % s'applique sur les travaux de rénovation dans les logements de plus de 2 ans (5,5 % pour les travaux d'amélioration énergétique).",
+      "Les travaux de maçonnerie liés à l'amélioration énergétique (isolation par l'extérieur avec ravalement) peuvent être financés via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur (depuis le 1er janvier 2026, l'isolation des murs n'est plus aidée par MaPrimeRénov' par geste). La TVA à 10 % s'applique sur les travaux de rénovation dans les logements de plus de 2 ans (5,5 % pour les travaux d'amélioration énergétique).",
 
       '### Obligations administratives',
       'Tout ouvrage modifiant la structure du bâtiment nécessite une **déclaration préalable**, voire un **permis de construire** si la surface créée dépasse 20 m² (40 m² en zone PLU). Si la surface totale après travaux dépasse 150 m², le recours à un architecte est obligatoire.',
@@ -798,7 +798,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       {
         question: 'La maçonnerie est-elle éligible à des aides financières ?',
         answer:
-          "Les travaux de maçonnerie classiques (extension, mur, fondations) ne sont pas éligibles à MaPrimeRénov'. En revanche, si la maçonnerie est réalisée dans le cadre d'une ITE (Isolation Thermique par l'Extérieur), elle est éligible. La TVA à 10 % s'applique sur les travaux de rénovation dans les logements de plus de 2 ans. L'éco-PTZ peut financer le reste à charge pour les travaux d'amélioration énergétique.",
+          "Les travaux de maçonnerie classiques (extension, mur, fondations) ne sont pas éligibles à MaPrimeRénov'. En revanche, si la maçonnerie est réalisée dans le cadre d'une ITE (Isolation Thermique par l'Extérieur), elle peut être financée via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur (depuis le 1er janvier 2026, l'isolation des murs n'est plus aidée par MaPrimeRénov' par geste). La TVA à 10 % s'applique sur les travaux de rénovation dans les logements de plus de 2 ans. L'éco-PTZ peut financer le reste à charge pour les travaux d'amélioration énergétique.",
       },
     ],
     keyTakeaways: [
@@ -1623,7 +1623,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       '## Travaux préparatoires et spécifiques',
       "L'installation d'un échafaudage représente 15 à 30 €/m² de façade. Le traitement des fissures coûte de 20 à 60 € par mètre linéaire. Le remplacement des joints de dilatation revient à 15 – 40 €/ml. La dépose et repose des volets ajoute 50 à 150 € par fenêtre. Le traitement anti-mousse et hydrofuge protecteur coûte 8 à 20 €/m².",
       '## Aides financières pour le ravalement',
-      "Le ravalement avec ITE est éligible à MaPrimeRénov' (jusqu'à 75 €/m² selon les revenus), aux CEE (10 à 25 €/m²) et à l'éco-PTZ. Certaines communes proposent des aides complémentaires dans le cadre d'opérations de ravalement programmées. La TVA est à 5,5 % pour les travaux d'amélioration énergétique et à 10 % pour le ravalement simple. Ces aides combinées peuvent couvrir 40 à 60 % du coût d'une ITE.",
+      "Le ravalement avec ITE (isolation des murs) est finançable via les CEE (Coup de pouce, 10 à 25 €/m²), la TVA 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur (depuis le 1er janvier 2026, l'isolation des murs n'est plus financée par MaPrimeRénov' par geste). Certaines communes proposent des aides complémentaires dans le cadre d'opérations de ravalement programmées. La TVA est à 5,5 % pour les travaux d'amélioration énergétique et à 10 % pour le ravalement simple. Ces aides combinées peuvent couvrir 40 à 60 % du coût d'une ITE.",
       '## Variations régionales',
       "Les prix du ravalement varient de 20 à 35 % entre l'Île-de-France et la province. Les régions littorales, où les façades sont davantage exposées aux intempéries et aux embruns, nécessitent des traitements spécifiques plus coûteux. En montagne, les contraintes climatiques et d'accessibilité majorent les tarifs de 15 à 25 %.",
       '## Réglementation en copropriété',
@@ -1636,9 +1636,9 @@ export const prixArticles: Record<string, BlogArticle> = {
 
       ':::warning Attention\nLes façades des bâtiments construits avant **1948** peuvent contenir du plomb dans les peintures. Un **diagnostic plomb avant travaux** (DRIPP) est obligatoire. Si du plomb est détecté, des mesures de confinement et de protection spécifiques sont nécessaires, majorant le coût de 15 à 30 %. Ne confiez jamais un ravalement de façade ancienne à un artisan qui ignore cette réglementation.\n:::',
 
-      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour l'ITE : jusqu'à 75 €/m²\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **FFB** (Fédération Française du Bâtiment) — mercuriale des prix du bâtiment 2025-2026\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 (l'ITE des murs n'est plus financée par MaPrimeRénov' par geste ; aides via CEE Coup de pouce, TVA 5,5 % et éco-PTZ)\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
 
-      ":::takeaway\n- Ravalement simple : **40 – 100 €/m²**\n- Ravalement avec ITE enduit : **100 – 200 €/m²** (le meilleur investissement)\n- Aides ITE cumulables : jusqu'à **60 % du coût** (MaPrimeRénov' + CEE + TVA 5,5 %)\n- Obligation légale dans certaines communes (tous les **10 ans**)\n- Toujours coupler ravalement + isolation pour **maximiser les aides**\n:::",
+      ":::takeaway\n- Ravalement simple : **40 – 100 €/m²**\n- Ravalement avec ITE enduit : **100 – 200 €/m²** (le meilleur investissement)\n- Aides ITE cumulables : jusqu'à **60 % du coût** (CEE Coup de pouce + TVA 5,5 % + éco-PTZ — MaPrimeRénov' en parcours d'ampleur)\n- Obligation légale dans certaines communes (tous les **10 ans**)\n- Toujours coupler ravalement + isolation pour **maximiser les aides**\n:::",
     ],
     image: '/images/blog/prix-ravalement-facade-2026.jpg',
     author: "L'équipe ServicesArtisans",
@@ -1663,7 +1663,7 @@ export const prixArticles: Record<string, BlogArticle> = {
       {
         question: "Quelles aides pour un ravalement avec isolation par l'extérieur ?",
         answer:
-          "L'ITE est éligible à MaPrimeRénov' (jusqu'à 75 €/m²), aux CEE (10 à 25 €/m²), à l'éco-PTZ et à la TVA à 5,5 %. Certaines communes proposent des aides complémentaires. Ces aides combinées peuvent couvrir 40 à 60 % du coût total. Condition : artisan certifié RGE obligatoire.",
+          "L'ITE (isolation des murs) est finançable via les CEE (Coup de pouce, 10 à 25 €/m²), l'éco-PTZ et la TVA à 5,5 % — ou MaPrimeRénov' en parcours d'ampleur (depuis le 1er janvier 2026, l'isolation des murs n'est plus aidée par MaPrimeRénov' par geste). Certaines communes proposent des aides complémentaires. Ces aides combinées peuvent couvrir 40 à 60 % du coût total. Condition : artisan certifié RGE obligatoire.",
       },
       {
         question: "Faut-il profiter d'un ravalement pour isoler ?",
@@ -1674,7 +1674,7 @@ export const prixArticles: Record<string, BlogArticle> = {
     keyTakeaways: [
       'Le ravalement simple (nettoyage + peinture) coûte 30 à 60 €/m², avec ITE 100 à 200 €/m².',
       "L'obligation d'isolation s'impose lors d'un ravalement touchant plus de 50 % de la façade.",
-      "Les aides MaPrimeRénov' et CEE sont disponibles si le ravalement inclut une isolation par l'extérieur.",
+      "Les aides CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ sont disponibles si le ravalement inclut une isolation par l'extérieur — MaPrimeRénov' seulement en parcours d'ampleur.",
       'En copropriété, le ravalement est voté en AG et les charges sont réparties selon les tantièmes.',
     ],
   },

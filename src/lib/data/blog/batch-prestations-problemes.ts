@@ -374,7 +374,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
     metaDescription:
       "Isolation extérieure 2026 : sous enduit 100-180€/m², sous bardage 150-250€/m². PSE, laine de roche, fibre de bois. Aides MaPrimeRénov'.",
     content: [
-      "L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour supprimer les ponts thermiques et réduire drastiquement les déperditions énergétiques d'un bâtiment. En France, les murs représentent **20 à 25 % des pertes de chaleur** d'une maison mal isolée (source : ADEME, guide « Isoler sa maison », 2025). L'ITE enveloppe le bâtiment d'un manteau isolant continu, sans réduire la surface habitable. En 2026, c'est aussi l'un des travaux les plus subventionnés grâce à MaPrimeRénov' (jusqu'à 75 €/m² pour les ménages modestes, barèmes ANAH 2026) et aux CEE. Ce guide détaille les prix au m² selon la technique et le matériau choisis. Consultez un [façadier qualifié](/services/facadier) pour un devis adapté.",
+      "L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour supprimer les ponts thermiques et réduire drastiquement les déperditions énergétiques d'un bâtiment. En France, les murs représentent **20 à 25 % des pertes de chaleur** d'une maison mal isolée (source : ADEME, guide « Isoler sa maison », 2025). L'ITE enveloppe le bâtiment d'un manteau isolant continu, sans réduire la surface habitable. Depuis le 1er janvier 2026, l'isolation des murs n'est plus financée par MaPrimeRénov' par geste : l'ITE reste toutefois l'un des travaux les plus subventionnés via les CEE (Coup de pouce), la TVA à 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur. Ce guide détaille les prix au m² selon la technique et le matériau choisis. Consultez un [façadier qualifié](/services/facadier) pour un devis adapté.",
 
       "## Prix par technique d'ITE",
 
@@ -416,9 +416,9 @@ export const prestationsArticles: Record<string, BlogArticle> = {
 
       ":::warning Attention\nL'ITE modifie l'aspect extérieur de votre maison et nécessite une **déclaration préalable de travaux** en mairie (ou un permis de construire si la façade donne sur une rue). En zone protégée (ABF), certaines techniques ou couleurs peuvent être imposées. Vérifiez **avant** de signer un devis.\n:::",
 
-      ":::tip Conseil pro\nAvec MaPrimeRénov' 2026, l'ITE est l'un des travaux les plus subventionnés : jusqu'à **75 €/m²** pour les ménages très modestes (cumul MaPrimeRénov' + CEE). Sur une maison de 100 m² de façade, cela peut représenter **7 500 €** d'aides, ramenant le reste à charge à 5 000-10 000 € au lieu de 12 000-18 000 €.\n:::",
+      ":::tip Conseil pro\nDepuis le 1er janvier 2026, l'isolation des murs (ITE) n'est plus financée par MaPrimeRénov' par geste. L'ITE reste néanmoins l'un des travaux les plus subventionnés via les CEE (Coup de pouce), la TVA à 5,5 % et l'éco-PTZ — ou MaPrimeRénov' en parcours d'ampleur. Ces aides réduisent nettement le reste à charge.\n:::",
 
-      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / MaPrimeRénov'** — barèmes officiels 2026 pour l'ITE : jusqu'à 75 €/m² d'aide\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
+      "## Sources et méthodologie\n\nLes prix indiqués dans ce guide sont issus de :\n- **ADEME** — guide isolation thermique par l'extérieur (2025)\n- **ANAH / France Rénov'** — depuis le 1er janvier 2026, l'isolation des murs (ITE) n'est plus financée par MaPrimeRénov' par geste ; elle relève des CEE (Coup de pouce), de la TVA à 5,5 % et de l'éco-PTZ, ou de MaPrimeRénov' en parcours d'ampleur\n- **FFB** — mercuriale des prix du bâtiment 2025-2026\n- Comparaison de devis collectés via ServicesArtisans\n\nLes fourchettes tiennent compte des écarts régionaux (coefficient IDF × 1.3). Dernière mise à jour : avril 2026.",
 
       ":::takeaway\n- ITE sous enduit (PSE) : **100 – 160 €/m²** (meilleur rapport qualité/prix)\n- ITE sous bardage : **150 – 250 €/m²** (plus durable, design varié)\n- Fibre de bois : +50-80 % vs PSE mais confort d'été supérieur\n- Aides cumulées jusqu'à **75 €/m²** pour les ménages modestes\n- Déclaration préalable de travaux obligatoire\n:::",
     ],
@@ -440,7 +440,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       {
         question: "Quelles aides pour l'isolation extérieure en 2026 ?",
         answer:
-          "MaPrimeRénov' accorde 15 à 75 €/m² selon les revenus. Les CEE ajoutent 5 à 12 €/m². La TVA réduite à 5,5 % s'applique automatiquement. Au total, les aides peuvent couvrir 30 à 60 % du coût des travaux pour les ménages modestes.",
+          "Depuis le 1er janvier 2026, l'isolation des murs (ITE) n'est plus financée par MaPrimeRénov' par geste : elle relève des CEE (Coup de pouce), de la TVA à 5,5 % et de l'éco-PTZ — ou de MaPrimeRénov' en parcours d'ampleur. Les CEE apportent 5 à 12 €/m² et la TVA réduite à 5,5 % s'applique automatiquement.",
       },
       {
         question: 'ITE sous enduit ou sous bardage : que choisir ?',
@@ -1485,7 +1485,7 @@ export const prestationsArticles: Record<string, BlogArticle> = {
       '## Top 10 des travaux les plus rentables',
 
       '### 1. Rénovation énergétique (DPE F/G → D/C)',
-      "Avec l'interdiction progressive de location des passoires thermiques (F/G interdits depuis 2025, E en 2034), améliorer le DPE est devenu le travail le plus rentable. Un passage de F à C augmente la valeur du bien de **15 à 25 %**, soit un ROI de **150 à 300 %**. Les travaux incluent isolation (combles, murs, fenêtres) + chauffage performant.",
+      "Avec l'interdiction progressive de location des passoires thermiques (G interdit depuis 2025, F à partir de 2028, E à partir de 2034), améliorer le DPE est devenu le travail le plus rentable. Un passage de F à C augmente la valeur du bien de **15 à 25 %**, soit un ROI de **150 à 300 %**. Les travaux incluent isolation (combles, murs, fenêtres) + chauffage performant.",
 
       '### 2. Rénovation de la cuisine',
       "La cuisine est la pièce qui influence le plus la décision d'achat. Une cuisine moderne et fonctionnelle augmente la valeur de **8 à 15 %**. Budget : 5 000-20 000 €. ROI : **80 à 150 %**.",

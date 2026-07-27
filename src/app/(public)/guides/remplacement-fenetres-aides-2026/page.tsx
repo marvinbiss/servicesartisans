@@ -52,7 +52,7 @@ const faqs = [
   {
     question: 'Quelles sont les aides 2026 pour remplacer mes fenêtres ?',
     answer:
-      "MaPrimeRénov' parcours accompagné uniquement (2025-2026) : 40-100 €/fenêtre selon profil (Rose 40, Violet 60, Jaune 80, Bleu 100). Limite : 40 fenêtres max par logement. Seulement sur remplacement simple vitrage. Coup de pouce CEE via un obligé : 5-15 €/fenêtre (faible). TVA 5,5 % sur l'ensemble fourniture + pose. Éco-PTZ pour le solde. Total aides moyennes : 500-2 500 € pour 8 fenêtres rénovation.",
+      "MaPrimeRénov' par geste (2025-2026) : 40-100 €/fenêtre selon profil (Rose 40, Violet 60, Jaune 80, Bleu 100). Limite : 40 fenêtres max par logement. Seulement sur remplacement simple vitrage. Coup de pouce CEE via un obligé : 5-15 €/fenêtre (faible). TVA 5,5 % sur l'ensemble fourniture + pose. Éco-PTZ pour le solde. Total aides moyennes : 500-2 500 € pour 8 fenêtres rénovation.",
   },
   {
     question: 'Quelle performance Uw pour toucher MaPrimeRénov’ ?',

@@ -51,7 +51,7 @@ const tldr = [
 const howToSteps = [
   {
     name: 'Audit énergétique / visite technique',
-    text: "Visite gratuite d'un artisan RGE QualiPAC pour mesurer la maison (surface, isolation, émetteurs existants, fusibles disponibles) et vérifier la faisabilité technique. Durée 45-90 min. Si audit énergétique payant (150-400 €), il est remboursable via MaPrimeRénov' Sérénité.",
+    text: "Visite gratuite d'un artisan RGE QualiPAC pour mesurer la maison (surface, isolation, émetteurs existants, fusibles disponibles) et vérifier la faisabilité technique. Durée 45-90 min. Si audit énergétique payant (150-400 €), il est remboursable via MaPrimeRénov' parcours accompagné.",
   },
   {
     name: 'Choix du type de PAC',
