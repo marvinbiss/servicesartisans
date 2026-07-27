@@ -324,21 +324,44 @@ export function getQAPageSchema(params: {
   suggestedAnswerTexts?: string[]
   upvoteCount?: number
   dateCreated?: string
+  /**
+   * ISO date the editorial answer was first published. Emitted on the
+   * Question + each Answer (Google QAPage recommended field). Must be a
+   * stable, real publish date — never `new Date()` (false-freshness spam).
+   */
+  datePublished?: string
   name?: string
 }): Record<string, unknown> {
   const suggested = params.suggestedAnswerTexts || []
+  /**
+   * Editorial author = the ServicesArtisans Organization entity. These are
+   * editorial expert answers (not community-submitted), so the Organization
+   * is the honest author. Linked by @id to the canonical #organization node.
+   */
+  const author = {
+    '@type': 'Organization',
+    '@id': `${SITE_URL}#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+  }
+  // upvoteCount is 0: editorial answers carry no community votes. Emitting the
+  // real count (0) satisfies the recommended field without fabricating engagement.
   const mainEntity: Record<string, unknown> = {
     '@type': 'Question',
     name: params.question,
     text: params.question,
     inLanguage: 'fr-FR',
     answerCount: 1 + suggested.length,
+    author,
+    ...(params.datePublished && { datePublished: params.datePublished }),
     acceptedAnswer: {
       '@type': 'Answer',
       text: params.acceptedAnswerText,
       inLanguage: 'fr-FR',
       url: `${params.pageUrl}#accepted-answer`,
-      ...(params.upvoteCount !== undefined && { upvoteCount: params.upvoteCount }),
+      author,
+      ...(params.datePublished && { datePublished: params.datePublished }),
+      upvoteCount: params.upvoteCount ?? 0,
     },
   }
   if (suggested.length > 0) {
@@ -347,6 +370,9 @@ export function getQAPageSchema(params: {
       text: answerText,
       inLanguage: 'fr-FR',
       url: `${params.pageUrl}#suggested-${i + 1}`,
+      author,
+      ...(params.datePublished && { datePublished: params.datePublished }),
+      upvoteCount: 0,
     }))
   }
   return {

@@ -18,6 +18,10 @@ const ExitIntentPopup = dynamic(() => import('@/components/conversion/ExitIntent
   ssr: false,
 })
 
+// Stable, real publish date of the editorial questions cluster (first shipped
+// 2026-03-10). Fixed constant — never `new Date()` (would signal false freshness).
+const QUESTIONS_PUBLISHED_DATE = '2026-03-10'
+
 // ---------------------------------------------------------------------------
 // Static params
 // ---------------------------------------------------------------------------
@@ -97,6 +101,7 @@ export default function QuestionPage({ params }: { params: { slug: string } }) {
     question: question.question,
     acceptedAnswerText: question.shortAnswer,
     suggestedAnswerTexts: question.detailedAnswer,
+    datePublished: QUESTIONS_PUBLISHED_DATE,
     name: question.question,
   })
 
