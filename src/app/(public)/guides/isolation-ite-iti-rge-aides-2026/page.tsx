@@ -143,7 +143,7 @@ const faqItems = [
   {
     question: "Faut-il obligatoirement un artisan RGE pour l'isolation ?",
     answer:
-      "Oui, absolument. Pour bénéficier de MaPrimeRénov' Isolation, du Coup de pouce CEE Isolation, de la TVA à 5,5 % et de l'éco-PTZ, l'entreprise doit détenir une qualification Qualibat RGE sur le domaine exact (7131 ou 7132 pour l'ITE, 7133 ou 7134 pour l'ITI).",
+      "Oui, absolument. Pour bénéficier du Coup de pouce CEE Isolation, de la TVA à 5,5 % et de l'éco-PTZ sur l'isolation des murs, l'entreprise doit détenir une qualification Qualibat RGE sur le domaine exact (7131 ou 7132 pour l'ITE, 7133 ou 7134 pour l'ITI). Depuis 2026, MaPrimeRénov' ne finance plus l'isolation des murs en geste isolé : elle n'intervient sur les murs qu'en rénovation d'ampleur (parcours accompagné), qui exige elle aussi un artisan RGE.",
   },
   {
     question: 'Quelle résistance thermique R viser ?',
@@ -163,7 +163,7 @@ const faqItems = [
   {
     question: "Quelles aides pour l'isolation des murs en 2026 ?",
     answer:
-      "Cumul MaPrimeRénov' Isolation + Coup de pouce Isolation CEE (majoré pour l'ITE en 2026) + TVA à 5,5 % + éco-PTZ. Les primes sont calculées au m² de paroi traitée et dépendent du profil de ressources du ménage ainsi que de la zone climatique (H1, H2, H3).",
+      "Pour les murs seuls (geste isolé), l'aide de référence est le Coup de pouce Isolation CEE (majoré pour l'ITE en 2026), cumulable avec la TVA à 5,5 % et l'éco-PTZ. Depuis 2026, MaPrimeRénov' ne finance plus l'isolation des murs en geste : elle n'intervient sur les murs que dans une rénovation d'ampleur (parcours accompagné, bouquet d'au moins deux gestes). Les primes CEE sont calculées au m² de paroi traitée et dépendent du profil de ressources du ménage ainsi que de la zone climatique (H1, H2, H3).",
   },
   {
     question: "Combien de temps dure un chantier d'isolation ITE ?",
@@ -223,7 +223,11 @@ export default function IsolationIteItiPage() {
 
   // GovernmentService — guide ITE/ITI + MPR Isolation + Coup de pouce CEE.
   // Fragment URL distinct pour @id KG uniques.
-  const mprGovSchema = getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`)
+  const mprGovSchema = {
+    ...getMaPrimeRenovGovServiceSchema(`${PAGE_URL}#maprimerenov`),
+    description:
+      "Aide forfaitaire de l'État versée par l'Anah pour la rénovation énergétique. Depuis le 1ᵉʳ janvier 2026, MaPrimeRénov' ne finance plus l'isolation des murs (ITE/ITI) en parcours par geste : sur les murs, elle n'intervient qu'en rénovation d'ampleur (parcours accompagné, bouquet d'au moins deux gestes). L'isolation des murs en geste isolé reste couverte par les CEE (Coup de pouce isolation), la TVA à 5,5 % et l'éco-PTZ.",
+  }
   const ceeGovSchema = getCeeGovServiceSchema(`${PAGE_URL}#cee`)
   const coupDePouceGovSchema = getCoupDePouceGovServiceSchema(`${PAGE_URL}#coup-de-pouce`)
 
@@ -372,9 +376,9 @@ export default function IsolationIteItiPage() {
             </h2>
             <div className="space-y-4 text-green-50 leading-relaxed">
               <p>
-                <strong>MaPrimeRénov&apos; Isolation :</strong>{' '}
+                <strong>MaPrimeRénov&apos; (murs) :</strong>{' '}
                 {
-                  "prime forfaitaire par m² de paroi traitée, versée par l'Anah après validation du dossier. Les montants sont plus élevés pour les profils Bleu et Jaune (ménages modestes), plus modestes pour les profils Violet et Rose."
+                  "depuis le 1ᵉʳ janvier 2026, MaPrimeRénov' ne finance plus l'isolation des murs en geste isolé. Pour les murs, elle n'intervient que dans une rénovation d'ampleur (parcours accompagné) : le forfait dépend alors du gain énergétique global et du profil de ressources (Bleu, Jaune, Violet, Rose), et non d'un montant au m² de paroi. En geste mur seul, appuyez-vous sur le Coup de pouce CEE, la TVA à 5,5 % et l'éco-PTZ."
                 }
               </p>
               <p>

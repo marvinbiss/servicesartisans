@@ -238,15 +238,15 @@ export default function Page() {
             </p>
             <ul>
               <li>
-                <strong>Bleu</strong> : 70-90 % pris en charge selon geste (80 % pour isolation murs
-                extérieurs, 90 % pour pompe à chaleur air-eau).
+                <strong>Bleu</strong> : 70-90 % pris en charge selon geste (90 % pour pompe à
+                chaleur air-eau).
               </li>
               <li>
                 <strong>Jaune</strong> : 50-75 % (60 % pompe à chaleur, 75 % isolation combles).
               </li>
               <li>
-                <strong>Violet</strong> : 30-50 % (pas d’aide pour isolation simple, conserve 40 %
-                chaudière biomasse et 30 % pompe à chaleur).
+                <strong>Violet</strong> : 30-50 % (pas d’aide pour isolation simple, conserve 30 %
+                pompe à chaleur).
               </li>
               <li>
                 <strong>Rose</strong> : 20-30 % UNIQUEMENT dans le parcours rénovation d’ampleur

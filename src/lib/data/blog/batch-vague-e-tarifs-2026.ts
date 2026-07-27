@@ -198,7 +198,7 @@ Pour estimer instantanément vos aides et obtenir 3 devis d’artisans RGE véri
     tags: ['chaudière', 'condensation', 'chauffage', 'prix', 'gaz', 'bois'],
     keyTakeaways: [
       'Chaudière gaz à condensation 2026 : 3 500-6 000 € pose comprise. Plus aucune aide d’État depuis 2024 (exclue MaPrimeRénov’ et CEE).',
-      'Chaudière biomasse à condensation (granulés, bûches) : 12 000-22 000 € pose comprise. Éligible MaPrimeRénov’ jusqu’à 5 000 € + CEE.',
+      'Chaudière biomasse à condensation (granulés, bûches) : 12 000-22 000 € pose comprise. Éligible au CEE Coup de pouce ; MaPrimeRénov’ uniquement via une rénovation d’ampleur (parcours accompagné).',
       'Chaudière fioul à condensation : interdite à l’installation neuve depuis le 1er juillet 2022 (décret n° 2022-8 du 5 janvier 2022).',
       'Rendement chaudière condensation : 105-110 % (calcul basé sur le PCI), 25-30 % d’économie vs chaudière standard.',
       'TVA 5,5 % sur main-d’œuvre + matériel pour les chaudières biomasse uniquement (gaz au taux normal 20 % depuis mars 2025).',
@@ -212,7 +212,7 @@ Pour estimer instantanément vos aides et obtenir 3 devis d’artisans RGE véri
       {
         question: 'Quelles aides pour une chaudière biomasse en 2026 ?',
         answer:
-          'MaPrimeRénov’ : jusqu’à 5 000 € pour une chaudière à granulés (4 catégories revenus). CEE Coup de pouce chauffage : jusqu’à 4 000 € pour les ménages modestes. TVA réduite 5,5 % sur la fourniture et la pose. Éco-PTZ jusqu’à 30 000 € sans intérêts. Cumul total : reste à charge typique 4 000-8 000 € pour un budget brut 12 000-18 000 €.',
+          'Depuis le 1er janvier 2026, la chaudière biomasse (granulés, bûches) n’est plus financée par MaPrimeRénov’ en geste isolé : elle reste aidée par le CEE Coup de pouce chauffage (jusqu’à 4 000 € pour les ménages modestes), la TVA réduite 5,5 % sur la fourniture et la pose, et l’éco-PTZ jusqu’à 30 000 € sans intérêts. MaPrimeRénov’ ne la couvre plus que dans le cadre d’une rénovation d’ampleur (parcours accompagné). Cumul total : reste à charge typique 4 000-8 000 € pour un budget brut 12 000-18 000 €.',
       },
       {
         question: 'Chaudière à condensation ou pompe à chaleur en 2026 ?',
@@ -227,7 +227,7 @@ Pour estimer instantanément vos aides et obtenir 3 devis d’artisans RGE véri
       {
         question: 'Pourquoi les chaudières gaz ne sont plus aidées en 2026 ?',
         answer:
-          'La France suit l’objectif européen de neutralité carbone 2050. Le gaz fossile (méthane) est progressivement retiré des dispositifs d’aide depuis 2022 (sortie MaPrimeRénov’ janvier 2023, sortie CEE Coup de pouce 2024, fin TVA réduite mars 2025). Seules les chaudières biomasse (granulés, bûches), géothermique et PAC restent aidées. Le réseau gaz reste opérationnel mais sans soutien financier au remplacement.',
+          'La France suit l’objectif européen de neutralité carbone 2050. Le gaz fossile (méthane) est progressivement retiré des dispositifs d’aide depuis 2022 (sortie MaPrimeRénov’ janvier 2023, sortie CEE Coup de pouce 2024, fin TVA réduite mars 2025). Depuis le 1er janvier 2026, la chaudière biomasse (granulés, bûches) n’est plus aidée par MaPrimeRénov’ en geste isolé (elle reste éligible au CEE et à MaPrimeRénov’ via une rénovation d’ampleur) ; seules la PAC et la chaudière géothermique restent aidées par MaPrimeRénov’ en geste. Le réseau gaz reste opérationnel mais sans soutien financier au remplacement.',
       },
     ],
     content: [
@@ -254,7 +254,7 @@ Voici les prix réels constatés en 2026, les aides disponibles et les arbitrage
       `## Aides 2026 : qui a droit à quoi
 
 **Chaudière biomasse (granulés ou bûches)** :
-- MaPrimeRénov’ : 1 500 € (rose, supérieurs) à 5 000 € (bleu, très modeste) pour granulés.
+- MaPrimeRénov’ : plus d’aide en geste isolé depuis le 1er janvier 2026 (biomasse financée uniquement dans une rénovation d’ampleur).
 - CEE Coup de pouce chauffage : 800-4 000 € selon revenus et fournisseur.
 - TVA réduite 5,5 % (matériel + pose).
 - Éco-PTZ jusqu’à 30 000 € pour le geste seul.
@@ -389,7 +389,7 @@ Pour estimer instantanément vos aides 2026 (biomasse ou PAC) et obtenir 3 devis
       {
         question: 'Poêle à granulés ou chaudière à granulés ?',
         answer:
-          'Poêle à granulés (3 000-7 000 €) : chauffe 80-120 m² depuis une pièce principale, idéal en complément ou en chauffage principal d’une maison ouverte. Chaudière à granulés (12 000-22 000 €) : alimente le circuit de chauffage central + ECS, idéal pour grande maison (150 m²+) ou si chauffage central existant à remplacer. La chaudière offre plus d’aides (jusqu’à 5 000 € MPR vs 2 500 € pour le poêle).',
+          'Poêle à granulés (3 000-7 000 €) : chauffe 80-120 m² depuis une pièce principale, idéal en complément ou en chauffage principal d’une maison ouverte. Chaudière à granulés (12 000-22 000 €) : alimente le circuit de chauffage central + ECS, idéal pour grande maison (150 m²+) ou si chauffage central existant à remplacer. Côté aides, le poêle à granulés reste éligible à MaPrimeRénov’ en geste (jusqu’à 2 500 €), tandis que la chaudière biomasse n’est plus financée par MaPrimeRénov’ en geste isolé depuis 2026 (CEE ou rénovation d’ampleur uniquement).',
       },
     ],
     content: [
@@ -495,7 +495,7 @@ Le poêle à granulés reste en 2026 la solution biomasse la plus accessible : i
 
 **Privilégier le poêle à granulés si** : maison ≤ 120 m² ouverte (salon + pièces communicantes), envie d’un chauffage d’appoint puissant en complément d’une PAC, budget initial limité (vs chaudière à 12 000 €).
 
-**Privilégier la chaudière à granulés si** : maison > 150 m², radiateurs ou plancher chauffant existant, budget aides max disponible (jusqu’à 5 000 € MPR).
+**Privilégier la chaudière à granulés si** : maison > 150 m², radiateurs ou plancher chauffant existant, aides mobilisables via le CEE ou une rénovation d’ampleur (la chaudière biomasse n’est plus aidée par MaPrimeRénov’ en geste isolé depuis 2026).
 
 **Privilégier l’insert à bois bûches si** : disponibilité bois local gratuit/économique, envie chauffage convivial, budget combustible serré (bûches 100-150 €/m³ vs granulés 350-400 €/tonne).
 

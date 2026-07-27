@@ -302,7 +302,7 @@ const travauxEligibles = [
   {
     title: 'Chauffage',
     description:
-      'PAC air-eau, PAC géothermique, chaudière biomasse, poêle à granulés, poêle à bois',
+      'PAC air-eau, PAC géothermique, poêle à granulés, poêle à bois. Chaudière biomasse : parcours accompagné uniquement (plus en geste depuis 2026)',
     icon: Flame,
     parcours: 'Geste & Accompagné',
   },

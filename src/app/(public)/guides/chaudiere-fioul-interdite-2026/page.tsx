@@ -62,7 +62,7 @@ const tldr = [
   'Décret 2022-8 du 5 janvier 2022 : interdit installation de chaudières fioul neuves depuis 1er juillet 2022.',
   'Chaudières fioul existantes : peuvent rester en fonctionnement + être réparées. Remplacement à l’identique INTERDIT.',
   'Remplacements autorisés : PAC air-eau, PAC géothermique, chaudière biomasse (granulés, bois), raccordement réseau chaleur.',
-  'Aides majorées Coup de pouce : PAC 2 500-5 000 €, chaudière granulés 3 500-6 500 €, +MPR 4 000-11 000 € selon revenus.',
+  'Aides majorées Coup de pouce CEE : PAC 2 500-5 000 €, chaudière granulés 3 500-6 500 €. MaPrimeRénov’ par geste 4 000-11 000 € pour la PAC (chaudière granulés : parcours accompagné uniquement depuis 2026).',
   'Coût total remplacement fioul → PAC 2026 : 15 000-22 000 € TTC, reste à charge 4 000-12 000 € après cumul aides.',
 ]
 
@@ -80,7 +80,7 @@ const faqs = [
   {
     question: 'Quelles aides pour remplacer une chaudière fioul ?',
     answer:
-      "Les aides sont MAJORÉES pour remplacement fioul (ciblées sortie énergies fossiles) : (1) Coup de pouce CEE Chauffage renforcé : PAC air-eau 4 000 € revenus supérieurs, 5 000 € intermédiaires, 5 500 € modestes, 5 500 € très modestes ; (2) MaPrimeRénov' Parcours par Geste : PAC air-eau 4 000-11 000 € selon revenus, chaudière granulés 3 500-10 000 € ; (3) TVA 5,5 % sur pose + matériel ; (4) Éco-PTZ jusqu'à 50 000 € sur 20 ans ; (5) Aides locales 500-2 000 € selon région. Cumul max revenus très modestes + Coup de pouce + MPR : 15 000 € d'aides pour 16 000 € de PAC = reste à charge 1 000 €. Déclaration d'énergie fossile supprimée obligatoire sur dossier MPR pour toucher majoration.",
+      "Les aides sont MAJORÉES pour remplacement fioul (ciblées sortie énergies fossiles) : (1) Coup de pouce CEE Chauffage renforcé : PAC air-eau 4 000 € revenus supérieurs, 5 000 € intermédiaires, 5 500 € modestes, 5 500 € très modestes ; (2) MaPrimeRénov' Parcours par Geste : PAC air-eau 4 000-11 000 € selon revenus (la chaudière granulés n'est plus éligible en geste depuis 2026 — Coup de pouce CEE ou parcours accompagné / rénovation d'ampleur) ; (3) TVA 5,5 % sur pose + matériel ; (4) Éco-PTZ jusqu'à 50 000 € sur 20 ans ; (5) Aides locales 500-2 000 € selon région. Cumul max revenus très modestes + Coup de pouce + MPR : 15 000 € d'aides pour 16 000 € de PAC = reste à charge 1 000 €. Déclaration d'énergie fossile supprimée obligatoire sur dossier MPR pour toucher majoration.",
   },
   {
     question: 'Puis-je garder mon stock de fioul après changement ?',

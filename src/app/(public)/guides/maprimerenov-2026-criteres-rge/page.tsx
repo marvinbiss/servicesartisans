@@ -121,7 +121,7 @@ const travaux = [
     items: [
       'Pompe à chaleur air/eau',
       'Pompe à chaleur géothermique',
-      'Chaudière biomasse (granulés, bûches)',
+      'Chaudière biomasse (granulés, bûches) — parcours accompagné uniquement depuis 2026',
       'Chauffe-eau thermodynamique',
       'Chauffe-eau solaire individuel',
     ],
@@ -131,8 +131,8 @@ const travaux = [
     items: [
       'Isolation des combles perdus',
       'Isolation de la toiture (rampants, sarking)',
-      'Isolation des murs ITE',
-      'Isolation des murs ITI',
+      'Isolation des murs ITE — parcours accompagné uniquement depuis 2026',
+      'Isolation des murs ITI — parcours accompagné uniquement depuis 2026',
       'Isolation des planchers bas',
     ],
   },
