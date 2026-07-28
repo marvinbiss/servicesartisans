@@ -13,7 +13,7 @@
  *
  * Optional custom field keys (set these if you created custom fields in Pipedrive):
  *   PIPEDRIVE_FIELD_SERVICE, PIPEDRIVE_FIELD_URGENCY, PIPEDRIVE_FIELD_CITY,
- *   PIPEDRIVE_FIELD_POSTAL_CODE, PIPEDRIVE_FIELD_SOURCE
+ *   PIPEDRIVE_FIELD_POSTAL_CODE, PIPEDRIVE_FIELD_SOURCE, PIPEDRIVE_FIELD_GCLID
  */
 
 import { logger } from '@/lib/logger'
@@ -61,6 +61,13 @@ export interface DevisLeadForSync {
    * 'servicesartisans.fr'. Convention LP : `lp_${campaign}` (ex `lp_aides-pac`).
    */
   source?: string | null
+  /**
+   * Click-IDs Google Ads (mig 551). Un clic n'en porte qu'un seul ; l'ordre de
+   * repli gclid → gbraid → wbraid reflète la fréquence décroissante.
+   */
+  gclid?: string | null
+  gbraid?: string | null
+  wbraid?: string | null
 }
 
 interface PipedriveResponse<T> {
@@ -102,6 +109,7 @@ function getConfig() {
       city: process.env.PIPEDRIVE_FIELD_CITY,
       postalCode: process.env.PIPEDRIVE_FIELD_POSTAL_CODE,
       source: process.env.PIPEDRIVE_FIELD_SOURCE,
+      gclid: process.env.PIPEDRIVE_FIELD_GCLID,
     },
   }
 }
@@ -208,6 +216,12 @@ async function createDeal(
   // source est NULL (leads historiques + cas non-LP). Sinon, valeur fournie
   // (ex `lp_aides-pac`) pour attribution Google Ads / reporting Pipedrive.
   if (cfg.fields.source) body[cfg.fields.source] = lead.source ?? 'servicesartisans.fr'
+  // Mig 551 — click-ID Google Ads poussé dans le CRM. L'upload OCI est piloté
+  // par le cron `/api/cron/ads-offline-conversions` depuis Supabase ; ce champ
+  // sert au rapprochement manuel côté commercial (« ce deal vient de quel
+  // clic ? ») et à un éventuel export Pipedrive.
+  const adsClickId = lead.gclid ?? lead.gbraid ?? lead.wbraid ?? null
+  if (cfg.fields.gclid && adsClickId) body[cfg.fields.gclid] = adsClickId
 
   const res = await pdFetch<PipedriveDeal>('/deals', {
     token: cfg.token,
@@ -287,7 +301,7 @@ export async function syncDevisRequestToPipedrive(devisId: string): Promise<void
   const { data: lead, error } = await supabase
     .from('devis_requests')
     .select(
-      'id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, source, created_at, pipedrive_deal_id, pipedrive_sync_attempts, pipedrive_dead_letter_at'
+      'id, client_name, client_email, client_phone, service_name, description, budget, urgency, city, postal_code, source, gclid, gbraid, wbraid, created_at, pipedrive_deal_id, pipedrive_sync_attempts, pipedrive_dead_letter_at'
     )
     .eq('id', devisId)
     .single()
