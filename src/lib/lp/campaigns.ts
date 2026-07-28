@@ -91,6 +91,34 @@ export type LpCampaign = {
 }
 
 const CAMPAIGNS: Record<string, LpCampaign> = {
+  // Intention ÉQUIPEMENT (« je veux une pompe à chaleur »), à distinguer de
+  // `aides-pac` qui cible l'intention AIDE (« quelles primes pour une PAC »).
+  // Deux intentions, deux pages, deux groupes d'annonces — sinon les deux LP
+  // se disputent les mêmes enchères et le message match s'effondre.
+  //
+  // Grounding paid : `docs/audit-ahrefs-2026-05-03/paid_intelligence_2026-05.csv`
+  // — la page payante la mieux dotée d'Effy sur ce cluster est
+  // `/lp/chauffage/pompe-a-chaleur/pompe-a-chaleur-air-eau-newform` (27 mots-clés
+  // achetés), une LP équipement, pas une LP aides.
+  //
+  // Aucun montant affiché : sur cette intention, la promesse est le devis et
+  // l'artisan certifié, pas un chiffre d'aide invérifiable (cf. revue YMYL).
+  'pompe-a-chaleur': {
+    slug: 'pompe-a-chaleur',
+    serviceSlug: 'pompe-a-chaleur',
+    h1: "Pompe à chaleur : devis gratuit d'un artisan RGE QualiPAC",
+    subheadline:
+      "Installation ou remplacement de chaudière par une pompe à chaleur air/eau, air/air ou géothermique. Comparez les devis d'artisans RGE QualiPAC certifiés près de chez vous, sans engagement.",
+    ctaLabel: 'Recevoir mes devis PAC',
+    trustBlocks: [
+      { label: 'Artisans RGE QualiPAC', value: '49 000+' },
+      { label: 'Réponse devis', value: '< 24h' },
+      { label: 'Mise en relation', value: 'Gratuite' },
+    ],
+    kind: 'service',
+    legalNote:
+      "Mise en relation gratuite et sans engagement avec des artisans RGE QualiPAC en qualification active. Des aides (MaPrimeRénov', CEE) existent selon les revenus et l'équipement : la PAC air/air n'est pas éligible à MaPrimeRénov'.",
+  },
   'aides-pac': {
     slug: 'aides-pac',
     serviceSlug: 'pompe-a-chaleur',
