@@ -28,8 +28,19 @@ export const AIDES_LAST_REVIEWED = '2026-04-29' as const
 export const MAPRIMERENOV = {
   /** Plafond global parcours par geste (1-2 gestes isolés). */
   MAX_PARCOURS_GESTE_EUR: 30_000,
-  /** Plafond global parcours accompagné (2+ gestes + saut ≥ 2 classes DPE). */
+  /**
+   * Plafond de DÉPENSE de travaux, parcours accompagné (2+ gestes + saut ≥ 2
+   * classes DPE). À ne pas confondre avec le plafond d'AIDE ci-dessous : la
+   * confusion entre les deux faisait annoncer « 70 000 € d'aide ».
+   */
   MAX_PARCOURS_ACCOMPAGNE_EUR: 70_000,
+  /**
+   * Plafond d'AIDE effectivement versée en parcours accompagné.
+   * Source : economie.gouv.fr — « un financement pouvant atteindre 63 000 € »,
+   * consulté le 2026-07-28. Aligne le catalogue sur le guide
+   * `/guides/maprimerenov-2026` déjà corrigé par le commit 78b1ef84.
+   */
+  MAX_AIDE_PARCOURS_ACCOMPAGNE_EUR: 63_000,
   /** PAC air-eau — bonus catégorie « bleu » (revenus très modestes).
    *  Source : arrêté Anah 2024-12-23 — plafond 5 000 € ménages très modestes
    *  pour PAC air-eau (parcours par geste). Vérifier après chaque arrêté annuel. */

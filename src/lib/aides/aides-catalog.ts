@@ -99,19 +99,20 @@ export const aidesCatalog: Aide[] = [
     description:
       "Subvention de l'Anah versée aux ménages pour les travaux de rénovation énergétique. Montant calculé selon le revenu fiscal de référence (4 catégories : bleu / jaune / violet / rose) et le type de travaux. Artisan certifié RGE obligatoire à la signature du devis.",
     schemaDescription:
-      "Aide financière à la rénovation énergétique versée par l'Agence nationale de l'habitat (Anah) aux propriétaires occupants et bailleurs. Plafond 30 000 € (parcours par geste) ou 70 000 € (parcours accompagné).",
+      "Aide financière à la rénovation énergétique versée par l'Agence nationale de l'habitat (Anah) aux propriétaires occupants et bailleurs. Plafond de travaux 30 000 € en parcours par geste ; en parcours accompagné, aide pouvant atteindre 63 000 € pour 70 000 € de travaux.",
     estimatedVolume: 90000,
     category: 'Subvention nationale',
     montants: [
       {
-        label: 'Parcours par geste — plafond global',
+        label: 'Parcours par geste — plafond de travaux',
         max: formatEur(MAPRIMERENOV.MAX_PARCOURS_GESTE_EUR),
-        condition: '1 ou 2 gestes isolés (isolation, fenêtres, pompe à chaleur, etc.)',
+        condition:
+          "1 ou 2 gestes isolés : combles, toiture, planchers bas, fenêtres, pompe à chaleur. Depuis le 01/01/2026, l'isolation des murs et les chaudières biomasse sont exclues du parcours par geste.",
       },
       {
-        label: 'Parcours accompagné — plafond global',
-        max: formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR),
-        condition: '2+ gestes isolation + saut ≥ 2 classes DPE, accompagnement MAR obligatoire',
+        label: "Parcours accompagné — plafond d'aide",
+        max: formatEur(MAPRIMERENOV.MAX_AIDE_PARCOURS_ACCOMPAGNE_EUR),
+        condition: `2+ gestes isolation + saut ≥ 2 classes DPE, accompagnement MAR obligatoire. Plafond de dépense de travaux : ${formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR)}.`,
       },
       {
         label: 'Pompe à chaleur air-eau — revenus très modestes (bleu)',
