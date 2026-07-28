@@ -12,6 +12,16 @@ type LpFormProps = {
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
+/**
+ * Bug contraste 2026-07-28 : la section hero parente porte `text-white`, et le
+ * Preflight Tailwind applique `color: inherit` aux `input`. Sans couleur
+ * explicite, le texte saisi était donc BLANC sur la carte BLANCHE du
+ * formulaire — invisible à la frappe, sur la page même où arrive le trafic
+ * payant. `bg-white` est également explicite pour neutraliser l'autofill.
+ */
+const INPUT_CLASS =
+  'w-full px-4 py-3 rounded-xl border border-charcoal-300 bg-white text-charcoal-900 placeholder:text-charcoal-400 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none'
+
 export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -98,7 +108,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Jean Dupont"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+          className={INPUT_CLASS}
           autoComplete="name"
           required
           minLength={2}
@@ -118,7 +128,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
           placeholder="06 12 34 56 78"
-          className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+          className={INPUT_CLASS}
           autoComplete="tel"
           required
           inputMode="tel"
@@ -136,7 +146,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="vous@exemple.fr"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+            className={INPUT_CLASS}
             autoComplete="email"
             required
           />
@@ -151,7 +161,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value)}
             placeholder="75015"
-            className="w-full px-4 py-3 rounded-xl border border-charcoal-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
+            className={INPUT_CLASS}
             autoComplete="postal-code"
             inputMode="numeric"
             pattern="[0-9]{5}"
