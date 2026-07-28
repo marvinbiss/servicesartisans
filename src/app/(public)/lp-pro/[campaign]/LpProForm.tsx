@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react'
 import { ArrowRight, Check, Loader2, ShieldCheck } from 'lucide-react'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
 import { trackLead } from '@/lib/analytics/track'
+import { captureAdsAttribution } from '@/lib/ads/click-ids'
 
 type LpProFormProps = {
   campaignSlug: string
@@ -50,6 +51,8 @@ export default function LpProForm({ campaignSlug, serviceSlug, trade, ctaLabel }
             codePostal: postalCode.trim() || undefined,
             description: `Demande LP Pro ${campaignSlug}`,
             source: `lppro_${campaignSlug}`,
+            // Mig 551 — click-ID Google Ads pour l'Offline Conversion Import.
+            ...captureAdsAttribution(),
           }),
         })
 

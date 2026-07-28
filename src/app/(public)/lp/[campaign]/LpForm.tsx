@@ -3,6 +3,8 @@
 import { useCallback, useState } from 'react'
 import { ArrowRight, Check, Loader2, ShieldCheck } from 'lucide-react'
 import { isValidFrenchPhone, cleanPhone } from '@/lib/validation/phone'
+import { captureAdsAttribution } from '@/lib/ads/click-ids'
+import { trackLead } from '@/lib/analytics/track'
 
 type LpFormProps = {
   campaignSlug: string
@@ -58,6 +60,9 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
             codePostal: postalCode.trim() || undefined,
             description: `Demande LP ${campaignSlug}`,
             source: `lp_${campaignSlug}`,
+            // Mig 551 — click-ID lu au submit (encore présent dans l'URL sur
+            // ces LP : formulaire above-fold, aucune navigation intermédiaire).
+            ...captureAdsAttribution(),
           }),
         })
 
@@ -67,6 +72,7 @@ export default function LpForm({ campaignSlug, serviceSlug, ctaLabel }: LpFormPr
         }
 
         setState('success')
+        trackLead({ content_name: campaignSlug, content_category: serviceSlug })
       } catch (err) {
         setErrorMsg(err instanceof Error ? err.message : 'Erreur réseau')
         setState('error')
