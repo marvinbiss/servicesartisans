@@ -238,6 +238,10 @@
     {
       "path": "/api/cron/google-places-sync",
       "schedule": "0 3 * * 1"
+    },
+    {
+      "path": "/api/cron/ads-offline-conversions",
+      "schedule": "15 * * * *"
     }
   ]
 }
