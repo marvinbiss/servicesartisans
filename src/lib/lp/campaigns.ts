@@ -14,6 +14,57 @@
  *
  * Modification : éditer ICI uniquement. Test cohérence
  * `__tests__/lib/lp/campaigns.test.ts` verrouille la shape.
+ *
+ * ---------------------------------------------------------------------------
+ * REVUE FACTUELLE YMYL — 2026-07-28
+ * ---------------------------------------------------------------------------
+ * Ces pages sont diffusées en Google Ads : une allégation chiffrée fausse est
+ * un motif de désapprobation (règle « déclarations trompeuses ») en plus du
+ * risque DGCCRF. Tout montant affiché ici doit être sourcé officiellement.
+ *
+ * Corrections appliquées :
+ *   - `isolation-aides` annonçait « 75 €/m² » pour l'ITE/ITI. FAUX depuis le
+ *     01/01/2026 : l'isolation des murs est sortie du parcours par geste
+ *     (également chaudières biomasse). Page recentrée sur combles / toiture /
+ *     planchers bas, qui restent éligibles ; les murs sont renvoyés vers
+ *     CEE / TVA 5,5 % / éco-PTZ / parcours accompagné. Cohérent avec le
+ *     commit 78b1ef84 qui a corrigé les guides et le blog.
+ *   - `aides-pac` annonçait « jusqu'à 11 000 € d'aides » avec un trust block
+ *     « Aides cumulées max 2026 ». Ce chiffre est le forfait MPR géothermie
+ *     ménages bleus, PAS un cumul, et PAS ce que cherche un internaute sur
+ *     « aides pompe à chaleur » (intention = air/eau). Remplacé par le
+ *     forfait air/eau ménage modeste 4 000 €, plafond de dépense 12 000 €,
+ *     corroboré par economie.gouv.fr.
+ *
+ * Sources : anah.gouv.fr, france-renov.gouv.fr/aides/mpr, economie.gouv.fr
+ * (parcours par geste), consultées le 2026-07-28. Guichet MPR rouvert le
+ * 23/02/2026.
+ *
+ *   - `prime-cee` citait « jusqu'à 4 200 € » et nommait Effy, Sonergia et
+ *     TotalEnergies comme « délégataires partenaires ». Deux problèmes :
+ *     (a) le seed 387 classe ces trois acteurs en vague 1 = « cibles
+ *     d'intégration immédiate », SIRET à NULL, PAS partenaires signés — et
+ *     Effy est un concurrent direct ; (b) `forfaits-cee-2026.ts` marque tous
+ *     les forfaits concernés UNVERIFIED et interdit explicitement de citer un
+ *     montant. Une prime CEE n'est de toute façon pas un forfait réglementaire
+ *     (kWh cumac × taux délégataire). Noms et montant retirés, promesse de
+ *     versement « 30-60j » retirée (tunnel CEE partiellement en 501).
+ *   - `audit-energetique` accolait l'aide MPR 500 € à l'audit RÉGLEMENTAIRE de
+ *     vente. Or l'aide vise l'audit préalable aux travaux, « demandé avant le
+ *     début des travaux » (France Rénov'). Un vendeur sans projet de travaux
+ *     n'y a pas droit. Les deux audits sont désormais distingués et le montant
+ *     non resourcé est retiré. Les dates et la validité 5 ans, elles, sont
+ *     confirmées par ecologie.gouv.fr et conservées.
+ *
+ * Sources : anah.gouv.fr, france-renov.gouv.fr/aides/mpr, economie.gouv.fr
+ * (parcours par geste), ecologie.gouv.fr (audit énergétique réglementaire),
+ * consultées le 2026-07-28. Guichet MPR rouvert le 23/02/2026.
+ *
+ * NON VÉRIFIÉ / à ne pas réintroduire sans grille officielle : le forfait
+ * géothermie 11 000 € (ménages bleus), les montants €/m² isolation, les
+ * forfaits MPR Audit 500/400/300 € et tout montant CEE en euros. Le barème
+ * interne `src/lib/aides/bareme-mpr-2026.ts` est un snapshot du 2026-04-15
+ * ANTÉRIEUR à la réforme — ne pas s'en servir comme source pour ces pages.
  */
 
 export type LpCampaignKind = 'financial' | 'government' | 'service'
@@ -43,70 +94,67 @@ const CAMPAIGNS: Record<string, LpCampaign> = {
   'aides-pac': {
     slug: 'aides-pac',
     serviceSlug: 'pompe-a-chaleur',
-    h1: "Pompe à chaleur : jusqu'à 11 000 € d'aides en 2026",
+    h1: "Pompe à chaleur air/eau : MaPrimeRénov' + prime CEE 2026",
     subheadline:
-      "Estimez vos aides MaPrimeRénov' + prime CEE en 2 minutes. Devis gratuit avec un artisan RGE QualiPAC certifié près de chez vous.",
+      "MaPrimeRénov' jusqu'à 4 000 € pour un ménage modeste, dans la limite de 12 000 € de dépense éligible, cumulable avec la prime CEE. Devis gratuit, artisan RGE QualiPAC.",
     ctaLabel: 'Calculer mes aides PAC',
     trustBlocks: [
       { label: 'Artisans RGE QualiPAC', value: '49 000+' },
-      { label: 'Aides cumulées max 2026', value: '11 000 €' },
+      { label: 'MPR air/eau, ménage modeste', value: '4 000 €' },
       { label: 'Réponse devis', value: '< 24h' },
     ],
     kind: 'government',
-    maxAmountEur: 11000,
+    maxAmountEur: 4000,
     legalNote:
-      'Montants indicatifs maximaux. Conditions Anah selon revenus du foyer. Installation par artisan RGE QualiPAC actif obligatoire (cf. arrêté Anah 2024-12-23).',
+      "Montant selon revenus et composition du foyer ; plafond de dépense éligible 12 000 €. PAC air/air non éligible à MaPrimeRénov'. Artisan RGE QualiPAC actif requis. Source : Anah / France Rénov' 2026.",
   },
   'prime-cee': {
     slug: 'prime-cee',
     serviceSlug: 'isolation-thermique',
-    h1: "Prime CEE 2026 : jusqu'à 4 200 € pour vos travaux énergétiques",
+    h1: 'Prime CEE 2026 : estimez votre montant avec un artisan RGE',
     subheadline:
-      "Calculez votre prime CEE (Certificat d'Économies d'Énergie) en 2 minutes. Versement direct par les délégataires Effy, Sonergia, TotalEnergies sous 30 à 60 jours.",
+      "La prime CEE finance vos travaux d'économie d'énergie : isolation, chauffage, ventilation. Montant calculé selon l'opération, la zone climatique et vos revenus, puis versé par un délégataire agréé.",
     ctaLabel: 'Estimer ma prime CEE',
     trustBlocks: [
-      { label: 'Délégataires partenaires', value: '4 majors' },
-      { label: 'Prime CEE PAC + isolation', value: '4 200 €' },
-      { label: 'Versement', value: '30-60j' },
+      { label: 'Artisans RGE vérifiés', value: '49 000+' },
+      { label: 'Opérations couvertes', value: 'BAR-EN / BAR-TH' },
+      { label: 'Réponse devis', value: '< 24h' },
     ],
     kind: 'financial',
-    maxAmountEur: 4200,
     legalNote:
-      'Montants indicatifs selon barème DGEC en vigueur 2026. Conditions : artisan RGE actif au moment de la signature du devis, opération éligible (BAR-EN/BAR-TH).',
+      "Une prime CEE n'est pas un forfait réglementaire : elle dépend de l'opération (BAR-EN / BAR-TH), de la zone climatique, du volume de kWh cumac et des revenus. Son montant est arrêté par le délégataire. Artisan RGE actif requis à la signature.",
   },
   'isolation-aides': {
     slug: 'isolation-aides',
     serviceSlug: 'isolation-thermique',
-    h1: "Isolation thermique : 75 €/m² d'aides en 2026",
+    h1: 'Isolation combles et toiture : aides 2026 + artisan RGE',
     subheadline:
-      "Isolation par l'extérieur (ITE) ou par l'intérieur (ITI), combles, planchers : MaPrimeRénov' jusqu'à 75 €/m² + CEE BAR-EN-103 jusqu'à 25 €/m². Devis gratuit avec artisan RGE Qualibat.",
+      "Combles, toiture et planchers bas restent éligibles à MaPrimeRénov' par geste en 2026, cumulable avec la prime CEE. Isolation des murs : CEE, TVA 5,5 % et éco-PTZ. Devis gratuit, artisan RGE Qualibat.",
     ctaLabel: 'Estimer mes aides isolation',
     trustBlocks: [
       { label: 'Artisans RGE Qualibat', value: '49 000+' },
-      { label: 'Aide max ITE par m²', value: '100 €' },
-      { label: 'TVA réduite', value: '5,5 %' },
+      { label: 'TVA travaux de rénovation', value: '5,5 %' },
+      { label: 'Réponse devis', value: '< 24h' },
     ],
     kind: 'government',
-    maxAmountEur: 75,
     legalNote:
-      "Aide MaPrimeRénov' + CEE cumulées par m² isolé. Plafonds Anah selon revenus. Artisan RGE Qualibat 7141 ou 7144 obligatoire pour aides publiques.",
+      "Depuis le 01/01/2026, l'isolation des murs n'est plus financée par MaPrimeRénov' par geste : elle reste aidée via les CEE, la TVA 5,5 %, l'éco-PTZ ou le parcours accompagné. Source : Anah / France Rénov' 2026.",
   },
   'audit-energetique': {
     slug: 'audit-energetique',
     serviceSlug: 'renovation-energetique',
-    h1: "Audit énergétique : aide MaPrimeRénov' jusqu'à 500 €",
+    h1: 'Audit énergétique : auditeur RGE certifié, devis en 24h',
     subheadline:
-      "Audit énergétique réglementaire obligatoire pour la vente d'un DPE F ou G (et E depuis 2025). Réalisé par un auditeur RGE OPQIBI 1905 ou Qualibat 8731. Devis gratuit en 24h.",
+      'Audit réglementaire pour vendre un logement classé F, G ou E, ou audit préalable à des travaux de rénovation. Réalisé par un auditeur RGE OPQIBI 1905 ou Qualibat 8731. Validité 5 ans.',
     ctaLabel: 'Demander mon audit énergétique',
     trustBlocks: [
       { label: 'Auditeurs RGE certifiés', value: 'OPQIBI 1905' },
-      { label: 'Aide MaPrimeRénov Audit', value: '500 €' },
-      { label: 'Validité audit', value: '5 ans' },
+      { label: "Validité de l'audit", value: '5 ans' },
+      { label: 'Réponse devis', value: '< 24h' },
     ],
     kind: 'service',
-    maxAmountEur: 500,
     legalNote:
-      "Audit obligatoire à la vente DPE F/G depuis 2023, étendu E depuis 2025, D au 1er janvier 2034. MaPrimeRénov' Audit : 500 € très modestes / 400 € modestes / 300 € intermédiaires.",
+      "Audit obligatoire à la vente : DPE F/G depuis le 01/04/2023, E depuis le 01/01/2025, D au 01/01/2034. L'aide MaPrimeRénov' Audit vise l'audit préalable aux travaux, demandé avant leur démarrage — pas l'audit de vente. Source : ecologie.gouv.fr.",
   },
 }
 
