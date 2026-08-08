@@ -8,24 +8,27 @@ import { logger } from '@/lib/logger'
  * - Session refresh (with validation cache)
  * - Auth guard for private routes
  * - URL canonicalization
- * - CSP header with per-request nonce (other security headers in next.config.js)
+ * - Nonce-based CSP with 'strict-dynamic' (other security headers in next.config.js)
  * - Rate limiting for API routes (Upstash Redis in production, in-memory fallback in dev)
  */
 
-// Static CSP — no nonce (Next.js 14 App Router doesn't propagate nonce to framework chunks)
-// 'unsafe-inline' required for Next.js inline scripts; 'self' covers /_next/static/chunks/*.js
-const STATIC_CSP =
-  "default-src 'self'; " +
-  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms; " +
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-  "font-src 'self' https://fonts.gstatic.com data:; " +
-  "img-src 'self' data: blob: https: http:; " +
-  "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.anthropic.com https://api.openai.com https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; " +
-  "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
-  "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+// Build CSP with per-request nonce for strict-dynamic script loading
+// 'strict-dynamic' allows scripts loaded by a nonced script to execute without their own nonce
+function buildCsp(nonce: string): string {
+  return (
+    "default-src 'self'; " +
+    `script-src 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://t.contentsquare.net https://www.clarity.ms; ` +
+    `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com; ` +
+    "font-src 'self' https://fonts.gstatic.com data:; " +
+    "img-src 'self' data: blob: https: http:; " +
+    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://api-adresse.data.gouv.fr https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.anthropic.com https://api.openai.com https://www.clarity.ms https://t.contentsquare.net https://connect.facebook.net https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; " +
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org; " +
+    "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  )
+}
 
 // CSP headers only — other security headers are set in next.config.js (more efficient, handled at CDN edge)
-function addCspHeaders(response: NextResponse, request: NextRequest): NextResponse {
+function addCspHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
   const isDev = process.env.NODE_ENV === 'development'
@@ -34,7 +37,7 @@ function addCspHeaders(response: NextResponse, request: NextRequest): NextRespon
     return response
   }
 
-  response.headers.set('Content-Security-Policy', STATIC_CSP)
+  response.headers.set('Content-Security-Policy', buildCsp(nonce))
 
   return response
 }
@@ -45,6 +48,48 @@ const LEGACY_REDIRECTS: Record<string, string> = {
   '/outils/diagnostic-artisan': '/outils/diagnostic',
   '/barometre-prix': '/barometre',
   '/calculateur': '/outils/calculateur-prix',
+}
+
+/**
+ * Persiste l'attribution Meta avant que la canonicalisation ne supprime `fbclid`.
+ *
+ * Le clic publicitaire arrive sur `?fbclid=…`, mais la canonicalisation renvoie
+ * un 301 qui strippe le paramètre AVANT que le Pixel n'ait pu s'exécuter : sans
+ * ce cookie, `_fbc` n'existe jamais et on perd le signal d'attribution le plus
+ * fort de la Conversions API.
+ *
+ * Format imposé par Meta : `fb.<subdomainIndex>.<creationTimeMs>.<fbclid>`.
+ * `subdomainIndex = 1` correspond à un cookie posé sur le domaine racine.
+ *
+ * Le cookie n'est écrit que sur des URLs porteuses d'un `fbclid` (unique par
+ * clic) : aucun impact sur le cache CDN des pages publiques.
+ *
+ * Portée `.servicesartisans.fr` (et non l'hôte seul) : l'attribution suit le
+ * visiteur jusqu'à pro.servicesartisans.fr, où se termine le tunnel artisan.
+ * Les deux domaines partagent le même dataset Meta.
+ */
+const FBC_MAX_AGE_SECONDS = 90 * 24 * 60 * 60 // 90 jours — fenêtre d'attribution Meta
+const FBC_COOKIE_DOMAIN = '.servicesartisans.fr'
+
+function persistFbclid(response: NextResponse, request: NextRequest): NextResponse {
+  const fbclid = request.nextUrl.searchParams.get('fbclid')
+  if (!fbclid) return response
+  // Un clic plus récent doit écraser l'ancien : on réécrit même si `_fbc` existe.
+  if (!/^[A-Za-z0-9._-]{1,512}$/.test(fbclid)) return response
+
+  const isProduction = process.env.NODE_ENV === 'production'
+  response.cookies.set('_fbc', `fb.1.${Date.now()}.${fbclid}`, {
+    maxAge: FBC_MAX_AGE_SECONDS,
+    path: '/',
+    sameSite: 'lax',
+    secure: isProduction,
+    // Non httpOnly : le Pixel navigateur lit ce cookie pour ses propres appels.
+    httpOnly: false,
+    // En local, l'hôte n'est pas servicesartisans.fr : poser le domaine ferait
+    // rejeter le cookie par le navigateur.
+    ...(isProduction ? { domain: FBC_COOKIE_DOMAIN } : {}),
+  })
+  return response
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop
@@ -136,11 +181,13 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // URL canonicalization
   const canonicalUrl = getCanonicalRedirect(request)
   if (canonicalUrl && process.env.NODE_ENV === 'production') {
-    return NextResponse.redirect(canonicalUrl, 301)
+    // `fbclid` est supprimé par la canonicalisation → on le fige en cookie `_fbc`
+    // sur la réponse de redirection, sinon l'attribution Meta est perdue.
+    return persistFbclid(NextResponse.redirect(canonicalUrl, 301), request)
   }
 
-  // Nonce removed — Next.js 14 App Router doesn't propagate nonce to framework chunk <script> tags
-  // so 'strict-dynamic' CSP breaks all /_next/static/chunks/*.js loading
+  // Generate per-request nonce for CSP
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // Auth guard for private spaces
   if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
@@ -222,18 +269,26 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   }
 
   // Refresh session — only for routes that need auth (skip Supabase call for public pages)
+  // Pass nonce to downstream via request headers so Server Components can read it
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
+
   let response: NextResponse
   const needsAuth = pathname.startsWith('/espace-') || pathname.startsWith('/admin') || pathname.startsWith('/booking')
   if (needsAuth) {
     try {
+      // updateSession creates its own NextResponse.next() from request.headers
+      // We need to set the nonce on its response afterward
       response = await updateSession(request)
     } catch {
-      response = NextResponse.next()
+      response = NextResponse.next({ request: { headers: requestHeaders } })
     }
   } else {
-    response = NextResponse.next()
+    response = NextResponse.next({ request: { headers: requestHeaders } })
   }
 
+  // Ensure nonce is available to Server Components via headers()
+  response.headers.set('x-nonce', nonce)
   response.headers.set('x-pathname', pathname)
 
   // X-Robots-Tag + Cache-Control for all private and admin routes
@@ -324,7 +379,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     event.waitUntil(logGooglebotCrawl(pathname, ua))
   }
 
-  return addCspHeaders(response, request)
+  // Hors production (pas de 301 canonique), `fbclid` atteint la page directement :
+  // on fige quand même `_fbc` pour que le comportement soit testable en local.
+  persistFbclid(response, request)
+
+  return addCspHeaders(response, request, nonce)
 }
 
 export const config = {

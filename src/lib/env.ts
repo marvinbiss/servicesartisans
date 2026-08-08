@@ -85,6 +85,18 @@ const envSchema = z.object({
   STRIPE_PREMIUM_PRICE_ID: z.string().optional(),
 
   // ──────────────────────────────────────────────
+  // Meta — Pixel & Conversions API (optional)
+  // ──────────────────────────────────────────────
+  NEXT_PUBLIC_META_PIXEL_ID: z.string().optional(),
+  /** System User Token (permission `ads_management`) — server-only. */
+  META_CAPI_ACCESS_TOKEN: z.string().optional(),
+  /** Dataset/pixel ID ciblé par la CAPI. Défaut : NEXT_PUBLIC_META_PIXEL_ID. */
+  META_DATASET_ID: z.string().optional(),
+  /** Code « Test Events » — développement uniquement, jamais en production. */
+  META_TEST_EVENT_CODE: z.string().optional(),
+  META_GRAPH_API_VERSION: z.string().regex(/^v\d+\.\d+$/).optional(),
+
+  // ──────────────────────────────────────────────
   // INSEE / Pappers API (optional)
   // ──────────────────────────────────────────────
   INSEE_API_TOKEN: z.string().optional(),
