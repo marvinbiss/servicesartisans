@@ -257,7 +257,9 @@ export default function Page() {
             <ul>
               <li>
                 <strong>MaPrimeRénov’ par geste</strong> : jusqu’à 5 000 € par geste selon revenus
-                (PAC, isolation, fenêtres, etc.). Cumulable avec CEE.
+                (PAC, isolation des combles/toiture, fenêtres, etc.). Cumulable avec CEE. Depuis
+                2026, l’isolation des murs n’est plus un geste MaPrimeRénov’ (CEE / Coup de pouce ou
+                parcours accompagné).
               </li>
               <li>
                 <strong>MaPrimeRénov’ Parcours accompagné</strong> : jusqu’à 70 000 € de travaux

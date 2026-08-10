@@ -12,12 +12,11 @@
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { DispatchPrimeEstimate, DispatchJustificatif } from './dispatcher'
 import { escapeHtml, formatEuros } from './format'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 // ---------------------------------------------------------------------------
 // Types

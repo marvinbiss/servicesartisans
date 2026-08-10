@@ -269,7 +269,7 @@ const aides2026 = [
     conditions:
       'Logement de + de 15 ans (2 ans pour les chaudières fossiles), revenus sous plafonds',
     detail:
-      'Isolation des murs, remplacement de chauffage, VMC. Cumulable avec les CEE. Moins avantageux que le parcours accompagné pour les rénovations globales.',
+      "Remplacement de chauffage, VMC, isolation des combles et toiture, fenêtres. Depuis 2026, l'isolation des murs (ITE/ITI) n'est plus un geste MaPrimeRénov' : elle passe par les CEE (Coup de pouce isolation) ou par une rénovation d'ampleur. Cumulable avec les CEE. Moins avantageux que le parcours accompagné pour les rénovations globales.",
   },
   {
     aide: "CEE (Certificats d'Économies d'Énergie)",

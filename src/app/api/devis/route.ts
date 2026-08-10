@@ -17,6 +17,17 @@ import { safeJsonBody } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
 
+// Mig 551 — attribution paid. Un champ mal formé ne doit JAMAIS faire échouer
+// une soumission de devis (canal de conversion #1) : on préfère perdre
+// l'attribution que le lead. D'où `.catch(undefined)` plutôt qu'une erreur.
+const adsClickId = z
+  .string()
+  .regex(/^[A-Za-z0-9._-]{1,512}$/)
+  .optional()
+  .catch(undefined)
+
+const utmValue = z.string().min(1).max(120).optional().catch(undefined)
+
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
   // Funnel devis fix 2026-05-05 : urgency était requise côté serveur mais
@@ -49,6 +60,17 @@ const devisSchema = z.object({
     .max(50)
     .regex(/^[a-z0-9_-]+$/, 'Source invalide (a-z, 0-9, _, - uniquement)')
     .optional(),
+  // Mig 551 — click-IDs Google Ads pour l'Offline Conversion Import.
+  // Chaînes opaques base64url-like : on borne la forme côté serveur aussi,
+  // sans faire confiance au client (le payload part ensuite vers l'API Ads).
+  gclid: adsClickId,
+  gbraid: adsClickId,
+  wbraid: adsClickId,
+  utm_source: utmValue,
+  utm_medium: utmValue,
+  utm_campaign: utmValue,
+  utm_term: utmValue,
+  utm_content: utmValue,
 })
 
 export async function POST(request: Request) {

@@ -671,9 +671,12 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
       // vers une liste vide + log Sentry → la page tente le fallback département
       // ligne 610-617, ou retourne notFound() proprement si vraiment 0 provider.
       (async () => {
+        let directErrored = false
+        let deptErrored = false
         const [directProviders, totalProviderCount, rgeProviderCount] = await Promise.all([
           getProvidersByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(
             (err: unknown) => {
+              directErrored = true
               logger.error('service_location.providers_fetch_error', err as Error, {
                 route: 'services/[service]/[location]',
                 service: serviceSlug,
@@ -684,7 +687,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
             }
           ),
           getProviderCountByServiceAndLocation(serviceSlug, locationSlug, { rgeOnly }).catch(
-            () => -1
+            () => -1 // -1 = la query a échoué (≠ 0 = vraiment aucun artisan)
           ),
           getRgeProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
         ])
@@ -700,6 +703,7 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
             providers = await getProvidersByServiceAndDepartment(serviceSlug, deptCode, {
               limit: 6,
             }).catch((err: unknown) => {
+              deptErrored = true
               logger.error('service_location.dept_fallback_fetch_error', err as Error, {
                 route: 'services/[service]/[location]',
                 service: serviceSlug,
@@ -710,7 +714,27 @@ async function renderServiceLocationPage({ params, searchParams }: PageProps) {
             })
             isFallback = providers.length > 0
           }
-          if (providers.length === 0) return null // signal notFound
+          if (providers.length === 0) {
+            // Incident SEO 2026-06 : un timeout Supabase produit providers=[] +
+            // count=-1, indistinguable d'un vrai « 0 artisan ». L'ancien code
+            // faisait alors `return null` → notFound() → soft-404 (HTTP 200
+            // « Page non trouvée » sur ISR, bug Next #69103) servi à Googlebot
+            // sur les 459K combos service×ville → démotion massive (clics
+            // 148→17/j sur ~6 semaines). On ne 404 QUE sur un vrai vide (aucune
+            // erreur DB). Sur erreur transitoire (count === -1, ou fetch throw
+            // direct/dept), on rend la page dégradée en 200 indexable : Google
+            // la garde en index et l'ISR la recharge dès que la DB répond.
+            const dbErrored = directErrored || deptErrored || totalProviderCount === -1
+            if (dbErrored) {
+              return {
+                providers: [] as Awaited<ReturnType<typeof getProvidersByServiceAndLocation>>,
+                isFallback: false,
+                totalProviderCount: 0,
+                rgeProviderCount: 0,
+              }
+            }
+            return null // vrai 404 : combinaison réellement sans artisan
+          }
         }
         return { providers, isFallback, totalProviderCount, rgeProviderCount }
       })(),

@@ -54,6 +54,17 @@ export const maxDuration = 90
 // artificially claiming daily content updates.
 const STATIC_DATE = new Date().toISOString().slice(0, 10)
 
+// One-shot freshness floor for /services/[service]/[location] pages.
+// These materially changed on 2026-07-27 (fix A+B, commits 8dace4bd/416127eb):
+// a transient DB timeout made the template call notFound() → soft-404 HTTP 200
+// (Next #69103) served to Googlebot for weeks; the fix returns a degraded 200
+// with real content instead. Fixed date (not new Date()) = honest one-time
+// recrawl signal, NOT re-stamped each deploy. The real DB lastmod (provider
+// activity) still wins whenever present — this only fills the gap left when
+// fetchAllLastmodData() returns empty maps (DB blip), which previously omitted
+// lastmod entirely and starved Google of any freshness signal on 16K URLs.
+const SERVICE_FIX_FLOOR = '2026-07-27'
+
 // CEE — codes d'opérations seed. Source unique : src/lib/cee/operation-codes.ts
 // (leaf module sans imports — réutilisé par sitemap.ts, lastmod-queries.ts,
 // indexnow-submit/route.ts pour éliminer le drift triple SSoT).
@@ -2412,7 +2423,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       .filter((v): v is NonNullable<typeof v> => v != null)
     const mergedCities = [...phase1Cities, ...gscExtras]
 
-    const { byDeptServiceSlug, qualifiedCombos, deptServiceFallbackCombos } = await getLastmodData()
+    const { byDeptServiceSlug, rgeQualifiedServiceCity, rgeQualifiedServiceDept } =
+      await getLastmodData()
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
@@ -2425,21 +2437,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         // Rollback urgence : `SA_DISABLE_SERVICES_TIERED=1`.
         if (!isServiceVilleIndexable(service.slug, ville.slug)) continue
         // lastmod from latest provider activity in dept×service.
-        // If no data → omitted (honest).
+        // If no DB data → SERVICE_FIX_FLOOR (2026-07-27 fix date), not omitted.
         const deptKey = `${normalizeName(ville.departement)}::${service.slug}`
-        const lastmod = byDeptServiceSlug.get(deptKey)
-        // Sprint A #6 PhB (2026-05-03) — drift sitemap↔noindex aligné. La page
-        // applique `robots:noindex` quand `providerCount === 0 && !hasFallbackDept`
-        // (cf. services/[s]/[location]/page.tsx). Le sitemap doit appliquer la
-        // même règle pour ne pas exposer d'URL noindex à Google (gaspille budget
-        // crawl). Seuils alignés avec la page :
-        //   - `qualifiedCombos.has(...)` = ≥1 provider local (specialty + city match)
-        //   - `deptServiceFallbackCombos.has(...)` = ≥3 providers dept (cf. DEPT_FALLBACK_INDEX_THRESHOLD)
-        // Fail-open : si une des deux sources est `null` (DB blip), on inclut
-        // l'URL — identique au comportement page (providerCount default = 1).
-        if (qualifiedCombos !== null && deptServiceFallbackCombos !== null) {
-          const hasLocalProviders = qualifiedCombos.has(`${service.slug}::${ville.slug}`)
-          const hasDeptFallback = deptServiceFallbackCombos.has(deptKey)
+        // Real DB lastmod wins; fall back to the fix floor so Google always
+        // gets a freshness signal (was omitted entirely on DB blips — see
+        // SERVICE_FIX_FLOOR). Post-recovery this ?? is a no-op for live combos.
+        const lastmod = byDeptServiceSlug.get(deptKey) ?? SERVICE_FIX_FLOOR
+        // Sprint A #6 PhB (2026-05-03) — drift sitemap↔noindex aligné.
+        // 2026-07-17 FIX : la page est passée RGE-only (pivot 2026-05-05,
+        // `rgeOnly` default dans services/[s]/[location]/page.tsx + supabase.ts),
+        // mais ce gate utilisait encore les sets NON-RGE (qualifiedCombos /
+        // deptServiceFallbackCombos = tout provider actif) → le sitemap annonçait
+        // des dizaines de milliers d'URLs que la page renvoie en `noindex`
+        // (providers non-RGE only) = gaspillage crawl budget + signaux contradictoires.
+        // Aligné sur les mêmes sets RGE que la page et que les shards /rge/* :
+        //   - `rgeQualifiedServiceCity.has('service::ville')`     = ≥1 provider RGE local
+        //   - `rgeQualifiedServiceDept.has('service::deptSlug')`  = ≥3 providers RGE dept
+        //     (NB : clé RGE = `service::dept`, inverse de l'ancien `dept::service`).
+        // Fail-open : si une des deux sources est `null` (DB blip), on inclut l'URL.
+        if (rgeQualifiedServiceCity !== null && rgeQualifiedServiceDept !== null) {
+          const hasLocalProviders = rgeQualifiedServiceCity.has(`${service.slug}::${ville.slug}`)
+          const deptSlug = normalizeName(ville.departement)
+          const hasDeptFallback = rgeQualifiedServiceDept.has(`${service.slug}::${deptSlug}`)
           if (!hasLocalProviders && !hasDeptFallback) continue
         }
         allUrls.push({

@@ -3,6 +3,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { createClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
@@ -100,8 +101,8 @@ export async function POST(request: Request) {
           bookingId,
           userId: user.id,
         },
-        success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/?payment=success`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/?payment=cancelled`,
+        success_url: `${SITE_URL}/?payment=success`,
+        cancel_url: `${SITE_URL}/?payment=cancelled`,
       },
       { idempotencyKey: `booking-payment:${bookingId}` }
     )

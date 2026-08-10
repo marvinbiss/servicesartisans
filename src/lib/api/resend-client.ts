@@ -5,6 +5,7 @@
  */
 
 import { Resend } from 'resend'
+import { SITE_URL } from '@/lib/seo/config'
 import { retry } from '../utils/retry'
 import { APIError, ErrorCode, AppError, ValidationError } from '../utils/errors'
 import { apiLogger } from '@/lib/logger'
@@ -273,7 +274,7 @@ export async function sendWelcomeEmail(params: {
   }
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}${isArtisan ? '/espace-artisan' : '/devis'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${SITE_URL}${isArtisan ? '/espace-artisan' : '/devis'}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       ${isArtisan ? 'Accéder à mon compte' : 'Demander un devis'}
     </a>
   </div>
@@ -400,7 +401,7 @@ export async function sendClaimEmailConfirmation(params: {
 
   <p style="color: #999; font-size: 12px; text-align: center;">
     ServicesArtisans — La plateforme des artisans RGE certifiés<br>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+    <a href="${SITE_URL}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
 </html>
@@ -463,7 +464,7 @@ export async function sendClaimApprovedEmail(params: {
 
   <p style="color: #999; font-size: 12px; text-align: center;">
     ServicesArtisans - La plateforme des artisans RGE certifiés<br>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+    <a href="${SITE_URL}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
 </html>
@@ -531,7 +532,7 @@ export async function sendClaimRejectedEmail(params: {
 
   <p style="color: #999; font-size: 12px; text-align: center;">
     ServicesArtisans - La plateforme des artisans RGE certifiés<br>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}" style="color: #999;">servicesartisans.fr</a>
+    <a href="${SITE_URL}" style="color: #999;">servicesartisans.fr</a>
   </p>
 </body>
 </html>
@@ -585,7 +586,7 @@ export async function sendBookingConfirmationEmail(params: {
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${SITE_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Voir ma réservation
     </a>
   </div>
@@ -651,7 +652,7 @@ export async function sendQuoteRequestEmail(params: {
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/espace-artisan/demandes" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${SITE_URL}/espace-artisan/demandes" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Répondre à la demande
     </a>
   </div>

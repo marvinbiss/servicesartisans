@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 const tldr = [
-  'MaPrimeRénov’ + CEE cumulables : jusqu’à 45 €/m² sur ITE, 45 €/m² sur combles perdus.',
+  'Combles perdus : MaPrimeRénov’ + CEE cumulables jusqu’à 45 €/m². Murs (ITE/ITI) : plus de geste MaPrimeRénov’ depuis 2026 — CEE (Coup de pouce isolation) jusqu’à 25 €/m² en geste, MaPrimeRénov’ uniquement en rénovation d’ampleur.',
   'Éco-PTZ jusqu’à 50 000 € pour rénovation d’ampleur, 15 000 € pour un seul geste isolation.',
   'TVA 5,5 % si artisan RGE Qualibat + résistance thermique R exigée.',
   'Aides locales (région, département, intercommunalité) en complément : jusqu’à +5-15 €/m².',
@@ -52,7 +52,7 @@ const faqs = [
   {
     question: 'Quelles aides pour isoler ma maison en 2026 ?',
     answer:
-      "Cinq dispositifs cumulables : (1) MaPrimeRénov' par geste (15-25 €/m² combles, 30-75 €/m² ITE selon revenus) ; (2) CEE Coup de pouce isolation (10-30 €/m² selon geste et profil) ; (3) TVA réduite 5,5 % (économie ~15 % sur HT) si artisan RGE Qualibat ; (4) Éco-PTZ jusqu'à 15 000 € par geste ou 50 000 € bouquet ; (5) Aides locales variables. L'ensemble peut couvrir 50 à 80 % du coût pour un ménage modeste.",
+      "Cinq dispositifs cumulables : (1) MaPrimeRénov' par geste (15-25 €/m² sur les combles) — attention, depuis 2026 MaPrimeRénov' ne finance plus l'isolation des murs (ITE/ITI) en geste isolé, uniquement en rénovation d'ampleur ; (2) CEE Coup de pouce isolation (10-30 €/m² selon geste et profil), dispositif de référence pour les murs en geste ; (3) TVA réduite 5,5 % (économie ~15 % sur HT) si artisan RGE Qualibat ; (4) Éco-PTZ jusqu'à 15 000 € par geste ou 50 000 € bouquet ; (5) Aides locales variables. L'ensemble peut couvrir 50 à 80 % du coût pour un ménage modeste.",
   },
   {
     question: 'Quelle résistance thermique R exigée pour les aides ?',
@@ -165,8 +165,8 @@ export default function Page() {
                   {[
                     ['Combles perdus (R≥7)', '25 €/m²', '20 €/m²', '45 €/m²'],
                     ['Combles aménagés (R≥6)', '25 €/m²', '20 €/m²', '45 €/m²'],
-                    ['Murs par l’extérieur ITE (R≥3,7)', '75 €/m²', '25 €/m²', '100 €/m²'],
-                    ['Murs par l’intérieur ITI (R≥3,7)', '25 €/m²', '20 €/m²', '45 €/m²'],
+                    ['Murs par l’extérieur ITE (R≥3,7)', '— (ampleur)', '25 €/m²', '25 €/m²'],
+                    ['Murs par l’intérieur ITI (R≥3,7)', '— (ampleur)', '20 €/m²', '20 €/m²'],
                     ['Planchers bas (R≥3)', '25 €/m²', '20 €/m²', '45 €/m²'],
                     [
                       'Fenêtres double vitrage (Uw≤1,3)',

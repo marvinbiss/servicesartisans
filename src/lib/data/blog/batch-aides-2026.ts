@@ -26,12 +26,16 @@ export const aides2026Articles: Record<string, BlogArticle> = {
       '### Chauffage et eau chaude',
       "Les aides les plus généreuses concernent le remplacement d'un système de chauffage fossile (fioul, gaz) par un équipement performant et décarboné.",
 
-      ':::budget\n| Équipement | Bleu | Jaune | Violet | Rose |\n| Pompe à chaleur air/eau | 5 000 € | 4 000 € | 3 000 € | — |\n| Pompe à chaleur géothermique | 11 000 € | 9 000 € | 6 000 € | — |\n| Chaudière biomasse | 8 000 € | 6 500 € | 4 000 € | — |\n| Poêle à granulés | 2 500 € | 2 000 € | 1 500 € | — |\n| Poêle à bûches | 2 500 € | 2 000 € | 1 000 € | — |\n| Chauffe-eau thermodynamique | 1 200 € | 800 € | 400 € | — |\n| Chauffe-eau solaire | 4 000 € | 3 000 € | 2 000 € | — |\n| Insert / foyer fermé | 2 500 € | 1 500 € | 800 € | — |\n:::',
+      ':::budget\n| Équipement | Bleu | Jaune | Violet | Rose |\n| Pompe à chaleur air/eau | 5 000 € | 4 000 € | 3 000 € | — |\n| Pompe à chaleur géothermique | 11 000 € | 9 000 € | 6 000 € | — |\n| Poêle à granulés | 2 500 € | 2 000 € | 1 500 € | — |\n| Poêle à bûches | 2 500 € | 2 000 € | 1 000 € | — |\n| Chauffe-eau thermodynamique | 1 200 € | 800 € | 400 € | — |\n| Chauffe-eau solaire | 4 000 € | 3 000 € | 2 000 € | — |\n| Insert / foyer fermé | 2 500 € | 1 500 € | 800 € | — |\n:::',
+
+      ":::warning Changement 2026\nDepuis le 1ᵉʳ janvier 2026, les **chaudières biomasse** (granulés, bûches) ne sont plus finançables par MaPrimeRénov' parcours par geste. Elles restent éligibles dans une **rénovation d'ampleur** (parcours accompagné) ainsi qu'aux primes CEE (Coup de pouce chauffage), à la TVA 5,5 % et à l'éco-PTZ.\n:::",
 
       '### Isolation thermique',
       "L'isolation reste subventionnée pour tous les profils, y compris les ménages aisés (Rose) pour certains postes.",
 
-      ":::budget\n| Travaux d'isolation | Bleu | Jaune | Violet | Rose |\n| Isolation murs ext. (ITE) | 75 €/m² | 60 €/m² | 40 €/m² | 15 €/m² |\n| Isolation murs int. (ITI) | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Isolation toiture/combles | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Isolation plancher bas | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Fenêtres double/triple vitrage | 100 €/fenêtre | 80 €/fenêtre | 40 €/fenêtre | — |\n:::",
+      ":::budget\n| Travaux d'isolation | Bleu | Jaune | Violet | Rose |\n| Isolation toiture/combles | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Isolation plancher bas | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |\n| Fenêtres double/triple vitrage | 100 €/fenêtre | 80 €/fenêtre | 40 €/fenêtre | — |\n:::",
+
+      ":::warning Changement 2026\nDepuis le 1ᵉʳ janvier 2026, l'**isolation des murs** (ITE et ITI) n'est plus finançable par MaPrimeRénov' parcours par geste. Elle reste éligible dans une **rénovation d'ampleur** (bouquet ≥ 2 gestes d'isolation), aux primes CEE (jusqu'à 20 €/m²), au Coup de pouce isolation et à la TVA 5,5 %.\n:::",
 
       '### Ventilation',
       "L'installation d'une VMC double flux est aidée à hauteur de **2 500 €** (Bleu), **2 000 €** (Jaune), **1 500 €** (Violet). Les profils Rose n'y ont pas accès en parcours par geste.",

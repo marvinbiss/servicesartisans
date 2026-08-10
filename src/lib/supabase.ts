@@ -182,26 +182,40 @@ const QUERY_TIMEOUT_MS = 8_000
  * Each attempt is also guarded by withTimeout to prevent hanging queries.
  */
 async function retryWithBackoff<T>(
-  fn: () => Promise<T>,
+  fn: (signal: AbortSignal) => Promise<T>,
   label: string,
   maxRetries = 2,
   baseDelayMs = 800
 ): Promise<T> {
   let lastError: unknown
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    // 2026-07 — AbortController par tentative. `withTimeout` seul ne coupait PAS
+    // la requête Supabase sous-jacente : elle continuait en fond, connexion
+    // retenue → épuisement du pool → socket drops (`UND_ERR_SOCKET`) → spirale
+    // de timeouts observée à partir du 16/06. Les queries qui passent le signal
+    // (`.abortSignal(signal)`) sont réellement annulées au budget expiré et
+    // libèrent leur connexion. Les callers qui ignorent le param gardent le
+    // simple race timer (rétro-compatible, aucun changement de comportement).
+    const controller = new AbortController()
+    const timer = setTimeout(
+      () => controller.abort(new Error(`upstream_timeout:${label}`)),
+      QUERY_TIMEOUT_MS
+    )
     try {
-      return await withTimeout(fn(), QUERY_TIMEOUT_MS, label)
+      return await withTimeout(fn(controller.signal), QUERY_TIMEOUT_MS, label)
     } catch (err: unknown) {
       lastError = err
+      const message = err instanceof Error ? err.message : ''
       const isRetryable =
-        err instanceof Error &&
-        (err.message?.includes('statement timeout') ||
-          err.message?.includes('57014') ||
-          err.message?.includes('canceling statement') ||
-          err.message?.includes('timed out') ||
-          err.message?.includes('upstream request timeout') ||
-          err.message?.includes('ECONNRESET') ||
-          err.message?.includes('fetch failed'))
+        message.includes('statement timeout') ||
+        message.includes('57014') ||
+        message.includes('canceling statement') ||
+        message.includes('timed out') ||
+        message.includes('upstream request timeout') ||
+        message.includes('upstream_timeout') ||
+        message.includes('aborted') ||
+        message.includes('ECONNRESET') ||
+        message.includes('fetch failed')
       if (!isRetryable || attempt === maxRetries) {
         throw err
       }
@@ -210,6 +224,8 @@ async function retryWithBackoff<T>(
         `[retryWithBackoff] ${label} failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`
       )
       await new Promise((r) => setTimeout(r, delay))
+    } finally {
+      clearTimeout(timer)
     }
   }
   throw lastError
@@ -872,7 +888,7 @@ export async function getProvidersByServiceAndLocation(
       // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
       // whose address_postal_code matches the exact arrondissement.
       if (postalCode) {
-        return await retryWithBackoff(async () => {
+        return await retryWithBackoff(async (signal) => {
           let query = supabase
             .from('providers_public')
             .select(PROVIDER_LIST_SELECT)
@@ -890,6 +906,7 @@ export async function getProvidersByServiceAndLocation(
             .order('is_verified', { ascending: false })
             .order('name')
             .range(offset, offset + limit - 1)
+            .abortSignal(signal)
           if (error) throw error
           return resolveProviderCities((data || []) as unknown as ProviderListRow[])
         }, `getProvidersByServiceAndLocation:postal(${serviceSlug}, ${postalCode})`)
@@ -898,7 +915,7 @@ export async function getProvidersByServiceAndLocation(
       const cityValues = getCityValues(ville.name, ville.departementCode)
 
       try {
-        return await retryWithBackoff(async () => {
+        return await retryWithBackoff(async (signal) => {
           // Primary: direct specialty + city (fast — uses index + .in())
           let primary = supabase
             .from('providers_public')
@@ -918,6 +935,7 @@ export async function getProvidersByServiceAndLocation(
             .order('is_verified', { ascending: false })
             .order('name')
             .range(offset, offset + limit - 1)
+            .abortSignal(signal)
 
           if (directError) {
             logger.warn(
@@ -976,7 +994,7 @@ export async function getProvidersByServiceAndDepartment(
         const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
         if (!specialties || specialties.length === 0) return []
 
-        return await retryWithBackoff(async () => {
+        return await retryWithBackoff(async (signal) => {
           let query = supabase
             .from('providers_public')
             .select(PROVIDER_LIST_SELECT)
@@ -995,6 +1013,7 @@ export async function getProvidersByServiceAndDepartment(
             .order('rating_average', { ascending: false, nullsFirst: false })
             .order('review_count', { ascending: false })
             .limit(limit)
+            .abortSignal(signal)
 
           if (error) throw error
           return resolveProviderCities((data || []) as unknown as ProviderListRow[])
@@ -1035,7 +1054,7 @@ export async function hasProvidersByServiceAndLocation(
     async () => {
       try {
         return await retryWithBackoff(
-          async () => {
+          async (signal) => {
             const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
             if (!specialties || specialties.length === 0) return false
 
@@ -1056,7 +1075,7 @@ export async function hasProvidersByServiceAndLocation(
               const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
               if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
             }
-            const { count, error } = await query
+            const { count, error } = await query.abortSignal(signal)
 
             if (error) throw error
             return (count ?? 0) > 0
@@ -1092,7 +1111,7 @@ export async function getProviderCountByServiceAndLocation(
     async () => {
       try {
         return await retryWithBackoff(
-          async () => {
+          async (signal) => {
             const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
             if (!specialties || specialties.length === 0) return 0
 
@@ -1113,7 +1132,7 @@ export async function getProviderCountByServiceAndLocation(
               const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
               if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
             }
-            const { count, error } = await query
+            const { count, error } = await query.abortSignal(signal)
 
             if (error) throw error
             return count ?? 0
@@ -1192,7 +1211,7 @@ export async function getRgeProviderCountByServiceAndLocation(
     `rge-provider-count:svc-loc:${serviceSlug}:${locationSlug}`,
     async () => {
       try {
-        return await retryWithBackoff(async () => {
+        return await retryWithBackoff(async (signal) => {
           const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
           if (!specialties || specialties.length === 0) return 0
 
@@ -1212,7 +1231,7 @@ export async function getRgeProviderCountByServiceAndLocation(
             .gte('rge_valid_until', today)
           const decretCat = SERVICE_RGE_DECRET_CATEGORY[serviceSlug]
           if (decretCat) query = query.contains('rge_categories_decret', [decretCat])
-          const { count, error } = await query
+          const { count, error } = await query.abortSignal(signal)
 
           if (error) throw error
           return count ?? 0

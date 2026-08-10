@@ -961,14 +961,16 @@ Le retour sur investissement (ROI) dépend du coût des travaux, des économies 
 ### Tableau des aides 2026 pour l'isolation
 
 :::budget
-| Aide | Isolation combles | Isolation murs (ITI ou ITE) | Plancher bas | Fenêtres (par fenêtre) |
-| MaPrimeRénov' Bleu | 25 €/m² | 75 €/m² (ITE) / 25 €/m² (ITI) | 20 €/m² | 100 € |
-| MaPrimeRénov' Jaune | 20 €/m² | 60 €/m² (ITE) / 20 €/m² (ITI) | 15 €/m² | 80 € |
-| MaPrimeRénov' Violet | 15 €/m² | 40 €/m² (ITE) / 15 €/m² (ITI) | 10 €/m² | 40 € |
-| MaPrimeRénov' Rose | 0 € | 15 €/m² (ITE uniquement) | 0 € | 0 € |
-| CEE (prime énergie) | 5-10 €/m² | 8-25 €/m² | 5-10 €/m² | 50-100 €/fenêtre |
-| TVA 5,5 % | Oui | Oui | Oui | Oui |
+| Aide | Isolation combles | Plancher bas | Fenêtres (par fenêtre) |
+| MaPrimeRénov' Bleu | 25 €/m² | 20 €/m² | 100 € |
+| MaPrimeRénov' Jaune | 20 €/m² | 15 €/m² | 80 € |
+| MaPrimeRénov' Violet | 15 €/m² | 10 €/m² | 40 € |
+| MaPrimeRénov' Rose | 0 € | 0 € | 0 € |
+| CEE (prime énergie) | 5-10 €/m² | 5-10 €/m² | 50-100 €/fenêtre |
+| TVA 5,5 % | Oui | Oui | Oui |
 :::
+
+Depuis le 1er janvier 2026, l'isolation des **murs** (ITE/ITI) n'est plus finançable via MaPrimeRénov' en parcours par geste : elle est prise en charge via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou par MaPrimeRénov' en parcours d'ampleur.
 
 ### Simulation complète : rénovation globale d'une maison 120 m²
 
@@ -982,6 +984,8 @@ Maison individuelle de 1975, DPE F, chauffage gaz, propriétaire occupant revenu
 | Fenêtres ×10 | 8 000 € | 800 € | 800 € | 1 160 € | 5 240 € |
 | **TOTAL** | **41 600 €** | **13 400 €** | **6 100 €** | **6 010 €** | **16 090 €** |
 :::
+
+À noter : depuis le 1er janvier 2026, l'isolation des murs par l'extérieur (ITE façades) n'est plus finançable via MaPrimeRénov' en parcours par geste. Le montant MaPrimeRénov' porté sur la ligne ITE façades suppose une rénovation globale en **parcours d'ampleur** ; hors parcours d'ampleur, cette isolation des murs se finance via les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ.
 
 Avec l'Éco-PTZ de 16 090 € sur 15 ans à taux zéro, la mensualité est de **89 €/mois**, compensée par l'économie de chauffage de **120 à 180 €/mois**. Le propriétaire est gagnant **dès le premier mois**.
 
@@ -2165,11 +2169,8 @@ Le parcours "par geste" permet de financer un ou deux travaux spécifiques sans 
 | Travaux | Bleu (très modeste) | Jaune (modeste) | Violet (intermédiaire) | Rose (aisé) |
 | PAC air-eau | 5 000 € | 4 000 € | 3 000 € | 0 € |
 | PAC géothermique | 10 000 € | 8 000 € | 6 000 € | 0 € |
-| Chaudière biomasse | 8 000 € | 6 500 € | 4 000 € | 0 € |
 | Chauffe-eau solaire | 4 000 € | 3 000 € | 2 000 € | 0 € |
 | Chauffe-eau thermo. | 1 200 € | 800 € | 400 € | 0 € |
-| Isolation murs ITE | 75 €/m² | 60 €/m² | 40 €/m² | 15 €/m² |
-| Isolation murs ITI | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |
 | Isolation combles | 25 €/m² | 20 €/m² | 15 €/m² | 7 €/m² |
 | Isolation plancher bas | 20 €/m² | 15 €/m² | 10 €/m² | 0 € |
 | Fenêtres (par fenêtre) | 100 € | 80 € | 40 € | 0 € |
@@ -2315,7 +2316,7 @@ Prévoyez 3 à 6 semaines entre le dépôt du dossier et le déblocage des fonds
 | Avril 2026 | CEE : revalorisation des barèmes isolation | +5-10 % sur les primes isolation murs |
 | Juillet 2026 | MaPrimeRénov' : nouveau formulaire simplifié | Dossier en ligne plus rapide |
 | Septembre 2026 | Parcours Accompagné : plafonds relevés à 75 000 € | Gain maximum de 67 500 € (profil Bleu) |
-| Janvier 2027 (annoncé) | Interdiction location DPE F | Obligation de rénover pour les bailleurs |
+| Janvier 2028 (annoncé) | Interdiction location DPE F | Obligation de rénover pour les bailleurs |
 :::
 
 :::warning Anticipez l'interdiction de location DPE F

@@ -99,19 +99,20 @@ export const aidesCatalog: Aide[] = [
     description:
       "Subvention de l'Anah versée aux ménages pour les travaux de rénovation énergétique. Montant calculé selon le revenu fiscal de référence (4 catégories : bleu / jaune / violet / rose) et le type de travaux. Artisan certifié RGE obligatoire à la signature du devis.",
     schemaDescription:
-      "Aide financière à la rénovation énergétique versée par l'Agence nationale de l'habitat (Anah) aux propriétaires occupants et bailleurs. Plafond 30 000 € (parcours par geste) ou 70 000 € (parcours accompagné).",
+      "Aide financière à la rénovation énergétique versée par l'Agence nationale de l'habitat (Anah) aux propriétaires occupants et bailleurs. Plafond de travaux 30 000 € en parcours par geste ; en parcours accompagné, aide pouvant atteindre 63 000 € pour 70 000 € de travaux.",
     estimatedVolume: 90000,
     category: 'Subvention nationale',
     montants: [
       {
-        label: 'Parcours par geste — plafond global',
+        label: 'Parcours par geste — plafond de travaux',
         max: formatEur(MAPRIMERENOV.MAX_PARCOURS_GESTE_EUR),
-        condition: '1 ou 2 gestes isolés (isolation, fenêtres, pompe à chaleur, etc.)',
+        condition:
+          "1 ou 2 gestes isolés : combles, toiture, planchers bas, fenêtres, pompe à chaleur. Depuis le 01/01/2026, l'isolation des murs et les chaudières biomasse sont exclues du parcours par geste.",
       },
       {
-        label: 'Parcours accompagné — plafond global',
-        max: formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR),
-        condition: '2+ gestes isolation + saut ≥ 2 classes DPE, accompagnement MAR obligatoire',
+        label: "Parcours accompagné — plafond d'aide",
+        max: formatEur(MAPRIMERENOV.MAX_AIDE_PARCOURS_ACCOMPAGNE_EUR),
+        condition: `2+ gestes isolation + saut ≥ 2 classes DPE, accompagnement MAR obligatoire. Plafond de dépense de travaux : ${formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR)}.`,
       },
       {
         label: 'Pompe à chaleur air-eau — revenus très modestes (bleu)',
@@ -840,7 +841,7 @@ export const aidesCatalog: Aide[] = [
     tagline: 'Combles, murs, planchers : économies de 25 à 30 % sur la facture',
     kind: 'FinancialProduct',
     description:
-      "L'isolation thermique (combles, murs par l'intérieur ou l'extérieur, planchers bas) reste l'opération la plus rentable en rénovation énergétique. Cumul d'aides 2026 : MaPrimeRénov' au m², CEE jusqu'à 20 €/m², Coup de pouce isolation pour ménages modestes, TVA 5,5 %.",
+      "L'isolation thermique (combles, murs par l'intérieur ou l'extérieur, planchers bas) reste l'opération la plus rentable en rénovation énergétique. Cumul d'aides 2026 : MaPrimeRénov' au m² pour les combles et planchers bas (⚠️ l'isolation des MURS n'est plus éligible au parcours par geste depuis le 1ᵉʳ janvier 2026 — uniquement en rénovation d'ampleur), CEE jusqu'à 20 €/m², Coup de pouce isolation pour ménages modestes, TVA 5,5 %.",
     schemaDescription:
       "Cumul des aides pour les travaux d'isolation thermique d'un logement résidence principale : isolation des combles, des murs (ITE ou ITI) et des planchers bas.",
     estimatedVolume: 8000,
@@ -851,9 +852,10 @@ export const aidesCatalog: Aide[] = [
         max: 'jusqu’à 25 €/m²',
       },
       {
-        label: 'Isolation murs ITE — revenus très modestes',
-        max: 'jusqu’à 75 €/m²',
-        condition: 'Plafond 100 m²',
+        label: 'Isolation murs (ITE / ITI) — CEE + rénovation d’ampleur',
+        max: 'jusqu’à 20 €/m² (CEE)',
+        condition:
+          'Hors MaPrimeRénov’ parcours par geste depuis le 1ᵉʳ janvier 2026 ; MaPrimeRénov’ possible uniquement dans une rénovation d’ampleur (bouquet ≥ 2 gestes)',
       },
       {
         label: 'Isolation planchers bas — revenus très modestes',
@@ -1006,28 +1008,27 @@ export const aidesCatalog: Aide[] = [
     tagline: 'Chaudière à granulés ou bûches : alternative au fioul',
     kind: 'FinancialProduct',
     description:
-      "La chaudière biomasse (granulés, bûches, plaquettes) est une alternative au chauffage fioul ou gaz éligible à MaPrimeRénov' (jusqu'à 7 000 €) + CEE bonifiés (Coup de pouce sortie fioul/gaz) + TVA 5,5 %. Cumulable avec l'éco-PTZ pour étaler le reste à charge.",
+      "La chaudière biomasse (granulés, bûches, plaquettes) est une alternative au chauffage fioul ou gaz. ⚠️ Depuis le 1ᵉʳ janvier 2026, elle n'est PLUS financée par MaPrimeRénov' parcours par geste ; elle reste finançable via une rénovation d'ampleur (bouquet ≥ 2 gestes), les primes CEE (Coup de pouce chauffage / sortie fioul-gaz), la TVA 5,5 % et l'éco-PTZ.",
     schemaDescription:
       "Cumul des aides pour le remplacement d'un chauffage fossile par une chaudière à granulés, à bûches ou à plaquettes dans un logement résidence principale.",
     estimatedVolume: 6000,
     category: 'Prime privée',
     montants: [
       {
-        label: 'Chaudière granulés — revenus très modestes (bleu)',
-        max: '7 000 €',
+        label: "MaPrimeRénov' parcours par geste",
+        max: 'non éligible depuis le 1ᵉʳ janvier 2026',
+        condition:
+          'Biomasse retirée du parcours par geste — finançable uniquement en rénovation d’ampleur (bouquet ≥ 2 gestes)',
       },
       {
-        label: 'Chaudière granulés — revenus modestes (jaune)',
-        max: '5 500 €',
+        label: 'Coup de pouce chauffage (CEE) — sortie fioul/gaz',
+        max: 'jusqu’à 5 000 €',
+        condition:
+          'Bonification CEE ménages modestes, montant variable selon obligé et zone climatique',
       },
       {
-        label: 'Chaudière bûches — revenus très modestes (bleu)',
-        max: '5 500 €',
-      },
-      {
-        label: 'Coup de pouce sortie fioul/gaz',
-        max: '+4 000 € à +5 000 €',
-        condition: 'Bonification CEE',
+        label: 'TVA réduite',
+        max: '5,5 %',
       },
     ],
     eligibilite: [
@@ -1046,8 +1047,8 @@ export const aidesCatalog: Aide[] = [
         text: 'Sélectionner un artisan RGE QualiBois module Eau (chaudière). Le module Air (poêle) ne suffit pas pour la chaudière. Demander la fiche technique du modèle (rendement, label Flamme Verte).',
       },
       {
-        name: "Cumuler aides MaPrimeRénov' + CEE",
-        text: "Dossier MaPrimeRénov' + attestation CEE bonifiée Coup de pouce sortie fioul/gaz. Total cumulé jusqu'à 12 000 € pour les ménages très modestes.",
+        name: 'Mobiliser les aides valides en 2026',
+        text: "Depuis 2026, la biomasse n'ouvre plus droit à MaPrimeRénov' parcours par geste : viser la prime CEE bonifiée (Coup de pouce chauffage / sortie fioul-gaz) via un délégataire, la TVA 5,5 % et l'éco-PTZ. Pour capter MaPrimeRénov', intégrer la chaudière dans une rénovation d'ampleur (bouquet ≥ 2 gestes, accompagnement MAR obligatoire).",
       },
       {
         name: 'Installer la chaudière',
@@ -1058,7 +1059,7 @@ export const aidesCatalog: Aide[] = [
       {
         question: 'Granulés ou bûches : quelle chaudière biomasse choisir ?',
         answer:
-          "Granulés : automatisation totale (chargement automatique depuis silo, allumage piloté), confort proche du gaz/fioul. Coût d'installation 15-25 k€. Bûches : moins automatisé (rechargement manuel), combustible 30-40 % moins cher. Coût d'installation 10-18 k€. La chaudière granulés est éligible à un montant MaPrimeRénov' supérieur (7 000 € vs 5 500 € en bleu).",
+          "Granulés : automatisation totale (chargement automatique depuis silo, allumage piloté), confort proche du gaz/fioul. Coût d'installation 15-25 k€. Bûches : moins automatisé (rechargement manuel), combustible 30-40 % moins cher. Coût d'installation 10-18 k€. Depuis 2026, la biomasse n'est plus aidée par MaPrimeRénov' parcours par geste (uniquement en rénovation d'ampleur) ; la prime CEE Coup de pouce chauffage reste le principal levier pour les deux technologies.",
       },
       {
         question: 'Combien coûte le combustible biomasse ?',

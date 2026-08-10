@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 const tldr = [
   'ITE (par l’extérieur) : 110-230 €/m² TTC posée. Supprime ponts thermiques. Idéal ravalement combiné.',
   'ITI (par l’intérieur) : 50-130 €/m² TTC posée. Moins cher, perd 5-10 cm de surface, ponts thermiques subsistent.',
-  'ITE plus aidée : MaPrimeRénov’ jusqu’à 75 €/m² + CEE ~15-25 €/m². ITI : 15-25 €/m² MPR + 10-15 €/m² CEE.',
+  'Murs : depuis 2026, plus de geste MaPrimeRénov’ (ITE comme ITI) — l’aide de geste passe par le CEE (~15-25 €/m², majoré pour l’ITE) ; MaPrimeRénov’ n’intervient sur les murs qu’en rénovation d’ampleur.',
   'ITE contraintes : autorisation urbanisme (DP), ABF possible en secteur protégé, pas toujours possible en copro.',
   'ITI contraintes : perte surface habitable, dépose radiateurs/prises, dégagement fenêtres à retravailler.',
 ]
@@ -52,7 +52,7 @@ const faqs = [
   {
     question: 'Quelle est la différence de prix entre ITE et ITI ?',
     answer:
-      "Prix moyens 2026 posés TTC : ITI 50-130 €/m² (laine de verre ou PSE sur ossature bois + placoplâtre). ITE 110-230 €/m² (PSE sous enduit ou bardage ventilé). L'écart vient de l'échafaudage, de la protection façade et de la finition. Mais ITE est nettement plus aidée : MaPrimeRénov' jusqu'à 75 €/m² (profil Bleu) vs 25 €/m² pour ITI. Le reste à charge effectif est souvent équivalent.",
+      "Prix moyens 2026 posés TTC : ITI 50-130 €/m² (laine de verre ou PSE sur ossature bois + placoplâtre). ITE 110-230 €/m² (PSE sous enduit ou bardage ventilé). L'écart vient de l'échafaudage, de la protection façade et de la finition. Côté aides, depuis 2026 MaPrimeRénov' ne finance plus l'isolation des murs en geste isolé (ni ITE ni ITI) : l'aide de geste passe par le CEE (Coup de pouce isolation), majoré pour l'ITE, MaPrimeRénov' n'intervenant sur les murs qu'en rénovation d'ampleur. Le reste à charge effectif est souvent équivalent.",
   },
   {
     question: 'Laquelle est la plus performante thermiquement ?',
@@ -165,7 +165,11 @@ export default function Page() {
                 <tbody>
                   {[
                     ['Prix m² posé TTC', '110-230 €', '50-130 €'],
-                    ['Aide MaPrimeRénov’ (Bleu)', '75 €/m²', '25 €/m²'],
+                    [
+                      'MaPrimeRénov’ geste (murs)',
+                      '— (parcours accompagné)',
+                      '— (parcours accompagné)',
+                    ],
                     ['Ponts thermiques', 'Supprimés', 'Subsistants'],
                     ['Perte surface', 'Zéro', '5-10 cm/mur'],
                     ['Durée chantier 100 m²', '3-5 semaines', '2-3 semaines'],

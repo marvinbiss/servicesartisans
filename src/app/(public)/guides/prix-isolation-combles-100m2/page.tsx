@@ -62,7 +62,7 @@ const faqs = [
   {
     question: 'Quelles aides en 2026 ?',
     answer:
-      "MaPrimeRénov' 2026 isolation combles : 15 à 25 €/m² selon revenus (barème bleu-jaune-primary-rose), plafond 100 m² habituellement. Coup de pouce CEE : 10 à 20 €/m² supplémentaires. TVA 5,5 % si artisan Qualibat 7141 RGE. Cumul total : 25 à 45 €/m² pour ménage modeste = 2 500 à 4 500 € pour 100 m². Éco-PTZ possible pour compléter le reste à charge.",
+      "MaPrimeRénov' 2026 isolation combles : 15 à 25 €/m² selon revenus (barème bleu, jaune, violet et rose), plafond 100 m² habituellement. Coup de pouce CEE : 10 à 20 €/m² supplémentaires. TVA 5,5 % si artisan Qualibat 7141 RGE. Cumul total : 25 à 45 €/m² pour ménage modeste = 2 500 à 4 500 € pour 100 m². Éco-PTZ possible pour compléter le reste à charge.",
   },
   {
     question: 'Quelle épaisseur pour atteindre R = 7 m²·K/W ?',
@@ -72,7 +72,7 @@ const faqs = [
   {
     question: 'Le soufflage à 1 € existe-t-il encore ?',
     answer:
-      "Non. Les offres « isolation à 1 € » ont été supprimées en 2020 puis rénovées puis re-supprimées. En 2026, le prix minimum réel d'une isolation de combles perdus correctement faite est d'environ 7-10 €/m² (hors aides). Toute offre à 1 € ou quasi-gratuite en 2026 est soit une fraude, soit une prestation sous-performante (épaisseur insuffisante, matériau dégradé).",
+      "Non. Les offres « isolation à 1 € » ont été supprimées en 2021 puis rénovées puis re-supprimées. En 2026, le prix minimum réel d'une isolation de combles perdus correctement faite est d'environ 7-10 €/m² (hors aides). Toute offre à 1 € ou quasi-gratuite en 2026 est soit une fraude, soit une prestation sous-performante (épaisseur insuffisante, matériau dégradé).",
   },
   {
     question: 'Faut-il déposer l’ancienne isolation avant de refaire ?',

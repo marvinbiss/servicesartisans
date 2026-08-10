@@ -67,7 +67,7 @@ const faqs = [
   {
     question: 'Ravalement + ITE : est-ce éligible à MaPrimeRénov’ ?',
     answer:
-      "Oui. L'ITE (Isolation Thermique par l'Extérieur) est éligible MaPrimeRénov' avec R ≥ 3,7 m²·K/W et artisan RGE Qualibat 7131 ou 7132. Aide : 30 à 75 €/m² selon revenus, plafonnée à 100 m² d'ITE. CEE Coup de pouce cumulable. Le ravalement seul n'est pas éligible aux aides énergétiques, mais la TVA 10 % s'applique si le logement a plus de 2 ans.",
+      "Depuis 2026, l'ITE (Isolation Thermique par l'Extérieur) des murs n'est plus financée par MaPrimeRénov' par geste : elle l'est uniquement en rénovation d'ampleur (parcours accompagné). Au geste, l'ITE reste aidée via CEE (Coup de pouce), TVA 5,5 % et éco-PTZ. Conditions techniques inchangées : R ≥ 3,7 m²·K/W et artisan RGE Qualibat 7131 ou 7132. Le ravalement seul n'est pas éligible aux aides énergétiques, mais la TVA 10 % s'applique si le logement a plus de 2 ans.",
   },
   {
     question: 'Quelle période pour ravaler ?',

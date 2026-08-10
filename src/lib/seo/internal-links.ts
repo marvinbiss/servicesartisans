@@ -1,3 +1,5 @@
+import { isComboValid } from './valid-combos'
+
 interface InternalLink {
   text: string
   href: string
@@ -368,11 +370,11 @@ const localServiceMapping: Record<
  * Determines which service pages are relevant for a given article
  * based on its slug, category and tags.
  */
-export function getRelatedServiceLinks(
+export async function getRelatedServiceLinks(
   slug: string,
   category: string,
   tags: string[]
-): InternalLink[] {
+): Promise<InternalLink[]> {
   const links: InternalLink[] = []
   const addedSlugs = new Set<string>()
   const addedLocalKeys = new Set<string>()
@@ -454,8 +456,22 @@ export function getRelatedServiceLinks(
     links.push({ text: 'Artisan en urgence', href: '/urgence' })
   }
 
+  // SSoT enforcement: /services/[service]/[ville] links must point at a combo that
+  // actually has RGE providers, else we emit internal links to pages the route will
+  // noindex/404 (the drift that generated the "broken internal links" churn).
+  // isComboValid reads mv_provider_counts (1h-cached) and is fail-open — on a DB
+  // blip it returns true, so links degrade to their prior behaviour, never vanish.
+  // Non-combo links (generic service, tarifs, devis, ...) pass through untouched.
+  const validated = await Promise.all(
+    links.map(async (link) => {
+      const combo = /^\/services\/([^/]+)\/([^/]+)$/.exec(link.href)
+      if (!combo) return link
+      return (await isComboValid(combo[1], combo[2])) ? link : null
+    })
+  )
+
   // Limit to 8 links max (services + tarifs + city variants)
-  return links.slice(0, 8)
+  return validated.filter((l): l is InternalLink => l !== null).slice(0, 8)
 }
 
 interface ArticleMeta {

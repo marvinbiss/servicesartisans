@@ -3,6 +3,26 @@
  *
  * Source ANAH https://www.anah.gouv.fr/proprietaires/aides-de-l-anah/maprimerenov
  * Snapshot : 2026-04-15
+ * Révision réforme : 2026-07-28
+ *
+ * ⚠ RÉFORME DU 01/01/2026 — deux gestes sortis du parcours par geste :
+ *   - isolation des murs (ITE / ITI)
+ *   - chaudières biomasse
+ * Les deux restent aidés via CEE / Coup de pouce, TVA 5,5 %, éco-PTZ, ou
+ * MaPrimeRénov' en parcours accompagné. Sources : economie.gouv.fr (parcours
+ * par geste), france-renov.gouv.fr, consultées le 2026-07-28. Guichet MPR
+ * rouvert le 23/02/2026.
+ *
+ * Ces entrées sont passées à `amountEUR: 0` avec un motif explicite. Elles
+ * portaient jusqu'au 2026-07-28 des valeurs actives (ITE 75 / 60 EUR/m²)
+ * marquées verified:true, servies au public par `calculator.ts`, l'API
+ * `/api/v1/aides`, le MCP `get-bareme-mpr` et le résolveur GraphQL.
+ *
+ * Le reste du fichier demeure un snapshot 2026-04-15 : les montants encore
+ * actifs (PAC, combles, planchers, CET, audit) n'ont PAS été re-vérifiés
+ * contre la grille officielle post-réforme. Seul le forfait PAC air/eau
+ * ménage modeste (4 000 EUR, plafond de dépense 12 000 EUR) a été corroboré
+ * par economie.gouv.fr le 2026-07-28.
  *
  * Sémantique des valeurs `amountEUR` :
  *   - number > 0      : forfait MPR par geste éligible (EUR ou EUR/m² selon notes)
@@ -21,14 +41,27 @@
  *   PAC air/air = non éligible MPR (mpr-008, mpr-033)
  *   Chauffe-eau thermo Bleu=1200, Jaune=800 (mpr-009..010)
  *   Isolation combles Bleu=25/m², Jaune=20/m² (mpr-011..012)
- *   ITE Bleu=75/m², Jaune=60/m² (mpr-013..014)
  *   Isolation planchers bas Bleu=25/m² (mpr-016)
+ *   (mpr-013..015, ITE 75/60 EUR/m² + plafond 100 m² : CADUQUES depuis la
+ *    réforme du 01/01/2026, cas gold repassés verified:false)
  *   Audit énergétique Bleu=500, Jaune=400, Violet=300 (mpr-019..021)
  */
 
 import type { BaremeEntry, Geste, MenageCategorie, PlafondRevenusEntry, Zone } from './types'
 
 const UNVERIFIED = 'UNVERIFIED_PENDING_SOURCE_2026' as const
+
+/**
+ * Motif renvoyé par `computeMprAmount` pour les gestes retirés du parcours par
+ * geste au 01/01/2026. Sert de `reason` côté calculateur et API publique : on
+ * explique la sortie du dispositif plutôt que de renvoyer un montant nul muet.
+ */
+const MURS_HORS_GESTE_2026 =
+  "Isolation des murs sortie du parcours par geste MaPrimeRénov' au 01/01/2026 — reste aidée via CEE (BAR-EN-102), TVA 5,5 %, éco-PTZ ou parcours accompagné"
+
+/** Idem pour les chaudières biomasse, retirées à la même date. */
+const BIOMASSE_HORS_GESTE_2026 =
+  "Chaudière biomasse sortie du parcours par geste MaPrimeRénov' au 01/01/2026 — reste aidée via CEE / Coup de pouce, TVA 5,5 %, éco-PTZ ou parcours accompagné"
 
 export const BAREME_MPR_2026: ReadonlyArray<BaremeEntry> = [
   // ---- PAC air/eau (source: mpr-001..004 verified:true) ----
@@ -173,34 +206,43 @@ export const BAREME_MPR_2026: ReadonlyArray<BaremeEntry> = [
     notes: 'Rose exclu du Parcours par geste depuis recentrage 2024',
   },
 
-  // ---- Isolation thermique par l'extérieur (ITE) (source: mpr-013..014 verified:true — EUR/m²) ----
+  // ---- Isolation des murs (ITE / ITI) — SORTIE DU PARCOURS PAR GESTE 2026 ----
+  // Réforme du 01/01/2026 : l'isolation des murs n'est plus financée par
+  // MaPrimeRénov' parcours par geste, quelle que soit la catégorie de ménage.
+  // Elle reste aidée via les CEE (BAR-EN-102), la TVA 5,5 %, l'éco-PTZ, ou
+  // MaPrimeRénov' en parcours accompagné (rénovation d'ampleur).
+  //
+  // Les valeurs 75 / 60 EUR/m² qui figuraient ici provenaient du snapshot
+  // 2026-04-15 et étaient marquées verified:true — elles ont continué à être
+  // servies par le calculateur, l'API publique /api/v1/aides, le MCP et
+  // GraphQL après la réforme. Cas gold mpr-013/014/015 repassés verified:false.
   {
     geste: 'isolation_ite',
     menageCategorie: 'tres_modeste',
-    amountEUR: 75,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: 'EUR/m² — Bleu, plafond 100 m² par logement (cf. mpr-015)',
+    notes: MURS_HORS_GESTE_2026,
   },
   {
     geste: 'isolation_ite',
     menageCategorie: 'modeste',
-    amountEUR: 60,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: 'EUR/m² — Jaune, plafond 100 m² par logement',
+    notes: MURS_HORS_GESTE_2026,
   },
   {
     geste: 'isolation_ite',
     menageCategorie: 'intermediaire',
-    amountEUR: null,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: `${UNVERIFIED} — ITE Violet 2026 à confirmer (EUR/m²)`,
+    notes: MURS_HORS_GESTE_2026,
   },
   {
     geste: 'isolation_ite',
     menageCategorie: 'superieur',
     amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: 'Rose exclu du Parcours par geste depuis recentrage 2024',
+    notes: MURS_HORS_GESTE_2026,
   },
 
   // ---- Isolation planchers bas (source: mpr-016 verified:true — EUR/m²) ----
@@ -263,34 +305,38 @@ export const BAREME_MPR_2026: ReadonlyArray<BaremeEntry> = [
     notes: 'Rose exclu du Parcours par geste depuis recentrage 2024',
   },
 
-  // ---- Chaudière biomasse (source: mpr-018 verified:false — barème annuel) ----
+  // ---- Chaudière biomasse — SORTIE DU PARCOURS PAR GESTE 2026 ----
+  // Retirée du parcours par geste au 01/01/2026, comme l'isolation des murs.
+  // Les entrées étaient jusqu'ici `null` (« à confirmer »), ce qui laissait
+  // entendre une éligibilité en attente de barème : c'est désormais une
+  // exclusion, pas une valeur manquante.
   {
     geste: 'chaudiere_biomasse',
     menageCategorie: 'tres_modeste',
-    amountEUR: null,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: `${UNVERIFIED} — chaudière biomasse Bleu 2026 à confirmer (révisions annuelles)`,
+    notes: BIOMASSE_HORS_GESTE_2026,
   },
   {
     geste: 'chaudiere_biomasse',
     menageCategorie: 'modeste',
-    amountEUR: null,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: `${UNVERIFIED} — chaudière biomasse Jaune 2026 à confirmer`,
+    notes: BIOMASSE_HORS_GESTE_2026,
   },
   {
     geste: 'chaudiere_biomasse',
     menageCategorie: 'intermediaire',
-    amountEUR: null,
+    amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: `${UNVERIFIED} — chaudière biomasse Violet 2026 à confirmer`,
+    notes: BIOMASSE_HORS_GESTE_2026,
   },
   {
     geste: 'chaudiere_biomasse',
     menageCategorie: 'superieur',
     amountEUR: 0,
     sourceRef: 'ANAH_MAPRIMERENOV',
-    notes: 'Rose exclu du Parcours par geste depuis recentrage 2024',
+    notes: BIOMASSE_HORS_GESTE_2026,
   },
 
   // ---- Audit énergétique (source: mpr-019..021 verified:true) ----

@@ -5,6 +5,7 @@
 
 import { SIRENE_OPEN_CONFIG, TRANCHES_EFFECTIFS } from './config'
 import { logger } from '@/lib/logger'
+import { getDeptCodeFromPostal, getRegionName } from '@/lib/geography'
 
 interface SearchResult {
   siren: string
@@ -210,8 +211,11 @@ export function transformOpenResultToProvider(result: SearchResult): {
     address_street: result.siege?.adresse || null,
     address_city: result.siege?.libelle_commune || null,
     address_postal_code: result.siege?.code_postal || null,
-    address_department: result.siege?.departement || null,
-    address_region: result.siege?.region || null,
+    // Dériver dept + région du code postal (établissement) — jamais du siège :
+    // result.siege.departement/region pointent le siège social, qui diverge de
+    // l'adresse établissement stockée → 5,7 % de dept/région faux (fix data 2026-07-28).
+    address_department: getDeptCodeFromPostal(result.siege?.code_postal || null),
+    address_region: getRegionName(result.siege?.code_postal || null),
     latitude: latitude && !isNaN(latitude) ? latitude : null,
     longitude: longitude && !isNaN(longitude) ? longitude : null,
     legal_form: result.nature_juridique || null,

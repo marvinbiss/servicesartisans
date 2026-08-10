@@ -12,8 +12,8 @@
  */
 
 import { escapeHtml as esc } from './format'
+import { SITE_URL } from '@/lib/seo/config'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const REPLY_EMAIL = 'contact@servicesartisans.fr'
 
 // ---------------------------------------------------------------------------

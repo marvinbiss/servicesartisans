@@ -65,6 +65,14 @@ const NEXT_PUBLIC_SITE_URL_ALLOWED = new Set(
     'src/lib/utils/sanitize-url.ts',
     'src/lib/config/company-identity.ts',
     'src/lib/env.ts',
+    // CSRF/Origin validators — must read the RAW env, not the sanitized
+    // `SITE_URL` (which falls back to the canonical host). They fail-CLOSED
+    // when the env is unset in prod; swapping in a never-undefined fallback
+    // would silently defeat that guard. They validate URLs, they don't emit
+    // them, so the www/non-www concern does not apply.
+    'src/lib/admin-auth.ts',
+    'src/lib/cee/csrf.ts',
+    'src/middleware.ts',
   ].map((p) => p.split('/').join(sep))
 )
 

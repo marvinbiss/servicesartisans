@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 
 const tldr = [
   'Chaudière gaz condensation : 3 500-6 500 € TTC posée. Plus de MaPrimeRénov’ depuis 2023 (sauf bailleurs précaires).',
-  'Chaudière granulés : 14 000-22 000 € TTC posée (avec silo). MaPrimeRénov’ jusqu’à 11 000 €, CEE 4-5 k€.',
+  'Chaudière granulés : 14 000-22 000 € TTC posée (avec silo). MaPrimeRénov’ uniquement en rénovation d’ampleur (parcours accompagné), CEE 4-5 k€.',
   'Coût combustible 2026 : gaz ~100 €/MWh PCI, granulés ~85-110 €/MWh PCI (volatil). Écart réduit vs 2022.',
   'Rendement : gaz condensation 105-109 % sur PCI, granulés 85-92 %. Emprise silo granulés : 6-12 m³ minimum.',
   'Gaz en copro = simple, granulés = quasi impossible (silo, nettoyage, ramonage 2x/an).',
@@ -72,7 +72,7 @@ const faqs = [
   {
     question: 'Peut-on remplacer chaudière fioul par granulés ?',
     answer:
-      "Oui, c'est même le projet MaPrimeRénov' le plus aidé : jusqu'à 11 000 € MPR Bleu + 5 000 € Coup de pouce CEE + TVA 5,5 % = 13-16 k€ d'aides sur un projet à 18-22 k€. Reste à charge 5-9 k€. Vérifier : espace pour silo (souvent cuve fioul à dépolluer d'abord = 800-1 500 €), conduit compatible (diamètre, hauteur), alimentation électrique suffisante. Arbitrage vs pompe à chaleur air-eau : granulés mieux en région froide, PAC mieux en région tempérée.",
+      "Oui, mais depuis 2026 la chaudière granulés n'est plus financée par MaPrimeRénov' en geste isolé (réservée au parcours accompagné / rénovation d'ampleur). En geste, elle reste aidée par le Coup de pouce CEE jusqu'à 5 000 € + TVA 5,5 % + éco-PTZ. Vérifier : espace pour silo (souvent cuve fioul à dépolluer d'abord = 800-1 500 €), conduit compatible (diamètre, hauteur), alimentation électrique suffisante. Arbitrage vs pompe à chaleur air-eau : granulés mieux en région froide, PAC mieux en région tempérée.",
   },
   {
     question: 'Et la pompe à chaleur alors ?',
@@ -167,7 +167,7 @@ export default function Page() {
                 <tbody>
                   {[
                     ['Prix installée TTC', '3 500-6 500 €', '14 000-22 000 €'],
-                    ['Aides MPR max', '0 € (sauf bailleurs)', '11 000 €'],
+                    ['Aides MPR max', '0 € (sauf bailleurs)', '— (parcours accompagné)'],
                     ['Aides CEE', '500-1 500 €', '4 000-5 000 €'],
                     ['Rendement PCI', '105-109 %', '85-92 %'],
                     ['Coût énergie 2026', '100 €/MWh', '85-110 €/MWh'],

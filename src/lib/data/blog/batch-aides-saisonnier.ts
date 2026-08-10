@@ -47,17 +47,17 @@ export const aidesSaisonnierArticles: Record<string, BlogArticle> = {
       '### Le parcours par geste (décarbonation)',
       "Ce parcours concerne les travaux isolés de **remplacement d'un système de chauffage ou d'eau chaude décarboné**. Il est plus simple car il ne nécessite pas d'audit énergétique ni d'accompagnateur. Les montants sont forfaitaires et varient selon le type d'équipement et le profil de revenus.\n\nConditions d'éligibilité :\n- Logement de **plus de 15 ans** (ramené de 20 ans en 2026)\n- Résidence principale du demandeur\n- Remplacement d'un système utilisant une énergie fossile (fioul, gaz, charbon)\n- Installation réalisée par un artisan **RGE**",
 
-      ":::warning Attention\nLe parcours par geste ne finance plus les travaux d'isolation seuls depuis 2024. Pour isoler vos combles ou vos murs sans changer de chauffage, vous devez obligatoirement passer par le parcours accompagné. Cette règle, souvent méconnue, est la première cause de rejet des dossiers en 2026.\n:::",
+      ":::warning Attention\nDepuis le 1er janvier 2026, l'isolation des **murs** (ITE/ITI) n'est plus finançable en parcours par geste : elle passe par les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ — ou par MaPrimeRénov' en parcours d'ampleur. En revanche, l'isolation des **combles**, des **planchers bas** et le remplacement des **fenêtres** restent éligibles au parcours par geste. Cette distinction, souvent méconnue, est une cause fréquente de rejet des dossiers en 2026.\n:::",
 
       '## Montants par geste : ce que vous pouvez toucher',
 
       '### Chauffage et eau chaude sanitaire',
       'Les montants ci-dessous concernent le parcours par geste (décarbonation) :',
 
-      ':::budget\n| Équipement | Bleu | Jaune | Violet | Rose |\n| Pompe à chaleur air/eau | 5 000 € | 4 000 € | 3 000 € | — |\n| PAC géothermique | 11 000 € | 9 000 € | 6 000 € | — |\n| Chaudière biomasse | 7 000 € | 5 500 € | 3 500 € | — |\n| Poêle à granulés | 2 500 € | 2 000 € | 1 500 € | — |\n| Chauffe-eau solaire individuel | 4 000 € | 3 000 € | 2 000 € | — |\n| Chauffe-eau thermodynamique | 1 200 € | 800 € | 400 € | — |\n| Système solaire combiné | 10 000 € | 8 000 € | 4 000 € | — |\n| Réseau de chaleur | 1 200 € | 800 € | 400 € | — |\n:::',
+      ':::budget\n| Équipement | Bleu | Jaune | Violet | Rose |\n| Pompe à chaleur air/eau | 5 000 € | 4 000 € | 3 000 € | — |\n| PAC géothermique | 11 000 € | 9 000 € | 6 000 € | — |\n| Poêle à granulés | 2 500 € | 2 000 € | 1 500 € | — |\n| Chauffe-eau solaire individuel | 4 000 € | 3 000 € | 2 000 € | — |\n| Chauffe-eau thermodynamique | 1 200 € | 800 € | 400 € | — |\n| Système solaire combiné | 10 000 € | 8 000 € | 4 000 € | — |\n| Réseau de chaleur | 1 200 € | 800 € | 400 € | — |\n:::',
 
-      '### Isolation (parcours accompagné uniquement)',
-      "Dans le cadre du parcours accompagné, les travaux d'isolation sont pris en charge selon un pourcentage du coût total et non un forfait. À titre indicatif :",
+      '### Isolation',
+      "Depuis le 1er janvier 2026, l'isolation des **murs** (ITE/ITI) n'est plus prise en charge en parcours par geste : elle relève du parcours accompagné ou des CEE (Coup de pouce), TVA 5,5 % et éco-PTZ. L'isolation des **combles**, des **planchers bas** et le remplacement des **fenêtres** restent éligibles au parcours par geste. Dans le cadre du parcours accompagné, les travaux d'isolation sont pris en charge selon un pourcentage du coût total et non un forfait. À titre indicatif :",
 
       ":::budget\n| Type d'isolation | Coût moyen au m² | Prise en charge Bleu | Prise en charge Jaune |\n| Isolation des combles perdus | 25 – 50 € | Jusqu'à 90 % | Jusqu'à 75 % |\n| Isolation des murs par l'extérieur | 120 – 200 € | Jusqu'à 90 % | Jusqu'à 75 % |\n| Isolation des murs par l'intérieur | 50 – 90 € | Jusqu'à 90 % | Jusqu'à 75 % |\n| Isolation des planchers bas | 30 – 60 € | Jusqu'à 90 % | Jusqu'à 75 % |\n| Remplacement fenêtres (double vitrage) | 300 – 800 € / fenêtre | Jusqu'à 90 % | Jusqu'à 75 % |\n:::",
 

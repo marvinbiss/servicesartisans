@@ -66,6 +66,18 @@ export interface DevisInput {
    * Cf. mig 499 + src/lib/integrations/pipedrive.ts.
    */
   source?: string
+  /**
+   * Click-IDs Google Ads (mig 551) — support de l'Offline Conversion Import.
+   * Un clic ne porte qu'un seul des trois. Cf. src/lib/ads/click-ids.ts.
+   */
+  gclid?: string
+  gbraid?: string
+  wbraid?: string
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  utm_term?: string
+  utm_content?: string
 }
 
 export type DevisResult =
@@ -88,6 +100,27 @@ export function resolveServiceName(service: string): string {
   return (
     serviceNames[service] || service.charAt(0).toUpperCase() + service.slice(1).replace(/-/g, ' ')
   )
+}
+
+/** Colonnes d'attribution paid (mig 551), omises quand la valeur est absente. */
+export function buildAdsAttributionColumns(data: DevisInput): Record<string, string> {
+  const keys = [
+    'gclid',
+    'gbraid',
+    'wbraid',
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_term',
+    'utm_content',
+  ] as const
+
+  const out: Record<string, string> = {}
+  for (const key of keys) {
+    const value = data[key]
+    if (value) out[key] = value
+  }
+  return out
 }
 
 /** Escape HTML special chars to prevent XSS in email templates */
@@ -191,6 +224,10 @@ export async function processDevis(
       status: 'pending',
       // Mig 499 — attribution LP / Google Ads. NULL = défaut servicesartisans.fr.
       ...(data.source ? { source: data.source } : {}),
+      // Mig 551 — attribution paid au niveau du clic. Colonnes omises quand
+      // absentes pour garder les leads organiques à NULL (l'index partiel
+      // `idx_devis_requests_ads_click` ne les indexe alors pas).
+      ...buildAdsAttributionColumns(data),
     })
     .select()
     .single()

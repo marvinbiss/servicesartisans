@@ -52,7 +52,7 @@ export interface RgeServiceHubContent {
 
 const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   'pompe-a-chaleur': {
-    h1: 'Artisans RGE pompe à chaleur',
+    h1: 'Pompe à chaleur : certification RGE QualiPAC & aides',
     lede: "Installateurs QualiPAC certifiés pour l'installation de pompes à chaleur aérothermiques et géothermiques, éligibles MaPrimeRénov' et coup de pouce CEE.",
     description: [
       "La pompe à chaleur est le poste numéro un de MaPrimeRénov' en France avec plus de 400 000 dossiers validés chaque année. Installer une PAC performante suppose un dimensionnement précis (bilan thermique, coefficient de performance SCOP, intégration hydraulique) qu'un artisan non qualifié ne maîtrise pas toujours. La mention RGE QualiPAC, délivrée par Qualit'EnR après formation théorique, examen et audit chantier, est la seule garantie reconnue par l'Anah et les délégataires CEE.",
@@ -129,7 +129,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   'isolation-thermique': {
-    h1: 'Artisans RGE isolation thermique',
+    h1: 'Isolation thermique : certification RGE Qualibat & aides',
     lede: "Spécialistes Qualibat RGE de l'isolation par l'intérieur (ITI), par l'extérieur (ITE), des combles perdus et des planchers bas. Brique n°1 des économies d'énergie.",
     description: [
       "L'isolation thermique est le chantier à plus fort ROI énergétique en rénovation : jusqu'à 30 % d'économies sur la facture de chauffage pour une isolation de combles, 25 % pour une ITE complète. C'est aussi le poste le plus fraudé historiquement (arnaques « isolation à 1 € » démantelées en 2020-2022), ce qui rend la vérification RGE d'autant plus critique.",
@@ -204,7 +204,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   chauffagiste: {
-    h1: 'Chauffagistes RGE certifiés',
+    h1: 'Chauffagiste RGE : qualification, labels & aides',
     lede: 'Installateurs RGE de chaudières biomasse, poêles à granulés, systèmes hybrides et chauffage bas-carbone. QualiBois, Chauffage + et Qualibat RGE.',
     description: [
       "Le remplacement d'un système de chauffage ancien — fioul, gaz vétuste, convecteurs électriques — est l'un des chantiers les plus impactants en rénovation énergétique. Un chauffagiste RGE certifié sait dimensionner précisément la puissance du générateur, adapter l'émission (radiateurs, plancher, ventilo-convecteurs) et raccorder le tout à l'hydraulique existante sans créer de dysfonctionnement.",
@@ -279,7 +279,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   'panneaux-solaires': {
-    h1: 'Installateurs RGE panneaux solaires',
+    h1: "Panneaux solaires : qualification RGE & MaPrimeRénov'",
     lede: "Spécialistes QualiPV et QualiSol certifiés pour le photovoltaïque, le solaire thermique et l'autoconsommation. Prime à l'investissement et obligation d'achat.",
     description: [
       "L'installation photovoltaïque résidentielle connaît une croissance annuelle > 30 % en France depuis 2022. Deux qualifications RGE spécifiques encadrent le métier : QualiPV (modules photovoltaïques et autoconsommation) et QualiSol (chauffe-eau solaire et systèmes solaires combinés). Les deux sont délivrées par Qualit'EnR après examen théorique et audit chantier.",
@@ -357,7 +357,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   'renovation-energetique': {
-    h1: 'Artisans RGE rénovation énergétique globale',
+    h1: 'Rénovation énergétique : certification RGE & aides',
     lede: "Spécialistes de la rénovation énergétique globale et de l'accompagnement Mon Accompagnateur Rénov'. Parcours MaPrimeRénov' Accompagné jusqu'à 70 000 € d'aides.",
     description: [
       "La rénovation énergétique globale — appelée « parcours accompagné » depuis 2024 — consiste à enchaîner plusieurs chantiers (isolation + chauffage + ventilation) pour atteindre un gain de classe DPE significatif (minimum 2 classes). C'est le dispositif le plus généreux de MaPrimeRénov' : jusqu'à 70 000 € d'aides cumulées pour un ménage aux revenus très modestes.",
@@ -432,7 +432,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   electricien: {
-    h1: 'Électriciens RGE Qualifelec',
+    h1: 'Électricien RGE : certification Qualifelec & aides',
     lede: 'Électriciens certifiés Qualifelec RGE pour bornes de recharge IRVE, photovoltaïque et solutions électriques performantes éligibles aux aides.',
     description: [
       "La qualification Qualifelec RGE est délivrée par l'organisme Qualifelec (branche RGE depuis 2013) aux entreprises d'électricité qui justifient d'une compétence spécifique en rénovation énergétique. Trois domaines sont couverts : l'installation de bornes de recharge pour véhicules électriques (IRVE niveau 1 à 3), le photovoltaïque résidentiel avec raccordement Enedis, et les solutions de pilotage énergétique (domotique, effacement, délestage).",
@@ -508,7 +508,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   menuisier: {
-    h1: 'Menuisiers RGE fenêtres & portes',
+    h1: "Menuiserie RGE : certification Qualibat & MaPrimeRénov'",
     lede: "Menuisiers Qualibat RGE pour remplacement de fenêtres, portes d'entrée et baies vitrées à haute performance thermique. Aides MaPrimeRénov' et CEE.",
     description: [
       "Le remplacement des menuiseries anciennes (simple vitrage, double vitrage premier âge) est l'un des travaux les plus rentables en confort et en économies d'énergie : jusqu'à 15 % de réduction des déperditions thermiques pour une maison individuelle bien équipée en double ou triple vitrage. La qualification Qualibat RGE « menuiseries extérieures » (code 3511 / 3512) est délivrée aux entreprises qui maîtrisent la pose étanche selon la norme DTU 36.5.",
@@ -584,7 +584,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   couvreur: {
-    h1: 'Couvreurs RGE isolation toiture',
+    h1: 'Couvreur RGE : qualification isolation toiture & aides',
     lede: "Couvreurs Qualibat RGE spécialisés en isolation de toiture par l'extérieur (sarking), couverture éco-performante et traitement des combles.",
     description: [
       "La toiture est le premier poste de déperdition thermique d'un logement (jusqu'à 30 % des pertes en maison individuelle). Un couvreur RGE Qualibat maîtrise deux techniques d'isolation complémentaires : l'isolation par l'extérieur en sarking (pose d'un isolant rigide sur la charpente visible) et l'isolation des combles aménageables par l'intérieur (laine minérale ou biosourcée entre chevrons).",
@@ -659,7 +659,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   plombier: {
-    h1: 'Plombiers RGE chauffe-eau thermodynamique',
+    h1: 'Plombier RGE : qualification chauffe-eau thermo & aides',
     lede: "Plombiers-chauffagistes RGE spécialisés en chauffe-eau thermodynamique (CET), solutions ECS performantes et remplacement d'équipements énergivores.",
     description: [
       "Le chauffe-eau thermodynamique (CET) est la solution ECS la plus performante pour un logement moderne : il capte les calories de l'air ambiant ou extrait pour produire de l'eau chaude, avec un COP moyen de 3 — soit 3 fois moins de consommation électrique qu'un cumulus classique. L'aide MaPrimeRénov' CET peut atteindre 1 200 € pour un ménage très modeste, cumulable avec la prime CEE.",
@@ -734,7 +734,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   climaticien: {
-    h1: 'Climaticiens RGE PAC air/air',
+    h1: 'Climaticien RGE : qualification PAC air/air & aides',
     lede: 'Climaticiens QualiPAC et Qualibat RGE pour climatisation réversible, pompes à chaleur air/air et multi-splits éligibles au coup de pouce CEE.',
     description: [
       "La climatisation réversible (PAC air/air) est une solution de chauffage d'appoint et de rafraîchissement estival très efficace dans les logements bien isolés. Contrairement à la PAC air/eau (éligible MaPrimeRénov'), la PAC air/air n'ouvre pas droit à l'aide de l'Anah — en revanche, la prime Coup de Pouce CEE reste mobilisable pour remplacer un chauffage électrique ou fossile dans un logement classé F ou G.",
@@ -809,7 +809,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   ramoneur: {
-    h1: 'Ramoneurs certifiés entretien chauffage bois',
+    h1: 'Ramoneur RGE : certification chauffage bois & aides',
     lede: "Ramoneurs et entreprises d'entretien RGE pour appareils à bois (poêles, chaudières, inserts). Condition de maintien des aides et des assurances.",
     description: [
       "L'entretien annuel des appareils de chauffage au bois n'est pas un simple confort : c'est une obligation réglementaire (arrêté du 23 février 2009 pour les chaudières > 4 kW, règlement sanitaire départemental pour tous les conduits) et une condition de maintien des garanties constructeur et décennale. Un ramonage mal exécuté ou absent est aussi l'une des principales causes d'incendie domestique et d'intoxication au monoxyde de carbone.",
@@ -884,7 +884,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   zingueur: {
-    h1: 'Zingueurs RGE couverture & isolation',
+    h1: 'Zingueur RGE : qualification couverture-isolation & aides',
     lede: "Zingueurs Qualibat RGE pour couverture zinc, isolation de toiture et travaux d'étanchéité performants. Cumul aides isolation + réfection couverture.",
     description: [
       "Le zingueur est l'artisan spécialisé dans la couverture métallique (zinc, cuivre, aluminium) et dans les ouvrages de zinguerie (gouttières, descentes, noues, solins, bandes de rive). Dans une rénovation énergétique complète, il intervient souvent en tandem avec le couvreur ou en entreprise tout-corps-d'état pour combiner réfection de toiture et isolation par l'extérieur (sarking).",
@@ -960,7 +960,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   facadier: {
-    h1: 'Façadiers RGE ITE & ravalement performant',
+    h1: 'Façadier RGE : certification ITE Qualibat & aides',
     lede: "Façadiers Qualibat RGE spécialisés en isolation thermique par l'extérieur (ITE), ravalement performant et rénovation des façades anciennes.",
     description: [
       "L'isolation thermique par l'extérieur (ITE) est la solution la plus performante pour isoler les murs d'une maison individuelle : elle supprime les ponts thermiques au niveau des refends et des planchers intermédiaires, préserve l'inertie des murs anciens, ne réduit pas la surface habitable et permet un ravalement simultané. Le façadier RGE est le professionnel clé de cette technique.",
@@ -1032,7 +1032,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
 
   platrier: {
-    h1: "Plâtriers RGE isolation par l'intérieur",
+    h1: 'Plâtrier RGE : qualification isolation ITI & aides',
     lede: "Plâtriers Qualibat RGE spécialisés en isolation thermique par l'intérieur (ITI), cloisons performantes et doublage de murs anciens.",
     description: [
       "L'isolation thermique par l'intérieur (ITI) reste la technique la plus économique et la moins invasive pour isoler les murs d'un logement — notamment en copropriété où l'ITE est souvent refusée. Le plâtrier-plaquiste RGE Qualibat est le professionnel de référence pour cette technique : il maîtrise la pose des doublages isolants (complexes laine + plaque de plâtre) et la gestion des points singuliers (tableaux de fenêtre, coffres de volet roulant, angles).",
@@ -1107,7 +1107,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
   },
   // === Élargissement RGE 2026-05-02 — slugs RGE-only ===
   'borne-recharge': {
-    h1: 'Installateurs IRVE Qualifelec',
+    h1: 'Borne de recharge : certification RGE IRVE Qualifelec',
     lede: "Électriciens certifiés Qualifelec IRVE pour l'installation de bornes de recharge en maison, copropriété et entreprise — éligibles au programme ADVENIR.",
     description: [
       "L'installation d'une borne de recharge pour véhicule électrique de plus de 3,7 kW exige un installateur titulaire de la qualification Qualifelec IRVE (Infrastructure de Recharge de Véhicule Électrique), seul label reconnu par le programme ADVENIR pour le versement des primes. La qualification se décline en trois niveaux : P1 (jusqu'à 22 kW AC), P2 (avec supervision et communication) et P3 (charge rapide DC).",
@@ -1189,7 +1189,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
       "Trouvez un installateur Qualifelec IRVE certifié pour votre borne de recharge. Prime ADVENIR, crédit d'impôt 500 €.",
   },
   'chauffe-eau-thermodynamique': {
-    h1: 'Artisans RGE chauffe-eau thermodynamique',
+    h1: 'Chauffe-eau thermodynamique : qualification RGE & aides',
     lede: "Plombiers et chauffagistes QualiPAC module CET pour l'installation de chauffe-eau thermodynamiques — éligibles MaPrimeRénov' et prime CEE BAR-TH-148.",
     description: [
       "Le chauffe-eau thermodynamique (CET) capte les calories de l'air ambiant ou extrait pour produire l'eau chaude sanitaire avec un coefficient de performance (COP) annuel supérieur à 3, soit 3 fois moins d'électricité qu'un cumulus classique. Son installation requiert un artisan titulaire de la qualification QualiPAC module CET (Qualit'EnR), spécifiquement validée pour ce produit.",
@@ -1264,7 +1264,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
       "Plombiers et chauffagistes QualiPAC CET pour votre chauffe-eau thermodynamique. MaPrimeRénov' jusqu'à 1 200 € + CEE BAR-TH-148.",
   },
   'audit-energetique': {
-    h1: 'Audit énergétique réglementaire',
+    h1: "Audit énergétique : RGE réglementaire & MaPrimeRénov'",
     lede: "Architectes CNOA et bureaux d'études OPQIBI 1905/1911 pour réaliser un audit énergétique conforme — point d'entrée obligatoire de la rénovation d'ampleur MaPrimeRénov'.",
     description: [
       "L'audit énergétique réglementaire est une étude approfondie qui établit l'état des lieux thermique d'un logement et propose au minimum deux scénarios de rénovation chiffrés permettant d'atteindre la classe B ou la classe A du DPE. Il est obligatoire depuis avril 2023 pour vendre un logement classé F ou G, et il conditionne l'accès au parcours MaPrimeRénov' Rénovation d'ampleur.",
@@ -1340,7 +1340,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
       "Architectes CNOA et bureaux d'études OPQIBI pour votre audit énergétique réglementaire. Prime MaPrimeRénov' 300-500 €.",
   },
   ventilation: {
-    h1: 'Artisans RGE ventilation (VMC)',
+    h1: 'VMC : certification RGE ventilation & aides',
     lede: 'Installateurs Qualibat RGE ventilation pour VMC simple flux hygroréglable et double flux haute performance — éligibles prime CEE BAR-TH-125.',
     description: [
       "Une ventilation mécanique contrôlée (VMC) performante est le complément indispensable de toute rénovation d'isolation : sans renouvellement d'air maîtrisé, l'humidité s'accumule et provoque condensation, moisissures et dégradations du bâti. La VMC double flux récupère 75 à 90 % de la chaleur de l'air extrait pour préchauffer l'air neuf entrant — gain énergétique de 5 à 15 % sur la facture chauffage.",
@@ -1417,7 +1417,7 @@ const C: Record<RgeAllowedService, RgeServiceHubContent> = {
       "Installateurs Qualibat RGE pour VMC simple flux et double flux. Prime CEE BAR-TH-125 jusqu'à 800 €.",
   },
   fenetres: {
-    h1: 'Artisans RGE remplacement de fenêtres',
+    h1: "Fenêtres : certification RGE remplacement & MaPrimeRénov'",
     lede: "Menuisiers Qualibat RGE pour le remplacement de fenêtres et baies isolantes — éligibles MaPrimeRénov' et primes CEE BAR-EN-104 / BAR-EN-108.",
     description: [
       "Les fenêtres anciennes représentent 10 à 15 % des déperditions thermiques d'une maison non rénovée. Le remplacement par des fenêtres performantes (Uw ≤ 1,3 W/m².K) avec un menuisier Qualibat RGE conditionne l'accès à MaPrimeRénov' (forfait 40 à 100 €/équipement selon revenus) et aux primes CEE BAR-EN-104 (fenêtres) ou BAR-EN-108 (porte d'entrée donnant sur l'extérieur).",

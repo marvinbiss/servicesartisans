@@ -327,12 +327,28 @@ export async function getNearestRgeProvidersForCommune(
 // Fetch commune data by slug (cached 24h)
 // ---------------------------------------------------------------------------
 
-export async function getCommuneBySlug(slug: string): Promise<CommuneData | null> {
-  if (IS_BUILD) return null // Skip DB during build — ISR will populate on first visit
-  return getCachedData<CommuneData | null>(
-    `commune:${slug}`,
-    async () => {
-      try {
+/**
+ * Result of a strict commune lookup that separates a genuine "not found" from
+ * a DB error. WHY: `.single()` returns PGRST116 for 0 rows, but a timeout /
+ * connection error also arrives via `error` (or a thrown exception). The old
+ * `if (error || !data) return null` collapsed both into `null`, so the page's
+ * `if (!commune) notFound()` fired on transient DB errors → soft-404 HTTP 200
+ * (Next.js 14.2 #69103) served to Googlebot across ~35K commune URLs during the
+ * mid-June DB timeout = mass demotion (same class as the /services soft-404 fix).
+ *
+ *   { ok: true,  commune: X }    → found
+ *   { ok: true,  commune: null } → genuine 0-row (notFound legitimate)
+ *   { ok: false, commune: null } → DB error/timeout — callers MUST NOT notFound()
+ *                                  (render degraded / let it 500 — never soft-404)
+ */
+export type CommuneLookup = { ok: boolean; commune: CommuneData | null }
+
+export async function getCommuneBySlugStrict(slug: string): Promise<CommuneLookup> {
+  if (IS_BUILD) return { ok: true, commune: null } // build: skip DB, ISR populates on first visit
+  try {
+    const commune = await getCachedData<CommuneData | null>(
+      `commune:${slug}`,
+      async () => {
         // Lazy import to avoid crashes when env vars are missing (build time)
         const { createAdminClient } = await import('@/lib/supabase/admin')
         const supabase = createAdminClient()
@@ -344,16 +360,33 @@ export async function getCommuneBySlug(slug: string): Promise<CommuneData | null
           .eq('is_active', true)
           .single()
 
-        if (error || !data) return null
-        return data as unknown as CommuneData
-      } catch {
-        // DB unavailable or table doesn't exist yet — graceful fallback
-        return null
-      }
-    },
-    CACHE_TTL.locations, // 24 hours
-    { skipNull: true }
-  )
+        if (error) {
+          // PGRST116 = `.single()` matched 0 rows = genuine not-found (cache the null).
+          if (error.code === 'PGRST116') return null
+          // Any other error (timeout 57014, connection, 5xx) = DB error → throw so
+          // getCachedData does NOT cache it and the outer catch flags ok:false.
+          throw new Error(`commune_db_error:${error.code ?? 'unknown'}`)
+        }
+        return (data as unknown as CommuneData) ?? null
+      },
+      CACHE_TTL.locations, // 24 hours
+      { skipNull: true }
+    )
+    return { ok: true, commune }
+  } catch {
+    // DB unavailable / timeout / network — NOT a genuine 404.
+    return { ok: false, commune: null }
+  }
+}
+
+/**
+ * Backward-compatible lookup — collapses to `commune | null` (DB error → null,
+ * identical to the historical behaviour). Kept for callers that don't gate a
+ * `notFound()` on the result. Render templates that DO `notFound()` must use
+ * {@link getCommuneBySlugStrict} instead to avoid soft-404 on DB errors.
+ */
+export async function getCommuneBySlug(slug: string): Promise<CommuneData | null> {
+  return (await getCommuneBySlugStrict(slug)).commune
 }
 
 // ---------------------------------------------------------------------------

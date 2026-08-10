@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/email/resend'
 import { getAbandonEmail1 } from '@/lib/email/templates/abandon-email-1'
@@ -9,8 +10,6 @@ import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
 // Force dynamic rendering — cron lit request.headers (cron-secret) à chaque appel.
 export const dynamic = 'force-dynamic'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 // SLA-99.9 : wall-clock guard (1 email Resend = ~500ms-1.5s) + lease anti-double-run.
 const MAX_RUNTIME_MS = 50_000

@@ -4,6 +4,7 @@
  */
 
 import crypto from 'crypto'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { buildOptoutUrl } from './optout'
 import type { ProspectionContact, ProspectionCampaign } from '@/types/prospection'
@@ -153,7 +154,7 @@ export function renderTemplate(
   }
 
   // Lien de désinscription with HMAC-signed token to prevent tampering
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const siteUrl = SITE_URL
   const unsubToken = generateUnsubscribeToken(contact.id, campaign.channel)
   rendered = rendered.replaceAll(
     '{{unsubscribe_link}}',

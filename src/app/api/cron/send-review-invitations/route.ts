@@ -22,6 +22,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
@@ -29,7 +30,6 @@ import { createInvitationToken } from '@/lib/reviews/invitation-token'
 import { verifyCronSecret } from '@/lib/auth/verify-cron-secret'
 import { withCronCheckIn } from '@/lib/monitoring/sentry-checkin'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const BATCH_SIZE = 100
 const MAX_ATTEMPTS = 3
 

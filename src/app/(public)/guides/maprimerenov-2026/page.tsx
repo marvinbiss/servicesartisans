@@ -59,7 +59,7 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'MaPrimeRénov 2026 : Montants',
   description:
-    "Guide MaPrimeRénov' 2026 : montants jusqu'à 70 000 €, conditions, barèmes revenus, parcours accompagné. Obtenez votre aide rénovation énergétique.",
+    "Guide MaPrimeRénov' 2026 : aide jusqu'à 63 000 € (travaux plafonnés 70 000 € HT), conditions, barèmes revenus, parcours accompagné. Obtenez votre aide rénovation énergétique.",
   keywords: [
     'MaPrimeRénov 2026',
     'aide rénovation énergétique',
@@ -121,7 +121,7 @@ const faqItems = [
   {
     question: 'Peut-on isoler ses murs avec MaPrimeRénov en 2026 ?',
     answer:
-      "Depuis le 1er janvier 2025, l'isolation seule (murs, toiture, plancher) n'est plus éligible au parcours par geste. Elle reste finançable via le parcours accompagné (gain ≥ 2 classes DPE). Les CEE restent disponibles pour l'isolation seule.",
+      "Depuis le 1er janvier 2026, seule l'isolation des murs (ITE/ITI) n'est plus éligible au parcours par geste : elle reste finançable via le parcours accompagné (gain ≥ 2 classes DPE), les CEE, la TVA à 5,5 % ou l'éco-PTZ. Les autres isolations (combles, planchers bas, toiture et rampants) restent, elles, éligibles au parcours par geste.",
   },
   {
     question: 'Quel est le délai pour recevoir la prime ?',
@@ -157,8 +157,8 @@ const faqItems = [
 const keyFigures = [
   {
     icon: Euro,
-    value: '70 000 €',
-    label: 'Montant max (parcours accompagné)',
+    value: '63 000 €',
+    label: 'Aide max (parcours accompagné, travaux plafonnés 70 000 € HT)',
     color: 'text-green-600',
     bg: 'bg-green-50',
   },
@@ -302,7 +302,7 @@ const travauxEligibles = [
   {
     title: 'Chauffage',
     description:
-      'PAC air-eau, PAC géothermique, chaudière biomasse, poêle à granulés, poêle à bois',
+      'PAC air-eau, PAC géothermique, poêle à granulés, poêle à bois. Chaudière biomasse : parcours accompagné uniquement (plus en geste depuis 2026)',
     icon: Flame,
     parcours: 'Geste & Accompagné',
   },
@@ -320,17 +320,17 @@ const travauxEligibles = [
   },
   {
     title: 'Isolation',
-    description: 'Murs, toiture, planchers, combles',
+    description:
+      'Combles, planchers bas, toiture et rampants : éligibles par geste. Isolation des murs (ITE/ITI) : parcours accompagné uniquement depuis 2026.',
     icon: Home,
-    parcours: 'Accompagné uniquement',
+    parcours: 'Geste & Accompagné',
     warning: true,
   },
   {
     title: 'Fenêtres',
-    description: 'Remplacement de fenêtres, portes-fenêtres',
+    description: 'Remplacement de fenêtres, portes-fenêtres. Éligible au parcours par geste.',
     icon: Building2,
-    parcours: 'Accompagné uniquement',
-    warning: true,
+    parcours: 'Geste & Accompagné',
   },
   {
     title: 'Audit énergétique',
@@ -477,10 +477,10 @@ export default function MaPrimeRenov2026Page() {
   const financialProductSchema = getFinancialProductSchema({
     name: "MaPrimeRénov' 2026",
     description:
-      "Aide financière de l'État pour la rénovation énergétique des logements. Jusqu'à 70 000 € pour le parcours accompagné. Accessible à tous les propriétaires, artisan RGE obligatoire.",
+      "Aide financière de l'État pour la rénovation énergétique des logements. Jusqu'à 63 000 € d'aide en parcours accompagné (travaux plafonnés à 70 000 € HT). Accessible à tous les propriétaires, artisan RGE obligatoire.",
     url: `${SITE_URL}/guides/maprimerenov-2026`,
     category: 'Government Grant',
-    amount: '70000',
+    amount: '63000',
     feesAndCommissionsSpecification: "Aucuns frais — aide directe de l'ANAH versée après travaux",
   })
 
@@ -603,7 +603,7 @@ export default function MaPrimeRenov2026Page() {
             <div className="bg-white rounded-xl border border-sand-300 p-6 md:p-8">
               <p className="text-charcoal-700 leading-relaxed">
                 {
-                  "MaPrimeRénov' est l'aide principale de l'État pour la rénovation énergétique des logements, gérée par l'ANAH depuis 2020 (en remplacement du CITE et des aides « Habiter Mieux »). En 2026, elle propose deux parcours : accompagné (rénovation globale, gain ≥ 2 classes DPE) et par geste (chauffage, eau chaude, ventilation). Tous les propriétaires sont éligibles — occupants ou bailleurs — avec un montant variable selon revenus, travaux et parcours."
+                  "MaPrimeRénov' est l'aide principale de l'État pour la rénovation énergétique des logements, gérée par l'ANAH depuis 2020 (en remplacement du CITE et des aides « Habiter Mieux »). En 2026, elle propose deux parcours : accompagné (rénovation globale, gain ≥ 2 classes DPE) et par geste (chauffage, eau chaude, ventilation, isolation des combles/planchers/toiture, fenêtres). Tous les propriétaires sont éligibles — occupants ou bailleurs — avec un montant variable selon revenus, travaux et parcours."
                 }
               </p>
             </div>
@@ -616,7 +616,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                "Deux parcours selon l'ampleur du projet. Depuis 2025, l'isolation seule n'est plus éligible au parcours par geste."
+                "Deux parcours selon l'ampleur du projet. Depuis le 1er janvier 2026, seules l'isolation des murs (ITE/ITI) et la chaudière biomasse quittent le parcours par geste ; les autres gestes (combles, planchers bas, toiture/rampants, fenêtres, PAC, poêles, VMC) y restent éligibles."
               }
             </p>
 
@@ -716,9 +716,9 @@ export default function MaPrimeRenov2026Page() {
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-red-800">
-                    <strong>Depuis 2025 :</strong>{' '}
+                    <strong>Depuis le 1er janvier 2026 :</strong>{' '}
                     {
-                      'isolation seule (murs, toiture, plancher) plus éligible au parcours par geste. Seuls chauffage, eau chaude et ventilation sont concernés.'
+                      "l'isolation des murs (ITE/ITI) et la chaudière biomasse ne sont plus éligibles au parcours par geste. Combles, planchers bas, toiture/rampants, fenêtres, PAC, poêles et VMC y restent finançables."
                     }
                   </p>
                 </div>
@@ -878,7 +878,7 @@ export default function MaPrimeRenov2026Page() {
             </h2>
             <p className="text-charcoal-600 mb-6 leading-relaxed">
               {
-                'Chauffage, eau chaude sanitaire, ventilation, plus isolation et menuiseries en parcours accompagné uniquement. Artisan RGE certifié obligatoire pour chaque catégorie.'
+                "Chauffage, eau chaude sanitaire, ventilation, isolation (combles, planchers bas, toiture/rampants) et menuiseries restent éligibles par geste. Seules l'isolation des murs (ITE/ITI) et la chaudière biomasse basculent en parcours accompagné uniquement depuis 2026. Artisan RGE certifié obligatoire pour chaque catégorie."
               }
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -915,7 +915,7 @@ export default function MaPrimeRenov2026Page() {
                     <div className="mt-3 flex items-start gap-1.5">
                       <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
                       <p className="text-xs text-amber-700">
-                        Non éligible en mono-geste depuis 2025
+                        Isolation des murs (ITE/ITI) non éligible en mono-geste depuis 2026
                       </p>
                     </div>
                   )}

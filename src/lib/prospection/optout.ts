@@ -10,6 +10,7 @@
  */
 
 import crypto from 'crypto'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 
 const TOKEN_VERSION = 'v1'
@@ -96,7 +97,7 @@ export function verifyOptoutToken(token: string, email: string, campaignId: stri
  * sans devoir le décoder depuis le token.
  */
 export function buildOptoutUrl(email: string, campaignId: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+  const baseUrl = SITE_URL
   const token = generateOptoutToken(email, campaignId)
   const params = new URLSearchParams({
     email: normalizeEmail(email),

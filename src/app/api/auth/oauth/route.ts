@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { captureError } from '@/lib/monitoring/sentry'
 import { createClient } from '@supabase/supabase-js'
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = SITE_URL
     const safeNext = next && isSafeRedirectPath(next) ? next : null
     const redirectTo = safeNext
       ? `${siteUrl}/auth/callback?next=${encodeURIComponent(safeNext)}`

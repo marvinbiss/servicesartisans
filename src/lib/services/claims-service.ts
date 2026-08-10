@@ -4,6 +4,7 @@
  */
 
 import { revalidatePath } from 'next/cache'
+import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
@@ -334,7 +335,7 @@ export async function createClaim(
   // l'admin peut toujours valider manuellement depuis le dashboard. On log
   // l'erreur pour visibilité.
   if (insertedClaim?.id) {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = SITE_URL
     const confirmLink = `${siteUrl}/api/artisan/claim/confirm/${emailToken}`
     try {
       await sendClaimEmailConfirmation({
@@ -693,7 +694,7 @@ export async function approveClaim(
       }
     }
     const claimEmail = claim.claimant_email.trim().toLowerCase()
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = SITE_URL
 
     try {
       const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
@@ -909,7 +910,7 @@ export async function rejectClaim(
         .eq('id', claim.provider_id)
         .single()
 
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+      const siteUrl = SITE_URL
       const serviceSlug = slugify(providerInfo?.specialty || 'artisan')
       const locationSlug = slugify(providerInfo?.address_city || 'france')
       const publicId = providerInfo?.slug || providerInfo?.stable_id

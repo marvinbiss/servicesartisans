@@ -58,7 +58,7 @@ export const metadata: Metadata = {
 const tldr = [
   'Prix 2026 : panneau polyuréthane (PUR/PIR) 15-30 €/m² fourniture, mousse projetée 25-50 €/m² posé. Pose au m² panneau collé 25-40 €, vissé 35-60 €, projetée intervention 350-600 €/jour artisan.',
   'Performance lambda 0,022-0,028 W/m·K — meilleur conducteur isolant marché (1 cm PUR = 2 cm laine de verre). Idéal faible épaisseur (combles aménagés, murs intérieurs <8 cm dispo).',
-  'Aides 2026 : MaPrimeRénov’ Isolation Murs 15-25 €/m² (selon revenus) + CEE BAR-EN-101 ou BAR-EN-103 10-25 €/m² + TVA 5,5 % = cumul 30-60 €/m² primes possibles.',
+  'Aides 2026 : CEE BAR-EN-101 ou BAR-EN-103 10-25 €/m² + TVA 5,5 % + éco-PTZ. MaPrimeRénov’ pour les murs uniquement en parcours d’ampleur (plus de forfait au geste depuis 2026 ; combles aménagés restent éligibles par geste).',
   'Mise en œuvre RGE QualiBat 7141 (isolation) ou QualiPAC obligatoire pour aides. Projection nécessite équipement spécifique (cabine haute pression + EPI).',
   'Atouts : compact, étanche à l’air, hydrofuge, durabilité 30-50 ans. Limites : produit synthétique non recyclable, classement feu B-s2-d0 inférieur laine de roche, prix x2 vs laine.',
 ]
@@ -77,7 +77,7 @@ const faqs = [
   {
     question: 'Polyuréthane éligible MaPrimeRénov’ et CEE en 2026 ?',
     answer:
-      'Éligibilité aides 2026 : (1) MaPrimeRénov’ Isolation Murs Intérieurs (ITI) : 15 €/m² (catégorie rose), 20 €/m² (violet), 25 €/m² (jaune et bleu très modeste). Plafond 30 000 € sur 5 ans. Conditions : R ≥ 3,7 m²·K/W mur, R ≥ 6,0 m²·K/W combles aménagés. (2) CEE BAR-EN-101 « Isolation murs intérieurs » : 10-25 €/m² selon fournisseur (Effy, TotalEnergies, EDF). Conditions identiques R + RGE QualiBat 7141. (3) CEE BAR-EN-103 « Isolation combles aménagés » : 12-30 €/m² (plus généreux que mur). (4) Coup de pouce Isolation (jusqu’en 2025, renouvellement 2026 en cours) : 10-30 €/m² supplémentaire ménage modeste/très modeste. (5) TVA 5,5 % sur fourniture + pose si artisan RGE QualiBat 7141 isolation. (6) Éco-PTZ 30 000 € sur 15 ans sans intérêts. Cumul max : 60-75 €/m² primes + TVA réduite, soit 60-80 % du coût TTC pour ménage très modeste.',
+      'Éligibilité aides 2026 : (1) MaPrimeRénov’ : l’isolation des murs par l’intérieur (ITI) n’est plus financée par geste depuis 2026 — uniquement en rénovation d’ampleur (parcours accompagné) ; au geste, les murs restent aidés via CEE (Coup de pouce), TVA 5,5 % et éco-PTZ. Conditions techniques inchangées : R ≥ 3,7 m²·K/W mur, R ≥ 6,0 m²·K/W combles aménagés. (2) CEE BAR-EN-101 « Isolation murs intérieurs » : 10-25 €/m² selon fournisseur (Effy, TotalEnergies, EDF). Conditions identiques R + RGE QualiBat 7141. (3) CEE BAR-EN-103 « Isolation combles aménagés » : 12-30 €/m² (plus généreux que mur). (4) Coup de pouce Isolation (jusqu’en 2025, renouvellement 2026 en cours) : 10-30 €/m² supplémentaire ménage modeste/très modeste. (5) TVA 5,5 % sur fourniture + pose si artisan RGE QualiBat 7141 isolation. (6) Éco-PTZ 30 000 € sur 15 ans sans intérêts. Cumul CEE + TVA réduite + éco-PTZ possible ; MaPrimeRénov’ pour les murs uniquement en parcours d’ampleur.',
   },
   {
     question: 'Quelle qualification RGE pour poser du polyuréthane ?',

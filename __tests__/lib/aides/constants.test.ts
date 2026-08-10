@@ -66,7 +66,17 @@ describe('aides/constants — alignement avec aides-catalog', () => {
     expect(mpr).toBeDefined()
     const labels = normalizeSpaces(mpr!.montants.map((m) => m.max).join(' '))
     expect(labels).toContain(normalizeSpaces(formatEur(MAPRIMERENOV.MAX_PARCOURS_GESTE_EUR)))
-    expect(labels).toContain(normalizeSpaces(formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR)))
+    // Révision 2026-07-28 : le champ `max` du parcours accompagné porte le
+    // plafond d'AIDE (63 000 €), pas le plafond de DÉPENSE de travaux
+    // (70 000 €) — les deux étaient confondus et « 70 000 € d'aide » était
+    // annoncé au public. Le plafond de travaux reste exposé, en `condition`.
+    expect(labels).toContain(
+      normalizeSpaces(formatEur(MAPRIMERENOV.MAX_AIDE_PARCOURS_ACCOMPAGNE_EUR))
+    )
+    const conditions = normalizeSpaces(mpr!.montants.map((m) => m.condition ?? '').join(' '))
+    expect(conditions).toContain(
+      normalizeSpaces(formatEur(MAPRIMERENOV.MAX_PARCOURS_ACCOMPAGNE_EUR))
+    )
   })
 
   it('schemaDescription maprimerenov mentionne les deux plafonds', () => {

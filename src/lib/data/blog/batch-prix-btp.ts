@@ -419,7 +419,7 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
 
       '## Aides et subventions',
 
-      ":::info Bon à savoir\nLes travaux de plâtrerie peuvent bénéficier d'aides lorsqu'ils incluent une isolation thermique :\n- **MaPrimeRénov'** : aide pour l'isolation des murs par l'intérieur (doublage placo + isolant), variable selon revenus et zone\n- **CEE** : prime pour l'isolation des murs (R ≥ 3,7 m².K/W)\n- **TVA à 5,5 %** sur les travaux d'isolation thermique (logement > 2 ans)\n- **TVA à 10 %** sur les travaux de plâtrerie seuls en rénovation (logement > 2 ans)\n- La pose de cloisons, faux-plafonds et enduits en construction neuve reste à **TVA 20 %**\n:::",
+      ":::info Bon à savoir\nLes travaux de plâtrerie peuvent bénéficier d'aides lorsqu'ils incluent une isolation thermique :\n- **MaPrimeRénov'** : plus d'aide par geste pour l'isolation des murs par l'intérieur (doublage placo + isolant) depuis le 1er janvier 2026 — aide possible uniquement en parcours d'ampleur\n- **CEE** : prime pour l'isolation des murs (R ≥ 3,7 m².K/W)\n- **TVA à 5,5 %** sur les travaux d'isolation thermique (logement > 2 ans)\n- **TVA à 10 %** sur les travaux de plâtrerie seuls en rénovation (logement > 2 ans)\n- La pose de cloisons, faux-plafonds et enduits en construction neuve reste à **TVA 20 %**\n:::",
 
       '## Trouver un plâtrier près de chez vous',
 
@@ -469,7 +469,7 @@ export const prixBtpArticles: Record<string, BlogArticle> = {
       'La cloison placo standard (35-65 €/m²) est le poste le plus courant en plâtrerie intérieure.',
       "Le faux-plafond (40-80 €/m²) permet de masquer les réseaux et d'améliorer l'isolation acoustique.",
       'Le staff et la restauration de moulures (80-200 €/ml) sont des spécialités rares et recherchées.',
-      "MaPrimeRénov' et les CEE financent le doublage isolant (placo + isolant) en rénovation.",
+      "Le doublage isolant (placo + isolant) est financé par les CEE (Coup de pouce), la TVA 5,5 % et l'éco-PTZ en rénovation — MaPrimeRénov' seulement en parcours d'ampleur (plus par geste pour les murs depuis le 1er janvier 2026).",
       'Demandez le niveau de finition (Q1 à Q4) dans le devis pour éviter les mauvaises surprises.',
     ],
   },

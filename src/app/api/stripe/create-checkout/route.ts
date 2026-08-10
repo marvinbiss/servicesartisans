@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
@@ -88,8 +89,8 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-artisan/abonnement?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/espace-artisan/abonnement?canceled=true`,
+      success_url: `${SITE_URL}/espace-artisan/abonnement?success=true`,
+      cancel_url: `${SITE_URL}/espace-artisan/abonnement?canceled=true`,
       metadata: {
         user_id: user.id,
         plan_id: planId,

@@ -4,6 +4,7 @@
  */
 
 import twilio from 'twilio'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID
@@ -61,7 +62,7 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
     }
 
     // Ajouter callback URL pour le tracking
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+    const siteUrl = SITE_URL
     if (siteUrl) {
       messageParams.statusCallback = `${siteUrl}/api/admin/prospection/webhooks/twilio`
     }

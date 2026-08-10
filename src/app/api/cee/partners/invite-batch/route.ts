@@ -20,6 +20,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { SITE_URL } from '@/lib/seo/config'
 import { z } from 'zod'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -103,7 +104,7 @@ export async function POST(request: NextRequest) {
       return serverErrorResponse('READ_FAILED', 'Erreur serveur')
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const siteUrl = SITE_URL
 
     const results = {
       invited: 0,

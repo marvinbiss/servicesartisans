@@ -1114,7 +1114,7 @@ export const urgencesGuidesArticles: Record<string, BlogArticle> = {
 
       ':::budget\n| Prestation | Prix au m² TTC |\n| Nettoyage simple | 10 – 25 €/m² |\n| Ravalement peinture | 30 – 60 €/m² |\n| Ravalement enduit monocouche | 40 – 70 €/m² |\n| Ravalement enduit traditionnel | 50 – 90 €/m² |\n| ITE polystyrène + enduit | 100 – 180 €/m² |\n| ITE laine de roche + enduit | 130 – 220 €/m² |\n| Échafaudage (supplément) | 5 – 15 €/m² |\n:::',
 
-      ":::tip Conseil pro\nSi votre façade nécessite un ravalement, profitez-en pour étudier l'**ITE** (Isolation Thermique par l'Extérieur). Le surcoût par rapport à un simple ravalement est de 50 à 100 €/m², mais l'ITE réduit vos factures de chauffage de 25 à 40 % et est éligible à MaPrimeRénov' (jusqu'à 75 €/m² d'aide). Le retour sur investissement est de 8 à 12 ans.\n:::",
+      ":::tip Conseil pro\nSi votre façade nécessite un ravalement, profitez-en pour étudier l'**ITE** (Isolation Thermique par l'Extérieur). Le surcoût par rapport à un simple ravalement est de 50 à 100 €/m², mais l'ITE réduit vos factures de chauffage de 25 à 40 % et reste éligible aux CEE (Coup de pouce), à la TVA à 5,5 % et à l'éco-PTZ — ou à MaPrimeRénov' en parcours d'ampleur (l'isolation des murs n'est plus financée par MaPrimeRénov' par geste depuis le 1er janvier 2026). Le retour sur investissement est de 8 à 12 ans.\n:::",
 
       ":::takeaway\n- Exigez Qualibat 6131/6132 et RGE pour l'ITE\n- Le diagnostic préalable de la façade est un critère de sérieux non négociable\n- Vérifiez que l'échafaudage est inclus dans le devis (500-1 500 € sinon)\n- Ravalement peinture : 30-60 €/m², ITE complète : 100-220 €/m²\n- Profitez du ravalement obligatoire pour étudier l'ITE et les aides MaPrimeRénov'\n:::",
     ],

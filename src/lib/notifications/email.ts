@@ -1,4 +1,5 @@
 import type { SupabaseClientType } from '@/types'
+import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 
@@ -7,7 +8,6 @@ const getResend = () => getResendClient()
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
 const SITE_NAME = 'ServicesArtisans'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 
 export interface BookingEmailData {
   bookingId: string

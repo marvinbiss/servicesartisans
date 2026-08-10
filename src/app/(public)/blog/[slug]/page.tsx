@@ -690,7 +690,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
   const blogImageForSchema = getBlogImage(slug, article.category)
   const schemas = getBlogArticleSchema(article, slug, blogImageForSchema.src)
-  const serviceLinks = getRelatedServiceLinks(slug, article.category, article.tags)
+  const serviceLinks = await getRelatedServiceLinks(slug, article.category, article.tags)
   const relatedArticles = getRelatedArticleSlugs(
     slug,
     article.category,
@@ -703,9 +703,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
   const tocItems = extractTocItems(blocks)
 
   // Derive contextual devis link from service links (first /services/X match -> /devis/X)
-  const firstServiceLink = getRelatedServiceLinks(slug, article.category, article.tags).find((l) =>
-    l.href.startsWith('/services/')
-  )
+  const firstServiceLink = serviceLinks.find((l) => l.href.startsWith('/services/'))
   const primaryServiceSlug = firstServiceLink
     ? firstServiceLink.href.split('/services/')[1].split('/')[0]
     : null

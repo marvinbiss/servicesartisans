@@ -7,12 +7,12 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { SITE_URL } from '@/lib/seo/config'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const SITE_NAME = 'ServicesArtisans'
 
 // ============================================================

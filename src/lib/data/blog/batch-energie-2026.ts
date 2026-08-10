@@ -512,7 +512,7 @@ La rénovation globale (tous les postes en une fois) est plus efficace et mieux 
 Les propriétaires disposent de plusieurs leviers :
 
 - **MaPrimeRénov' Parcours accompagné** : jusqu'à 63 000 € pour une rénovation globale permettant un gain de 2 classes DPE minimum. Financement de 30 à 90 % selon les revenus.
-- **MaPrimeRénov' par geste** : aides unitaires pour chaque type de travaux (isolation, chauffage, ventilation). Montants de 15 à 75 € par m² pour l'isolation, 2 000 à 10 000 € pour le chauffage.
+- **MaPrimeRénov' par geste** : aides unitaires pour chaque type de travaux (isolation des combles/planchers/toiture, chauffage, ventilation). À partir de 15 € par m² pour l'isolation des combles et planchers, 2 000 à 10 000 € pour le chauffage. L'isolation des murs (ITE/ITI) n'est plus financée par geste depuis le 1er janvier 2026 : elle relève des CEE (Coup de pouce), de la TVA à 5,5 % et de l'éco-PTZ, ou du parcours d'ampleur.
 - **CEE (Certificats d'Économies d'Énergie)** : primes versées par les fournisseurs d'énergie, cumulables avec MaPrimeRénov'.
 - **Éco-PTZ** : prêt à taux zéro jusqu'à 50 000 € sur 20 ans.
 - **Loc'Avantages** : réduction d'impôt pour les propriétaires bailleurs qui louent à un loyer modéré après rénovation.`,

@@ -82,7 +82,7 @@ const faqs = [
   {
     question: 'Y a-t-il des aides pour isolation phonique en 2026 ?',
     answer:
-      'PAS d’aides nationales spécifiques pour isolation acoustique. Détail : (1) MaPrimeRénov’, CEE, TVA 5,5 % et Coup de Pouce → réservés isolation thermique uniquement (laine pour économie d’énergie). Isolation phonique pure NON éligible. (2) Exception : si l’isolation phonique mur est faite EN MÊME TEMPS qu’une isolation thermique par l’intérieur (ITI) avec performance thermique suffisante (R ≥ 3,7 m²·K/W), l’ensemble devient éligible MaPrimeRénov’ Isolation Murs Intérieurs (15-25 €/m² selon revenus) + CEE BAR-EN-101 (10-25 €/m²). (3) Aides régionales ponctuelles : Île-de-France « lutte contre nuisances sonores » (jusqu’à 50 % travaux plafond 5 000 €), certaines aides ANRU près des aéroports/autoroutes. (4) Crédit d’impôt copropriété ANAH si bouquet rénovation globale incluant acoustique : 50 % travaux plafond 25 000 €/logement. Conseil : combiner isolation phonique + thermique pour cumuler aides MPR + CEE.',
+      'PAS d’aides nationales spécifiques pour isolation acoustique. Détail : (1) MaPrimeRénov’, CEE, TVA 5,5 % et Coup de Pouce → réservés isolation thermique uniquement (laine pour économie d’énergie). Isolation phonique pure NON éligible. (2) Exception : si l’isolation phonique mur est faite EN MÊME TEMPS qu’une isolation thermique par l’intérieur (ITI) avec performance thermique suffisante (R ≥ 3,7 m²·K/W), l’ensemble devient éligible via CEE (Coup de pouce), TVA 5,5 % et éco-PTZ — ou MaPrimeRénov’ en parcours d’ampleur (l’isolation des murs n’est plus financée par MaPrimeRénov’ au geste depuis 2026). CEE BAR-EN-101 : 10-25 €/m². (3) Aides régionales ponctuelles : Île-de-France « lutte contre nuisances sonores » (jusqu’à 50 % travaux plafond 5 000 €), certaines aides ANRU près des aéroports/autoroutes. (4) Crédit d’impôt copropriété ANAH si bouquet rénovation globale incluant acoustique : 50 % travaux plafond 25 000 €/logement. Conseil : combiner isolation phonique + thermique pour cumuler aides MPR + CEE.',
   },
   {
     question: 'Faut-il une autorisation copropriété pour isoler un mur phoniquement ?',
@@ -227,8 +227,9 @@ export default function Page() {
                 <p className="text-accent-800 leading-relaxed">
                   L’isolation phonique pure n’est PAS éligible MaPrimeRénov’ / CEE. Si vous prévoyez
                   une <strong>isolation thermique par l’intérieur (ITI)</strong> avec R ≥ 3,7
-                  m²·K/W, l’ensemble devient éligible MPR Isolation Murs (15-25 €/m²) + CEE
-                  BAR-EN-101 (10-25 €/m²). Économie de 25-50 €/m² sur le chantier.
+                  m²·K/W, l’ensemble reste aidé via CEE (Coup de pouce), TVA 5,5 % et éco-PTZ — ou
+                  MaPrimeRénov’ en parcours d’ampleur (l’isolation des murs n’est plus financée par
+                  MaPrimeRénov’ au geste depuis 2026). CEE BAR-EN-101 : 10-25 €/m².
                 </p>
               </div>
             </div>

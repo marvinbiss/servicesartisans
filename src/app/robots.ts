@@ -38,6 +38,8 @@ const OPEN_DATA_ALLOW = [
   '/api/v1/docs/',
 ]
 
+// Route-level blocks. Applied to EVERY crawler, including AdsBot: these paths
+// are private (auth/admin/api) and are never a legitimate ad destination.
 const PRIVATE_DISALLOW = [
   // Immutable static assets (1-year cache headers) — no need for Google to crawl
   '/_next/static/',
@@ -58,6 +60,22 @@ const PRIVATE_DISALLOW = [
   '/recherche',
   // Offline fallback page (PWA only, no SEO value)
   '/offline',
+]
+
+// Query-parameter blocks — ORGANIC crawlers only, NEVER AdsBot.
+//
+// Google Ads fix 2026-07-28 : ces patterns étaient dans `PRIVATE_DISALLOW`,
+// lui-même appliqué à `AdsBot-Google` / `AdsBot-Google-Mobile`. Or l'auto-
+// tagging Ads envoie le trafic sur l'URL finale `…?gclid=…` (+ tracking
+// template `utm_*`), et AdsBot crawle cette URL AVEC ses paramètres pour
+// évaluer la landing page. Résultat : « Destination non explorable » →
+// annonces refusées et/ou Quality Score dégradé (= CPC plus cher).
+//
+// Google : « AdsBot ignore le user-agent `*` », et bloquer AdsBot est un
+// motif documenté de désapprobation. On garde donc l'anti-duplicate pour
+// Googlebot/Bingbot/Yandex/`*` (le besoin SEO d'origine est réel), mais on
+// laisse AdsBot atteindre les URLs taguées.
+const TRACKING_PARAM_DISALLOW = [
   // Query parameter variations (duplicate content).
   // Pattern /*?*param= covers BOTH first (?param=) and secondary (&param=) occurrences.
   // Google doc example: disallow: /*?*color= (blocks /items?color=x AND /items?cat=y&color=x)
@@ -95,6 +113,9 @@ const PRIVATE_DISALLOW = [
   '/*?*igshid=',
 ]
 
+/** Crawlers organiques : routes privées + anti-duplicate paramètres. */
+const ORGANIC_DISALLOW = [...PRIVATE_DISALLOW, ...TRACKING_PARAM_DISALLOW]
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -102,23 +123,27 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'Googlebot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Bingbot: full access
       {
         userAgent: 'Bingbot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Yandex: full access with crawl-delay (Yandex respects crawl-delay, unlike Google)
       {
         userAgent: 'YandexBot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
         crawlDelay: 1,
       },
       // AdsBot — MUST be named explicitly: the '*' wildcard does NOT cover AdsBot (Google spec).
       // Block private routes to avoid unnecessary ad-serving crawl on auth/admin pages.
+      //
+      // `PRIVATE_DISALLOW` (routes) et NON `ORGANIC_DISALLOW` : AdsBot doit
+      // pouvoir crawler les URLs finales taguées `?gclid=` / `?utm_*` sous
+      // peine de « Destination non explorable ». Cf. TRACKING_PARAM_DISALLOW.
       {
         userAgent: ['AdsBot-Google', 'AdsBot-Google-Mobile'],
         allow: OPEN_DATA_ALLOW,
@@ -129,10 +154,11 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'APIs-Google',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Mediapartners-Google (AdSense) — also ignores '*' per Google special-crawlers spec.
       // Block private routes defensively even though we don't run AdSense.
+      // Même traitement qu'AdsBot : routes seules, pas les paramètres.
       {
         userAgent: 'Mediapartners-Google',
         allow: OPEN_DATA_ALLOW,
@@ -143,12 +169,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: ['OAI-SearchBot', 'ChatGPT-User'],
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       {
         userAgent: ['Claude-SearchBot', 'Claude-User'],
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Mistral AI — Mistral Le Chat (Mistral AI, Paris) + Mistral platform agents (CRITIQUE FR sovereignty)
       // MistralBot = crawler indexation Le Chat, Mistralai-User = fetch contextuel quand user demande
@@ -156,42 +182,42 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: ['MistralBot', 'Mistralai-User'],
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       {
         userAgent: 'PerplexityBot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Applebot-Extended — Apple Intelligence / Siri AI search (CRITICAL for Apple ecosystem visibility)
       {
         userAgent: 'Applebot-Extended',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Amazonbot — Amazon Alexa and shopping AI answers
       {
         userAgent: 'Amazonbot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Meta-ExternalAgent — Meta AI (Facebook, Instagram, WhatsApp AI assistant)
       {
         userAgent: 'Meta-ExternalAgent',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // YouBot — You.com AI search engine
       {
         userAgent: 'YouBot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Google-CloudVertexBot — Google Vertex AI grounding/search
       {
         userAgent: 'Google-CloudVertexBot',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // AI Training bots — Block training data scraping (protect content)
       // These bots scrape content to train LLMs — we block them to protect our original content.
@@ -223,13 +249,13 @@ export default function robots(): MetadataRoute.Robots {
           'WhatsApp',
         ],
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // All other legitimate bots
       {
         userAgent: '*',
         allow: OPEN_DATA_ALLOW,
-        disallow: PRIVATE_DISALLOW,
+        disallow: ORGANIC_DISALLOW,
       },
       // Block aggressive SEO scrapers (consume resources, no SEO benefit)
       // AhrefsBot unblocked 2026-04-18 — needed for Site Explorer Internal Links

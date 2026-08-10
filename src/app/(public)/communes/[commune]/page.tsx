@@ -24,7 +24,7 @@ const COMM_REVIEWER = getReviewerForAuthor(COMM_AUTHOR)
 import { monthlyAnchorIso } from '@/lib/seo/sprint-helpers'
 import { SITE_URL, SITE_NAME, getAlternates, getOgDefaults } from '@/lib/seo/config'
 import {
-  getCommuneBySlug,
+  getCommuneBySlugStrict,
   getNearestRgeProvidersForCommune,
   hasDemographicData,
   hasGeorisquesData,
@@ -88,8 +88,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const canonical = getCanonicalRedirectTarget(slug)
   if (canonical) permanentRedirect(canonical)
 
-  const commune = await getCommuneBySlug(slug)
-  if (!commune) notFound()
+  const { ok, commune } = await getCommuneBySlugStrict(slug)
+  if (!commune) {
+    // DB error → minimal noindex metadata, NO notFound() (would soft-404 on a
+    // transient timeout). The render decides the real status: on DB error it
+    // throws → 500/stale ISR, never soft-404. notFound() only on a genuine 0-row.
+    if (!ok) return { title: SITE_NAME, robots: { index: false, follow: true } }
+    notFound()
+  }
 
   const dept = commune.departement_name ?? commune.departement_code
   const cp = commune.code_postal ?? commune.departement_code
@@ -162,7 +168,11 @@ export default async function CommunePage(props: PageProps) {
       route: 'communes/[commune]',
       commune: params?.commune ?? null,
     })
-    notFound()
+    // Re-throw instead of notFound(): an unhandled render error (DB timeout,
+    // network) is NOT "page does not exist". notFound() here produced a soft-404
+    // (200 to Googlebot, Next #69103) that demoted ~35K commune URLs. A 500 is
+    // honest and retryable, and ISR serves the last good render if available.
+    throw err
   }
 }
 
@@ -172,8 +182,14 @@ async function renderCommunePage({ params }: PageProps) {
   const canonical = getCanonicalRedirectTarget(slug)
   if (canonical) permanentRedirect(canonical)
 
-  const commune = await getCommuneBySlug(slug)
-  if (!commune) notFound()
+  const { ok, commune } = await getCommuneBySlugStrict(slug)
+  if (!commune) {
+    // Genuine 0-row → notFound(). DB error → throw so the outer catch lets it
+    // become a 500 (retryable, ISR serves stale if present) instead of a
+    // soft-404. NEVER notFound() on a DB error (Next #69103 → 200 to Googlebot).
+    if (!ok) throw new Error('commune_db_unavailable')
+    notFound()
+  }
 
   const cp = commune.code_postal ?? commune.departement_code
   const dept = commune.departement_name ?? commune.departement_code
