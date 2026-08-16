@@ -119,7 +119,18 @@ class UpstashRateLimiter {
       throw new Error(`Redis error: ${response.status}`)
     }
 
-    const data = (await response.json()) as Array<{ result?: unknown; error?: string }>
+    const raw = (await response.json()) as unknown
+    // Guard: Upstash can return a non-array JSON body (e.g. `{error:"…"}`) on
+    // 200 when overloaded — without this check `for (const entry of data)` throws
+    // "TypeError: x is not iterable" in middleware, affecting real users
+    // (JAVASCRIPT-NEXTJS-BY, 528 events / 415 users, 2026-08-14).
+    if (!Array.isArray(raw)) {
+      const errMsg = (raw as Record<string, unknown>)?.error
+      throw new Error(
+        `Redis pipeline error: ${typeof errMsg === 'string' ? errMsg : 'unexpected non-array response'}`
+      )
+    }
+    const data = raw as Array<{ result?: unknown; error?: string }>
     // Upstash /pipeline peut renvoyer un objet d'erreur par commande sans faire
     // échouer le HTTP global → on propage la première erreur rencontrée.
     for (const entry of data) {
